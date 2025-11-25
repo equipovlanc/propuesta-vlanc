@@ -15,26 +15,25 @@
         font-family: 'Montserrat', sans-serif;
       }
       
-      /* --- ESTILOS DE IMPRESIÓN AVANZADOS --- */
+      /* --- ESTILOS DE IMPRESIÓN PRO --- */
       @media print {
         @page {
-          /* Puedes cambiar a A3 aquí si lo prefieres, pero A4 es estándar para documentos legales */
           size: A4 portrait; 
-          margin: 1cm; /* Margen reducido para aprovechar espacio */
+          margin: 1.5cm 1cm; /* Margen superior/inf un poco mayor, laterales ajustados */
         }
 
         body {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
           background-color: white !important;
-          font-size: 12pt; /* Tamaño de letra legible en papel */
+          font-size: 11pt; /* Tamaño de letra ligeramente reducido para mejor encaje */
+          color: black !important;
         }
 
-        /* Ocultar elementos innecesarios */
+        /* Ocultar navegación y botones */
         .no-print { display: none !important; }
 
-        /* RESET DE ANIMACIONES Y CONTENEDORES */
-        /* Eliminamos cualquier posición relativa/absoluta que confunda al motor de impresión */
+        /* RESET GENERAL DE ANIMACIONES */
         div[class*="opacity-0"], 
         div[class*="translate-y"],
         .transition-all,
@@ -43,93 +42,100 @@
           transform: none !important;
           transition: none !important;
           animation: none !important;
-          display: block !important; /* Crítico: rompe el contexto de apilamiento */
+          display: block !important;
         }
 
-        /* --- REGLAS DE CORTE INTELIGENTE --- */
-        
-        /* Regla General: Los títulos nunca se separan de lo que viene después */
-        h1, h2, h3, h4, h5, h6 {
-          break-after: avoid !important;
-          page-break-after: avoid !important;
-        }
+        /* --- CONTROL DE FLUJO Y PAGINACIÓN --- */
 
-        /* Imágenes y figuras: nunca partir por la mitad */
-        img, figure, svg {
-          break-inside: avoid !important;
-          page-break-inside: avoid !important;
-        }
-
-        /* SECCIONES PRINCIPALES */
-        /* Permitimos que las secciones se corten (porque pueden ser largas), 
-           pero forzamos un margen limpio entre ellas */
+        /* REGLA DE ORO: Las secciones no se rompen a menos que sean gigantes */
         section {
-          break-inside: auto; /* Permitir corte dentro de la sección si es muy larga */
-          page-break-inside: auto;
-          display: block !important; /* Importante para que el navegador calcule bien la altura */
-          padding-top: 20px !important;
-          padding-bottom: 40px !important;
+          break-inside: avoid !important;      /* Intenta mantener la sección en una sola página */
+          page-break-inside: avoid !important; /* Sintaxis antigua para compatibilidad */
+          display: block !important;
+          position: relative !important;
+          
+          /* Reducir el padding gigante de la web para ahorrar papel */
+          padding-top: 1cm !important;
+          padding-bottom: 1cm !important;
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
           height: auto !important;
           min-height: 0 !important;
         }
-
-        /* ELEMENTOS INDIVISIBLES (ÁTOMOS) */
-        /* Estos son los elementos que NUNCA deben partirse por la mitad */
         
-        /* 1. Tarjetas (Testimonios, Equipo, Pasos, Precios) */
+        /* TÍTULOS SIEMPRE PEGADOS A SU CONTENIDO */
+        h1, h2, h3, h4, h5, h6 {
+          break-after: avoid !important;      /* Nunca romper página justo después de un título */
+          page-break-after: avoid !important;
+          break-inside: avoid !important;
+        }
+
+        /* Contenedores de títulos específicos (como los que tienen la barra verde) */
+        .relative.mb-12, .mb-12 {
+            margin-bottom: 1rem !important; /* Reducir espacio entre título y texto */
+            break-after: avoid !important;
+            page-break-after: avoid !important;
+        }
+
+        /* ELEMENTOS INDIVISIBLES INTERNOS */
+        /* Si una sección DEBE romperse (porque ocupa 2 páginas), protegemos sus piezas internas */
+        
+        img, figure, svg {
+          break-inside: avoid !important;
+          max-height: 10cm !important; /* Limitar altura de imágenes para que no fuercen saltos excesivos */
+          width: auto !important;
+        }
+
+        /* Tarjetas, filas de precios, testimonios */
         .grid > div, 
-        .bg-gray-100, 
-        .bg-slate-50,
-        .border,
         .shadow-xl,
-        .shadow-2xl,
-        .rounded-lg {
+        .border {
           break-inside: avoid !important;
           page-break-inside: avoid !important;
-          display: block !important; /* A veces flex/grid causa problemas de corte */
-          margin-bottom: 10px !important;
+          display: block !important;
+          margin-bottom: 0.5cm !important;
         }
 
-        /* 2. Filas de tablas (Inversión) */
-        /* Si usas grid para tablas, aseguramos que la fila no se rompa */
-        [class*="grid-cols-"] > div {
-           break-inside: avoid !important;
+        /* Párrafos largos */
+        p {
+          orphans: 3; /* Mínimo 3 líneas al final de la página */
+          widows: 3;  /* Mínimo 3 líneas al principio de la nueva página */
         }
 
-        /* 3. Párrafos y Listas */
-        p, li {
-          orphans: 3; /* Mínimo líneas al final de la página */
-          widows: 3;  /* Mínimo líneas al principio de la nueva página */
-        }
-
-        /* OPTIMIZACIÓN DE LAYOUT PARA PAPEL */
+        /* AJUSTES VISUALES PARA TINTA Y PAPEL */
         
-        /* Forzar anchos completos para aprovechar el papel */
-        .max-w-7xl, .max-w-4xl {
-          max-width: 100% !important;
-          width: 100% !important;
-          margin: 0 !important;
-          padding: 0 !important;
+        /* Forzar texto negro puro */
+        p, span, div, h1, h2, h3, li {
+           color: #000 !important;
+        }
+        
+        /* Color corporativo (Teal) se mantiene pero oscurecido para legibilidad */
+        .text-teal-600, .text-teal-500, .text-teal-700 {
+           color: #006058 !important; 
         }
 
-        /* Ajustar grids para que quepan mejor en vertical */
-        /* En papel, a veces es mejor 2 columnas que 3 o 4 para que el texto sea legible */
-        .lg\:grid-cols-4, .lg\:grid-cols-3 {
+        /* Fondos claros */
+        .bg-slate-50, .bg-gray-100, .bg-slate-100 {
+           background-color: #f8f9fa !important; /* Un gris muy muy suave apenas perceptible */
+           border: 1px solid #eee !important;   /* Añadir borde suave para delimitar áreas */
+        }
+
+        /* Sombras fuera */
+        .shadow-xl, .shadow-2xl, .shadow-lg {
+          box-shadow: none !important;
+        }
+
+        /* GRID FIXES */
+        /* Convertir grids complejos en columnas simples si es necesario */
+        .lg\:grid-cols-4 {
              grid-template-columns: repeat(2, 1fr) !important;
         }
         
-        /* Forzar colores de texto para máximo contraste */
-        p, span, div, h1, h2, h3 {
-           color: #000 !important; /* Negro puro para texto */
-        }
-        .text-teal-600, .text-teal-500, .text-teal-700 {
-           color: #0d9488 !important; /* Mantener el color corporativo pero oscuro */
-        }
-        
-        /* Ocultar sombras para ahorrar tinta y limpiar visualmente */
-        .shadow-xl, .shadow-2xl, .shadow-lg {
-          box-shadow: none !important;
-          border: 1px solid #ddd !important; /* Reemplazar sombra con borde fino */
+        /* Ajustar anchos */
+        .max-w-7xl {
+          max-width: 100% !important;
+          width: 100% !important;
+          padding: 0 !important;
         }
       }
     </style>
