@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -47,8 +48,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     </p>
                 </AnimatedSection>
                 <AnimatedSection>
-                    {/* Desktop Table View */}
-                    <div className="hidden lg:block">
+                    {/* Desktop Table View - Forced visible in print */}
+                    <div className="hidden lg:block print:block">
                         <div className="grid grid-cols-[2fr_repeat(4,1fr)] gap-px bg-gray-200 border border-gray-200">
                             {/* Header Row */}
                             <div className="bg-white p-4"></div>
@@ -95,8 +96,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         </div>
                     </div>
 
-                    {/* Mobile & Tablet Card View */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:hidden">
+                    {/* Mobile & Tablet Card View - Forced hidden in print */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:hidden print:hidden">
                         {(data?.plans ?? []).map((plan) => (
                             <div key={plan.name} className="bg-white border border-gray-200 p-6 flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
                                 <h3 className="text-center text-lg font-bold text-gray-800">{plan.name}</h3>

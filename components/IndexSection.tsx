@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -38,7 +39,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
   };
 
   return (
-    <section className="py-20 md:py-32 px-4 md:px-8 lg:px-16 bg-white">
+    <section id="index-section" className="py-20 md:py-32 px-4 md:px-8 lg:px-16 bg-white">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <AnimatedSection>
             <SectionTitle>{data?.title}</SectionTitle>
