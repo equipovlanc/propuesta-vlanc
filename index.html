@@ -14,169 +14,180 @@
         font-family: 'Montserrat', sans-serif;
       }
       
-      /* --- ESTILOS DE IMPRESIÓN PRO --- */
+      /* --- ESTILOS DE IMPRESIÓN "NATIVE PDF" --- */
       @media print {
         @page {
           size: A4 portrait; 
-          margin: 10mm 15mm; /* Márgenes optimizados: 1cm arriba/abajo, 1.5cm lados */
+          margin: 1.5cm; /* Margen estándar de documento */
         }
 
+        /* RESET TOTAL */
         html, body {
           width: 210mm;
-          height: auto;
           background-color: white !important;
           color: black !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          overflow: visible !important;
+          font-size: 11pt; /* Tamaño base legible */
         }
 
-        /* --- 1. LIMPIEZA DE UI Y ANIMACIONES --- */
-        .no-print { display: none !important; }
-        
+        /* OCULTAR ELEMENTOS INTERACTIVOS/DECORATIVOS QUE MOLESTAN */
+        .no-print, 
+        video, 
+        iframe,
+        span[class*="bg-teal-400"] { /* Barras verdes fuera para evitar solapamientos */
+            display: none !important; 
+        }
+
+        /* RESET DE ESPACIADOS WEB */
+        section, footer, header, main, div {
+           padding: 0 !important;
+           margin: 0 !important;
+           border: none !important;
+           box-shadow: none !important;
+        }
+
+        /* ANIMACIONES FUERA - TODO VISIBLE */
         div[class*="opacity-0"], 
-        div[class*="translate-y"],
-        .transition-all,
-        .transform {
+        div[class*="translate-y"] {
           opacity: 1 !important;
           transform: none !important;
           transition: none !important;
-          animation: none !important;
         }
 
-        /* --- 2. ELIMINACIÓN DE ESPACIOS WEB (EL "AIRE") --- */
-        /* Sobrescribimos Tailwind para eliminar paddings gigantes */
-        section, footer, header, main > div {
-           padding-top: 10mm !important;
-           padding-bottom: 10mm !important;
-           margin: 0 !important;
-        }
+        /* --- TIPOGRAFÍA DE CONTRATO --- */
+        h1 { font-size: 36pt !important; line-height: 1.1 !important; margin-bottom: 1rem !important; }
+        h2 { font-size: 20pt !important; font-weight: 700 !important; margin-bottom: 0.5cm !important; color: #000 !important; margin-top: 0 !important; }
+        h3 { font-size: 14pt !important; font-weight: 600 !important; margin-bottom: 0.25cm !important; color: #0d9488 !important; }
+        h4 { font-size: 12pt !important; font-weight: 600 !important; margin-bottom: 0.1cm !important; }
+        p, li { font-size: 10pt !important; line-height: 1.4 !important; color: #333 !important; margin-bottom: 0.25cm !important; }
         
-        /* Excepción para la portada */
-        section#hero-section {
-          padding: 0 !important;
-          margin: 0 !important;
-        }
-
-        .gap-12, .gap-16, .gap-24, .space-y-12, .space-y-20 {
-           gap: 1rem !important;
-           space-y: 1rem !important;
-        }
-
-        /* --- 3. MAQUETACIÓN ESTRUCTURAL --- */
+        /* --- ESTRUCTURA DE PÁGINAS --- */
         
-        /* Forzar saltos de página limpios */
-        section {
-          break-inside: avoid;
-          page-break-inside: avoid;
+        /* Regla General: Cada sección principal es una página nueva */
+        main > div, main > section {
           break-after: page;
           page-break-after: always;
           display: block !important;
-          min-height: auto !important; /* Evitar alturas forzadas de pantalla */
+          width: 100% !important;
+          min-height: 0 !important; /* Evitar alturas forzadas */
+          padding-top: 1cm !important; /* Pequeño respiro superior en cada página */
         }
 
-        /* Títulos */
-        h2 { font-size: 24pt !important; margin-bottom: 0.5rem !important; line-height: 1.1 !important; }
-        h3 { font-size: 14pt !important; margin-bottom: 0.25rem !important; }
-        p, li { font-size: 10pt !important; line-height: 1.4 !important; color: #333 !important; }
-        
-        /* Imágenes: Contención para que no rompan la página */
-        img {
-          max-height: 250px !important;
-          width: auto !important;
-          object-fit: contain !important;
-          margin: 0 auto !important;
-        }
+        /* --- AJUSTES ESPECÍFICOS POR SECCIÓN --- */
 
-        /* --- 4. BARRAS DECORATIVAS --- */
-        /* Ajuste fino para que no estorben */
-        span[class*="bg-teal-400"] {
-           opacity: 0.2 !important;
-           width: 3px !important;
-           z-index: -1;
-        }
-        /* Ocultar barra en índice */
-        #index-section span[class*="bg-teal-400"] { display: none !important; }
-
-        /* --- 5. REGLAS ESPECÍFICAS POR SECCIÓN --- */
-
-        /* PORTADA (HERO) */
+        /* 1. PORTADA */
         #hero-section {
-           height: 290mm !important; /* Ocupar toda la hoja A4 */
-           display: flex !important;
-           flex-direction: column;
-           justify-content: center;
-           align-items: center;
-           break-after: page !important;
+          height: 250mm !important; /* Casi toda la página */
+          display: flex !important;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          padding-top: 0 !important;
         }
-        #hero-section h1 { font-size: 40pt !important; }
-        
-        /* MISIÓN (Secciones 2 y 3) */
-        #mission section {
-          break-after: avoid !important; /* Permitir que fluya dentro del contenedor */
-          padding: 0 !important;
-        }
-        #mission .grid {
-          display: grid !important;
-          grid-template-columns: 1.5fr 1fr !important; /* Texto izquierda, imagen derecha */
-          gap: 2rem !important;
-          align-items: start !important;
-        }
-        #mission img { max-height: 400px !important; }
 
-        /* PROCESO (Sección 4) */
+        /* 2. ÍNDICE */
+        #index-section .grid {
+          display: block !important;
+        }
+        #index-section h2 { margin-bottom: 1cm !important; border-bottom: 2px solid #0d9488; padding-bottom: 0.5cm; }
+        #index-section a {
+          display: flex;
+          justify-content: space-between;
+          border-bottom: 1px dotted #ccc;
+          padding: 0.2cm 0 !important;
+          text-decoration: none !important;
+          color: black !important;
+        }
+
+        /* 3. SITUACIÓN Y MISIÓN (Texto + Imagen compactos) */
+        #situation .grid, #mission .grid {
+          display: flex !important;
+          flex-direction: column; /* Apilado pero compacto */
+          gap: 1cm !important;
+        }
+        /* Si queremos imagen y texto lado a lado en Situación */
+        #situation .grid {
+             flex-direction: row !important;
+             align-items: flex-start;
+        }
+        #situation img, #mission img {
+            max-height: 8cm !important;
+            width: auto !important;
+            max-width: 100% !important;
+            object-fit: contain !important;
+            border-radius: 4px !important;
+        }
+        
+        /* EXCEPCIÓN: Misión y Logros juntos */
+        #mission {
+            display: flex !important;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        /* 4. PROCESO (El Grid 2x4) */
         #process .grid {
           display: grid !important;
-          grid-template-columns: repeat(4, 1fr) !important;
-          gap: 0.5rem !important;
+          grid-template-columns: 1fr 1fr !important; /* 2 columnas */
+          gap: 0.5cm !important;
+          background: none !important; /* Quitar fondo gris separador */
         }
-        #process h3 { font-size: 9pt !important; font-weight: bold !important; color: #0d9488 !important; }
-        #process p { font-size: 8pt !important; }
-        #process .bg-gray-100 { padding: 0.5rem !important; border: 1px solid #ddd; }
+        #process .bg-gray-100 {
+            background-color: white !important;
+            border: 1px solid #ddd;
+            padding: 0.5cm !important;
+        }
+        #process h3 { font-size: 11pt !important; margin-bottom: 0.1cm !important; }
+        #process p { font-size: 9pt !important; margin-bottom: 0 !important; }
 
-        /* EQUIPO (Sección 5) */
-        #team .grid-cols-1.lg\:grid-cols-2 {
-           display: grid !important;
-           grid-template-columns: 1fr 1fr !important;
-        }
-        #team .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
-           display: grid !important;
-           grid-template-columns: repeat(4, 1fr) !important;
-        }
-        #team img { height: 120px !important; width: 100% !important; object-fit: cover !important; }
+        /* 5. EQUIPO */
+        #team .grid { display: flex !important; flex-wrap: wrap; gap: 1cm !important; }
+        #team .group { width: 45% !important; } /* 2 por fila */
+        #team img { height: 6cm !important; width: 100% !important; object-fit: cover; filter: grayscale(100%); }
 
-        /* ALCANCE (Sección 7) */
-        #scope .grid {
-           display: grid !important;
-           grid-template-columns: 2fr 1fr !important;
-        }
+        /* 6. TESTIMONIOS */
+        #testimonials .grid { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 0.5cm !important; }
+        #testimonials img { height: 4cm !important; }
+        #testimonials .shadow-lg { box-shadow: none !important; border: 1px solid #eee; }
 
-        /* INVERSIÓN (Sección 8) */
-        #investment { break-after: page; }
-        #investment .lg\:hidden { display: none !important; }
-        #investment .hidden.lg\:block { display: block !important; }
-        #investment .grid { border: 1px solid #ccc !important; }
-        #investment .grid > div { 
-           padding: 4px !important; 
-           font-size: 8pt !important;
-           display: flex; align-items: center; justify-content: center;
-        }
-        /* Alinear textos a la izquierda en primera columna */
-        #investment .grid > div:nth-child(5n+1), 
-        #investment .grid > div:nth-child(5n+6) {
-           justify-content: flex-start !important;
-           text-align: left !important;
-        }
-
-        /* OFERTAS */
-        #special-offers .grid {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 2rem !important;
-        }
+        /* 7. ALCANCE (Scope) */
+        #scope .grid { display: block !important; }
+        #scope img { display: none !important; } /* Ocultar imágenes secundarias para priorizar texto en scope si falta espacio, o hacerlas pequeñas */
         
-        /* CONTACTO */
-        footer { break-after: auto !important; }
+        /* 8. INVERSIÓN (Tabla) */
+        #investment { padding-top: 0 !important; }
+        #investment .introduction { display: none !important; } /* Ocultar intro larga para que quepa la tabla */
+        #investment .grid { 
+            display: grid !important;
+            grid-template-columns: 2fr repeat(4, 1fr) !important;
+            border: 1px solid #000 !important;
+            font-size: 8pt !important;
+        }
+        #investment .grid > div {
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            padding: 4px !important;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #investment .hidden.lg\:block { display: block !important; }
+        #investment .lg\:hidden { display: none !important; }
+
+        /* 9. OFERTAS Y PAGO */
+        #special-offers .grid, #payment .grid {
+             display: grid !important;
+             grid-template-columns: 1fr 1fr !important;
+             gap: 1cm !important;
+        }
+        #special-offers img { height: 6cm !important; object-fit: cover; }
+        
+        /* 10. SERVICIOS PREMIUM */
+        #premium-services .grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 1cm !important; }
+        #premium-services .bg-slate-50 { border: 1px solid #ccc; background: white !important; padding: 0.5cm !important; }
+
+        /* FOOTER / CONTACTO */
+        footer { break-after: auto !important; padding-top: 2cm !important; }
       }
     </style>
   <script type="importmap">

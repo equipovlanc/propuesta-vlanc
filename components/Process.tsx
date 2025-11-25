@@ -38,6 +38,7 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                 <AnimatedSection>
                     <SectionHeader number={data?.sectionNumber} title={data?.title} />
                 </AnimatedSection>
+                {/* En impresión, el CSS global forzará un grid limpio de 2 columnas sin fondos grises */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-gray-200">
                     {(data?.steps ?? []).map((step, index) => (
                         <AnimatedSection key={index}>
