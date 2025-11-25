@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" style="scroll-behavior: smooth;">
   <head>
@@ -14,31 +15,26 @@
         font-family: 'Montserrat', sans-serif;
       }
       
-      /* PRINT STYLES FOR PDF GENERATION */
+      /* --- ESTILOS DE IMPRESIÓN AVANZADOS --- */
       @media print {
         @page {
-          margin: 0.5cm;
-          size: auto;
+          /* Puedes cambiar a A3 aquí si lo prefieres, pero A4 es estándar para documentos legales */
+          size: A4 portrait; 
+          margin: 1cm; /* Margen reducido para aprovechar espacio */
         }
 
         body {
-          /* Force background colors/images to print */
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          background-color: white;
-          color: black;
+          background-color: white !important;
+          font-size: 12pt; /* Tamaño de letra legible en papel */
         }
 
-        /* Hide elements marked as no-print (buttons, etc) */
-        .no-print {
-          display: none !important;
-        }
+        /* Ocultar elementos innecesarios */
+        .no-print { display: none !important; }
 
-        /* 
-           CRITICAL: Disable scroll animations for print.
-           Ensure everything is fully opaque and in its final position 
-           so the PDF doesn't have blank sections.
-        */
+        /* RESET DE ANIMACIONES Y CONTENEDORES */
+        /* Eliminamos cualquier posición relativa/absoluta que confunda al motor de impresión */
         div[class*="opacity-0"], 
         div[class*="translate-y"],
         .transition-all,
@@ -46,15 +42,94 @@
           opacity: 1 !important;
           transform: none !important;
           transition: none !important;
+          animation: none !important;
+          display: block !important; /* Crítico: rompe el contexto de apilamiento */
         }
 
-        /* Avoid breaking pages inside important cards or images */
-        img, h2, h3, p {
-          break-inside: avoid;
+        /* --- REGLAS DE CORTE INTELIGENTE --- */
+        
+        /* Regla General: Los títulos nunca se separan de lo que viene después */
+        h1, h2, h3, h4, h5, h6 {
+          break-after: avoid !important;
+          page-break-after: avoid !important;
+        }
+
+        /* Imágenes y figuras: nunca partir por la mitad */
+        img, figure, svg {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+        }
+
+        /* SECCIONES PRINCIPALES */
+        /* Permitimos que las secciones se corten (porque pueden ser largas), 
+           pero forzamos un margen limpio entre ellas */
+        section {
+          break-inside: auto; /* Permitir corte dentro de la sección si es muy larga */
+          page-break-inside: auto;
+          display: block !important; /* Importante para que el navegador calcule bien la altura */
+          padding-top: 20px !important;
+          padding-bottom: 40px !important;
+          height: auto !important;
+          min-height: 0 !important;
+        }
+
+        /* ELEMENTOS INDIVISIBLES (ÁTOMOS) */
+        /* Estos son los elementos que NUNCA deben partirse por la mitad */
+        
+        /* 1. Tarjetas (Testimonios, Equipo, Pasos, Precios) */
+        .grid > div, 
+        .bg-gray-100, 
+        .bg-slate-50,
+        .border,
+        .shadow-xl,
+        .shadow-2xl,
+        .rounded-lg {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+          display: block !important; /* A veces flex/grid causa problemas de corte */
+          margin-bottom: 10px !important;
+        }
+
+        /* 2. Filas de tablas (Inversión) */
+        /* Si usas grid para tablas, aseguramos que la fila no se rompa */
+        [class*="grid-cols-"] > div {
+           break-inside: avoid !important;
+        }
+
+        /* 3. Párrafos y Listas */
+        p, li {
+          orphans: 3; /* Mínimo líneas al final de la página */
+          widows: 3;  /* Mínimo líneas al principio de la nueva página */
+        }
+
+        /* OPTIMIZACIÓN DE LAYOUT PARA PAPEL */
+        
+        /* Forzar anchos completos para aprovechar el papel */
+        .max-w-7xl, .max-w-4xl {
+          max-width: 100% !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        /* Ajustar grids para que quepan mejor en vertical */
+        /* En papel, a veces es mejor 2 columnas que 3 o 4 para que el texto sea legible */
+        .lg\:grid-cols-4, .lg\:grid-cols-3 {
+             grid-template-columns: repeat(2, 1fr) !important;
         }
         
-        section {
-          break-inside: auto;
+        /* Forzar colores de texto para máximo contraste */
+        p, span, div, h1, h2, h3 {
+           color: #000 !important; /* Negro puro para texto */
+        }
+        .text-teal-600, .text-teal-500, .text-teal-700 {
+           color: #0d9488 !important; /* Mantener el color corporativo pero oscuro */
+        }
+        
+        /* Ocultar sombras para ahorrar tinta y limpiar visualmente */
+        .shadow-xl, .shadow-2xl, .shadow-lg {
+          box-shadow: none !important;
+          border: 1px solid #ddd !important; /* Reemplazar sombra con borde fino */
         }
       }
     </style>
