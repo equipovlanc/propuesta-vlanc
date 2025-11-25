@@ -13,6 +13,50 @@
       body {
         font-family: 'Montserrat', sans-serif;
       }
+      
+      /* PRINT STYLES FOR PDF GENERATION */
+      @media print {
+        @page {
+          margin: 0.5cm;
+          size: auto;
+        }
+
+        body {
+          /* Force background colors/images to print */
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          background-color: white;
+          color: black;
+        }
+
+        /* Hide elements marked as no-print (buttons, etc) */
+        .no-print {
+          display: none !important;
+        }
+
+        /* 
+           CRITICAL: Disable scroll animations for print.
+           Ensure everything is fully opaque and in its final position 
+           so the PDF doesn't have blank sections.
+        */
+        div[class*="opacity-0"], 
+        div[class*="translate-y"],
+        .transition-all,
+        .transform {
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
+        }
+
+        /* Avoid breaking pages inside important cards or images */
+        img, h2, h3, p {
+          break-inside: avoid;
+        }
+        
+        section {
+          break-inside: auto;
+        }
+      }
     </style>
   <script type="importmap">
 {
@@ -24,7 +68,6 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <div id="root"></div>

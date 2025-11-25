@@ -55,6 +55,22 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
                         <a href={data?.web?.url} target="_blank" rel="noopener noreferrer" className="text-sm text-teal-600 hover:underline">{data?.web?.displayText}</a>
                     </AnimatedSection>
                 </div>
+
+                {/* Print/Download Button - Hidden in the actual print via CSS */}
+                <AnimatedSection className="mt-24 no-print">
+                    <button 
+                        onClick={() => window.print()}
+                        className="group flex items-center gap-3 bg-teal-600 text-white px-8 py-4 rounded-full font-bold hover:bg-teal-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        DESCARGAR / IMPRIMIR CONTRATO
+                    </button>
+                    <p className="mt-4 text-xs text-gray-400 max-w-md mx-auto">
+                        Al pulsar, selecciona "Guardar como PDF" en el destino de tu impresora para generar el archivo digital.
+                    </p>
+                </AnimatedSection>
             </div>
         </footer>
     );
