@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" style="scroll-behavior: smooth;">
   <head>
@@ -15,30 +14,26 @@
         font-family: 'Montserrat', sans-serif;
       }
       
-      /* --- ESTILOS DE IMPRESIÓN EDITORIAL --- */
+      /* --- ESTILOS DE IMPRESIÓN PRO --- */
       @media print {
         @page {
           size: A4 portrait; 
-          margin: 1.5cm 1.5cm 1.5cm 1.5cm; /* Márgenes un poco más ajustados */
+          margin: 10mm 15mm; /* Márgenes optimizados: 1cm arriba/abajo, 1.5cm lados */
         }
 
         html, body {
           width: 210mm;
-          min-height: 297mm;
-          margin: 0 auto;
-          padding: 0;
+          height: auto;
           background-color: white !important;
           color: black !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          text-rendering: optimizeLegibility; 
-          font-size: 11pt; /* Tamaño base de lectura cómodo */
+          overflow: visible !important;
         }
 
-        /* Ocultar elementos de UI */
+        /* --- 1. LIMPIEZA DE UI Y ANIMACIONES --- */
         .no-print { display: none !important; }
-
-        /* --- 1. RESET Y LIMPIEZA --- */
+        
         div[class*="opacity-0"], 
         div[class*="translate-y"],
         .transition-all,
@@ -49,127 +44,139 @@
           animation: none !important;
         }
 
-        /* --- 2. GESTIÓN DE SALTOS DE PÁGINA --- */
-        p, h2, h3, h4, li { orphans: 3; widows: 3; }
+        /* --- 2. ELIMINACIÓN DE ESPACIOS WEB (EL "AIRE") --- */
+        /* Sobrescribimos Tailwind para eliminar paddings gigantes */
+        section, footer, header, main > div {
+           padding-top: 10mm !important;
+           padding-bottom: 10mm !important;
+           margin: 0 !important;
+        }
         
-        h1, h2, h3, h4, h5, h6 {
-          break-after: avoid !important;
-          page-break-after: avoid !important;
-          margin-bottom: 0.5rem !important;
+        /* Excepción para la portada */
+        section#hero-section {
+          padding: 0 !important;
+          margin: 0 !important;
         }
 
-        /* Secciones principales: Empiezan página nueva */
-        main > div[id], section {
-          position: relative;
+        .gap-12, .gap-16, .gap-24, .space-y-12, .space-y-20 {
+           gap: 1rem !important;
+           space-y: 1rem !important;
+        }
+
+        /* --- 3. MAQUETACIÓN ESTRUCTURAL --- */
+        
+        /* Forzar saltos de página limpios */
+        section {
+          break-inside: avoid;
+          page-break-inside: avoid;
+          break-after: page;
+          page-break-after: always;
           display: block !important;
-          break-before: page; /* Por defecto, nueva página */
-          margin-bottom: 0 !important;
-          padding-top: 1cm !important;
-          padding-bottom: 0 !important;
+          min-height: auto !important; /* Evitar alturas forzadas de pantalla */
         }
 
-        /* Excepción: El índice y la primera sección pueden ir seguidos si caben (raro, pero flexible) */
-        #index-section { break-before: auto !important; }
+        /* Títulos */
+        h2 { font-size: 24pt !important; margin-bottom: 0.5rem !important; line-height: 1.1 !important; }
+        h3 { font-size: 14pt !important; margin-bottom: 0.25rem !important; }
+        p, li { font-size: 10pt !important; line-height: 1.4 !important; color: #333 !important; }
         
-        /* Evitar que una sección se rompa justo después del título */
-        section > div:first-child { break-inside: avoid !important; }
-
-        /* --- 3. ARREGLO DE BARRAS VERDES (DECORATIVAS) --- */
-        /* Hacemos que sean sutiles y nunca pisen texto */
-        span[class*="bg-teal-400"] {
-           z-index: -10 !important;
-           print-color-adjust: exact !important;
-           opacity: 0.3 !important; /* Más claro para no molestar la lectura */
-           /* En vez de fixed height, que se adapten */
-           height: 100% !important; 
-           max-height: 3rem !important; /* Tope de altura para que no bajen demasiado */
-           top: 0 !important;
-           margin-top: 0.5rem;
-        }
-
-        /* Títulos centrados (Garantías, Premium): Centrar la barra respecto al texto */
-        .text-center span[class*="bg-teal-400"] {
-           left: 50% !important;
-           transform: translateX(-50%) skewY(-12deg) !important;
-           width: 4px !important;
-           height: 2rem !important;
-           margin-top: 1rem;
-        }
-
-        /* En el ÍNDICE, la barra suele molestar mucho al texto inferior. La ocultamos o reducimos */
-        #index-section span[class*="bg-teal-400"] {
-            display: none !important; 
-        }
-
-        /* --- 4. OPTIMIZACIÓN DE IMÁGENES --- */
+        /* Imágenes: Contención para que no rompan la página */
         img {
-          max-width: 100% !important;
-          /* Limitamos altura para que no ocupen todo el folio */
-          max-height: 400px !important; 
-          object-fit: contain !important; /* O cover, según preferencia, contain asegura ver todo */
-          break-inside: avoid !important;
-          border: 1px solid #ddd;
-          margin-bottom: 1rem;
+          max-height: 250px !important;
+          width: auto !important;
+          object-fit: contain !important;
+          margin: 0 auto !important;
         }
+
+        /* --- 4. BARRAS DECORATIVAS --- */
+        /* Ajuste fino para que no estorben */
+        span[class*="bg-teal-400"] {
+           opacity: 0.2 !important;
+           width: 3px !important;
+           z-index: -1;
+        }
+        /* Ocultar barra en índice */
+        #index-section span[class*="bg-teal-400"] { display: none !important; }
+
+        /* --- 5. REGLAS ESPECÍFICAS POR SECCIÓN --- */
+
+        /* PORTADA (HERO) */
+        #hero-section {
+           height: 290mm !important; /* Ocupar toda la hoja A4 */
+           display: flex !important;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           break-after: page !important;
+        }
+        #hero-section h1 { font-size: 40pt !important; }
         
-        /* Imágenes de fondo o decorativas grandes: ocultar para ahorrar tinta y espacio */
-        .absolute.inset-0 img {
-           opacity: 0.1 !important;
+        /* MISIÓN (Secciones 2 y 3) */
+        #mission section {
+          break-after: avoid !important; /* Permitir que fluya dentro del contenedor */
+          padding: 0 !important;
         }
+        #mission .grid {
+          display: grid !important;
+          grid-template-columns: 1.5fr 1fr !important; /* Texto izquierda, imagen derecha */
+          gap: 2rem !important;
+          align-items: start !important;
+        }
+        #mission img { max-height: 400px !important; }
 
-        /* --- 5. AJUSTES ESPECÍFICOS POR SECCIÓN PARA QUE QUEPAN --- */
-
-        /* SECCIÓN 04: PROCESO (Tarjetas) */
-        /* Forzamos grid de 4 columnas (como escritorio) y letra pequeña */
+        /* PROCESO (Sección 4) */
         #process .grid {
           display: grid !important;
           grid-template-columns: repeat(4, 1fr) !important;
           gap: 0.5rem !important;
         }
-        #process .bg-gray-100 { /* Las tarjetas */
-           padding: 0.5rem !important;
-           border: 1px solid #ccc;
-        }
-        #process h3 { font-size: 10pt !important; margin-bottom: 0.2rem !important; }
-        #process p { font-size: 8pt !important; line-height: 1.2 !important; }
+        #process h3 { font-size: 9pt !important; font-weight: bold !important; color: #0d9488 !important; }
+        #process p { font-size: 8pt !important; }
+        #process .bg-gray-100 { padding: 0.5rem !important; border: 1px solid #ddd; }
 
-        /* SECCIÓN 08: INVERSIÓN (Tabla de precios) */
-        /* Ocultar tarjetas móviles, mostrar tabla escritorio */
+        /* EQUIPO (Sección 5) */
+        #team .grid-cols-1.lg\:grid-cols-2 {
+           display: grid !important;
+           grid-template-columns: 1fr 1fr !important;
+        }
+        #team .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
+           display: grid !important;
+           grid-template-columns: repeat(4, 1fr) !important;
+        }
+        #team img { height: 120px !important; width: 100% !important; object-fit: cover !important; }
+
+        /* ALCANCE (Sección 7) */
+        #scope .grid {
+           display: grid !important;
+           grid-template-columns: 2fr 1fr !important;
+        }
+
+        /* INVERSIÓN (Sección 8) */
+        #investment { break-after: page; }
         #investment .lg\:hidden { display: none !important; }
         #investment .hidden.lg\:block { display: block !important; }
-        
-        #investment .grid {
-           border: 1px solid #000 !important;
+        #investment .grid { border: 1px solid #ccc !important; }
+        #investment .grid > div { 
+           padding: 4px !important; 
+           font-size: 8pt !important;
+           display: flex; align-items: center; justify-content: center;
         }
-        #investment .grid > div {
-           padding: 0.3rem !important; /* Reducir padding celdas */
-           font-size: 8pt !important; /* Letra pequeña para que quepa la tabla */
-           border-bottom: 1px solid #eee;
-        }
-        /* Ajustar anchos de columnas de tabla para A4 */
-        #investment .lg\:grid-cols-\[2fr_repeat\(4\,1fr\)\] {
-           grid-template-columns: 1.5fr repeat(4, 1fr) !important;
-        }
-
-        /* SECCIÓN 05: EQUIPO */
-        /* Fotos más pequeñas */
-        #team img {
-           height: 150px !important;
-           width: auto !important;
-           margin: 0 auto;
-        }
-        #team .grid {
-           gap: 1rem !important;
+        /* Alinear textos a la izquierda en primera columna */
+        #investment .grid > div:nth-child(5n+1), 
+        #investment .grid > div:nth-child(5n+6) {
+           justify-content: flex-start !important;
+           text-align: left !important;
         }
 
-        /* GENERAL TEXTO */
-        .text-gray-600 { color: black !important; }
-        
-        /* Ajuste para evitar páginas en blanco por márgenes excesivos */
-        .py-20, .py-32, .md\:py-32 {
-           padding-top: 1rem !important;
-           padding-bottom: 1rem !important;
+        /* OFERTAS */
+        #special-offers .grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 2rem !important;
         }
+        
+        /* CONTACTO */
+        footer { break-after: auto !important; }
       }
     </style>
   <script type="importmap">
