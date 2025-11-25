@@ -14,42 +14,49 @@
         font-family: 'Montserrat', sans-serif;
       }
       
-      /* --- ESTILOS DE IMPRESIÓN "CONTINUO HORIZONTAL" --- */
+      /* --- ESTILOS DE IMPRESIÓN "PERGAMINO CONTINUO REAL" --- */
       @media print {
         @page {
           size: A4 landscape; 
-          margin: 0; /* SIN MÁRGENES para efecto continuo al unir hojas */
+          margin: 0mm; /* Cero márgenes absolutos */
         }
 
-        /* Forzar aspecto visual exacto a la web */
         html, body {
-          width: 100%;
-          min-width: 1100px; /* Forzar ancho de escritorio */
+          /* Forzamos un ancho grande para replicar la pantalla 1920x1080 */
+          /* Esto hará que el contenido se vea "pequeño" pero idéntico a la pantalla */
+          min-width: 1600px !important; 
+          width: 1600px !important;
+          
+          /* Asegurar que se imprimen los fondos */
           background-color: white !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+          
+          /* Permitir que el flujo continúe sin cortes lógicos */
+          overflow: visible !important;
+          height: auto !important;
         }
 
-        /* Ocultar elementos de interfaz no deseados */
-        .no-print, 
-        video, 
-        iframe { 
+        /* RESET TOTAL DE RUPTURAS DE PÁGINA */
+        /* Esto permite cortar imágenes y textos por la mitad, ideal para unir hojas */
+        section, div, img, table, p, h1, h2, h3, ul, li {
+          break-inside: auto !important;
+          page-break-inside: auto !important;
+          break-before: auto !important;
+          break-after: auto !important;
+        }
+
+        /* Ocultar interfaz */
+        .no-print { 
             display: none !important; 
         }
 
         /* FORZAR VISIBILIDAD DE ANIMACIONES */
-        /* Sobrescribe las clases de AnimatedSection para que todo aparezca */
         div[class*="opacity-0"], 
         div[class*="translate-y"] {
           opacity: 1 !important;
           transform: none !important;
           transition: none !important;
-        }
-
-        /* Asegurar que las imágenes de fondo se vean */
-        * {
-          print-color-adjust: exact !important;
-          -webkit-print-color-adjust: exact !important;
         }
       }
     </style>
