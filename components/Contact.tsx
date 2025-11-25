@@ -56,7 +56,7 @@ const Contact: React.FC<ContactProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* Print/Download Button - Hidden in the actual print via CSS */}
+                {/* Print/Download Button - Hidden in the actual print via CSS class .no-print */}
                 <AnimatedSection className="mt-24 no-print">
                     <button 
                         onClick={() => window.print()}
