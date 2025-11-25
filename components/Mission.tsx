@@ -18,7 +18,7 @@ interface MissionProps {
 }
 
 const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, title }) => (
-    <div className="relative mb-12 ml-8 md:ml-0 print:mb-4">
+    <div className="relative mb-12 ml-8 md:ml-0">
       <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
         <span>{number}</span>
         <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">{title}</span>
@@ -38,7 +38,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
     return (
         <section className="py-20 md:py-32 px-4 md:px-8 lg:px-16 bg-white">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-                <div className="space-y-20 print:space-y-6">
+                <div className="space-y-20">
                     <AnimatedSection>
                         <SectionHeader number={data?.mission?.sectionNumber} title={data?.mission?.title} />
                         <h3 className="text-xl font-semibold text-teal-600 mb-4">&gt; {data?.mission?.subtitle}</h3>
@@ -53,9 +53,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
                 </div>
-                {/* En impresión, controlamos el tamaño de la imagen vía CSS global para que quepa */}
-                <AnimatedSection className="print:order-first">
-                    {data?.image && <img src={data.image} alt="Architect working on blueprints" className="rounded-lg shadow-2xl object-cover w-full h-full print:shadow-none print:rounded-none" />}
+                <AnimatedSection>
+                    {data?.image && <img src={data.image} alt="Architect working on blueprints" className="rounded-lg shadow-2xl object-cover w-full h-full" />}
                 </AnimatedSection>
             </div>
         </section>
