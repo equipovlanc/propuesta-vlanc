@@ -15,25 +15,31 @@
         font-family: 'Montserrat', sans-serif;
       }
       
-      /* --- ESTILOS DE IMPRESIÓN PRO --- */
+      /* --- ESTILOS DE IMPRESIÓN EDITORIAL --- */
       @media print {
         @page {
           size: A4 portrait; 
-          margin: 1.5cm 1cm; /* Margen superior/inf un poco mayor, laterales ajustados */
+          margin: 2cm 1.5cm; /* Márgenes estándar de documento formal */
         }
 
-        body {
+        html, body {
+          width: 100%;
+          height: auto;
+          margin: 0;
+          padding: 0;
+          background-color: white !important;
+          color: black !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          background-color: white !important;
-          font-size: 11pt; /* Tamaño de letra ligeramente reducido para mejor encaje */
-          color: black !important;
+          /* Asegurar que las fuentes se renderizan bien */
+          text-rendering: optimizeLegibility; 
         }
 
-        /* Ocultar navegación y botones */
+        /* Ocultar elementos de UI */
         .no-print { display: none !important; }
 
-        /* RESET GENERAL DE ANIMACIONES */
+        /* --- 1. RESET DE ANIMACIONES Y LAYOUT --- */
+        /* Eliminamos cualquier transformación que pueda confundir al motor de renderizado PDF */
         div[class*="opacity-0"], 
         div[class*="translate-y"],
         .transition-all,
@@ -42,100 +48,103 @@
           transform: none !important;
           transition: none !important;
           animation: none !important;
-          display: block !important;
         }
 
-        /* --- CONTROL DE FLUJO Y PAGINACIÓN --- */
-
-        /* REGLA DE ORO: Las secciones no se rompen a menos que sean gigantes */
-        section {
-          break-inside: avoid !important;      /* Intenta mantener la sección en una sola página */
-          page-break-inside: avoid !important; /* Sintaxis antigua para compatibilidad */
-          display: block !important;
-          position: relative !important;
-          
-          /* Reducir el padding gigante de la web para ahorrar papel */
-          padding-top: 1cm !important;
-          padding-bottom: 1cm !important;
-          margin-top: 0 !important;
-          margin-bottom: 0 !important;
-          height: auto !important;
-          min-height: 0 !important;
-        }
+        /* --- 2. GESTIÓN DE BLOQUES Y SALTOS DE PÁGINA --- */
         
-        /* TÍTULOS SIEMPRE PEGADOS A SU CONTENIDO */
+        /* Regla General: Los textos no deben quedar huérfanos */
+        p, h2, h3, h4, li {
+          orphans: 3; 
+          widows: 3;
+        }
+
+        /* Títulos: Siempre pegados a lo que viene después */
         h1, h2, h3, h4, h5, h6 {
-          break-after: avoid !important;      /* Nunca romper página justo después de un título */
+          break-after: avoid !important;
           page-break-after: avoid !important;
-          break-inside: avoid !important;
+          margin-top: 1.5rem !important; /* Restaurar aire superior */
+          margin-bottom: 1rem !important; /* Restaurar aire inferior */
         }
 
-        /* Contenedores de títulos específicos (como los que tienen la barra verde) */
-        .relative.mb-12, .mb-12 {
-            margin-bottom: 1rem !important; /* Reducir espacio entre título y texto */
-            break-after: avoid !important;
-            page-break-after: avoid !important;
+        /* SECCIONES PRINCIPALES: Forzar inicio en página nueva si son grandes */
+        /* Esto da el aspecto de "Capítulos" del contrato */
+        main > div[id], section {
+          break-inside: auto; /* Permitir romper DENTRO de la sección si es larga */
+          break-before: auto;
+          position: relative;
+          display: block !important; /* Simplificar layout */
+          margin-bottom: 2cm !important;
         }
 
-        /* ELEMENTOS INDIVISIBLES INTERNOS */
-        /* Si una sección DEBE romperse (porque ocupa 2 páginas), protegemos sus piezas internas */
+        /* Pero... el título de la sección y su intro NO deben separarse */
+        section > div:first-child {
+             break-inside: avoid !important;
+        }
+
+        /* Excepciones específicas para que empiecen en página nueva si o si */
+        #situation, #mission, #process, #team, #scope, #investment, #payment, #guarantees, #premium-services {
+           break-before: page !important; 
+           page-break-before: always !important;
+           margin-top: 0 !important;
+           padding-top: 0 !important;
+        }
+
+        /* --- 3. CORRECCIÓN DE ELEMENTOS VISUALES (BARRAS VERDES) --- */
         
-        img, figure, svg {
-          break-inside: avoid !important;
-          max-height: 10cm !important; /* Limitar altura de imágenes para que no fuercen saltos excesivos */
-          width: auto !important;
+        /* Asegurar que el texto está por encima de las decoraciones */
+        .relative {
+          z-index: 10;
         }
 
-        /* Tarjetas, filas de precios, testimonios */
-        .grid > div, 
-        .shadow-xl,
-        .border {
-          break-inside: avoid !important;
-          page-break-inside: avoid !important;
-          display: block !important;
-          margin-bottom: 0.5cm !important;
+        /* Las barras decorativas (teal) enviarlas al fondo y ajustarlas */
+        span[class*="bg-teal-400"] {
+           z-index: -1 !important;
+           print-color-adjust: exact !important;
+           /* Ajuste fino para que no monten el texto si la fuente cambia */
+           transform: translate(-5px, 0) !important; 
+           opacity: 0.6 !important; /* Un poco más suave para impresión */
         }
 
-        /* Párrafos largos */
-        p {
-          orphans: 3; /* Mínimo 3 líneas al final de la página */
-          widows: 3;  /* Mínimo 3 líneas al principio de la nueva página */
+        /* Corrección específica para el título grande con barra */
+        .SectionTitle, .relative.mb-12 {
+           display: flex;
+           align-items: center;
+           break-inside: avoid;
         }
 
-        /* AJUSTES VISUALES PARA TINTA Y PAPEL */
-        
-        /* Forzar texto negro puro */
-        p, span, div, h1, h2, h3, li {
-           color: #000 !important;
-        }
-        
-        /* Color corporativo (Teal) se mantiene pero oscurecido para legibilidad */
-        .text-teal-600, .text-teal-500, .text-teal-700 {
-           color: #006058 !important; 
-        }
+        /* --- 4. OPTIMIZACIÓN DE CONTENIDOS --- */
 
-        /* Fondos claros */
-        .bg-slate-50, .bg-gray-100, .bg-slate-100 {
-           background-color: #f8f9fa !important; /* Un gris muy muy suave apenas perceptible */
-           border: 1px solid #eee !important;   /* Añadir borde suave para delimitar áreas */
-        }
-
-        /* Sombras fuera */
-        .shadow-xl, .shadow-2xl, .shadow-lg {
-          box-shadow: none !important;
-        }
-
-        /* GRID FIXES */
-        /* Convertir grids complejos en columnas simples si es necesario */
-        .lg\:grid-cols-4 {
-             grid-template-columns: repeat(2, 1fr) !important;
-        }
-        
-        /* Ajustar anchos */
-        .max-w-7xl {
+        /* Imágenes */
+        img {
           max-width: 100% !important;
-          width: 100% !important;
-          padding: 0 !important;
+          height: auto !important;
+          break-inside: avoid !important;
+          box-shadow: none !important; /* Las sombras quedan mal impresas a veces */
+          border: 1px solid #eee; /* Borde sutil en lugar de sombra */
+        }
+
+        /* Grids: Permitir que fluyan mejor */
+        .grid {
+          display: grid !important;
+          /* Si hay columnas, mantenerlas, pero asegurar que caben */
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+          gap: 1rem !important;
+        }
+
+        /* Casos específicos donde queremos columnas fijas (ej: tabla precios) */
+        .lg\:grid-cols-\[2fr_repeat\(4\,1fr\)\] {
+           /* La tabla de precios es compleja. En A4 vertical a veces es mejor 
+              que se simplifique o reducir fuente */
+           font-size: 9pt !important;
+        }
+
+        /* Ajustes de color para legibilidad */
+        .text-gray-600, .text-gray-500 {
+          color: #333 !important; /* Gris más oscuro para que se lea bien en papel */
+        }
+        
+        .bg-slate-50, .bg-gray-100 {
+           background-color: #f9f9f9 !important;
         }
       }
     </style>
