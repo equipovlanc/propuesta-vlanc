@@ -93,7 +93,10 @@ const App: React.FC = () => {
           "situation": situation{..., "image": image.asset->url},
           "mission": mission{
             ...,
+            "videoFile": videoFile.asset->url,
+            "videoUrl": videoUrl,
             "image": image.asset->url,
+            "printImage": printImage.asset->url,
             "mission": mission{...},
             "achievements": achievements{..., "listItems": listItems[]}
           },
@@ -110,7 +113,12 @@ const App: React.FC = () => {
             "images": images[].asset->url,
             "intervention": intervention{..., "breakdown": breakdown[]}
           },
-          "scopePhases1": scopePhases1{..., "phases": phases[]{..., "subPhases": subPhases[]{...}}},
+          "scopePhases1": scopePhases1{
+            ..., 
+            "videoFile": videoFile.asset->url,
+            "videoUrl": videoUrl,
+            "phases": phases[]{..., "subPhases": subPhases[]{...}}
+          },
           "scopePhases2": scopePhases2{..., "phases": phases[]{..., "subPhases": subPhases[]{...}}},
           "investment": investment{..., "plansDescription": plansDescription[]{...}, "plans": plans[]{..., "features": features[]}, "featureLabels": featureLabels[]},
           "specialOffers": specialOffers{

@@ -1,6 +1,9 @@
 
 
 
+
+
+
 export const proposalData = {
     header: {
         projectCode: "25-400-RIN",
@@ -44,7 +47,8 @@ export const proposalData = {
         image: "https://picsum.photos/800/1000?grayscale"
     },
     mission: {
-        video: "https://videos.pexels.com/video-files/3205626/3205626-hd_1920_1080_25fps.mp4", // Placeholder video
+        videoUrl: "https://videos.pexels.com/video-files/3205626/3205626-hd_1920_1080_25fps.mp4", // Placeholder video URL
+        videoFile: "", // Placeholder for file upload
         printImage: "https://picsum.photos/1920/1080?grayscale", // Placeholder static image for print
         image: "https://picsum.photos/800/1000?random=2",
         mission: {
@@ -136,6 +140,7 @@ export const proposalData = {
     scopePhases1: {
         title: "TRABAJOS CONTEMPLADOS",
         videoUrl: "https://videos.pexels.com/video-files/3205626/3205626-hd_1920_1080_25fps.mp4",
+        videoFile: "",
         phases: [
             {
                 title: "1. FASE ANTEPROYECTO",

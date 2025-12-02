@@ -1,6 +1,9 @@
 
 
 
+
+
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -14,9 +17,11 @@ interface SectionData {
 
 interface MissionProps {
     data?: {
-        video?: string;
+        videoFile?: string; // New: uploaded file URL
+        videoUrl?: string;  // Old: external URL
+        video?: string;     // Fallback for legacy data
         image?: string;
-        printImage?: string; // New field for static print image
+        printImage?: string; 
         mission?: SectionData;
         achievements?: SectionData;
     }
@@ -40,6 +45,9 @@ const CheckListItem: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 );
 
 const Mission: React.FC<MissionProps> = ({ data }) => {
+    // Determine the video source: uploaded file > specific url field > legacy video field
+    const videoSrc = data?.videoFile || data?.videoUrl || data?.video;
+
     return (
         <section className="h-full py-12 px-4 md:px-8 lg:px-16 bg-white flex flex-col justify-center">
             <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -68,9 +76,9 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                     <div className="w-full aspect-video rounded-lg overflow-hidden shadow-2xl relative bg-gray-100">
                          {/* WEB VIEW: Video Loop */}
                          <div className="w-full h-full block no-print">
-                             {data?.video ? (
+                             {videoSrc ? (
                                  <video 
-                                    src={data.video} 
+                                    src={videoSrc} 
                                     autoPlay 
                                     loop 
                                     muted 

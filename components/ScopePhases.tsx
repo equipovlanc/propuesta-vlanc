@@ -1,5 +1,9 @@
 
 
+
+
+
+
 import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
 import Guarantees from './Guarantees';
@@ -28,7 +32,8 @@ interface Phase {
 interface ScopePhasesProps {
     data?: {
         title?: string;
-        videoUrl?: string;
+        videoFile?: string; // New: Uploaded file
+        videoUrl?: string;  // Old: External URL
         phases?: Phase[];
     };
     guaranteesData?: GuaranteesData;
@@ -37,6 +42,9 @@ interface ScopePhasesProps {
 const ScopePhases: React.FC<ScopePhasesProps> = ({ data, guaranteesData }) => {
   const [showVideo, setShowVideo] = useState(false);
   const [showGuarantees, setShowGuarantees] = useState(false);
+
+  // Determine video source
+  const videoSrc = data?.videoFile || data?.videoUrl;
 
   return (
     <>
@@ -121,8 +129,8 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, guaranteesData }) => {
                 onClick={() => setShowVideo(false)}
             >
                 <div className="relative w-full max-w-5xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
-                    {data?.videoUrl && (
-                        <video src={data.videoUrl} controls autoPlay className="w-full h-full" />
+                    {videoSrc && (
+                        <video src={videoSrc} controls autoPlay className="w-full h-full" />
                     )}
                     <button 
                         onClick={() => setShowVideo(false)}

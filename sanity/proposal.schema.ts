@@ -94,7 +94,19 @@ export default {
             type: 'object',
             options: { collapsible: true },
             fields: [
-                { name: 'video', title: 'Video Loop (URL)', description: 'Enlace directo al video mp4 para el loop de fondo (WEB)', type: 'url' },
+                { 
+                    name: 'videoFile', 
+                    title: 'Video Loop (Archivo)', 
+                    description: 'Sube el archivo de video mp4 directamente desde tu PC.', 
+                    type: 'file', 
+                    options: { accept: 'video/*' } 
+                },
+                { 
+                    name: 'videoUrl', 
+                    title: 'Video Loop (URL Alternativa)', 
+                    description: 'Opcional: Enlace externo si no subes archivo.', 
+                    type: 'url' 
+                },
                 { name: 'printImage', title: 'Imagen Estática para Impresión', description: 'Esta imagen sustituye al video cuando se imprime el PDF', type: 'image', options: { hotspot: true } },
                 { name: 'image', title: 'Imagen Principal (Fallback)', description: 'Si no hay video ni imagen de impresión', type: 'image', options: { hotspot: true } },
                 {
@@ -204,7 +216,19 @@ export default {
             options: { collapsible: true },
             fields: [
                 { name: 'title', title: 'Título (Trabajos Contemplados)', type: 'string' },
-                { name: 'videoUrl', title: 'Video Explicativo Popup (URL)', description: 'Enlace al video que se abre en popup', type: 'url' },
+                { 
+                    name: 'videoFile', 
+                    title: 'Video Explicativo (Archivo)', 
+                    description: 'Sube el archivo de video para el popup.', 
+                    type: 'file', 
+                    options: { accept: 'video/*' } 
+                },
+                { 
+                    name: 'videoUrl', 
+                    title: 'Video Explicativo (URL Alternativa)', 
+                    description: 'Opcional: Enlace externo.', 
+                    type: 'url' 
+                },
                 { name: 'phases', title: 'Fases (Anteproyecto / Interiorismo)', type: 'array', of: [{
                     type: 'object',
                     fields: [
