@@ -1,3 +1,4 @@
+
 // This file defines the structure of your data in Sanity.
 // It's like creating a template for your proposal form.
 
@@ -26,7 +27,7 @@ export default {
             validation: (Rule: any) => Rule.required(),
         },
 
-        // --- SECTIONS ---
+        // --- SECTIONS (MAPPED TO PDF PAGES) ---
         {
             name: 'header',
             title: 'Cabecera del Documento',
@@ -46,7 +47,7 @@ export default {
         },
         {
             name: 'hero',
-            title: 'Título Principal (Hero)',
+            title: 'Pág 1: Portada',
             type: 'object',
             fields: [
                 { name: 'line1', title: 'Línea 1', type: 'string' },
@@ -56,7 +57,7 @@ export default {
         },
         {
             name: 'index',
-            title: 'Índice',
+            title: 'Pág 2: Índice',
             type: 'object',
             fields: [
                 { name: 'title', title: 'Título de la Sección', type: 'string', initialValue: 'ÍNDICE' },
@@ -66,7 +67,7 @@ export default {
                         fields: [
                             { name: 'number', title: 'Número (01, 02...) o dejar vacío', type: 'string' },
                             { name: 'title', title: 'Título del Punto', type: 'string' },
-                            { name: 'id', title: 'ID de la Sección (para el enlace)', description: 'Debe coincidir con los IDs de las secciones: situation, mission, process, team, etc.', type: 'string' },
+                            { name: 'id', title: 'ID de la Sección (para el enlace)', description: 'Debe coincidir con los IDs del frontend', type: 'string' },
                         ]
                     }]
                 }
@@ -74,21 +75,23 @@ export default {
         },
         {
             name: 'situation',
-            title: 'Sección 01: La Situación',
+            title: 'Pág 3: La Situación (01)',
             type: 'object',
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '01' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'LA SITUACIÓN' },
-                { name: 'paragraphs', title: 'Párrafos (puedes usar <strong>texto</strong> para negritas)', type: 'array', of: [{ type: 'text', title: 'Párrafo' }] },
+                { name: 'paragraphs', title: 'Párrafos', type: 'array', of: [{ type: 'text' }] },
                 { name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } },
             ]
         },
         {
             name: 'mission',
-            title: 'Sección 02 y 03: Misión y Logros',
+            title: 'Pág 4: Misión y Logros (02/03)',
             type: 'object',
             fields: [
-                { name: 'image', title: 'Imagen Principal', type: 'image', options: { hotspot: true } },
+                { name: 'video', title: 'Video Loop (URL)', description: 'Enlace al video mp4 para el loop de fondo', type: 'url' },
+                { name: 'printImage', title: 'Imagen Estática para Impresión', description: 'Sustituye al video en el PDF impreso', type: 'image', options: { hotspot: true } },
+                { name: 'image', title: 'Imagen Principal (Fallback)', type: 'image', options: { hotspot: true } },
                 {
                     name: 'mission', title: 'Sub-sección: La Misión', type: 'object', fields: [
                         { name: 'sectionNumber', title: 'Número', type: 'string', initialValue: '02' },
@@ -108,7 +111,7 @@ export default {
         },
         {
             name: 'process',
-            title: 'Sección 04: El Proceso',
+            title: 'Pág 5: El Proceso (04)',
             type: 'object',
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '04' },
@@ -124,7 +127,7 @@ export default {
         },
         {
             name: 'team',
-            title: 'Sección 05: El Equipo',
+            title: 'Pág 6: El Equipo (05)',
             type: 'object',
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '05' },
@@ -145,7 +148,7 @@ export default {
         },
         {
             name: 'testimonials',
-            title: 'Sección 06: Testimonios',
+            title: 'Pág 7: Testimonios (06)',
             type: 'object',
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '06' },
@@ -157,15 +160,16 @@ export default {
                             { name: 'name', title: 'Nombre del Cliente', type: 'string' },
                             { name: 'quote', title: 'Cita', type: 'text' },
                             { name: 'img', title: 'Imagen del Proyecto', type: 'image', options: { hotspot: true } },
-                            { name: 'link', title: 'Enlace (URL)', description: 'URL a la que llevará la tarjeta (ej: https://vivevlanc.com/proyectos/...)', type: 'url' },
+                            { name: 'link', title: 'Enlace (URL)', type: 'url' },
                         ]
                     }]
                 }
             ]
         },
+        // --- SCOPE SPLIT INTO 3 SLIDES ---
         {
-            name: 'scope',
-            title: 'Sección 07: Qué vamos a hacer',
+            name: 'scopeIntro',
+            title: 'Pág 8: Qué vamos a hacer (07 - Ámbito)',
             type: 'object',
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '07' },
@@ -177,50 +181,90 @@ export default {
                         { name: 'location', title: 'Localización', type: 'string' },
                         { name: 'projectType', title: 'Tipo de Proyecto', type: 'string' },
                         { name: 'scope', title: 'Ámbito de Intervención', type: 'string' },
-                        { name: 'breakdown', title: 'Desglose', type: 'array', of: [{ type: 'string' }] }
-                    ]
-                },
-                {
-                    name: 'contemplatedWork', title: 'Trabajos Contemplados', type: 'object', fields: [
-                        { name: 'title', title: 'Título', type: 'string' },
-                        { name: 'phases', title: 'Fases', type: 'array', of: [{
-                            type: 'object',
-                            fields: [
-                                { name: 'title', title: 'Título de la Fase', type: 'string' },
-                                { name: 'description', title: 'Descripción de la Fase', type: 'text' }
-                            ]
-                        }]}
+                        { name: 'program', title: 'Programa (Texto completo)', type: 'text' },
+                        { name: 'breakdown', title: 'Desglose Puntos', type: 'array', of: [{ type: 'string' }] },
+                        { name: 'note', title: 'Nota al pie', type: 'string' }
                     ]
                 }
             ]
         },
         {
+            name: 'scopePhases1',
+            title: 'Pág 9: Trabajos Contemplados (07 - Parte 1)',
+            type: 'object',
+            fields: [
+                { name: 'title', title: 'Título (Trabajos Contemplados)', type: 'string' },
+                { name: 'videoUrl', title: 'Video Explicativo (URL)', description: 'Enlace al video que se abre en popup', type: 'url' },
+                { name: 'phases', title: 'Fases (Anteproyecto / Interiorismo)', type: 'array', of: [{
+                    type: 'object',
+                    fields: [
+                        { name: 'title', title: 'Título Principal', type: 'string' },
+                        { name: 'subPhases', title: 'Sub-fases', type: 'array', of: [{
+                            type: 'object',
+                            fields: [
+                                { name: 'number', title: 'Número (1.1)', type: 'string' },
+                                { name: 'title', title: 'Título', type: 'string' },
+                                { name: 'description', title: 'Descripción', type: 'text' }
+                            ]
+                        }]}
+                    ]
+                }]}
+            ]
+        },
+        {
+            name: 'scopePhases2',
+            title: 'Pág 10: Trabajos Contemplados (07 - Parte 2)',
+            type: 'object',
+            fields: [
+                { name: 'phases', title: 'Fases (Contratación / Doc / Obra)', type: 'array', of: [{
+                    type: 'object',
+                    fields: [
+                        { name: 'title', title: 'Título Principal', type: 'string' },
+                        { name: 'subPhases', title: 'Sub-fases', type: 'array', of: [{
+                            type: 'object',
+                            fields: [
+                                { name: 'number', title: 'Número (3.1)', type: 'string' },
+                                { name: 'title', title: 'Título', type: 'string' },
+                                { name: 'description', title: 'Descripción', type: 'text' },
+                                { name: 'note', title: 'Nota (opcional)', type: 'string' }
+                            ]
+                        }]}
+                    ]
+                }]}
+            ]
+        },
+        // --- INVESTMENT & PAYMENT SPLIT ---
+        {
             name: 'investment',
-            title: 'Sección 08: La Inversión',
+            title: 'Pág 11: La Inversión (08 - Tabla)',
             type: 'object',
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '08' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'LA INVERSIÓN' },
                 { name: 'introduction', title: 'Introducción', type: 'text' },
-                { name: 'featureLabels', title: 'Etiquetas de Características (para la tabla)', type: 'array', of: [{ type: 'string' }] },
-                {
-                    name: 'plans', title: 'Planes de Precios', type: 'array', of: [{
-                        type: 'object',
-                        fields: [
-                            { name: 'name', title: 'Nombre del Plan', type: 'string' },
-                            { name: 'price', title: 'Precio (ej: 6.700 €)', type: 'string' },
-                            { name: 'features', title: 'Características Incluidas', description: 'Marca las casillas que correspondan a este plan, en el mismo orden que las etiquetas de arriba.', type: 'array', of: [{ type: 'boolean' }] }
-                        ]
-                    }]
-                }
+                { name: 'subHeader', title: 'Subtítulo (Tú decides...)', type: 'string' },
+                { name: 'plansDescription', title: 'Descripción de Planes', type: 'array', of: [{
+                    type: 'object', 
+                    fields: [
+                        {name: 'name', type: 'string'}, 
+                        {name: 'desc', type: 'text'} // Changed to text for multiline
+                    ] 
+                }]},
+                { name: 'plans', title: 'Planes (Precios y Checks)', type: 'array', of: [{
+                     type: 'object',
+                     fields: [
+                         { name: 'name', title: 'Nombre', type: 'string' },
+                         { name: 'price', title: 'Precio', type: 'string' },
+                         { name: 'features', title: 'Checks', type: 'array', of: [{ type: 'boolean' }] }
+                     ]
+                }]}
             ]
         },
         {
             name: 'specialOffers',
-            title: 'Ofertas Especiales',
+            title: 'Pág 12: Ofertas Especiales',
             type: 'object',
             fields: [
-                { name: 'callToAction', title: 'Llamada a la Acción (Imagen)', type: 'object', fields: [{ name: 'text', title: 'Texto sobre la imagen', type: 'string' }, { name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } }] },
                 {
                     name: 'conditionalOffer', title: 'Oferta Condicional', type: 'object', fields: [
                         { name: 'title', title: 'Título', type: 'string' },
@@ -244,16 +288,16 @@ export default {
                         { name: 'premiumServiceName', title: 'Nombre del Servicio Premium', type: 'string' },
                         { name: 'premiumServiceValue', title: 'Valor del Servicio', type: 'string' },
                     ]
-                }
-
+                },
+                { name: 'callToAction', title: 'Llamada a la Acción (Imagen)', type: 'object', fields: [{ name: 'text', title: 'Texto sobre la imagen', type: 'string' }, { name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } }] },
             ]
         },
         {
             name: 'payment',
-            title: 'Formas de Pago',
+            title: 'Pág 13: Formas de Pago (08 - Cont.)',
             type: 'object',
             fields: [
-                { name: 'sectionNumber', title: 'Número de Sección (coincide con inversión)', type: 'string', initialValue: '08' },
+                { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '08' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'LA INVERSIÓN' },
                 {
                     name: 'paymentMethods', title: 'Métodos de Pago', type: 'object', fields: [
@@ -276,14 +320,24 @@ export default {
                 {
                     name: 'finePrint', title: 'Letra Pequeña', type: 'object', fields: [
                         { name: 'title', title: 'Título', type: 'string' },
-                        { name: 'points', title: 'Puntos', type: 'array', of: [{ type: 'string' }] }
+                        { name: 'points', title: 'Puntos', type: 'array', of: [{ type: 'string' }] },
+                        { name: 'invoiceInfo', title: 'Info Facturas', type: 'string' }
                     ]
                 }
             ]
         },
         {
+            name: 'divider',
+            title: 'Pág 14: Separador (¿Quieres vivir...?)',
+             type: 'object',
+             fields: [
+                 { name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } },
+                 { name: 'text', title: 'Texto', type: 'string' }
+             ]
+        },
+        {
             name: 'guarantees',
-            title: 'Garantías',
+            title: 'Pág 15: Garantías',
             type: 'object',
             fields: [
                 { name: 'title', title: 'Título de la Sección', type: 'string' },
@@ -291,14 +345,15 @@ export default {
                     type: 'object',
                     fields: [
                         { name: 'title', title: 'Título de la Garantía', type: 'string' },
-                        { name: 'description', title: 'Descripción', type: 'text' }
+                        { name: 'description', title: 'Descripción', type: 'text' },
+                        { name: 'note', title: 'Nota al pie (opcional)', type: 'string' }
                     ]
                 }]}
             ]
         },
         {
             name: 'premiumServices',
-            title: 'Servicios Premium',
+            title: 'Pág 16: Servicios Premium',
             type: 'object',
             fields: [
                 { name: 'title', title: 'Título de la Sección', type: 'string' },
@@ -308,14 +363,16 @@ export default {
                         { name: 'title', title: 'Título del Servicio', type: 'string' },
                         { name: 'subtitle', title: 'Subtítulo', type: 'string' },
                         { name: 'price', title: 'Precio', type: 'string' },
-                        { name: 'description', title: 'Descripción (puedes usar <strong>texto</strong> para negritas)', type: 'array', of: [{ type: 'text' }] },
+                        { name: 'description', title: 'Descripción', type: 'array', of: [{ type: 'text' }] },
+                        { name: 'note', title: 'Nota (opcional)', type: 'string' }
                     ]
-                }]}
+                }]},
+                { name: 'notes', title: 'Notas al pie globales', type: 'array', of: [{ type: 'string' }] }
             ]
         },
         {
             name: 'contact',
-            title: 'Contacto (Footer)',
+            title: 'Pág 17: Contacto',
             type: 'object',
             fields: [
                 { name: 'image', title: 'Imagen Final', type: 'image', options: { hotspot: true } },

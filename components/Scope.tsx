@@ -1,10 +1,6 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
-
-interface WorkPhase {
-    title?: string;
-    description?: string;
-}
 
 interface ScopeProps {
     data?: {
@@ -15,16 +11,15 @@ interface ScopeProps {
             location?: string;
             projectType?: string;
             scope?: string;
+            program?: string;
             breakdown?: string[];
-        };
-        contemplatedWork?: {
-            title?: string;
-            phases?: WorkPhase[];
+            note?: string;
         };
         images?: string[];
     }
 }
 
+// Estilo unificado de cabecera
 const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, title }) => (
     <div className="relative mb-12 ml-8 md:ml-0">
       <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
@@ -37,42 +32,37 @@ const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, 
 
 const Scope: React.FC<ScopeProps> = ({ data }) => {
   return (
-    <section className="py-20 md:py-32 px-4 md:px-8 lg:px-16 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="h-full py-12 px-4 md:px-8 lg:px-16 bg-white flex flex-col justify-center">
+      <div className="max-w-7xl mx-auto w-full">
         <AnimatedSection>
             <SectionHeader number={data?.sectionNumber} title={data?.title} />
         </AnimatedSection>
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
-            <div className="lg:col-span-3 space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+            <div className="lg:col-span-3 space-y-6">
                 <AnimatedSection>
                     <h3 className="text-xl font-semibold text-teal-600 mb-4">&gt; {data?.intervention?.title}</h3>
-                    <p><strong>LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
-                    <p><strong>TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
-                    <p><strong>ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
-                    <div className="mt-4 space-y-2 text-gray-600">
+                    <div className="space-y-3 text-gray-700 text-base">
+                        <p><strong>LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
+                        <p><strong>TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
+                        <p><strong>ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
+                        <p className="pt-2 font-medium">{data?.intervention?.program}</p>
+                    </div>
+                    <div className="mt-6 space-y-1 text-gray-600 text-sm md:text-base pl-2">
                         {(data?.intervention?.breakdown ?? []).map((item, i) => (
                             <p key={i}>&gt; {item}</p>
                         ))}
                     </div>
-                </AnimatedSection>
-                <AnimatedSection>
-                    <h3 className="text-xl font-semibold text-teal-600 mb-4 mt-12">&gt; {data?.contemplatedWork?.title}</h3>
-                     <div className="space-y-6">
-                        {(data?.contemplatedWork?.phases ?? []).map((phase, i) => (
-                            <div key={i}>
-                                <h4 className="font-bold">{i+1}. {phase.title}</h4>
-                                <p className="text-sm text-gray-600">{phase.description}</p>
-                            </div>
-                        ))}
-                    </div>
+                    {data?.intervention?.note && (
+                        <p className="mt-8 text-xs text-gray-400 italic">{data?.intervention?.note}</p>
+                    )}
                 </AnimatedSection>
             </div>
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 grid grid-cols-1 gap-6">
                 <AnimatedSection>
-                    {data?.images?.[0] && <img src={data.images[0]} alt="Interior before renovation" className="rounded-lg shadow-xl mb-8" />}
+                    {data?.images?.[0] && <img src={data.images[0]} alt="Interior state" className="rounded-lg shadow-xl w-full h-48 lg:h-64 object-cover" />}
                 </AnimatedSection>
                  <AnimatedSection>
-                    {data?.images?.[1] && <img src={data.images[1]} alt="Interior detail before renovation" className="rounded-lg shadow-xl" />}
+                    {data?.images?.[1] && <img src={data.images[1]} alt="Interior detail" className="rounded-lg shadow-xl w-full h-48 lg:h-64 object-cover" />}
                 </AnimatedSection>
             </div>
         </div>

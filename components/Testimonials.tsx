@@ -5,7 +5,7 @@ interface Testimonial {
     name?: string;
     quote?: string;
     img?: string;
-    link?: string; // URL for the clickable card
+    link?: string;
 }
 
 interface TestimonialsProps {
@@ -17,7 +17,7 @@ interface TestimonialsProps {
 }
 
 const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, title }) => (
-    <div className="relative mb-12 ml-8 md:ml-0">
+    <div className="relative mb-16 ml-8 md:ml-0">
       <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
         <span>{number}</span>
         <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">{title}</span>
@@ -27,12 +27,16 @@ const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, 
 );
 
 const TestimonialCard: React.FC<Testimonial> = ({ name, quote, img, link }) => (
-    <a href={link || '#'} target="_blank" rel="noopener noreferrer" className="block h-full">
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full">
-            {img && <img src={img} alt={name} className="w-full h-56 object-cover" />}
-            <div className="p-6">
-                <h4 className="text-lg font-semibold text-teal-600 mb-2">&gt; {name}</h4>
-                <p className="text-gray-600 italic">"{quote}"</p>
+    <a href={link || '#'} target="_blank" rel="noopener noreferrer" className="block h-full group">
+        <div className="bg-white shadow-xl rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full flex flex-col border border-gray-100">
+            {img && (
+                <div className="h-64 overflow-hidden rounded-t-2xl">
+                    <img src={img} alt={name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 rounded-t-2xl" />
+                </div>
+            )}
+            <div className="p-8 flex-grow flex flex-col justify-center">
+                <h4 className="text-lg font-bold text-teal-600 mb-4">&gt; {name}</h4>
+                <p className="text-gray-600 italic text-sm md:text-base leading-relaxed">"{quote}"</p>
             </div>
         </div>
     </a>
@@ -40,8 +44,8 @@ const TestimonialCard: React.FC<Testimonial> = ({ name, quote, img, link }) => (
 
 const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
     return (
-        <section className="py-20 md:py-32 px-4 md:px-8 lg:px-16 bg-slate-50">
-            <div className="max-w-7xl mx-auto">
+        <section className="h-full bg-slate-50 flex flex-col justify-center">
+            <div className="max-w-7xl mx-auto w-full">
                 <AnimatedSection>
                     <SectionHeader number={data?.sectionNumber} title={data?.title} />
                 </AnimatedSection>

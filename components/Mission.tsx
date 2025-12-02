@@ -1,3 +1,6 @@
+
+
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -11,17 +14,19 @@ interface SectionData {
 
 interface MissionProps {
     data?: {
+        video?: string;
+        image?: string;
+        printImage?: string; // New field for static print image
         mission?: SectionData;
         achievements?: SectionData;
-        image?: string;
     }
 }
 
 const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, title }) => (
-    <div className="relative mb-12 ml-8 md:ml-0">
+    <div className="relative mb-8 ml-8 md:ml-0">
       <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
         <span>{number}</span>
-        <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">{title}</span>
+        <span className="font-light text-3xl md:text-4xl ml-4 tracking-wider">{title}</span>
       </h2>
       <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
     </div>
@@ -30,31 +35,62 @@ const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, 
 const CheckListItem: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <div className="flex items-start mb-2">
         <span className="text-teal-500 font-bold mr-3 mt-1">&gt;</span>
-        <p className="text-gray-600 flex-1">{children}</p>
+        <p className="text-gray-600 flex-1 text-sm md:text-base">{children}</p>
     </div>
 );
 
 const Mission: React.FC<MissionProps> = ({ data }) => {
     return (
-        <section className="py-20 md:py-32 px-4 md:px-8 lg:px-16 bg-white">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-                <div className="space-y-20">
+        <section className="h-full py-12 px-4 md:px-8 lg:px-16 bg-white flex flex-col justify-center">
+            <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                {/* Columna Izquierda: Textos (Misión + Logros) */}
+                <div className="space-y-16">
+                    {/* Seccion 02: Misión */}
                     <AnimatedSection>
                         <SectionHeader number={data?.mission?.sectionNumber} title={data?.mission?.title} />
-                        <h3 className="text-xl font-semibold text-teal-600 mb-4">&gt; {data?.mission?.subtitle}</h3>
-                        <p className="text-gray-600 leading-relaxed text-justify">{data?.mission?.description}</p>
+                        <h3 className="text-lg font-semibold text-teal-600 mb-4 tracking-wide">&gt; {data?.mission?.subtitle}</h3>
+                        <p className="text-gray-600 leading-relaxed text-justify text-sm md:text-base">{data?.mission?.description}</p>
                     </AnimatedSection>
+
+                    {/* Seccion 03: Logros */}
                     <AnimatedSection>
                         <SectionHeader number={data?.achievements?.sectionNumber} title={data?.achievements?.title} />
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             {(data?.achievements?.listItems ?? []).map((item, i) => (
                                 <CheckListItem key={i}>{item}</CheckListItem>
                             ))}
                         </div>
                     </AnimatedSection>
                 </div>
-                <AnimatedSection>
-                    {data?.image && <img src={data.image} alt="Architect working on blueprints" className="rounded-lg shadow-2xl object-cover w-full h-full" />}
+
+                {/* Columna Derecha: Video Loop (Screen) / Static Image (Print) */}
+                <AnimatedSection className="h-full flex items-center">
+                    <div className="w-full aspect-video rounded-lg overflow-hidden shadow-2xl relative bg-gray-100">
+                         {/* WEB VIEW: Video Loop */}
+                         <div className="w-full h-full block no-print">
+                             {data?.video ? (
+                                 <video 
+                                    src={data.video} 
+                                    autoPlay 
+                                    loop 
+                                    muted 
+                                    playsInline 
+                                    className="w-full h-full object-cover"
+                                 />
+                             ) : (
+                                data?.image && <img src={data.image} alt="Mission context" className="w-full h-full object-cover" />
+                             )}
+                         </div>
+
+                         {/* PRINT VIEW: Static Image */}
+                         <div className="w-full h-full hidden print-only">
+                            <img 
+                                src={data?.printImage || data?.image || "https://picsum.photos/1920/1080?grayscale"} 
+                                alt="Mission context static" 
+                                className="w-full h-full object-cover" 
+                            />
+                         </div>
+                    </div>
                 </AnimatedSection>
             </div>
         </section>
