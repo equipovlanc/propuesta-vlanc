@@ -1,6 +1,6 @@
 
 // This file defines the structure of your data in Sanity.
-// It's like creating a template for your proposal form.
+// It reflects exactly the 1920x1080 Slide structure of the new web.
 
 export default {
     name: 'proposal',
@@ -18,7 +18,7 @@ export default {
         {
             name: 'slug',
             title: 'Identificador para la URL',
-            description: 'La parte final de la URL. Ej: "celia-blanes". Debe ser único. Haz clic en "Generate" para crearlo a partir del título.',
+            description: 'La parte final de la URL. Ej: "celia-blanes".',
             type: 'slug',
             options: {
                 source: 'title',
@@ -32,6 +32,7 @@ export default {
             name: 'header',
             title: 'Cabecera del Documento',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'projectCode', title: 'Código de Proyecto', type: 'string' },
                 { name: 'title', title: 'Título del Documento', type: 'string', initialValue: 'PROPUESTA DE HONORARIOS' },
@@ -49,6 +50,7 @@ export default {
             name: 'hero',
             title: 'Pág 1: Portada',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'line1', title: 'Línea 1', type: 'string' },
                 { name: 'line2', title: 'Línea 2 (en negrita)', type: 'string' },
@@ -59,6 +61,7 @@ export default {
             name: 'index',
             title: 'Pág 2: Índice',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'title', title: 'Título de la Sección', type: 'string', initialValue: 'ÍNDICE' },
                 {
@@ -77,10 +80,11 @@ export default {
             name: 'situation',
             title: 'Pág 3: La Situación (01)',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '01' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'LA SITUACIÓN' },
-                { name: 'paragraphs', title: 'Párrafos', type: 'array', of: [{ type: 'text' }] },
+                { name: 'paragraphs', title: 'Párrafos (texto completo)', type: 'array', of: [{ type: 'text' }] },
                 { name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } },
             ]
         },
@@ -88,10 +92,11 @@ export default {
             name: 'mission',
             title: 'Pág 4: Misión y Logros (02/03)',
             type: 'object',
+            options: { collapsible: true },
             fields: [
-                { name: 'video', title: 'Video Loop (URL)', description: 'Enlace al video mp4 para el loop de fondo', type: 'url' },
-                { name: 'printImage', title: 'Imagen Estática para Impresión', description: 'Sustituye al video en el PDF impreso', type: 'image', options: { hotspot: true } },
-                { name: 'image', title: 'Imagen Principal (Fallback)', type: 'image', options: { hotspot: true } },
+                { name: 'video', title: 'Video Loop (URL)', description: 'Enlace directo al video mp4 para el loop de fondo (WEB)', type: 'url' },
+                { name: 'printImage', title: 'Imagen Estática para Impresión', description: 'Esta imagen sustituye al video cuando se imprime el PDF', type: 'image', options: { hotspot: true } },
+                { name: 'image', title: 'Imagen Principal (Fallback)', description: 'Si no hay video ni imagen de impresión', type: 'image', options: { hotspot: true } },
                 {
                     name: 'mission', title: 'Sub-sección: La Misión', type: 'object', fields: [
                         { name: 'sectionNumber', title: 'Número', type: 'string', initialValue: '02' },
@@ -113,6 +118,7 @@ export default {
             name: 'process',
             title: 'Pág 5: El Proceso (04)',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '04' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'EL PROCESO VLANC' },
@@ -129,6 +135,7 @@ export default {
             name: 'team',
             title: 'Pág 6: El Equipo (05)',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '05' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'CONOCE VLANC' },
@@ -150,6 +157,7 @@ export default {
             name: 'testimonials',
             title: 'Pág 7: Testimonios (06)',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '06' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'QUÉ DICEN DE NOSOTROS' },
@@ -171,6 +179,7 @@ export default {
             name: 'scopeIntro',
             title: 'Pág 8: Qué vamos a hacer (07 - Ámbito)',
             type: 'object',
+            options: { collapsible: true },
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '07' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'QUÉ VAMOS A HACER POR TI' },
@@ -192,9 +201,10 @@ export default {
             name: 'scopePhases1',
             title: 'Pág 9: Trabajos Contemplados (07 - Parte 1)',
             type: 'object',
+            options: { collapsible: true },
             fields: [
                 { name: 'title', title: 'Título (Trabajos Contemplados)', type: 'string' },
-                { name: 'videoUrl', title: 'Video Explicativo (URL)', description: 'Enlace al video que se abre en popup', type: 'url' },
+                { name: 'videoUrl', title: 'Video Explicativo Popup (URL)', description: 'Enlace al video que se abre en popup', type: 'url' },
                 { name: 'phases', title: 'Fases (Anteproyecto / Interiorismo)', type: 'array', of: [{
                     type: 'object',
                     fields: [
@@ -215,6 +225,7 @@ export default {
             name: 'scopePhases2',
             title: 'Pág 10: Trabajos Contemplados (07 - Parte 2)',
             type: 'object',
+            options: { collapsible: true },
             fields: [
                 { name: 'phases', title: 'Fases (Contratación / Doc / Obra)', type: 'array', of: [{
                     type: 'object',
@@ -238,32 +249,35 @@ export default {
             name: 'investment',
             title: 'Pág 11: La Inversión (08 - Tabla)',
             type: 'object',
+            options: { collapsible: true },
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '08' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'LA INVERSIÓN' },
                 { name: 'introduction', title: 'Introducción', type: 'text' },
                 { name: 'subHeader', title: 'Subtítulo (Tú decides...)', type: 'string' },
-                { name: 'plansDescription', title: 'Descripción de Planes', type: 'array', of: [{
+                { name: 'plansDescription', title: 'Descripción de Planes (Texto Izq)', type: 'array', of: [{
                     type: 'object', 
                     fields: [
                         {name: 'name', type: 'string'}, 
-                        {name: 'desc', type: 'text'} // Changed to text for multiline
+                        {name: 'desc', type: 'text'} 
                     ] 
                 }]},
-                { name: 'plans', title: 'Planes (Precios y Checks)', type: 'array', of: [{
+                { name: 'plans', title: 'Planes (Columnas de la tabla)', type: 'array', of: [{
                      type: 'object',
                      fields: [
                          { name: 'name', title: 'Nombre', type: 'string' },
                          { name: 'price', title: 'Precio', type: 'string' },
-                         { name: 'features', title: 'Checks', type: 'array', of: [{ type: 'boolean' }] }
+                         { name: 'features', title: 'Checks (Debe haber 8 true/false)', type: 'array', of: [{ type: 'boolean' }] }
                      ]
-                }]}
+                }]},
+                { name: 'featureLabels', title: 'Etiquetas de filas (Características)', type: 'array', of: [{type: 'string'}] }
             ]
         },
         {
             name: 'specialOffers',
             title: 'Pág 12: Ofertas Especiales',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 {
                     name: 'conditionalOffer', title: 'Oferta Condicional', type: 'object', fields: [
@@ -296,6 +310,7 @@ export default {
             name: 'payment',
             title: 'Pág 13: Formas de Pago (08 - Cont.)',
             type: 'object',
+            options: { collapsible: true },
             fields: [
                 { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '08' },
                 { name: 'title', title: 'Título', type: 'string', initialValue: 'LA INVERSIÓN' },
@@ -330,6 +345,7 @@ export default {
             name: 'divider',
             title: 'Pág 14: Separador (¿Quieres vivir...?)',
              type: 'object',
+             options: { collapsible: true, collapsed: true },
              fields: [
                  { name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } },
                  { name: 'text', title: 'Texto', type: 'string' }
@@ -339,6 +355,7 @@ export default {
             name: 'guarantees',
             title: 'Pág 15: Garantías',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'title', title: 'Título de la Sección', type: 'string' },
                 { name: 'items', title: 'Lista de Garantías', type: 'array', of: [{
@@ -355,6 +372,7 @@ export default {
             name: 'premiumServices',
             title: 'Pág 16: Servicios Premium',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'title', title: 'Título de la Sección', type: 'string' },
                 { name: 'services', title: 'Lista de Servicios', type: 'array', of: [{
@@ -363,7 +381,7 @@ export default {
                         { name: 'title', title: 'Título del Servicio', type: 'string' },
                         { name: 'subtitle', title: 'Subtítulo', type: 'string' },
                         { name: 'price', title: 'Precio', type: 'string' },
-                        { name: 'description', title: 'Descripción', type: 'array', of: [{ type: 'text' }] },
+                        { name: 'description', title: 'Descripción (Párrafos)', type: 'array', of: [{ type: 'text' }] },
                         { name: 'note', title: 'Nota (opcional)', type: 'string' }
                     ]
                 }]},
@@ -374,6 +392,7 @@ export default {
             name: 'contact',
             title: 'Pág 17: Contacto',
             type: 'object',
+            options: { collapsible: true, collapsed: true },
             fields: [
                 { name: 'image', title: 'Imagen Final', type: 'image', options: { hotspot: true } },
                 { name: 'callToAction', title: 'Llamada a la Acción', type: 'string' },
