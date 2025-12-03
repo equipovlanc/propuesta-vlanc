@@ -192,7 +192,7 @@ export default defineType({
             fields: [
                 defineField({ name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '07' }),
                 defineField({ name: 'title', title: 'Título', type: 'string', initialValue: 'QUÉ VAMOS A HACER POR TI' }),
-                defineField({ name: 'images', title: 'Imágenes (2)', type: 'array', of: [{ type: 'image', options: { hotspot: true } }] },
+                defineField({ name: 'images', title: 'Imágenes (2)', type: 'array', of: [{ type: 'image', options: { hotspot: true } }] }),
                 defineField({
                     name: 'intervention', title: 'Ámbito de Intervención', type: 'object', fields: [
                         defineField({ name: 'title', title: 'Título', type: 'string' }),
@@ -248,7 +248,6 @@ export default defineType({
             type: 'object',
             options: { collapsible: true },
             fields: [
-                // CAMPOS DINÁMICOS SOLICITADOS PARA TÍTULO
                 defineField({ name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '07' }),
                 defineField({ name: 'title', title: 'Título de la Sección', type: 'string', initialValue: 'QUÉ VAMOS A HACER POR TI' }),
                 defineField({ name: 'phases', title: 'Fases (Contratación / Doc / Obra)', type: 'array', of: [{
@@ -323,7 +322,7 @@ export default defineType({
                         defineField({ name: 'title', title: 'Título', type: 'string' }),
                         defineField({ name: 'description', title: 'Descripción', type: 'text' }),
                         defineField({ name: 'premiumServiceName', title: 'Nombre del Servicio Premium', type: 'string' }),
-                        defineField({ name: 'premiumServiceValue', title: 'Valor del Servicio', type: 'string' },)
+                        defineField({ name: 'premiumServiceValue', title: 'Valor del Servicio', type: 'string' })
                     ]
                 }),
                 defineField({ name: 'callToAction', title: 'Llamada a la Acción (Imagen)', type: 'object', fields: [{ name: 'text', title: 'Texto sobre la imagen', type: 'string' }, { name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } }] }),

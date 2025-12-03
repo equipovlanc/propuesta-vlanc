@@ -1,4 +1,3 @@
-
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -37,7 +36,7 @@ const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, 
 const TeamMemberCard: React.FC<{ name?: string, role?: string, img?: string }> = ({ name, role, img }) => (
     <div className="group">
         <div className="overflow-hidden mb-3 rounded-lg shadow-md">
-            {/* Changed to aspect-square for better portrait display */}
+            {/* Aspect square for perfect portraits */}
             {img && <img src={img} alt={name} className="w-full aspect-square object-cover transform transition-transform duration-500 group-hover:scale-105" />}
         </div>
         <h4 className="text-base font-bold text-gray-800">{name}</h4>

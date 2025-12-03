@@ -1,4 +1,3 @@
-
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -35,7 +34,6 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                 </h2>
                 <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
             </div>
-            {/* Subtítulo eliminado para limpiar el diseño */}
         </AnimatedSection>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
