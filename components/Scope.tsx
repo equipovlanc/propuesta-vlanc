@@ -51,7 +51,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         {(data?.intervention?.breakdown ?? []).map((item, i) => (
                             <p key={i} className="whitespace-pre-line">&gt; {item}</p>
                         ))}
-                    </div>a
+                    </div>
                     {data?.intervention?.note && (
                         <p className="mt-8 text-xs text-gray-400 italic">{data?.intervention?.note}</p>
                     )}
