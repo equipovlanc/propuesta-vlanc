@@ -41,10 +41,21 @@ const App: React.FC = () => {
       if (!containerRef.current) return;
 
       const slides = Array.from(containerRef.current.querySelectorAll('.section-slide')) as HTMLElement[];
-      const currentSlideIndex = slides.findIndex(slide => {
+      
+      // Improved logic: Find active slide by checking which one covers the middle of the viewport
+      let currentSlideIndex = slides.findIndex(slide => {
         const rect = slide.getBoundingClientRect();
-        return rect.top >= -100 && rect.top < window.innerHeight / 2; 
+        const middleOfScreen = window.innerHeight / 2;
+        return rect.top <= middleOfScreen && rect.bottom >= middleOfScreen;
       });
+
+      // Fallback logic
+      if (currentSlideIndex === -1) {
+          currentSlideIndex = slides.findIndex(slide => {
+            const rect = slide.getBoundingClientRect();
+            return rect.top >= -100 && rect.top < window.innerHeight / 2; 
+          });
+      }
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
         e.preventDefault();
@@ -219,8 +230,11 @@ const App: React.FC = () => {
   // 4. Propuesta (Renderizado Principal)
   const data = proposalData || localProposalData;
 
+  // IMPORTANT CHANGES:
+  // 1. snap-proximity: Allows scrolling freely within long sections (prevents getting stuck at top).
+  // 2. overflow-x-hidden: Prevents horizontal scrollbars from decorative elements now that overflow-hidden is removed from slides.
   return (
-    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-white text-gray-800 relative">
+    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-proximity scroll-smooth no-scrollbar bg-white text-gray-800 relative">
         
         {/* Slide 1: Hero */}
         <SectionSlide id="hero">
