@@ -26,40 +26,34 @@
           scrollbar-width: none;  /* Firefox */
       }
       
-      /* --- ESTILOS DE IMPRESIÓN PRO: VIEWPORT SCALING (1920px -> A4) --- */
+      /* --- ESTILOS DE IMPRESIÓN PRO: LIENZO EXPANDIDO 1920px --- */
       @media print {
         @page {
           size: A4 landscape; 
-          margin: 0; /* Eliminamos márgenes del navegador para tener control total */
+          margin: 0; 
         }
 
-        /* 
-           LA CLAVE: Forzamos al navegador a renderizar como si fuera una pantalla de 1920px.
-           Luego usamos 'zoom' para escalar ese lienzo gigante dentro del papel A4.
-        */
         html {
            width: 1920px !important;
            min-width: 1920px !important;
-           overflow: visible !important;
         }
 
         body {
+          /* 1. Forzamos el ancho de escritorio para activar el diseño de 3 columnas */
           width: 1920px !important;
           min-width: 1920px !important;
+          
+          /* 2. Reseteamos márgenes y scroll */
           margin: 0 !important;
-          padding: 0 !important; /* El margen lo da el centrado del papel */
+          padding: 0 !important;
           overflow: visible !important;
           background-color: white !important;
           
-          /* 
-             CÁLCULO MATEMÁTICO:
-             Ancho A4 (297mm) con márgenes de seguridad ~ 1060px útiles.
-             Diseño Web: 1920px.
-             1060 / 1920 = 0.55
-             
-             Usamos 0.53 (53%) para asegurar que nada toque los bordes físicos de la impresora.
+          /* 3. SCALING MÁGICO: 
+             Ancho A4 (1123px) / Ancho Diseño (1920px) = 0.5848...
+             Usamos 0.585 para un ajuste perfecto sin bordes blancos excesivos.
           */
-          zoom: 53%; 
+          zoom: 0.585 !important; 
           
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
@@ -71,51 +65,48 @@
           height: auto !important;
           overflow: visible !important;
           display: block !important;
-          position: static !important;
         }
 
         /* --- GESTIÓN DE DIAPOSITIVAS --- */
         .section-slide {
-            /* Forzamos dimensiones de pantalla 16:9 */
+            /* Mantenemos la proporción 16:9 como base */
             width: 1920px !important;
             min-height: 1080px !important; 
-            height: auto !important; /* Si el contenido es mayor a 1080px, crece */
             
-            /* Cada slide es OBLIGATORIAMENTE una hoja nueva */
+            /* Pero dejamos que la altura crezca si el contenido (Garantías) es largo */
+            height: auto !important; 
+            
+            /* Forzamos salto de página limpio después de cada slide */
             break-after: page !important;
             page-break-after: always !important;
+            
+            /* Evitamos cortes internos raros */
             break-inside: avoid !important;
             page-break-inside: avoid !important;
             
-            /* Ajustes de flujo */
-            display: block !important;
-            position: relative !important;
             margin: 0 !important;
             padding: 0 !important;
             overflow: visible !important;
-            left: 0 !important;
-            top: 0 !important;
+            display: block !important;
         }
 
-        /* Contenedor interno del slide: Mantiene el padding generoso del diseño web */
+        /* Contenedor interno: Asegura el centrado y padding */
         .section-slide > div {
            width: 100% !important;
            min-height: 1080px !important;
-           box-sizing: border-box !important;
-           /* Aseguramos que el contenido se centre verticalmente si es corto */
            display: flex !important;
            flex-direction: column !important;
            justify-content: center !important;
         }
 
-        /* --- ARREGLAR ELEMENTOS ESPECÍFICOS --- */
+        /* --- PROTECCIÓN DE CONTENIDO --- */
         
-        /* Textos e imágenes no deben partirse */
-        p, h1, h2, h3, h4, img, .grid, .flex {
+        /* Textos, imágenes y grids no deben partirse a la mitad */
+        p, h1, h2, h3, h4, img, .grid, .flex, table {
             break-inside: avoid !important;
         }
 
-        /* Forzar visibilidad de animaciones (opacity-0 -> 1) */
+        /* Forzar visibilidad de animaciones */
         div[class*="opacity-0"], 
         div[class*="translate-y"],
         .transform {
@@ -124,15 +115,12 @@
           transition: none !important;
         }
 
-        /* Forzar colores de fondo y bordes */
-        * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-        }
-
         /* Utilidades */
         .no-print { display: none !important; }
         .print-only { display: block !important; }
+        
+        /* Ocultar botones de navegación si existieran */
+        button { display: none !important; }
       }
     </style>
   <script type="importmap">
