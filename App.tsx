@@ -29,7 +29,11 @@ const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<ProposalData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dataSource, setDataSource] = useState<'sanity' | 'local' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Obtener el slug de la URL actual (ej: /celia-blanes -> celia-blanes)
+  const slug = window.location.pathname.substring(1);
 
   // --- KEYBOARD NAVIGATION LOGIC ---
   useEffect(() => {
@@ -59,31 +63,31 @@ const App: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [loading]);
+  }, [loading, slug]);
 
   useEffect(() => {
     const fetchProposalData = async () => {
+      // Si no hay slug (estamos en la raíz), no cargamos nada
+      if (!slug) {
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       setProposalData(null);
 
       const isSanityConfigured = sanityClient.config().projectId && sanityClient.config().projectId !== 'your-project-id';
 
+      // Si Sanity no está configurado, usamos local pero avisamos
       if (!isSanityConfigured) {
-        setError("Modo de prueba activado.");
+        console.warn("Sanity no configurado o ID por defecto. Usando datos locales.");
         setProposalData(localProposalData);
+        setDataSource('local');
         setLoading(false);
         return;
       }
       
-      const slug = window.location.pathname.substring(1);
-
-      if (!slug) {
-        setError('Por favor, especifica una propuesta en la URL.');
-        setLoading(false);
-        return;
-      }
-
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
@@ -148,29 +152,81 @@ const App: React.FC = () => {
 
         if (data) {
           setProposalData(data);
+          setDataSource('sanity');
         } else {
-          setError(`No se encontró propuesta: "${slug}".`);
+          // Si no encontramos nada en Sanity para ese slug, mostramos error
+          // NO hacemos fallback a local para evitar confusiones, a menos que sea un error de red
+          setError(`No se encontró la propuesta "${slug}" en Sanity.`);
+          setDataSource(null);
         }
       } catch (err) {
         console.error('Error fetching data from Sanity:', err);
-        setError('Error al cargar datos.');
+        // Si hay error de conexión y estamos configurados, NO usar fallback para evitar confusión
+        // setProposalData(localProposalData); 
+        // setDataSource('local');
+        setError(`Error de conexión con Sanity: ${(err as any).message}`);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProposalData();
-  }, [window.location.pathname]);
+  }, [slug]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><p>Cargando...</p></div>;
+  // --- RENDERIZADO CONDICIONAL ---
+
+  // 1. Pantalla de Bienvenida (Ruta Raíz)
+  if (!slug) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white text-gray-800 p-8 font-sans">
+        <div className="max-w-md text-center space-y-8">
+            <h1 className="text-4xl font-bold tracking-widest text-teal-600">VLANC</h1>
+            <div className="w-16 h-1 bg-gray-200 mx-auto"></div>
+            <p className="text-xl font-light">Portal de Propuestas</p>
+            <p className="text-gray-500 text-sm">
+                Por favor, utiliza el enlace personalizado que te hemos facilitado para acceder a tu propuesta.
+            </p>
+            <div className="p-4 bg-gray-50 rounded text-xs text-gray-400 mt-8">
+                Ejemplo: /celia-blanes
+            </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 2. Pantalla de Carga
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-pulse flex flex-col items-center">
+            <div className="h-4 w-32 bg-gray-200 rounded mb-4"></div>
+            <p className="text-gray-400 text-sm tracking-widest">CARGANDO PROPUESTA...</p>
+        </div>
+    </div>
+  );
   
-  if (error && !proposalData) return <div className="min-h-screen flex items-center justify-center p-8 text-center bg-red-50 text-red-700"><h2>{error}</h2></div>;
+  // 3. Pantalla de Error (Solo si no hay datos)
+  if (error && !proposalData) return (
+    <div className="min-h-screen flex items-center justify-center p-8 text-center bg-white text-gray-800">
+        <div className="max-w-lg">
+             <h2 className="text-2xl font-bold text-red-500 mb-4">¡Vaya!</h2>
+             <p className="text-lg mb-6">{error}</p>
+             <p className="text-sm text-gray-500 mb-6">Asegúrate de que tu Project ID de Sanity es correcto y el documento está publicado.</p>
+             <a href="/" className="text-teal-600 underline hover:text-teal-800">Volver al inicio</a>
+        </div>
+    </div>
+  );
   
-  // Fallback for demo if Sanity fails or not configured
+  // 4. Propuesta (Renderizado Principal)
   const data = proposalData || localProposalData;
 
   return (
-    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-white text-gray-800">
+    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-white text-gray-800 relative">
+        
+        {/* INDICADOR DE FUENTE DE DATOS (Solo visible para desarrollo/debug) */}
+        <div className="fixed bottom-4 right-4 z-50 text-[10px] font-mono px-2 py-1 rounded bg-black/50 text-white pointer-events-none no-print">
+            FUENTE: {dataSource === 'sanity' ? '🟢 SANITY LIVE' : '🟠 DATOS LOCALES'}
+        </div>
+
         {/* Slide 1: Hero */}
         <SectionSlide id="hero">
             <div className="absolute top-0 left-0 w-full z-10 px-8 pt-4">
