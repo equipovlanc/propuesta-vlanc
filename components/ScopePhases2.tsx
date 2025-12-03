@@ -30,7 +30,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
             <div className="relative mb-8 md:mb-12 ml-8 md:ml-0 mt-8">
                 <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
                     <span>{data?.sectionNumber || '07'}</span>
-                    <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider uppercase">{data?.title || 'QUÉ VAMOS A HACER POR TI'}</span>
+                    <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider uppercase">{data?.title || 'TRABAJOS CONTEMPLADOS'}</span>
                 </h2>
                 <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
             </div>
