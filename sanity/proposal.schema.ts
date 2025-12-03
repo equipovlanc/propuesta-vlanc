@@ -149,8 +149,14 @@ export default defineType({
             fields: [
                 defineField({ name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '05' }),
                 defineField({ name: 'title', title: 'Título', type: 'string', initialValue: 'CONOCE VLANC' }),
-                defineField({ name: 'purpose', title: 'Propósito', type: 'object', fields: [{ name: 'title', title: 'Título', type: 'string' }, { name: 'description', title: 'Descripción', type: 'text' }] }),
-                defineField({ name: 'history', title: 'Historia', type: 'object', fields: [{ name: 'title', title: 'Título', type: 'string' }, { name: 'description', title: 'Descripción', type: 'text' }] }),
+                defineField({ name: 'purpose', title: 'Propósito', type: 'object', fields: [
+                    defineField({ name: 'title', title: 'Título', type: 'string' }), 
+                    defineField({ name: 'description', title: 'Descripción', type: 'text' })
+                ]}),
+                defineField({ name: 'history', title: 'Historia', type: 'object', fields: [
+                    defineField({ name: 'title', title: 'Título', type: 'string' }), 
+                    defineField({ name: 'description', title: 'Descripción', type: 'text' })
+                ]}),
                 defineField({
                     name: 'members', title: 'Miembros del Equipo', type: 'array', of: [{
                         type: 'object',
@@ -314,7 +320,7 @@ export default defineType({
                                     defineField({ name: 'discountedPrice', title: 'Precio con Descuento', type: 'string' }),
                                 ]
                             }]
-                        }
+                        })
                     ]
                 }),
                 defineField({
@@ -325,7 +331,10 @@ export default defineType({
                         defineField({ name: 'premiumServiceValue', title: 'Valor del Servicio', type: 'string' })
                     ]
                 }),
-                defineField({ name: 'callToAction', title: 'Llamada a la Acción (Imagen)', type: 'object', fields: [{ name: 'text', title: 'Texto sobre la imagen', type: 'string' }, { name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } }] }),
+                defineField({ name: 'callToAction', title: 'Llamada a la Acción (Imagen)', type: 'object', fields: [
+                    defineField({ name: 'text', title: 'Texto sobre la imagen', type: 'string' }), 
+                    defineField({ name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } })
+                ]}),
             ]
         }),
         defineField({
@@ -418,9 +427,20 @@ export default defineType({
             fields: [
                 defineField({ name: 'image', title: 'Imagen Final', type: 'image', options: { hotspot: true } }),
                 defineField({ name: 'callToAction', title: 'Llamada a la Acción', type: 'string' }),
-                defineField({ name: 'location', title: 'Localización', type: 'object', fields: [{ name: 'title', title: 'Título', type: 'string' }, { name: 'address', title: 'Dirección', type: 'string' }, { name: 'email', title: 'Email', type: 'string' }] }),
-                defineField({ name: 'phone', title: 'Teléfono', type: 'object', fields: [{ name: 'title', title: 'Título', type: 'string' }, { name: 'numbers', title: 'Números', type: 'array', of: [{ type: 'string' }] }] }),
-                defineField({ name: 'web', title: 'Página Web', type: 'object', fields: [{ name: 'title', title: 'Título', type: 'string' }, { name: 'url', title: 'URL', type: 'url' }, { name: 'displayText', title: 'Texto a mostrar', type: 'string' }] }),
+                defineField({ name: 'location', title: 'Localización', type: 'object', fields: [
+                    defineField({ name: 'title', title: 'Título', type: 'string' }), 
+                    defineField({ name: 'address', title: 'Dirección', type: 'string' }), 
+                    defineField({ name: 'email', title: 'Email', type: 'string' })
+                ]}),
+                defineField({ name: 'phone', title: 'Teléfono', type: 'object', fields: [
+                    defineField({ name: 'title', title: 'Título', type: 'string' }), 
+                    defineField({ name: 'numbers', title: 'Números', type: 'array', of: [{ type: 'string' }] })
+                ]}),
+                defineField({ name: 'web', title: 'Página Web', type: 'object', fields: [
+                    defineField({ name: 'title', title: 'Título', type: 'string' }), 
+                    defineField({ name: 'url', title: 'URL', type: 'url' }), 
+                    defineField({ name: 'displayText', title: 'Texto a mostrar', type: 'string' })
+                ]}),
             ]
         })
     ]
