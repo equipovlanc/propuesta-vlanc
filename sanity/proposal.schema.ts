@@ -71,7 +71,7 @@ export default defineType({
                             defineField({ name: 'id', title: 'ID de la Sección (para el enlace)', description: 'Debe coincidir con los IDs del frontend', type: 'string' }),
                         ]
                     }]
-                }
+                })
             ]
         }),
         defineField({
@@ -138,7 +138,7 @@ export default defineType({
                         defineField({ name: 'title', title: 'Título del Paso', type: 'string' }),
                         defineField({ name: 'description', title: 'Descripción del Paso', type: 'text' }),
                     ]
-                }]},
+                }]}),
             ]
         }),
         defineField({
@@ -160,7 +160,7 @@ export default defineType({
                             defineField({ name: 'img', title: 'Foto', type: 'image', options: { hotspot: true } }),
                         ]
                     }]
-                }
+                })
             ]
         }),
         defineField({
@@ -181,7 +181,7 @@ export default defineType({
                             defineField({ name: 'link', title: 'Enlace (URL)', type: 'url' }),
                         ]
                     }]
-                }
+                })
             ]
         }),
         defineField({
@@ -237,7 +237,7 @@ export default defineType({
                                 defineField({ name: 'title', title: 'Título', type: 'string' }),
                                 defineField({ name: 'description', title: 'Descripción', type: 'text' })
                             ]
-                        }]}
+                        }]})
                     ]
                 }]})
             ]
@@ -262,7 +262,7 @@ export default defineType({
                                 defineField({ name: 'description', title: 'Descripción', type: 'text' }),
                                 defineField({ name: 'note', title: 'Nota (opcional)', type: 'string' })
                             ]
-                        }]}
+                        }]})
                     ]
                 }]})
             ]
