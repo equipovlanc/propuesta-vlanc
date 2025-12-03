@@ -36,7 +36,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data }) => {
             <AnimatedSection>
                 <div className="border-l-4 border-teal-400 pl-8 group">
                     <h3 className="text-2xl font-bold mb-6 text-gray-800 group-hover:text-teal-600 transition-colors">{data?.conditionalOffer?.title}</h3>
-                    <p className="text-gray-600 mb-6 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: data?.conditionalOffer?.description || '' }} />
+                    <p className="text-gray-600 mb-6 text-sm leading-relaxed whitespace-pre-line">{data?.conditionalOffer?.description}</p>
                     <div className="grid grid-cols-2 gap-4 text-center">
                         {(data?.conditionalOffer?.discountedPlans ?? []).map((plan, i) => (
                             <div key={i} className="p-4 bg-slate-50 hover:bg-teal-50 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-sm cursor-default">
@@ -51,7 +51,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data }) => {
             <AnimatedSection>
                  <div className="border-l-4 border-teal-400 pl-8 group">
                     <h3 className="text-2xl font-bold mb-6 text-gray-800 group-hover:text-teal-600 transition-colors">{data?.launchOffer?.title}</h3>
-                    <p className="text-gray-600 mb-6 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: data?.launchOffer?.description || '' }} />
+                    <p className="text-gray-600 mb-6 text-sm leading-relaxed whitespace-pre-line">{data?.launchOffer?.description}</p>
                     <div className="p-8 bg-teal-50 text-center rounded-sm hover:scale-105 transition-transform duration-300 shadow-sm hover:shadow-md cursor-default border border-teal-100">
                         <p className="font-bold text-teal-800 text-xl tracking-wide">{data?.launchOffer?.premiumServiceName}</p>
                         <p className="text-gray-600 mt-3 text-sm">Valorado en <span className="font-bold text-teal-600 text-lg ml-1">{data?.launchOffer?.premiumServiceValue} + IVA</span></p>

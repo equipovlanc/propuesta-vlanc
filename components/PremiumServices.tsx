@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -26,7 +27,7 @@ const ServiceCard: React.FC<{ title?: string, subtitle?: string, price?: string,
         <h4 className="font-semibold text-gray-700 mb-2 text-xs uppercase tracking-wide">{subtitle}</h4>
         <div className="text-gray-600 space-y-1 text-xs flex-grow leading-tight">
             {(description ?? []).map((p, i) => (
-                <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
+                <p key={i} className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: p }} />
             ))}
         </div>
         {note && <p className="text-[10px] text-gray-400 italic mt-2 border-t pt-1 leading-tight">{note}</p>}

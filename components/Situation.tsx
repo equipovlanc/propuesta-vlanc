@@ -41,7 +41,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                     <AnimatedSection>
                          <div className="columns-1 md:columns-2 gap-8 space-y-4 text-gray-600 leading-relaxed text-justify text-sm md:text-base">
                             {(data?.paragraphs ?? []).map((p, i) => (
-                                <p key={i} className="break-inside-avoid-column mb-4" dangerouslySetInnerHTML={{ __html: p }} />
+                                <p key={i} className="break-inside-avoid-column mb-4 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: p }} />
                             ))}
                          </div>
                     </AnimatedSection>

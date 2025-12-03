@@ -51,7 +51,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     <div className="lg:col-span-5 space-y-6">
                         <AnimatedSection>
                             <SectionHeader number={data?.sectionNumber} title={data?.title} />
-                            <p className="text-gray-600 leading-relaxed text-sm mb-4">
+                            <p className="text-gray-600 leading-relaxed text-sm mb-4 whitespace-pre-line">
                                 {data?.introduction}
                             </p>
                             <h4 className="font-bold text-teal-700 mb-6 text-lg">{data?.subHeader}</h4>

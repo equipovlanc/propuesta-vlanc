@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -36,8 +37,8 @@ const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, 
 const TeamMemberCard: React.FC<{ name?: string, role?: string, img?: string }> = ({ name, role, img }) => (
     <div className="group">
         <div className="overflow-hidden mb-3 rounded-lg shadow-md">
-            {/* Reduced height to prevent cut-off on 1080p */}
-            {img && <img src={img} alt={name} className="w-full h-40 lg:h-48 object-cover transform transition-transform duration-500 group-hover:scale-105" />}
+            {/* Changed to aspect-square for better portrait display */}
+            {img && <img src={img} alt={name} className="w-full aspect-square object-cover transform transition-transform duration-500 group-hover:scale-105" />}
         </div>
         <h4 className="text-base font-bold text-gray-800">{name}</h4>
         <p className="text-sm text-gray-500">&gt; {role}</p>
@@ -56,11 +57,11 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-6 lg:mb-8">
                  <AnimatedSection>
                     <h3 className="text-lg font-bold text-teal-600 mb-2">&gt; {data?.purpose?.title}</h3>
-                    <p className="text-gray-600 leading-relaxed text-sm text-justify">{data?.purpose?.description}</p>
+                    <p className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line">{data?.purpose?.description}</p>
                  </AnimatedSection>
                  <AnimatedSection>
                     <h3 className="text-lg font-bold text-teal-600 mb-2">&gt; {data?.history?.title}</h3>
-                    <p className="text-gray-600 leading-relaxed text-sm text-justify">{data?.history?.description}</p>
+                    <p className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line">{data?.history?.description}</p>
                  </AnimatedSection>
             </div>
 

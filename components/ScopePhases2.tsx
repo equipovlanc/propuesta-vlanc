@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -45,7 +46,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
                             <div key={i} className="text-gray-600 text-sm leading-relaxed">
                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                <p className="mt-1">{sub.description}</p>
+                                <p className="mt-1 whitespace-pre-line">{sub.description}</p>
                             </div>
                         ))}
                     </div>
@@ -59,7 +60,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                              <div key={i} className="text-gray-600 text-sm leading-relaxed">
                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
                                 <p className="mt-1 whitespace-pre-line">{sub.description}</p>
-                                {sub.note && <p className="text-xs italic text-gray-400 mt-1">{sub.note}</p>}
+                                {sub.note && <p className="text-xs italic text-gray-400 mt-1 whitespace-pre-line">{sub.note}</p>}
                             </div>
                         ))}
                     </div>
@@ -74,7 +75,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                          {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
                              <div key={i} className="text-gray-600 text-sm leading-relaxed">
                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                <p className="mt-1">{sub.description}</p>
+                                <p className="mt-1 whitespace-pre-line">{sub.description}</p>
                             </div>
                         ))}
                     </div>
@@ -87,7 +88,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
                             <div key={i} className="text-gray-600 text-sm leading-relaxed">
                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                <p className="mt-1">{sub.description}</p>
+                                <p className="mt-1 whitespace-pre-line">{sub.description}</p>
                             </div>
                         ))}
                     </div>
