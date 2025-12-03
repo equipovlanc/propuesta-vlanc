@@ -222,11 +222,6 @@ const App: React.FC = () => {
   return (
     <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-white text-gray-800 relative">
         
-        {/* INDICADOR DE FUENTE DE DATOS (Solo visible para desarrollo/debug) */}
-        <div className="fixed bottom-4 right-4 z-50 text-[10px] font-mono px-2 py-1 rounded bg-black/50 text-white pointer-events-none no-print">
-            FUENTE: {dataSource === 'sanity' ? '🟢 SANITY LIVE' : '🟠 DATOS LOCALES'}
-        </div>
-
         {/* Slide 1: Hero */}
         <SectionSlide id="hero">
             <div className="absolute top-0 left-0 w-full z-10 px-8 pt-4">
