@@ -51,7 +51,10 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data, isInsideModal = false }) 
                          <AnimatedSection key={i} className="group flex flex-col h-full">
                             <SealIcon />
                             <h3 className="text-lg font-bold text-teal-600 mb-4 leading-tight uppercase tracking-wide border-b border-teal-100 pb-2">&gt; {item.title}</h3>
-                            <p className="text-gray-600 text-sm leading-relaxed text-justify mb-4 flex-grow whitespace-pre-line">{item.description}</p>
+                            <div 
+                                className="text-gray-600 text-sm leading-relaxed text-justify mb-4 flex-grow whitespace-pre-line"
+                                dangerouslySetInnerHTML={{ __html: item.description || '' }}
+                            />
                             {item.note && <p className="text-xs text-gray-400 italic pt-2">{item.note}</p>}
                         </AnimatedSection>
                     ))}

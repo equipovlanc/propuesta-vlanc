@@ -1,11 +1,4 @@
 
-
-
-
-
-
-
-
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -59,7 +52,10 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                     <AnimatedSection>
                         <SectionHeader number={data?.mission?.sectionNumber} title={data?.mission?.title} />
                         <h3 className="text-lg font-semibold text-teal-600 mb-4 tracking-wide">&gt; {data?.mission?.subtitle}</h3>
-                        <p className="text-gray-600 leading-relaxed text-justify text-sm md:text-base whitespace-pre-line">{data?.mission?.description}</p>
+                        <div 
+                            className="text-gray-600 leading-relaxed text-justify text-sm md:text-base whitespace-pre-line"
+                            dangerouslySetInnerHTML={{ __html: data?.mission?.description || '' }}
+                        />
                     </AnimatedSection>
 
                     {/* Seccion 03: Logros */}

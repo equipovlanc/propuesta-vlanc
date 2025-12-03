@@ -57,11 +57,17 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-6 lg:mb-8">
                  <AnimatedSection>
                     <h3 className="text-lg font-bold text-teal-600 mb-2">&gt; {data?.purpose?.title}</h3>
-                    <p className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line">{data?.purpose?.description}</p>
+                    <div 
+                        className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line"
+                        dangerouslySetInnerHTML={{ __html: data?.purpose?.description || '' }}
+                    />
                  </AnimatedSection>
                  <AnimatedSection>
                     <h3 className="text-lg font-bold text-teal-600 mb-2">&gt; {data?.history?.title}</h3>
-                    <p className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line">{data?.history?.description}</p>
+                    <div 
+                        className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line"
+                        dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
+                    />
                  </AnimatedSection>
             </div>
 

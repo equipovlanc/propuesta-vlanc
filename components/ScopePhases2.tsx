@@ -16,6 +16,8 @@ interface Phase {
 
 interface ScopePhases2Props {
     data?: {
+        sectionNumber?: string;
+        title?: string;
         phases?: Phase[];
     }
 }
@@ -28,8 +30,8 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
             {/* Margen top extra para la rotación de la barra */}
             <div className="relative mb-8 md:mb-12 ml-8 md:ml-0 mt-8">
                 <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
-                    <span>07</span>
-                    <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">QUÉ VAMOS A HACER POR TI</span>
+                    <span>{data?.sectionNumber || '07'}</span>
+                    <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider uppercase">{data?.title || 'QUÉ VAMOS A HACER POR TI'}</span>
                 </h2>
                 <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
             </div>
@@ -46,7 +48,10 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
                             <div key={i} className="text-gray-600 text-sm leading-relaxed">
                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                <p className="mt-1 whitespace-pre-line">{sub.description}</p>
+                                <p 
+                                    className="mt-1 whitespace-pre-line"
+                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                />
                             </div>
                         ))}
                     </div>
@@ -59,7 +64,10 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {(data?.phases?.[1]?.subPhases ?? []).slice(0, 1).map((sub, i) => (
                              <div key={i} className="text-gray-600 text-sm leading-relaxed">
                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                <p className="mt-1 whitespace-pre-line">{sub.description}</p>
+                                <p 
+                                    className="mt-1 whitespace-pre-line"
+                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                />
                                 {sub.note && <p className="text-xs italic text-gray-400 mt-1 whitespace-pre-line">{sub.note}</p>}
                             </div>
                         ))}
@@ -75,7 +83,10 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                          {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
                              <div key={i} className="text-gray-600 text-sm leading-relaxed">
                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                <p className="mt-1 whitespace-pre-line">{sub.description}</p>
+                                <p 
+                                    className="mt-1 whitespace-pre-line"
+                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                />
                             </div>
                         ))}
                     </div>
@@ -88,7 +99,10 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
                             <div key={i} className="text-gray-600 text-sm leading-relaxed">
                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                <p className="mt-1 whitespace-pre-line">{sub.description}</p>
+                                <p 
+                                    className="mt-1 whitespace-pre-line"
+                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                />
                             </div>
                         ))}
                     </div>

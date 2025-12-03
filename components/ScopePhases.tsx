@@ -1,9 +1,4 @@
 
-
-
-
-
-
 import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
 import Guarantees from './Guarantees';
@@ -72,7 +67,10 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, guaranteesData }) => {
                             {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
                                 <AnimatedSection key={i} className="text-gray-600 text-sm leading-relaxed">
                                     <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                    <p className="whitespace-pre-line mt-1">{sub.description}</p>
+                                    <p 
+                                        className="whitespace-pre-line mt-1"
+                                        dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                    />
                                 </AnimatedSection>
                             ))}
                         </div>
@@ -113,7 +111,10 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, guaranteesData }) => {
                         {(data?.phases?.[1]?.subPhases ?? []).map((sub, i) => (
                             <AnimatedSection key={i} className="text-gray-600 text-sm leading-relaxed">
                                  <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                 <p className="whitespace-pre-line mt-1">{sub.description}</p>
+                                 <p 
+                                    className="whitespace-pre-line mt-1"
+                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                 />
                             </AnimatedSection>
                         ))}
                      </div>

@@ -251,6 +251,8 @@ export default {
             type: 'object',
             options: { collapsible: true },
             fields: [
+                { name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '07' },
+                { name: 'title', title: 'Título de la Sección', type: 'string', initialValue: 'QUÉ VAMOS A HACER POR TI' },
                 { name: 'phases', title: 'Fases (Contratación / Doc / Obra)', type: 'array', of: [{
                     type: 'object',
                     fields: [

@@ -1,3 +1,4 @@
+
 export const proposalData = {
     header: {
         projectCode: "[CÓDIGO PROYECTO]",
@@ -150,6 +151,8 @@ export const proposalData = {
         ]
     },
     scopePhases2: {
+        sectionNumber: "07",
+        title: "QUÉ VAMOS A HACER POR TI",
         phases: [
             {
                 title: "3. FASE EJEMPLO",

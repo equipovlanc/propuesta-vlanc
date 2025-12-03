@@ -45,11 +45,20 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         <p><strong>LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
                         <p><strong>TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
                         <p><strong>ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
-                        <p className="pt-2 font-medium whitespace-pre-line">{data?.intervention?.program}</p>
+                        <div 
+                            className="pt-2 font-medium whitespace-pre-line"
+                            dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }}
+                        />
                     </div>
                     <div className="mt-6 space-y-1 text-gray-600 text-sm md:text-base pl-2">
                         {(data?.intervention?.breakdown ?? []).map((item, i) => (
-                            <p key={i} className="whitespace-pre-line">&gt; {item}</p>
+                            <div key={i} className="flex gap-2">
+                                <span>&gt;</span>
+                                <span 
+                                    className="whitespace-pre-line"
+                                    dangerouslySetInnerHTML={{ __html: item }}
+                                />
+                            </div>
                         ))}
                     </div>
                     {data?.intervention?.note && (

@@ -51,16 +51,20 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     <div className="lg:col-span-5 space-y-6">
                         <AnimatedSection>
                             <SectionHeader number={data?.sectionNumber} title={data?.title} />
-                            <p className="text-gray-600 leading-relaxed text-sm mb-4 whitespace-pre-line">
-                                {data?.introduction}
-                            </p>
+                            <div 
+                                className="text-gray-600 leading-relaxed text-sm mb-4 whitespace-pre-line"
+                                dangerouslySetInnerHTML={{ __html: data?.introduction || '' }}
+                            />
                             <h4 className="font-bold text-teal-700 mb-6 text-lg">{data?.subHeader}</h4>
                             
                             <div className="space-y-6">
                                 {(data?.plansDescription ?? []).map((desc, i) => (
                                     <div key={i}>
                                         <p className="font-bold text-gray-800 text-sm">{desc.name}</p>
-                                        <p className="text-xs text-gray-600 whitespace-pre-line leading-relaxed">{desc.desc}</p>
+                                        <div 
+                                            className="text-xs text-gray-600 whitespace-pre-line leading-relaxed"
+                                            dangerouslySetInnerHTML={{ __html: desc.desc || '' }}
+                                        />
                                     </div>
                                 ))}
                             </div>
