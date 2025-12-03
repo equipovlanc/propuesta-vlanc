@@ -26,67 +26,86 @@
           scrollbar-width: none;  /* Firefox */
       }
       
-      /* --- ESTILOS DE IMPRESIÓN "PERGAMINO CONTINUO REAL" --- */
+      /* --- ESTILOS DE IMPRESIÓN ROBUSTOS PARA A4 LANDSCAPE --- */
       @media print {
         @page {
           size: A4 landscape; 
-          margin: 0mm; /* Márgenes mínimos, dejamos que el CSS controle el padding */
+          margin: 10mm; /* Margen de seguridad para impresora física */
         }
 
-        /* 1. RESET CRÍTICO: Eliminar el scroll de la app para que la impresora vea todo */
+        /* 1. RESET GLOBAL */
         html, body, #root, #app-container {
           overflow: visible !important;
           height: auto !important;
-          min-height: 0 !important;
           width: 100% !important;
-          position: static !important;
+          max-width: 100% !important;
+          position: relative !important;
           display: block !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
 
-        /* 2. ESCALADO: Ajustar el diseño 1920px al ancho de un A4 */
+        /* 2. ESCALADO INTELIGENTE */
         body {
           /* 
-             El diseño está optimizado para 1920px de ancho.
-             Un A4 Landscape tiene aprox 297mm de ancho.
-             Para que quepa sin cortarse, aplicamos un zoom (soportado en Chrome/Edge).
-             60% suele ser el punto dulce para diseños FHD en A4.
+             Escalamos el contenido para que quepa en A4.
+             55% es más seguro para evitar desbordamientos horizontales.
           */
-          zoom: 60%; 
-          background-color: white !important;
+          zoom: 55%; 
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+          background: white !important;
         }
 
-        /* 3. ESTRUCTURA DE DIAPOSITIVAS */
+        /* 3. ARREGLAR "COLAPSO A LA IZQUIERDA" */
+        /* Forzamos a que los contenedores limitados (max-w-7xl) ocupen todo el ancho al imprimir */
+        div[class*="max-w-"], .max-w-7xl {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        /* 4. GESTIÓN DE DIAPOSITIVAS Y SALTOS DE PÁGINA */
         .section-slide {
-            /* Permitir que crezca si el contenido es largo, pero intentar mantener el alto de página */
-            height: auto !important; 
-            min-height: 100vh !important; 
-            width: 100vw !important; /* Forzar ancho completo */
+            height: auto !important;
+            min-height: 100vh !important; /* Mantiene la altura mínima visual */
+            width: 100% !important;
             
-            /* SALTO DE PÁGINA OBLIGATORIO DESPUÉS DE CADA SLIDE */
-            break-after: page !important; 
+            /* Salto de página limpio después de cada sección principal */
+            break-after: page !important;
             page-break-after: always !important;
             
-            /* Evitar cortes dentro de un slide si es posible */
+            /* Evitar cortes internos */
             break-inside: avoid !important;
             page-break-inside: avoid !important;
-
-            /* Resetear márgenes extraños */
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow: visible !important;
-            display: block !important; /* A veces flex da problemas en impresión al calcular alturas */
+            
+            display: block !important;
+            padding: 20px 0 !important; /* Espacio vertical entre slides si fallara el break */
         }
-        
-        /* Contenedor interno del slide: aseguramos padding para que no se pegue al borde del papel */
+
+        /* Contenedor interno del slide */
         .section-slide > div {
-            min-height: 100vh !important;
-            padding: 40px !important; /* Margen de seguridad visual en papel */
+            padding: 0 !important;
+            min-height: 0 !important;
         }
 
-        /* 4. FORZAR VISIBILIDAD DE ANIMACIONES */
-        /* Sobrescribimos Tailwind y estilos inline para que nada salga invisible */
+        /* 5. EVITAR CORTES EN CONTENIDO (Garantías, textos, imágenes) */
+        p, h1, h2, h3, h4, h5, img, li, span, 
+        .grid > div, 
+        .flex > div {
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+        }
+
+        /* Permitir que las listas largas o grids se rompan ENTRE elementos, no DENTRO de ellos */
+        .grid, ul, .space-y-4, .space-y-6, .space-y-8 {
+             break-inside: auto !important;
+        }
+
+        /* 6. FORZAR VISIBILIDAD DE ANIMACIONES */
         div[class*="opacity-0"], 
         div[class*="translate-y"],
         .transform {
@@ -95,14 +114,9 @@
           transition: none !important;
         }
 
-        /* 5. ELEMENTOS OCULTOS */
-        .no-print { 
-            display: none !important; 
-        }
-        
-        .print-only {
-            display: block !important;
-        }
+        /* 7. UTILIDADES */
+        .no-print { display: none !important; }
+        .print-only { display: block !important; }
       }
     </style>
   <script type="importmap">
