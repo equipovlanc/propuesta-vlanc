@@ -13,38 +13,43 @@ interface SituationProps {
 
 const Situation: React.FC<SituationProps> = ({ data }) => {
   return (
-    <section className="min-h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
-        <div className="w-full lg:w-3/5 flex flex-col justify-center px-12 md:px-24 py-24">
+    <section className="h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
+        {/* Left Content - 60% */}
+        <div className="w-full lg:w-[60%] flex flex-col justify-center px-12 md:px-24 h-full relative">
             <AnimatedSection>
-                <h2 className="title-xl text-vlanc-black mb-4 tracking-tighter">
+                <h2 className="title-xl text-vlanc-black mb-6 tracking-tighter">
                    {data?.title}
                 </h2>
-                <div className="w-16 h-[2px] bg-vlanc-primary mb-16"></div>
+                <div className="w-24 h-[3px] bg-vlanc-primary mb-16"></div>
             </AnimatedSection>
             
             <AnimatedSection>
-                <div className="space-y-8 text-vlanc-black/80 max-w-2xl">
+                <div className="space-y-8 text-vlanc-black/80 max-w-xl pr-12">
                     {(data?.paragraphs ?? []).map((p, i) => (
                         <p 
                             key={i} 
-                            className="text-[12px] font-sans leading-relaxed text-justify" 
+                            className="text-[13px] font-sans leading-[1.8] text-justify font-medium" 
                             dangerouslySetInnerHTML={{ __html: p }} 
                         />
                     ))}
                 </div>
             </AnimatedSection>
+            
+            {/* Page number handled by Header overlay, but can be added here if specific design needs */}
+            <div className="absolute bottom-24 left-24 font-serif text-vlanc-primary text-[21px]">{data?.sectionNumber}</div>
         </div>
         
-        <div className="w-full lg:w-2/5 min-h-[500px] lg:h-auto">
-            <AnimatedSection className="h-full">
-                {data?.image && (
+        {/* Right Image - 40% Full Height */}
+        <div className="hidden lg:block lg:w-[40%] h-full">
+            <div className="w-full h-full relative">
+                 {data?.image && (
                   <img 
                     src={data.image} 
                     alt="Situation" 
-                    className="w-full h-full object-cover grayscale brightness-90" 
+                    className="w-full h-full object-cover grayscale contrast-125" 
                   />
                 )}
-            </AnimatedSection>
+            </div>
         </div>
     </section>
   );

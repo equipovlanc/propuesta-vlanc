@@ -19,6 +19,7 @@ import PremiumServices from './components/PremiumServices';
 import DividerSlide from './components/DividerSlide';
 import Contact from './components/Contact';
 import SectionSlide from './components/SectionSlide';
+import StudioLanding from './components/StudioLanding'; 
 import { proposalData as localProposalData } from './data/proposal.data';
 import sanityClient from './sanity/client';
 
@@ -29,56 +30,76 @@ const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<ProposalData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [dataSource, setDataSource] = useState<'sanity' | 'local' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState(1);
+  const totalSlides = 17; // Total number of slides
 
-  // Obtener el slug de la URL actual (ej: /celia-blanes -> celia-blanes)
+  // Obtener el slug de la URL actual
   const slug = window.location.pathname.substring(1);
 
   // --- KEYBOARD NAVIGATION LOGIC ---
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!containerRef.current) return;
+    const handleScroll = () => {
+        if (!containerRef.current) return;
+        const slides = Array.from(containerRef.current.querySelectorAll('.section-slide')) as HTMLElement[];
+        const scrollPosition = containerRef.current.scrollTop + (window.innerHeight / 2);
+        
+        const index = slides.findIndex(slide => {
+            return slide.offsetTop <= scrollPosition && (slide.offsetTop + slide.offsetHeight) > scrollPosition;
+        });
 
-      const slides = Array.from(containerRef.current.querySelectorAll('.section-slide')) as HTMLElement[];
+        if (index !== -1) {
+            setCurrentSlide(index + 1);
+        }
+    };
+
+    const currentRef = containerRef.current;
+    if (currentRef) {
+        currentRef.addEventListener('scroll', handleScroll);
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!currentRef || !slug) return;
+
+      const slides = Array.from(currentRef.querySelectorAll('.section-slide')) as HTMLElement[];
+      let targetSlide: HTMLElement | null = null;
       
-      // Improved logic: Find active slide by checking which one covers the middle of the viewport
-      let currentSlideIndex = slides.findIndex(slide => {
+      // Encontrar el slide actual basado en scroll
+      let currentIndex = slides.findIndex(slide => {
         const rect = slide.getBoundingClientRect();
-        const middleOfScreen = window.innerHeight / 2;
-        return rect.top <= middleOfScreen && rect.bottom >= middleOfScreen;
+        return Math.abs(rect.top) < 5; // Tolerancia pequeña
       });
 
-      // Fallback logic
-      if (currentSlideIndex === -1) {
-          currentSlideIndex = slides.findIndex(slide => {
+      // Fallback si no está perfectamente alineado
+      if (currentIndex === -1) {
+           currentIndex = slides.findIndex(slide => {
             const rect = slide.getBoundingClientRect();
-            return rect.top >= -100 && rect.top < window.innerHeight / 2; 
+            return rect.top >= -window.innerHeight / 2 && rect.top < window.innerHeight / 2;
           });
       }
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
         e.preventDefault();
-        const nextSlide = slides[currentSlideIndex + 1];
-        if (nextSlide) {
-          nextSlide.scrollIntoView({ behavior: 'smooth' });
-        }
+        targetSlide = slides[currentIndex + 1];
       } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
         e.preventDefault();
-        const prevSlide = slides[currentSlideIndex - 1];
-        if (prevSlide) {
-          prevSlide.scrollIntoView({ behavior: 'smooth' });
-        }
+        targetSlide = slides[currentIndex - 1];
+      }
+
+      if (targetSlide) {
+          targetSlide.scrollIntoView({ behavior: 'smooth' });
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        if (currentRef) currentRef.removeEventListener('scroll', handleScroll);
+    };
   }, [loading, slug]);
 
   useEffect(() => {
     const fetchProposalData = async () => {
-      // Si no hay slug (estamos en la raíz), no cargamos nada
       if (!slug) {
         setLoading(false);
         return;
@@ -90,11 +111,9 @@ const App: React.FC = () => {
 
       const isSanityConfigured = sanityClient.config().projectId && sanityClient.config().projectId !== 'your-project-id';
 
-      // Si Sanity no está configurado, usamos local pero avisamos
       if (!isSanityConfigured) {
         console.warn("Sanity no configurado o ID por defecto. Usando datos locales.");
         setProposalData(localProposalData);
-        setDataSource('local');
         setLoading(false);
         return;
       }
@@ -102,9 +121,9 @@ const App: React.FC = () => {
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
-          "header": header{...},
+          "header": header{..., "logo": logo.asset->url},
           "hero": hero{...},
-          "index": index{..., "items": items[]{...}},
+          "index": index{..., "items": items[]{...}, "image": image.asset->url},
           "situation": situation{..., "image": image.asset->url},
           "mission": mission{
             ...,
@@ -163,18 +182,11 @@ const App: React.FC = () => {
 
         if (data) {
           setProposalData(data);
-          setDataSource('sanity');
         } else {
-          // Si no encontramos nada en Sanity para ese slug, mostramos error
-          // NO hacemos fallback a local para evitar confusiones, a menos que sea un error de red
           setError(`No se encontró la propuesta "${slug}" en Sanity.`);
-          setDataSource(null);
         }
       } catch (err) {
         console.error('Error fetching data from Sanity:', err);
-        // Si hay error de conexión y estamos configurados, NO usar fallback para evitar confusión
-        // setProposalData(localProposalData); 
-        // setDataSource('local');
         setError(`Error de conexión con Sanity: ${(err as any).message}`);
       } finally {
         setLoading(false);
@@ -184,151 +196,127 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-  // --- RENDERIZADO CONDICIONAL ---
-
-  // 1. Pantalla de Bienvenida (Ruta Raíz)
-  if (!slug) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white text-gray-800 p-8 font-sans">
-        <div className="max-w-md text-center space-y-8">
-            <h1 className="text-4xl font-bold tracking-widest text-teal-600">VLANC</h1>
-            <div className="w-16 h-1 bg-gray-200 mx-auto"></div>
-            <p className="text-xl font-light">Portal de Propuestas</p>
-            <p className="text-gray-500 text-sm">
-                Por favor, utiliza el enlace personalizado que te hemos facilitado para acceder a tu propuesta.
-            </p>
-            <div className="p-4 bg-gray-50 rounded text-xs text-gray-400 mt-8">
-                Ejemplo: /celia-blanes
-            </div>
-        </div>
-      </div>
-    );
-  }
-
-  // 2. Pantalla de Carga
+  if (!slug) return <StudioLanding />;
+  
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-vlanc-bg">
         <div className="animate-pulse flex flex-col items-center">
-            <div className="h-4 w-32 bg-gray-200 rounded mb-4"></div>
-            <p className="text-gray-400 text-sm tracking-widest">CARGANDO PROPUESTA...</p>
+             <div className="text-[32px] font-serif font-bold tracking-[0.2em] leading-none text-vlanc-black mb-4">VLANC</div>
+             <p className="text-vlanc-primary text-[10px] tracking-widest uppercase">Cargando Propuesta...</p>
         </div>
     </div>
   );
-  
-  // 3. Pantalla de Error (Solo si no hay datos)
+
   if (error && !proposalData) return (
-    <div className="min-h-screen flex items-center justify-center p-8 text-center bg-white text-gray-800">
+    <div className="min-h-screen flex items-center justify-center p-8 text-center bg-vlanc-bg text-vlanc-black">
         <div className="max-w-lg">
-             <h2 className="text-2xl font-bold text-red-500 mb-4">¡Vaya!</h2>
-             <p className="text-lg mb-6">{error}</p>
-             <p className="text-sm text-gray-500 mb-6">Asegúrate de que tu Project ID de Sanity es correcto y el documento está publicado.</p>
-             <a href="/" className="text-teal-600 underline hover:text-teal-800">Volver al inicio</a>
+             <h2 className="title-xl text-vlanc-primary mb-4">¡Vaya!</h2>
+             <p className="text-body mb-6">{error}</p>
+             <a href="/" className="bg-vlanc-primary text-white px-8 py-3 rounded-sm hover:bg-vlanc-secondary transition-colors uppercase tracking-widest text-[10px] font-bold">Volver al inicio</a>
         </div>
     </div>
   );
   
-  // 4. Propuesta (Renderizado Principal)
   const data = proposalData || localProposalData;
 
-  // IMPORTANT CHANGES:
-  // 1. snap-proximity: Allows scrolling freely within long sections (prevents getting stuck at top).
-  // 2. overflow-x-hidden: Prevents horizontal scrollbars from decorative elements now that overflow-hidden is removed from slides.
   return (
-    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-proximity scroll-smooth no-scrollbar bg-white text-gray-800 relative">
-        
-        {/* Slide 1: Hero */}
-        <SectionSlide id="hero">
-            <div className="absolute top-0 left-0 w-full z-10 px-8 pt-4">
-                <Header data={data.header} />
-            </div>
-            <Hero data={data.hero} />
-        </SectionSlide>
+    <div className="relative overflow-hidden h-screen bg-vlanc-bg">
+        {/* Fixed Header Overlay for inner pages */}
+        <Header currentSlide={currentSlide} totalSlides={totalSlides} data={data.header} />
 
-        {/* Slide 2: Index */}
-        <SectionSlide id="index">
-            <IndexSection data={data.index} />
-        </SectionSlide>
+        <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-mandatory scroll-smooth no-scrollbar bg-vlanc-bg text-vlanc-black">
+            
+            {/* Slide 1: Hero */}
+            <SectionSlide id="hero">
+                <Hero data={data.hero} headerData={data.header} />
+            </SectionSlide>
 
-        {/* Slide 3: Situation */}
-        <SectionSlide id="situation">
-            <Situation data={data.situation} />
-        </SectionSlide>
+            {/* Slide 2: Index */}
+            <SectionSlide id="index">
+                <IndexSection data={data.index} />
+            </SectionSlide>
 
-        {/* Slide 4: Mission */}
-        <SectionSlide id="mission">
-            <Mission data={data.mission} />
-        </SectionSlide>
+            {/* Slide 3: Situation */}
+            <SectionSlide id="situation">
+                <Situation data={data.situation} />
+            </SectionSlide>
 
-        {/* Slide 5: Process */}
-        <SectionSlide id="process">
-            <Process data={data.process} />
-        </SectionSlide>
+            {/* Slide 4: Mission */}
+            <SectionSlide id="mission">
+                <Mission data={data.mission} />
+            </SectionSlide>
 
-        {/* Slide 6: Team */}
-        <SectionSlide id="team">
-            <Team data={data.team} />
-        </SectionSlide>
+            {/* Slide 5: Process */}
+            <SectionSlide id="process">
+                <Process data={data.process} />
+            </SectionSlide>
 
-        {/* Slide 7: Testimonials */}
-        <SectionSlide id="testimonials">
-            <Testimonials data={data.testimonials} />
-        </SectionSlide>
+            {/* Slide 6: Team */}
+            <SectionSlide id="team">
+                <Team data={data.team} />
+            </SectionSlide>
 
-        {/* Slide 8: Scope Intro (Page 8) */}
-        <SectionSlide id="scope">
-            <Scope data={data.scopeIntro || (data as any).scope} />
-        </SectionSlide>
+            {/* Slide 7: Testimonials */}
+            <SectionSlide id="testimonials">
+                <Testimonials data={data.testimonials} />
+            </SectionSlide>
 
-        {/* Slide 9: Scope Phases 1 (Page 9) */}
-        <SectionSlide id="scope-phases-1">
-            <ScopePhases 
-                data={data.scopePhases1} 
-                guaranteesData={data.guarantees} // Pass guarantees data for popup
-            />
-        </SectionSlide>
+            {/* Slide 8: Scope Intro */}
+            <SectionSlide id="scope">
+                <Scope data={data.scopeIntro || (data as any).scope} />
+            </SectionSlide>
 
-         {/* Slide 10: Scope Phases 2 (Page 10) */}
-         <SectionSlide id="scope-phases-2">
-            <ScopePhases2 data={data.scopePhases2} />
-        </SectionSlide>
+            {/* Slide 9: Scope Phases 1 */}
+            <SectionSlide id="scope-phases-1">
+                <ScopePhases 
+                    data={data.scopePhases1} 
+                    guaranteesData={data.guarantees} 
+                />
+            </SectionSlide>
 
-        {/* Slide 11: Investment Table (Page 11) */}
-        <SectionSlide id="investment">
-            <Investment data={data.investment} />
-        </SectionSlide>
+            {/* Slide 10: Scope Phases 2 */}
+            <SectionSlide id="scope-phases-2">
+                <ScopePhases2 data={data.scopePhases2} />
+            </SectionSlide>
 
-        {/* Slide 12: Special Offers (Page 12) */}
-        <SectionSlide id="special-offers">
-            <SpecialOffers data={data.specialOffers} />
-        </SectionSlide>
+            {/* Slide 11: Investment Table */}
+            <SectionSlide id="investment">
+                <Investment data={data.investment} />
+            </SectionSlide>
 
-        {/* Slide 13: Payment & Fine Print (Page 13) */}
-        <SectionSlide id="payment">
-            <Payment data={data.payment} />
-        </SectionSlide>
+            {/* Slide 12: Special Offers */}
+            <SectionSlide id="special-offers">
+                <SpecialOffers data={data.specialOffers} />
+            </SectionSlide>
 
-        {/* Slide 14: Divider (Page 14) */}
-        <SectionSlide id="divider">
-            <DividerSlide 
-                image={data.dividerSlide?.image || data.contact?.image}
-                text={data.dividerSlide?.text || data.contact?.callToAction}
-            />
-        </SectionSlide>
+            {/* Slide 13: Payment & Fine Print */}
+            <SectionSlide id="payment">
+                <Payment data={data.payment} />
+            </SectionSlide>
 
-        {/* Slide 15: Guarantees (Page 15) */}
-        <SectionSlide id="guarantees">
-             <Guarantees data={data.guarantees} />
-        </SectionSlide>
+            {/* Slide 14: Divider */}
+            <SectionSlide id="divider">
+                <DividerSlide 
+                    image={data.dividerSlide?.image || data.contact?.image}
+                    text={data.dividerSlide?.text || data.contact?.callToAction}
+                />
+            </SectionSlide>
 
-        {/* Slide 16: Premium Services (Page 16) */}
-        <SectionSlide id="premium-services">
-            <PremiumServices data={data.premiumServices} />
-        </SectionSlide>
+            {/* Slide 15: Guarantees */}
+            <SectionSlide id="guarantees">
+                <Guarantees data={data.guarantees} />
+            </SectionSlide>
 
-        {/* Slide 17: Contact (Page 17) */}
-        <SectionSlide id="contact">
-            <Contact data={data.contact} />
-        </SectionSlide>
+            {/* Slide 16: Premium Services */}
+            <SectionSlide id="premium-services">
+                <PremiumServices data={data.premiumServices} />
+            </SectionSlide>
+
+            {/* Slide 17: Contact */}
+            <SectionSlide id="contact">
+                <Contact data={data.contact} />
+            </SectionSlide>
+        </div>
     </div>
   );
 };

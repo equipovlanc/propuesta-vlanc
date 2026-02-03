@@ -1,3 +1,4 @@
+
 import { defineType, defineField } from 'sanity'
 
 export default defineType({
@@ -28,10 +29,11 @@ export default defineType({
         // --- SECTIONS ---
         defineField({
             name: 'header',
-            title: 'Cabecera del Documento',
+            title: 'Configuración Global (Logo y Datos)',
             type: 'object',
             options: { collapsible: true, collapsed: true },
             fields: [
+                defineField({ name: 'logo', title: 'Logo Principal (Negro/Oscuro)', type: 'image' }),
                 defineField({ name: 'projectCode', title: 'Código de Proyecto', type: 'string' }),
                 defineField({ name: 'title', title: 'Título del Documento', type: 'string', initialValue: 'PROPUESTA DE HONORARIOS' }),
                 defineField({ name: 'clientName', title: 'Nombre del Cliente', type: 'string' }),
@@ -62,6 +64,7 @@ export default defineType({
             options: { collapsible: true, collapsed: true },
             fields: [
                 defineField({ name: 'title', title: 'Título de la Sección', type: 'string', initialValue: 'ÍNDICE' }),
+                defineField({ name: 'image', title: 'Imagen Lateral', type: 'image', options: { hotspot: true } }),
                 defineField({
                     name: 'items', title: 'Puntos del Índice', type: 'array', of: [{
                         type: 'object',
@@ -83,7 +86,7 @@ export default defineType({
                 defineField({ name: 'sectionNumber', title: 'Número de Sección', type: 'string', initialValue: '01' }),
                 defineField({ name: 'title', title: 'Título', type: 'string', initialValue: 'LA SITUACIÓN' }),
                 defineField({ name: 'paragraphs', title: 'Párrafos (texto completo)', type: 'array', of: [{ type: 'text' }] }),
-                defineField({ name: 'image', title: 'Imagen', type: 'image', options: { hotspot: true } }),
+                defineField({ name: 'image', title: 'Imagen Lateral', type: 'image', options: { hotspot: true } }),
             ]
         }),
         defineField({
