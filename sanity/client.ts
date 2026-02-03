@@ -4,7 +4,7 @@ const sanityClient = createClient({
   // --- IMPORTANT ---
   // Replace 'your-project-id' with your actual Sanity project ID
   // You can find it at manage.sanity.io
-  projectId: 'your-project-id', 
+  projectId: 'j14bbmni', 
   dataset: 'production', 
   
   apiVersion: '2024-06-24', // use a UTC date in YYYY-MM-DD format
