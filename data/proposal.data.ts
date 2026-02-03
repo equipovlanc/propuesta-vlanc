@@ -32,7 +32,7 @@ export const proposalData = {
         ]
     },
     situation: {
-        sectionNumber: "01",
+        sectionNumber: "",
         title: "la situación.",
         paragraphs: [
             "CELIA BLANES es una mujer joven que ha decidido dar un paso importante: independizarse y crear su propio hogar. Para ello, quiere transformar un lugar muy especial para ella: ALCOI. Un espacio cargado de recuerdos que ahora quiere convertir en un rincón que hable de su presente y de su futuro.",
@@ -48,13 +48,13 @@ export const proposalData = {
         printImage: "https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?q=80&w=1200&auto=format&fit=crop",
         image: "https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?q=80&w=1200&auto=format&fit=crop",
         mission: {
-            sectionNumber: "02",
+            sectionNumber: "",
             title: "la misión.",
             subtitle: "Transformar viviendas en hogares",
             description: "Encontrar junto a ti la mejor opción y la mejor propuesta para tu nuevo hogar, en función de su esencia y tus necesidades, siguiendo todo el proceso de transformación para que el resultado sea totalmente satisfactorio."
         },
         achievements: {
-            sectionNumber: "03",
+            sectionNumber: "",
             title: "qué vas a conseguir.",
             subtitle: "",
             description: "",
@@ -68,7 +68,7 @@ export const proposalData = {
         },
     },
     process: {
-        sectionNumber: "04",
+        sectionNumber: "",
         title: "el proceso Vlanc.",
         steps: [
             { title: "La entrevista", description: "Nos reuniremos contigo para conocerte y que nos cuentes tus deseos y sueños." },
@@ -82,7 +82,7 @@ export const proposalData = {
         ]
     },
     team: {
-        sectionNumber: "05",
+        sectionNumber: "",
         title: "conoce a VLANC",
         purpose: {
             title: "Nuestro propósito",
@@ -99,87 +99,8 @@ export const proposalData = {
             { name: 'LAURA PASCUAL', role: 'Interiorista', img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=400&auto=format&fit=crop' },
         ]
     },
-    testimonials: {
-        sectionNumber: "06",
-        title: "qué dicen de nosotros.",
-        items: [
-            { name: "Marta & Jorge", quote: "VLANC supo captar nuestra esencia desde el primer momento. No solo diseñaron nuestra casa, crearon nuestro hogar.", img: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=400&auto=format&fit=crop", link: "#" },
-            { name: "Carla S.", quote: "La tranquilidad de saber que todo estaba bajo control no tiene precio. El resultado superó nuestras expectativas.", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop", link: "#" }
-        ]
-    },
-    scopeIntro: {
-        sectionNumber: "07",
-        title: "qué vamos a hacer por ti.",
-        images: [
-            "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200&auto=format&fit=crop"
-        ],
-        intervention: {
-            title: "ÁMBITO DE INTERVENCIÓN",
-            location: "C/ Doña Amalia nº 25, Alcoi",
-            projectType: "REFORMA PARCIAL",
-            scope: "VIVIENDA COMPLETA",
-            program: "Salón-comedor\nCocina integrada\n2 Habitaciones\n1 Baño completo\nTerraza",
-            breakdown: [
-                "Levantamiento de planos estado actual",
-                "Propuesta de distribución",
-                "Diseño de interiorismo",
-                "Gestión de licencias",
-                "Dirección de obra"
-            ],
-            note: "Nota: El alcance exacto se definirá en la fase de anteproyecto."
-        }
-    },
-    scopePhases1: {
-        title: "trabajos contemplados.",
-        videoUrl: "", 
-        videoFile: "",
-        phases: [
-            {
-                title: "FASE 1: ANTEPROYECTO",
-                subPhases: [
-                    { number: "1.1", title: "TOMA DE DATOS", description: "Visita a la vivienda para realizar mediciones y reportaje fotográfico." },
-                    { number: "1.2", title: "PROPUESTAS DE DISTRIBUCIÓN", description: "Entrega de diferentes opciones de distribución sobre plano." }
-                ]
-            },
-            {
-                title: "FASE 2: INTERIORISMO",
-                subPhases: [
-                    { number: "2.1", title: "DEFINICIÓN ESTÉTICA", description: "Elección de materiales, acabados, iluminación y mobiliario fijo." },
-                    { number: "2.2", title: "INFOGRAFÍAS 3D", description: "Visualización realista del resultado final de la vivienda." }
-                ]
-            }
-        ]
-    },
-    scopePhases2: {
-        sectionNumber: "07",
-        title: "trabajos contemplados.",
-        phases: [
-            {
-                title: "FASE 3: CONTRATACIÓN",
-                subPhases: [
-                    { number: "3.1", title: "MEDICIONES Y PRESUPUESTO", description: "Elaboración de estado de mediciones y obtención de presupuestos de contratas." },
-                    { number: "3.2", title: "COMPARATIVO", description: "Ayuda en la elección de la empresa constructora." }
-                ]
-            },
-            {
-                title: "FASE 4: DOCUMENTACIÓN",
-                subPhases: [
-                    { number: "4.1", title: "PROYECTO TÉCNICO", description: "Redacción de documentación técnica necesaria para licencias." },
-                    { number: "4.2", title: "TRÁMITES", description: "Gestión de licencias municipales." }
-                ]
-            },
-            {
-                title: "FASE 5: OBRA",
-                subPhases: [
-                    { number: "5.1", title: "DIRECCIÓN DE OBRA", description: "Supervisión de la correcta ejecución de los trabajos." },
-                    { number: "5.2", title: "GESTIÓN DE PEDIDOS", description: "Coordinación de suministros de acabados y mobiliario." }
-                ]
-            }
-        ]
-    },
     investment: {
-        sectionNumber: "08",
+        sectionNumber: "",
         title: "la inversión.",
         introduction: "Te planteamos formar parte de tu vida. Tú decides hasta donde quieres que te ayudemos. Hemos diseñado varios planes para que fijéis vuestro alcance.",
         subHeader: "Condiciones especiales",
@@ -189,9 +110,9 @@ export const proposalData = {
             { name: "PLAN VLANC_", desc: "Tu hogar llave en mano, diseñado para emocionarte." }
         ],
         plans: [
-            { name: 'PLAN ESENCIA', price: '2.500 €', features: [true, true, false, false, false, false, false, false] },
-            { name: 'PLAN VIVE', price: '4.800 €', features: [true, true, true, true, true, false, false, false] },
-            { name: 'PLAN VLANC', price: '6.500 €', features: [true, true, true, true, true, true, true, true] },
+            { name: 'PLAN ESENCIA', price: '0000 €', features: [true, true, false, false, false, false, false, false] },
+            { name: 'PLAN VIVE', price: '0000 €', features: [true, true, true, true, true, false, false, false] },
+            { name: 'PLAN VLANC', price: '0000 €', features: [true, true, true, true, true, true, true, true] },
         ],
         featureLabels: [
             'FASE ANTEPROYECTO',
@@ -203,105 +124,6 @@ export const proposalData = {
             'TODO LISTO PARA VIVIR',
             'UN NUEVO COMIENZO SIN CARGA',
         ]
-    },
-    specialOffers: {
-        conditionalOffer: {
-            title: "DESCUENTO PRONTO PAGO",
-            description: "Si confirmas la propuesta antes de 15 días, obtendrás un descuento especial en los honorarios.",
-            discountedPlans: [
-                { name: "PLAN VIVE", originalPrice: "4.800 €", discountedPrice: "4.500 €" },
-                { name: "PLAN VLANC", originalPrice: "6.500 €", discountedPrice: "6.000 €" }
-            ]
-        },
-        launchOffer: {
-            title: "BONUS DE LANZAMIENTO",
-            description: "Incluimos un servicio adicional valorado en 500€ totalmente gratis.",
-            premiumServiceName: "ASESORAMIENTO EN DECORACIÓN",
-            premiumServiceValue: "500 €"
-        },
-        callToAction: {
-            text: "¿EMPEZAMOS?",
-            image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop"
-        }
-    },
-    payment: {
-        sectionNumber: "08",
-        title: "formas de pago.",
-        paymentMethods: {
-            title: "CÓMO PAGAR",
-            plans: [
-                { 
-                    title: "PLAN ESENCIA", 
-                    payments: [
-                        { percent: "50%", description: "A la aceptación de la propuesta" },
-                        { percent: "50%", description: "A la entrega del anteproyecto" }
-                    ] 
-                },
-                { 
-                    title: "PLAN VIVE", 
-                    payments: [
-                        { percent: "30%", description: "A la aceptación de la propuesta" },
-                        { percent: "30%", description: "Al inicio de la fase de diseño" },
-                        { percent: "40%", description: "A la entrega del proyecto" }
-                    ] 
-                },
-                { 
-                    title: "PLAN VLANC", 
-                    payments: [
-                        { percent: "30%", description: "A la aceptación de la propuesta" },
-                        { percent: "30%", description: "Al inicio de obra" },
-                        { percent: "40%", description: "A la finalización de obra" }
-                    ] 
-                },
-                { 
-                    title: "OTROS SERVICIOS", 
-                    payments: [
-                         { percent: "100%", description: "Por adelantado" }
-                    ] 
-                }
-            ]
-        },
-        finePrint: {
-            title: "CONDICIONES",
-            points: [
-                "Los precios no incluyen IVA.",
-                "Los pagos se realizarán mediante transferencia bancaria.",
-                "La validez de esta propuesta es de 30 días."
-            ],
-            invoiceInfo: "Las facturas se emitirán con cada pago."
-        }
-    },
-    dividerSlide: {
-        image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop",
-        text: "¿NOS DEJAS ACOMPAÑARTE?"
-    },
-    guarantees: {
-        title: "nuestras garantías.",
-        items: [
-            { title: "GARANTÍA DE SATISFACCIÓN", description: "Trabajamos hasta que estés 100% satisfecha con el diseño. Sin límites de revisiones en la fase de anteproyecto.", note: "Tu tranquilidad es lo primero." },
-            { title: "GARANTÍA DE PRESUPUESTO", description: "Nos comprometemos a que el coste de obra no supere el presupuesto objetivo marcado en más de un 5%, salvo cambios solicitados por la propiedad.", note: "Control total de costes." },
-            { title: "GARANTÍA DE PLAZO", description: "Establecemos un calendario de obra y nos comprometemos a cumplirlo. En caso de retraso imputable a nosotros, te compensamos.", note: "Tu tiempo es oro." }
-        ]
-    },
-    premiumServices: {
-        title: "servicios premium.",
-        services: [
-            { 
-                title: "PERSONAL SHOPPER", 
-                subtitle: "Acompañamiento en tiendas", 
-                price: "250 € / jornada", 
-                description: ["Te acompañamos a showrooms y tiendas para elegir mobiliario y decoración.", "Asesoramiento in-situ."],
-                note: "Máximo 4 horas por jornada."
-            },
-            { 
-                title: "GESTIÓN DE MUDANZA", 
-                subtitle: "Servicio llave en mano", 
-                price: "Consultar", 
-                description: ["Coordinación de empresa de mudanzas.", "Organización de enseres en la nueva vivienda."],
-                note: ""
-            }
-        ],
-        notes: ["Precios sin IVA."]
     },
     contact: {
         image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=1200&auto=format&fit=crop",
