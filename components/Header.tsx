@@ -6,6 +6,15 @@ interface HeaderProps {
   totalSlides: number;
   data?: {
     logo?: string;
+    projectCode?: string;
+    title?: string;
+    clientName?: string;
+    location?: string;
+    company?: {
+      name?: string;
+      tagline?: string;
+    };
+    [key: string]: any; // Permite propiedades adicionales para flexibilidad
   };
 }
 
