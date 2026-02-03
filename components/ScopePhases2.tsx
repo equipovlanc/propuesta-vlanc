@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -91,20 +92,22 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                 </div>
 
                  {/* Fase 5 */}
-                 <div>
-                    <h3 className="text-lg font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">{data?.phases?.[2]?.title}</h3>
-                    <div className="space-y-4">
-                        {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
-                            <div key={i} className="text-gray-600 text-sm leading-relaxed">
-                                <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                <p 
-                                    className="mt-1 whitespace-pre-line"
-                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                 </div>
+                 {data?.phases?.[2] && (
+                     <div>
+                        <h3 className="text-lg font-bold text-gray-800 border-b border-gray-200 pb-2 mb-4">{data?.phases?.[2]?.title}</h3>
+                        <div className="space-y-4">
+                            {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
+                                <div key={i} className="text-gray-600 text-sm leading-relaxed">
+                                    <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
+                                    <p 
+                                        className="mt-1 whitespace-pre-line"
+                                        dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                     </div>
+                 )}
             </div>
         </div>
       </div>
