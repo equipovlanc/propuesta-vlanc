@@ -54,7 +54,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
                     <span className="text-[18px] md:text-[21px] font-serif lowercase tracking-tight font-normal"> {item.title}</span>
                 </a>
             )) : (
-              <p className="text-vlanc-black/30 italic font-sans">Añade secciones en el campo Índice de Sanity...</p>
+              <p className="text-vlanc-black/30 italic font-sans">Añade secciones en el campo "Index" de Sanity...</p>
             )}
         </AnimatedSection>
       </div>
