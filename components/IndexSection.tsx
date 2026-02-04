@@ -3,9 +3,8 @@ import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
 interface IndexItem {
-    number?: string | null;
     title?: string;
-    id?: string; // Used for anchor links
+    id?: string;
 }
 
 interface IndexSectionProps {
@@ -15,23 +14,10 @@ interface IndexSectionProps {
     }
 }
 
-const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-    <div className="flex items-center ml-12 md:ml-0">
-        <div className="bg-gray-100 w-16 h-16 md:w-24 md:h-24 mr-8"></div>
-        <div className="relative">
-            <h2 className="text-5xl md:text-7xl font-bold text-gray-800 tracking-tighter">{children}</h2>
-            {/* Corrected bar position: vertically centered and placed to the left of the title. */}
-            <span className="absolute -left-8 top-1/2 -translate-y-1/2 w-1 h-32 bg-teal-400 transform -rotate-12"></span>
-        </div>
-    </div>
-);
-
-
 const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
-
   const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, id?: string) => {
     if (!id) return;
-    event.preventDefault(); // Prevent the default anchor link behavior
+    event.preventDefault();
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -39,24 +25,29 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
   };
 
   return (
-    <section id="index-section" className="py-20 md:py-32 px-4 md:px-8 lg:px-16 bg-white">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section id="index-section" className="min-h-screen w-full flex flex-col md:flex-row bg-vlanc-bg">
+      <div className="w-full md:w-1/2 min-h-[400px] md:h-auto overflow-hidden">
+        <img 
+          src="https://images.unsplash.com/photo-1513519247388-19345150d5c7?q=80&w=1200&auto=format&fit=crop" 
+          alt="Index" 
+          className="w-full h-full object-cover grayscale brightness-110"
+        />
+      </div>
+      <div className="w-full md:w-1/2 flex flex-col justify-center px-12 md:px-24 py-20">
         <AnimatedSection>
-            <SectionTitle>{data?.title}</SectionTitle>
+            <h2 className="title-xl text-vlanc-secondary mb-4 font-bold">{data?.title || "contenido."}</h2>
+            <div className="w-12 h-[2px] bg-vlanc-primary mb-16"></div>
         </AnimatedSection>
-        <AnimatedSection className="space-y-3">
+        <AnimatedSection className="space-y-6">
             {(data?.items ?? []).map((item, i) => (
                 <a 
                   key={i} 
                   href={`#${item.id}`} 
                   onClick={(e) => handleLinkClick(e, item.id)}
-                  className="flex justify-between items-baseline text-gray-700 pb-2 border-b border-gray-200 hover:text-teal-600 transition-colors duration-300 group cursor-pointer"
+                  className="flex items-center text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer"
                 >
-                    <div className="flex items-baseline">
-                        {item.number && <span className="text-lg font-semibold mr-3">{item.number}</span>}
-                        <p className={`font-medium ${!item.number && 'ml-8'}`}>&gt; {item.title}</p>
-                    </div>
-                    {/* Page numbers removed as requested */}
+                    <span className="subtitle-md text-vlanc-primary mr-4 opacity-40 group-hover:opacity-100">/</span>
+                    <span className="subtitle-md lowercase tracking-tight font-light"> {item.title}</span>
                 </a>
             ))}
         </AnimatedSection>

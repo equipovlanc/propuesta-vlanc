@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -10,46 +11,40 @@ interface SituationProps {
   }
 }
 
-const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, title }) => (
-    <div className="relative mb-8 md:mb-12 ml-8 md:ml-0">
-      <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
-        <span>{number}</span>
-        <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">{title}</span>
-      </h2>
-      <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
-    </div>
-  );
-
 const Situation: React.FC<SituationProps> = ({ data }) => {
   return (
-    <section className="h-full py-12 px-4 md:px-8 lg:px-16 bg-slate-50 flex flex-col justify-center">
-        <div className="max-w-7xl mx-auto w-full">
+    <section className="min-h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
+        <div className="w-full lg:w-3/5 flex flex-col justify-center px-12 md:px-24 py-24">
             <AnimatedSection>
-                <SectionHeader number={data?.sectionNumber} title={data?.title} />
+                <h2 className="title-xl text-vlanc-black mb-4 tracking-tighter">
+                   {data?.title}
+                </h2>
+                <div className="w-16 h-[2px] bg-vlanc-primary mb-16"></div>
             </AnimatedSection>
-            <div className="flex gap-12 lg:gap-24 items-start">
-                 {/* Columna Izquierda: Imagen */}
-                 <div className="hidden lg:block w-1/3">
-                    <AnimatedSection>
-                        {data?.image && <img src={data.image} alt="Street view" className="rounded-lg shadow-2xl object-cover w-full h-[600px] grayscale" />}
-                    </AnimatedSection>
-                 </div>
-                 
-                 {/* Columna Derecha: Texto a 2 columnas internas */}
-                 <div className="w-full lg:w-2/3">
-                    <AnimatedSection>
-                         <div className="columns-1 md:columns-2 gap-8 space-y-4 text-gray-600 leading-relaxed text-justify text-sm md:text-base">
-                            {(data?.paragraphs ?? []).map((p, i) => (
-                                <div 
-                                    key={i} 
-                                    className="break-inside-avoid-column mb-4 whitespace-pre-line" 
-                                    dangerouslySetInnerHTML={{ __html: p }} 
-                                />
-                            ))}
-                         </div>
-                    </AnimatedSection>
-                 </div>
-            </div>
+            
+            <AnimatedSection>
+                <div className="space-y-8 text-vlanc-black/80 max-w-2xl">
+                    {(data?.paragraphs ?? []).map((p, i) => (
+                        <p 
+                            key={i} 
+                            className="text-[12px] font-sans leading-relaxed text-justify" 
+                            dangerouslySetInnerHTML={{ __html: p }} 
+                        />
+                    ))}
+                </div>
+            </AnimatedSection>
+        </div>
+        
+        <div className="w-full lg:w-2/5 min-h-[500px] lg:h-auto">
+            <AnimatedSection className="h-full">
+                {data?.image && (
+                  <img 
+                    src={data.image} 
+                    alt="Situation" 
+                    className="w-full h-full object-cover grayscale brightness-90" 
+                  />
+                )}
+            </AnimatedSection>
         </div>
     </section>
   );

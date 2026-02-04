@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -17,52 +18,32 @@ interface PremiumServicesProps {
     }
 }
 
-const ServiceCard: React.FC<{ title?: string, subtitle?: string, price?: string, description?: string[], note?: string }> = ({ title, subtitle, price, description, note }) => (
-    <div className="bg-white p-4 md:p-5 h-full transition-all duration-300 hover:shadow-xl border-l-4 border-transparent hover:border-teal-400 flex flex-col">
-        <div className="flex justify-between items-start mb-1 gap-2">
-            <h3 className="text-sm md:text-base font-bold text-teal-600 uppercase leading-tight tracking-tight flex-1">{title}</h3>
-            <span className="bg-gray-100 px-2 py-1 font-bold text-gray-800 text-xs whitespace-nowrap">{price}</span>
-        </div>
-        <h4 className="font-semibold text-gray-700 mb-2 text-xs uppercase tracking-wide">{subtitle}</h4>
-        <div className="text-gray-600 space-y-1 text-xs flex-grow leading-tight">
-            {(description ?? []).map((p, i) => (
-                <div 
-                    key={i} 
-                    className="whitespace-pre-line" 
-                    dangerouslySetInnerHTML={{ __html: p }} 
-                />
-            ))}
-        </div>
-        {note && <p className="text-[10px] text-gray-400 italic mt-2 border-t pt-1 leading-tight">{note}</p>}
-    </div>
-);
-
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data }) => {
     return (
-        <section className="h-full bg-slate-100 flex flex-col justify-center">
+        <section className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-32 px-12 md:px-24">
             <div className="max-w-7xl mx-auto w-full">
-                 <AnimatedSection className="mb-6 lg:mb-8 ml-8 md:ml-0">
-                    <div className="relative inline-block">
-                        <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-gray-800">{data?.title}</h2>
-                        <span className="absolute -left-6 top-1/2 -translate-y-1/2 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
-                    </div>
+                 <AnimatedSection>
+                    <h2 className="title-xl text-vlanc-secondary mb-4 font-bold tracking-tighter">
+                       {data?.title || "servicios premium."}
+                    </h2>
+                    <div className="w-16 h-[2px] bg-vlanc-primary mb-20"></div>
                 </AnimatedSection>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
+                
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {(data?.services ?? []).map((service, i) => (
-                        <AnimatedSection key={i}>
-                            <ServiceCard 
-                                title={service.title}
-                                subtitle={service.subtitle}
-                                price={service.price}
-                                description={service.description}
-                                note={service.note}
-                            />
+                        <AnimatedSection key={i} className="bg-white/40 p-10 border border-vlanc-primary/10 rounded-sm hover:bg-white/60 transition-all duration-500">
+                             <div className="flex justify-between items-start mb-6">
+                                <h3 className="text-[18px] font-serif font-bold text-vlanc-secondary leading-tight uppercase tracking-tighter">{service.title}</h3>
+                                <span className="text-[14px] font-bold text-vlanc-primary font-sans">{service.price}</span>
+                             </div>
+                             <h4 className="text-[10px] font-bold text-vlanc-primary uppercase tracking-[0.2em] mb-6 italic">{service.subtitle}</h4>
+                             <div className="text-vlanc-black/70 text-[12px] space-y-4 leading-relaxed text-justify">
+                                {(service.description ?? []).map((p, idx) => (
+                                    <p key={idx} dangerouslySetInnerHTML={{ __html: p }} />
+                                ))}
+                             </div>
+                             {service.note && <p className="text-[10px] text-vlanc-black/40 italic mt-8 border-t border-vlanc-primary/10 pt-4 uppercase tracking-widest">{service.note}</p>}
                         </AnimatedSection>
-                    ))}
-                </div>
-                <div className="mt-4 text-right space-y-1">
-                    {(data?.notes ?? []).map((note, i) => (
-                        <p key={i} className="text-[10px] text-gray-500 font-medium">{note}</p>
                     ))}
                 </div>
             </div>

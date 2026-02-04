@@ -19,10 +19,10 @@ import PremiumServices from './components/PremiumServices';
 import DividerSlide from './components/DividerSlide';
 import Contact from './components/Contact';
 import SectionSlide from './components/SectionSlide';
+import StudioLanding from './components/StudioLanding'; 
 import { proposalData as localProposalData } from './data/proposal.data';
 import sanityClient from './sanity/client';
 
-// Define the type for your proposal data.
 type ProposalData = typeof localProposalData;
 
 const App: React.FC = () => {
@@ -32,24 +32,20 @@ const App: React.FC = () => {
   const [dataSource, setDataSource] = useState<'sanity' | 'local' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Obtener el slug de la URL actual (ej: /celia-blanes -> celia-blanes)
   const slug = window.location.pathname.substring(1);
 
-  // --- KEYBOARD NAVIGATION LOGIC ---
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!containerRef.current) return;
+      if (!containerRef.current || !slug) return; 
 
       const slides = Array.from(containerRef.current.querySelectorAll('.section-slide')) as HTMLElement[];
       
-      // Improved logic: Find active slide by checking which one covers the middle of the viewport
       let currentSlideIndex = slides.findIndex(slide => {
         const rect = slide.getBoundingClientRect();
         const middleOfScreen = window.innerHeight / 2;
         return rect.top <= middleOfScreen && rect.bottom >= middleOfScreen;
       });
 
-      // Fallback logic
       if (currentSlideIndex === -1) {
           currentSlideIndex = slides.findIndex(slide => {
             const rect = slide.getBoundingClientRect();
@@ -78,7 +74,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchProposalData = async () => {
-      // Si no hay slug (estamos en la raíz), no cargamos nada
       if (!slug) {
         setLoading(false);
         return;
@@ -90,9 +85,7 @@ const App: React.FC = () => {
 
       const isSanityConfigured = sanityClient.config().projectId && sanityClient.config().projectId !== 'your-project-id';
 
-      // Si Sanity no está configurado, usamos local pero avisamos
       if (!isSanityConfigured) {
-        console.warn("Sanity no configurado o ID por defecto. Usando datos locales.");
         setProposalData(localProposalData);
         setDataSource('local');
         setLoading(false);
@@ -102,6 +95,11 @@ const App: React.FC = () => {
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
+          "logos": logos{
+            "smallLogo": smallLogo.asset->url,
+            "mainLogo": mainLogo.asset->url,
+            "finalLogo": finalLogo.asset->url
+          },
           "header": header{...},
           "hero": hero{...},
           "index": index{..., "items": items[]{...}},
@@ -165,16 +163,11 @@ const App: React.FC = () => {
           setProposalData(data);
           setDataSource('sanity');
         } else {
-          // Si no encontramos nada en Sanity para ese slug, mostramos error
-          // NO hacemos fallback a local para evitar confusiones, a menos que sea un error de red
           setError(`No se encontró la propuesta "${slug}" en Sanity.`);
           setDataSource(null);
         }
       } catch (err) {
         console.error('Error fetching data from Sanity:', err);
-        // Si hay error de conexión y estamos configurados, NO usar fallback para evitar confusión
-        // setProposalData(localProposalData); 
-        // setDataSource('local');
         setError(`Error de conexión con Sanity: ${(err as any).message}`);
       } finally {
         setLoading(false);
@@ -184,130 +177,93 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-  // --- RENDERIZADO CONDICIONAL ---
-
-  // 1. Pantalla de Bienvenida (Ruta Raíz)
   if (!slug) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white text-gray-800 p-8 font-sans">
-        <div className="max-w-md text-center space-y-8">
-            <h1 className="text-4xl font-bold tracking-widest text-teal-600">VLANC</h1>
-            <div className="w-16 h-1 bg-gray-200 mx-auto"></div>
-            <p className="text-xl font-light">Portal de Propuestas</p>
-            <p className="text-gray-500 text-sm">
-                Por favor, utiliza el enlace personalizado que te hemos facilitado para acceder a tu propuesta.
-            </p>
-            <div className="p-4 bg-gray-50 rounded text-xs text-gray-400 mt-8">
-                Ejemplo: /celia-blanes
-            </div>
-        </div>
-      </div>
-    );
+    return <StudioLanding />;
   }
 
-  // 2. Pantalla de Carga
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center bg-vlanc-bg">
         <div className="animate-pulse flex flex-col items-center">
-            <div className="h-4 w-32 bg-gray-200 rounded mb-4"></div>
-            <p className="text-gray-400 text-sm tracking-widest">CARGANDO PROPUESTA...</p>
+            <div className="h-4 w-32 bg-vlanc-primary/20 rounded mb-4"></div>
+            <p className="text-vlanc-primary/40 text-sm tracking-widest uppercase font-bold">Cargando Experiencia VLANC...</p>
         </div>
     </div>
   );
   
-  // 3. Pantalla de Error (Solo si no hay datos)
-  if (error && !proposalData) return (
-    <div className="min-h-screen flex items-center justify-center p-8 text-center bg-white text-gray-800">
-        <div className="max-w-lg">
-             <h2 className="text-2xl font-bold text-red-500 mb-4">¡Vaya!</h2>
-             <p className="text-lg mb-6">{error}</p>
-             <p className="text-sm text-gray-500 mb-6">Asegúrate de que tu Project ID de Sanity es correcto y el documento está publicado.</p>
-             <a href="/" className="text-teal-600 underline hover:text-teal-800">Volver al inicio</a>
-        </div>
-    </div>
-  );
-  
-  // 4. Propuesta (Renderizado Principal)
   const data = proposalData || localProposalData;
 
-  // IMPORTANT CHANGES:
-  // 1. snap-proximity: Allows scrolling freely within long sections (prevents getting stuck at top).
-  // 2. overflow-x-hidden: Prevents horizontal scrollbars from decorative elements now that overflow-hidden is removed from slides.
   return (
-    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-proximity scroll-smooth no-scrollbar bg-white text-gray-800 relative">
+    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-proximity scroll-smooth no-scrollbar bg-vlanc-bg text-vlanc-black relative">
         
-        {/* Slide 1: Hero */}
+        {/* PORTADA - Diseño específico Página 1 */}
         <SectionSlide id="hero">
-            <div className="absolute top-0 left-0 w-full z-10 px-8 pt-4">
-                <Header data={data.header} />
-            </div>
-            <Hero data={data.hero} />
+            <Hero data={data.hero} headerData={data.header} logo={data.logos?.mainLogo} />
         </SectionSlide>
 
-        {/* Slide 2: Index */}
+        {/* LÁMINAS INTERNAS - Solo Logo y Página */}
         <SectionSlide id="index">
+            <Header logo={data.logos?.smallLogo} pageNumber={2} />
             <IndexSection data={data.index} />
         </SectionSlide>
 
-        {/* Slide 3: Situation */}
         <SectionSlide id="situation">
+            <Header logo={data.logos?.smallLogo} pageNumber={3} />
             <Situation data={data.situation} />
         </SectionSlide>
 
-        {/* Slide 4: Mission */}
         <SectionSlide id="mission">
+            <Header logo={data.logos?.smallLogo} pageNumber={4} />
             <Mission data={data.mission} />
         </SectionSlide>
 
-        {/* Slide 5: Process */}
         <SectionSlide id="process">
+            <Header logo={data.logos?.smallLogo} pageNumber={5} />
             <Process data={data.process} />
         </SectionSlide>
 
-        {/* Slide 6: Team */}
         <SectionSlide id="team">
+            <Header logo={data.logos?.smallLogo} pageNumber={6} />
             <Team data={data.team} />
         </SectionSlide>
 
-        {/* Slide 7: Testimonials */}
         <SectionSlide id="testimonials">
+            <Header logo={data.logos?.smallLogo} pageNumber={7} />
             <Testimonials data={data.testimonials} />
         </SectionSlide>
 
-        {/* Slide 8: Scope Intro (Page 8) */}
         <SectionSlide id="scope">
-            <Scope data={data.scopeIntro || (data as any).scope} />
+            <Header logo={data.logos?.smallLogo} pageNumber={8} />
+            <Scope data={data.scopeIntro} />
         </SectionSlide>
 
-        {/* Slide 9: Scope Phases 1 (Page 9) */}
         <SectionSlide id="scope-phases-1">
+            <Header logo={data.logos?.smallLogo} pageNumber={9} />
             <ScopePhases 
                 data={data.scopePhases1} 
-                guaranteesData={data.guarantees} // Pass guarantees data for popup
+                guaranteesData={data.guarantees} 
             />
         </SectionSlide>
 
-         {/* Slide 10: Scope Phases 2 (Page 10) */}
          <SectionSlide id="scope-phases-2">
+            <Header logo={data.logos?.smallLogo} pageNumber={10} />
             <ScopePhases2 data={data.scopePhases2} />
         </SectionSlide>
 
-        {/* Slide 11: Investment Table (Page 11) */}
         <SectionSlide id="investment">
+            <Header logo={data.logos?.smallLogo} pageNumber={14} />
             <Investment data={data.investment} />
         </SectionSlide>
 
-        {/* Slide 12: Special Offers (Page 12) */}
         <SectionSlide id="special-offers">
+            <Header logo={data.logos?.smallLogo} pageNumber={15} />
             <SpecialOffers data={data.specialOffers} />
         </SectionSlide>
 
-        {/* Slide 13: Payment & Fine Print (Page 13) */}
         <SectionSlide id="payment">
+            <Header logo={data.logos?.smallLogo} pageNumber={16} />
             <Payment data={data.payment} />
         </SectionSlide>
 
-        {/* Slide 14: Divider (Page 14) */}
         <SectionSlide id="divider">
             <DividerSlide 
                 image={data.dividerSlide?.image || data.contact?.image}
@@ -315,19 +271,18 @@ const App: React.FC = () => {
             />
         </SectionSlide>
 
-        {/* Slide 15: Guarantees (Page 15) */}
         <SectionSlide id="guarantees">
-             <Guarantees data={data.guarantees} />
+            <Header logo={data.logos?.smallLogo} pageNumber={18} />
+            <Guarantees data={data.guarantees} />
         </SectionSlide>
 
-        {/* Slide 16: Premium Services (Page 16) */}
         <SectionSlide id="premium-services">
+            <Header logo={data.logos?.smallLogo} pageNumber={19} />
             <PremiumServices data={data.premiumServices} />
         </SectionSlide>
 
-        {/* Slide 17: Contact (Page 17) */}
         <SectionSlide id="contact">
-            <Contact data={data.contact} />
+            <Contact data={data.contact} finalLogo={data.logos?.finalLogo} />
         </SectionSlide>
     </div>
   );

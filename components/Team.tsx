@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -9,7 +10,6 @@ interface TeamMember {
 
 interface TeamProps {
     data?: {
-        sectionNumber?: string;
         title?: string;
         purpose?: {
             title?: string;
@@ -23,57 +23,42 @@ interface TeamProps {
     }
 }
 
-const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, title }) => (
-    <div className="relative mb-8 ml-8 md:ml-0">
-      <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
-        <span>{number}</span>
-        <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">{title}</span>
-      </h2>
-      <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
-    </div>
-);
-
-const TeamMemberCard: React.FC<{ name?: string, role?: string, img?: string }> = ({ name, role, img }) => (
-    <div className="group">
-        <div className="overflow-hidden mb-3 rounded-lg shadow-md">
-            {/* Aspect square for perfect portraits */}
-            {img && <img src={img} alt={name} className="w-full aspect-square object-cover transform transition-transform duration-500 group-hover:scale-105" />}
-        </div>
-        <h4 className="text-base font-bold text-gray-800">{name}</h4>
-        <p className="text-sm text-gray-500">&gt; {role}</p>
-    </div>
-);
-
-
 const Team: React.FC<TeamProps> = ({ data }) => {
   return (
-    <section className="h-full bg-white flex flex-col justify-center">
+    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-32 px-12 md:px-24">
         <div className="max-w-7xl mx-auto w-full">
             <AnimatedSection>
-                <SectionHeader number={data?.sectionNumber} title={data?.title} />
+                <h2 className="title-xl text-vlanc-secondary mb-4 font-bold tracking-tighter">
+                   {data?.title || "conoce VLANC."}
+                </h2>
+                <div className="w-16 h-[2px] bg-vlanc-primary mb-20"></div>
             </AnimatedSection>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-6 lg:mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-24">
                  <AnimatedSection>
-                    <h3 className="text-lg font-bold text-teal-600 mb-2">&gt; {data?.purpose?.title}</h3>
+                    <h3 className="subtitle-md text-vlanc-primary font-bold mb-6">/ {data?.purpose?.title}</h3>
                     <div 
-                        className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line"
+                        className="text-vlanc-black/70 leading-relaxed text-[12px] text-justify space-y-4"
                         dangerouslySetInnerHTML={{ __html: data?.purpose?.description || '' }}
                     />
                  </AnimatedSection>
                  <AnimatedSection>
-                    <h3 className="text-lg font-bold text-teal-600 mb-2">&gt; {data?.history?.title}</h3>
+                    <h3 className="subtitle-md text-vlanc-primary font-bold mb-6">/ {data?.history?.title}</h3>
                     <div 
-                        className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line"
+                        className="text-vlanc-black/70 leading-relaxed text-[12px] text-justify space-y-4"
                         dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
                     />
                  </AnimatedSection>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
                 {(data?.members ?? []).map((member, index) => (
-                    <AnimatedSection key={index}>
-                        <TeamMemberCard {...member} />
+                    <AnimatedSection key={index} className="text-center group">
+                        <div className="overflow-hidden mb-6 aspect-[3/4] rounded-sm grayscale group-hover:grayscale-0 transition-all duration-700">
+                            {member.img && <img src={member.img} alt={member.name} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-1000" />}
+                        </div>
+                        <h4 className="text-[14px] font-bold text-vlanc-secondary tracking-widest uppercase mb-1">{member.name}</h4>
+                        <p className="text-[10px] text-vlanc-primary font-bold uppercase tracking-[0.2em]">{member.role}</p>
                     </AnimatedSection>
                 ))}
             </div>

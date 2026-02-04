@@ -1,9 +1,9 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
 interface ScopeProps {
     data?: {
-        sectionNumber?: string;
         title?: string;
         intervention?: {
             title?: string;
@@ -18,59 +18,56 @@ interface ScopeProps {
     }
 }
 
-// Estilo unificado de cabecera
-const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, title }) => (
-    <div className="relative mb-12 ml-8 md:ml-0">
-      <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
-        <span>{number}</span>
-        <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">{title}</span>
-      </h2>
-      <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
-    </div>
-);
-
 const Scope: React.FC<ScopeProps> = ({ data }) => {
   return (
-    <section className="h-full py-12 px-4 md:px-8 lg:px-16 bg-white flex flex-col justify-center">
+    <section className="min-h-screen py-32 px-12 md:px-24 bg-vlanc-bg flex flex-col justify-center">
       <div className="max-w-7xl mx-auto w-full">
         <AnimatedSection>
-            <SectionHeader number={data?.sectionNumber} title={data?.title} />
+            <h2 className="title-xl text-vlanc-secondary mb-4 font-bold tracking-tighter">
+                {data?.title || "qué vamos a hacer por ti."}
+            </h2>
+            <div className="w-16 h-[2px] bg-vlanc-primary mb-20"></div>
         </AnimatedSection>
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
-            <div className="lg:col-span-3 space-y-6">
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            <div className="lg:col-span-8 space-y-10">
                 <AnimatedSection>
-                    <h3 className="text-xl font-semibold text-teal-600 mb-4">&gt; {data?.intervention?.title}</h3>
-                    <div className="space-y-3 text-gray-700 text-base">
-                        <p><strong>LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
-                        <p><strong>TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
-                        <p><strong>ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
+                    <h3 className="subtitle-md text-vlanc-primary font-bold mb-8 italic">/ {data?.intervention?.title}</h3>
+                    <div className="space-y-4 text-vlanc-black/80 text-[12px]">
+                        <p><strong className="text-vlanc-secondary">LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
+                        <p><strong className="text-vlanc-secondary">TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
+                        <p><strong className="text-vlanc-secondary">ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
                         <div 
-                            className="pt-2 font-medium whitespace-pre-line"
+                            className="pt-4 font-medium leading-relaxed whitespace-pre-line text-justify"
                             dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }}
                         />
                     </div>
-                    <div className="mt-6 space-y-1 text-gray-600 text-sm md:text-base pl-2">
+                    
+                    <div className="mt-10 space-y-4 text-vlanc-black/70 text-[12px]">
                         {(data?.intervention?.breakdown ?? []).map((item, i) => (
-                            <div key={i} className="flex gap-2">
-                                <span>&gt;</span>
+                            <div key={i} className="flex gap-4">
+                                <span className="text-vlanc-primary font-bold">/</span>
                                 <span 
-                                    className="whitespace-pre-line"
+                                    className="leading-relaxed text-justify"
                                     dangerouslySetInnerHTML={{ __html: item }}
                                 />
                             </div>
                         ))}
                     </div>
+                    
                     {data?.intervention?.note && (
-                        <p className="mt-8 text-xs text-gray-400 italic">{data?.intervention?.note}</p>
+                        <p className="mt-12 text-[10px] text-vlanc-black/40 italic uppercase tracking-widest">{data?.intervention?.note}</p>
                     )}
                 </AnimatedSection>
             </div>
-            <div className="lg:col-span-2 grid grid-cols-1 gap-6">
+            
+            <div className="lg:col-span-4">
                 <AnimatedSection>
-                    {data?.images?.[0] && <img src={data.images[0]} alt="Interior state" className="rounded-lg shadow-xl w-full h-48 lg:h-64 object-cover" />}
-                </AnimatedSection>
-                 <AnimatedSection>
-                    {data?.images?.[1] && <img src={data.images[1]} alt="Interior detail" className="rounded-lg shadow-xl w-full h-48 lg:h-64 object-cover" />}
+                    <div className="space-y-8">
+                        {data?.images?.map((img, i) => (
+                            <img key={i} src={img} alt={`Scope ${i}`} className="w-full grayscale brightness-95 shadow-lg rounded-sm" />
+                        ))}
+                    </div>
                 </AnimatedSection>
             </div>
         </div>
