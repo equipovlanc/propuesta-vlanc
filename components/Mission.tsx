@@ -38,7 +38,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            <div className="w-full lg:w-[55%] h-1/2 lg:h-full flex flex-col justify-center pl-10 pr-[120px] pt-32 pb-[120px] space-y-16 overflow-y-auto no-scrollbar">
+            {/* justify-center -> justify-start. pt-32 -> pt-[140px] */}
+            <div className="w-full lg:w-[55%] h-1/2 lg:h-full flex flex-col justify-start pl-10 pr-[120px] pt-[140px] pb-[120px] space-y-16 overflow-y-auto no-scrollbar">
                 
                 {/* Bloque 1: La Misión */}
                 <AnimatedSection>
@@ -53,7 +54,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                     </p>
                 </AnimatedSection>
 
-                {/* Bloque 2: Qué vas a conseguir */}
+                {/* Bloque 2: Qué vas a conseguir (Excepción, fluye abajo) */}
                 <AnimatedSection>
                     <h2 className="subtitulo1 mb-4 tracking-tighter">{data?.achievements?.title}</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mb-6"></div>

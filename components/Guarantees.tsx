@@ -56,7 +56,7 @@ const GuaranteeBadge = ({ index }: { index: number }) => {
 
 const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center px-[120px] pt-32 pb-[120px]">
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start px-[120px] pt-[140px] pb-[120px]">
             <div className="w-full flex justify-end mb-24">
                 <AnimatedSection>
                     <div className="text-right flex flex-col items-end">

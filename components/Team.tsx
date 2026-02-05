@@ -27,9 +27,9 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   const members = data?.members || [];
 
   return (
-    <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center px-[120px] pt-32 pb-[120px]">
+    <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start px-[120px] pt-[140px] pb-[120px]">
         
-        <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             
             <div className="h-full max-h-[80vh] grid grid-cols-2 gap-6 items-center content-center">
                  {members.map((member, index) => (
@@ -51,7 +51,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                  ))}
             </div>
 
-            <div className="h-full flex flex-col justify-center space-y-12 overflow-y-auto no-scrollbar pr-4">
+            <div className="h-full flex flex-col justify-start space-y-12 overflow-y-auto no-scrollbar pr-4">
                  <AnimatedSection>
                     <h2 className="subtitulo1 mb-4 tracking-tighter">
                         {data?.title || "conoce VLANC."}

@@ -36,7 +36,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
     };
 
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center pt-32 pb-[120px] px-[120px]">
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[140px] pb-[120px] px-[120px]">
             <AnimatedSection className="mb-4">
                 <h2 className="subtitulo1 mb-4 tracking-tighter">
                    {data?.title || "la inversión."}

@@ -18,7 +18,7 @@ interface PremiumServicesProps {
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
     return (
         <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg">
-            <div className="w-full lg:w-1/2 h-full flex flex-col justify-center pl-[120px] pr-10 pt-32 pb-[120px] overflow-y-auto no-scrollbar">
+            <div className="w-full lg:w-1/2 h-full flex flex-col justify-start pl-[120px] pr-10 pt-[140px] pb-[120px] overflow-y-auto no-scrollbar">
                 <AnimatedSection className="mb-12">
                     <h2 className="subtitulo1 mb-4 tracking-tighter">servicios premium.</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary"></div>
