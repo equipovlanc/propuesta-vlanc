@@ -33,7 +33,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
         <section className="min-h-screen py-32 px-12 md:px-24 bg-vlanc-bg flex flex-col justify-center">
             <div className="max-w-7xl mx-auto w-full">
                  <AnimatedSection>
-                    <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
+                    <h2 className="subtitulo1 mb-4 tracking-tighter">
                        {investmentTitle || "la inversión."}
                     </h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mb-20"></div>
@@ -41,7 +41,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
                     <AnimatedSection>
-                        <h3 className="text-[32px] font-serif italic text-vlanc-black mb-10">{data?.paymentMethods?.title}</h3>
+                        {/* Subtitulo 2 (Italic, grande en este caso) */}
+                        <h3 className="subtitulo2 text-[32px] mb-10">{data?.paymentMethods?.title}</h3>
                         <div className="space-y-12">
                            {(data?.paymentMethods?.plans ?? []).map((plan, i) => (
                                 <div key={i}>
@@ -60,7 +61,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                     </AnimatedSection>
                     
                     <AnimatedSection>
-                         <h3 className="text-[32px] font-serif italic text-vlanc-black mb-10">{data?.finePrint?.title}</h3>
+                         <h3 className="subtitulo2 text-[32px] mb-10">{data?.finePrint?.title}</h3>
                          <div className="space-y-4 text-[11px] text-vlanc-secondary/80 text-justify leading-relaxed font-sans">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
                                 <p key={i} className="flex gap-3">

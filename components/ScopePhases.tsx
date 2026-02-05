@@ -27,7 +27,6 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
   return (
     <section className="h-full w-full bg-vlanc-bg flex relative overflow-hidden">
         
-        {/* Columna Izquierda: Imagen A SANGRE (Full Height, Absolute Left) */}
         <div className="absolute top-0 left-0 w-full lg:w-[45%] h-full z-0">
              <AnimatedSection className="w-full h-full">
                 {data?.image ? (
@@ -40,28 +39,22 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
              </AnimatedSection>
         </div>
 
-        {/* Overlay para el Título Principal (Sobre la imagen o desplazado) */}
-
         <div className="w-full h-full flex z-10 pointer-events-none">
-            {/* Columna 1: Título */}
             <div className="hidden lg:flex w-[25%] h-full pt-32 pl-12 flex-col bg-vlanc-bg">
                  <AnimatedSection>
-                    <h2 className="subtitulo1 text-vlanc-black tracking-tighter leading-none text-left">
+                    <h2 className="subtitulo1 tracking-tighter leading-none text-left">
                         {mainTitle}
                     </h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mt-6"></div>
                 </AnimatedSection>
             </div>
 
-            {/* Columna 2: Imagen (La ponemos aquí en el flujo normal si queremos que ocupe espacio, o usamos la absoluta de fondo si es a sangre total) */}
             <div className="w-full lg:w-[35%] h-full relative overflow-hidden pointer-events-auto">
-                 {/* Si hay imagen en data, la mostramos aquí a full height */}
                   {data?.image && (
                      <img src={data.image} className="w-full h-full object-cover grayscale" />
                   )}
             </div>
 
-            {/* Columna 3: Contenido Texto */}
             <div className="w-full lg:w-[40%] h-full flex flex-col justify-center px-12 lg:pr-24 py-20 overflow-y-auto no-scrollbar pointer-events-auto bg-vlanc-bg">
                 <AnimatedSection>
                     <h3 className="text-[21px] font-sans font-bold text-vlanc-black uppercase mb-12">{data?.title}</h3>
@@ -69,12 +62,11 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                     <div className="space-y-8">
                         {(data?.subPhases ?? []).map((sub, i) => (
                             <div key={i} className="text-[12px] leading-relaxed">
-                                {/* Puntos: Montserrat Negrita Negro. IMPORTANTE: Renderizar negritas del Sanity si las hay */}
                                 <p className="mb-2 tracking-widest font-bold text-vlanc-black uppercase">
                                     {sub.number} {sub.title}
                                 </p>
                                 <p 
-                                    className="text-justify whitespace-pre-line text-vlanc-secondary font-sans [&>strong]:font-bold [&>strong]:text-vlanc-black" 
+                                    className="cuerpo" 
                                     dangerouslySetInnerHTML={{ __html: sub.description || '' }} 
                                 />
                             </div>

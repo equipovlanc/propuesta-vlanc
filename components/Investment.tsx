@@ -28,10 +28,8 @@ const CheckIcon = () => (
 
 const Investment: React.FC<InvestmentProps> = ({ data }) => {
     
-    // Colores PDF P14 exactos aproximados
     const getRowBg = (color?: string) => {
-        // Filas alternas o destacadas en color crema/marrón muy suave
-        if (color === 'light') return 'bg-[#eae0d5]'; // Un beige más oscuro que el fondo
+        if (color === 'light') return 'bg-[#eae0d5]';
         if (color === 'medium') return 'bg-[#dccbc1]'; 
         if (color === 'dark') return 'bg-[#cbb6aa]';
         return 'border-b border-vlanc-primary/10';
@@ -40,18 +38,17 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
     return (
         <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center py-16 px-12 md:px-24">
             <AnimatedSection className="mb-4">
-                <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
+                <h2 className="subtitulo1 mb-4 tracking-tighter">
                    {data?.title || "la inversión."}
                 </h2>
                 <div className="w-20 h-[2px] bg-vlanc-primary mb-8"></div>
             </AnimatedSection>
 
             <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-start h-full overflow-hidden">
-                {/* Columna Izquierda: Texto */}
                 <div className="lg:col-span-4 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection>
                         <div 
-                            className="text-[12px] text-vlanc-secondary leading-relaxed text-justify mb-8 [&>strong]:font-bold [&>strong]:text-vlanc-black" 
+                            className="cuerpo mb-8" 
                             dangerouslySetInnerHTML={{ __html: data?.introduction || '' }} 
                         />
                         
@@ -59,17 +56,15 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             {(data?.plansDescription ?? []).map((p, i) => (
                                 <div key={i} className="space-y-1">
                                     <p className="text-[12px] font-bold text-vlanc-black tracking-widest uppercase">{p.name}_</p>
-                                    <p className="text-[11px] text-vlanc-secondary leading-relaxed text-justify">{p.desc}</p>
+                                    <p className="text-[11px] text-vlanc-secondary leading-relaxed text-justify font-sans">{p.desc}</p>
                                 </div>
                             ))}
                         </div>
                     </AnimatedSection>
                 </div>
 
-                {/* Columna Derecha: Tabla */}
                 <div className="lg:col-span-8 h-full flex flex-col">
                     <AnimatedSection className="w-full">
-                        {/* Cabecera Tabla con color solido #dccbc1 (aprox) del PDF */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
@@ -77,10 +72,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             ))}
                         </div>
                         
-                        {/* Cuerpo Tabla */}
                         <div className="bg-transparent text-[10px]">
                             {(data?.tableRows ?? []).map((row, i) => {
-                                // Fila especial "SERVICIOS PREMIUM"
                                 if (row.isPremiumSeparator) {
                                     return (
                                         <div key={i} className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#e6ded6] py-2 border-b border-vlanc-primary/10">
@@ -106,7 +99,6 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Pie Tabla: Precios con color solido #8f4933 */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white mt-auto">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (

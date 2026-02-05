@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -23,8 +23,7 @@
               }
             },
             fontFamily: {
-              // Prioridad: Baskerville Display PT (Local) -> Libre Baskerville (Google) -> Serif sistema
-              serif: ['"Baskerville Display PT"', 'Libre Baskerville', 'serif'],
+              serif: ['"Baskerville Display PT"', 'serif'],
               sans: ['Montserrat', 'sans-serif'],
             }
           }
@@ -32,18 +31,9 @@
       }
     </script>
     <style>
-      /* Fuentes Locales: Prioridad Absoluta */
+      /* --- FUENTES LOCALES: BASKERVILLE DISPLAY PT --- */
       
-      /* Peso 400 (Regular) */
-      @font-face {
-        font-family: 'Baskerville Display PT';
-        src: url('/fonts/baskerville-display-pt.otf') format('opentype');
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-      }
-      
-      /* Peso 300 (Light) - Mapeado al mismo OTF */
+      /* Peso 300: LIGHT (Usado en subtitulo1) */
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/baskerville-display-pt.otf') format('opentype');
@@ -52,16 +42,16 @@
         font-display: swap;
       }
 
-      /* Peso 200 (Thin/Extra Light) - Mapeado al mismo OTF */
+      /* Peso 400: REGULAR (Usado en titulos y subtitulo3) */
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/baskerville-display-pt.otf') format('opentype');
-        font-weight: 200;
+        font-weight: 400;
         font-style: normal;
         font-display: swap;
       }
-
-      /* Mapeos adicionales para Italic/Bold simulados sobre el mismo archivo */
+      
+      /* Peso 400: ITALIC (Simulado o real si el OTF lo soporta, usado en subtitulo2) */
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/baskerville-display-pt.otf') format('opentype');
@@ -69,13 +59,8 @@
         font-style: italic;
         font-display: swap;
       }
-      @font-face {
-        font-family: 'Baskerville Display PT';
-        src: url('/fonts/baskerville-display-pt.otf') format('opentype'); 
-        font-weight: 700; 
-        font-style: normal;
-        font-display: swap;
-      }
+
+      /* --- ESTILOS GLOBALES --- */
 
       body {
         font-family: 'Montserrat', sans-serif;
@@ -84,33 +69,69 @@
         overflow-x: hidden;
         font-size: 12px;
       }
-      
-      /* Forzar peso Regular (400) por defecto en títulos serif si no tienen clase especifica */
-      h1.font-serif, h2.font-serif, h3.font-serif, .font-serif {
-        font-weight: 400;
-      }
 
-      /* Clases de Tipografía PDF */
-      .title-pdf { font-size: 72px; line-height: 1.05; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; font-weight: 400; }
-      
-      /* DEFINICIÓN SUBTITULO1: Peso 300 (Light) */
-      .subtitulo1 { 
-        font-size: 60px; 
-        line-height: 1.1; 
-        font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; 
-        letter-spacing: -0.03em; 
-        font-weight: 300; 
-      }
-
-      .subtitle-pdf { font-size: 60px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.03em; font-weight: 400; }
-      
-      .title-xl { font-size: 42px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; font-weight: 400; }
-      .subtitle-md { font-size: 24px; line-height: 1.2; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; font-weight: 400; }
-      
-      .text-pdf { font-size: 12px; line-height: 1.6; font-family: 'Montserrat', sans-serif; }
-
+      /* Scrollbar Oculta */
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+      /* --- JERARQUÍA TIPOGRÁFICA DEFINITIVA --- */
+
+      /* 1. TÍTULO PRINCIPAL (Hero) */
+      .titulo {
+        font-family: 'Baskerville Display PT', serif;
+        font-size: 72px;
+        line-height: 1.05;
+        font-weight: 400; /* Regular */
+        letter-spacing: -0.02em;
+        color: #702622; /* Secundario por defecto en hero */
+      }
+
+      /* 2. SUBTÍTULO 1 (Encabezados de Sección: "contenido.", "la situación.") */
+      .subtitulo1 {
+        font-family: 'Baskerville Display PT', serif;
+        font-size: 60px;
+        line-height: 1.1;
+        font-weight: 300; /* Light - Nivel bajado */
+        letter-spacing: -0.03em;
+        color: #000000;
+      }
+
+      /* 3. SUBTÍTULO 2 (Destacados Medios: Italic, Nombres, Frases) */
+      .subtitulo2 {
+        font-family: 'Baskerville Display PT', serif;
+        font-size: 28px;
+        line-height: 1.2;
+        font-weight: 400;
+        font-style: italic;
+        color: #000000;
+      }
+
+      /* 4. SUBTÍTULO 3 (Listas, Pasos proceso, Items índice) */
+      .subtitulo3 {
+        font-family: 'Baskerville Display PT', serif;
+        font-size: 24px;
+        line-height: 1.2;
+        font-weight: 400; /* Regular */
+        font-style: normal;
+        color: #000000;
+        letter-spacing: -0.01em;
+      }
+
+      /* 5. CUERPO DE TEXTO (Párrafos generales) */
+      .cuerpo {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        line-height: 1.7; /* Leading relaxed */
+        font-weight: 400;
+        color: #702622; /* Marrón secundario por defecto */
+        text-align: justify;
+      }
+      
+      /* Utilidad para negritas dentro de .cuerpo */
+      .cuerpo strong {
+        font-weight: 700;
+        color: #000000;
+      }
 
       @media print {
         @page { size: A4 landscape; margin: 0; }
@@ -130,6 +151,7 @@
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <div id="root"></div>

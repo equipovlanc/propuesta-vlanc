@@ -15,21 +15,19 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
     <section className="min-h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
         <div className="w-full lg:w-3/5 flex flex-col justify-center px-12 md:px-24 py-24">
             <AnimatedSection>
-                <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
+                <h2 className="subtitulo1 mb-4 tracking-tighter">
                    {data?.title || "la situación."}
                 </h2>
                 <div className="w-20 h-[2px] bg-vlanc-primary mb-12"></div>
             </AnimatedSection>
             
             <AnimatedSection>
-                {/* Espacio reducido entre párrafos (space-y-4 en vez de 8) */}
                 <div className="space-y-4 max-w-2xl">
                     {data?.paragraphs && data.paragraphs.length > 0 ? (
                       data.paragraphs.map((p, i) => (
                         <p 
                             key={i} 
-                            // Cuerpo: Montserrat, Marrón Oscuro (#702622)
-                            className="text-[12px] font-sans leading-relaxed text-justify text-vlanc-secondary" 
+                            className="cuerpo" 
                             dangerouslySetInnerHTML={{ __html: p }} 
                         />
                       ))

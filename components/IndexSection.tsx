@@ -43,16 +43,14 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
         )}
       </div>
       <div className="w-full md:w-1/2 flex flex-col justify-center px-12 md:px-24 py-20 relative">
-        {/* Sin Header/Logo aquí */}
-        
         <AnimatedSection>
-            {/* Subtítulo 1: Aplicando nueva clase subtitulo1 */}
-            <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
+            {/* Clase subtitulo1 */}
+            <h2 className="subtitulo1 mb-4 tracking-tighter">
                 {data?.title || "contenido."}
             </h2>
-            {/* Línea horizontal: Marrón, fina */}
             <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
         </AnimatedSection>
+        
         <AnimatedSection className="space-y-4">
             {items.length > 0 ? items.map((item, i) => (
                 <a 
@@ -62,8 +60,8 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
                   className="flex items-center text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer"
                 >
                     <span className="text-[21px] font-serif text-vlanc-black/60 mr-5 group-hover:text-vlanc-primary transition-colors">/</span>
-                    {/* Items: Baskerville Regular, Negro */}
-                    <span className="text-[24px] font-serif tracking-tight font-normal"> {item.title}</span>
+                    {/* Clase subtitulo3 para items */}
+                    <span className="subtitulo3 tracking-tight"> {item.title}</span>
                 </a>
             )) : (
               <p className="text-vlanc-black/30 italic font-sans">Añade secciones en Sanity...</p>

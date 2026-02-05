@@ -35,7 +35,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
     <section id="special-offers" className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-32 px-12 md:px-24">
       
        <AnimatedSection>
-            <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
+            <h2 className="subtitulo1 mb-4 tracking-tighter">
                {investmentTitle || "la inversión."}
             </h2>
             <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
@@ -46,10 +46,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
             {/* Oferta Condicional */}
             <AnimatedSection>
                 <div className="border-l-2 border-vlanc-primary pl-10">
-                    {/* Título Oferta: Subtítulo 2 Italic pero más pequeño para jerarquía */}
-                    <h3 className="text-[21px] font-serif font-normal italic mb-6 text-vlanc-black">{data?.conditionalOffer?.title}</h3>
+                    <h3 className="subtitulo2 mb-6 text-[21px]">{data?.conditionalOffer?.title}</h3>
                     <div 
-                        className="text-vlanc-secondary mb-8 text-[12px] leading-relaxed text-justify whitespace-pre-line font-sans"
+                        className="cuerpo mb-8"
                         dangerouslySetInnerHTML={{ __html: data?.conditionalOffer?.description || '' }}
                     />
                     <div className="grid grid-cols-3 gap-4">
@@ -67,12 +66,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
             {/* Oferta Lanzamiento */}
             <AnimatedSection>
                  <div className="border-l-2 border-vlanc-primary pl-10">
-                    <h3 className="text-[21px] font-serif font-normal italic mb-6 text-vlanc-black">{data?.launchOffer?.title}</h3>
+                    <h3 className="subtitulo2 mb-6 text-[21px]">{data?.launchOffer?.title}</h3>
                     <div 
-                        className="text-vlanc-secondary mb-8 text-[12px] leading-relaxed text-justify whitespace-pre-line font-sans"
+                        className="cuerpo mb-8"
                         dangerouslySetInnerHTML={{ __html: data?.launchOffer?.description || '' }}
                     />
-                    {/* Botón Grande Marrón Sólido */}
                     <div className="w-full bg-[#8f4933] text-white p-6 text-center shadow-md rounded-[1px]">
                          <p className="font-bold text-[14px] tracking-[0.2em] uppercase mb-2">{data?.launchOffer?.premiumServiceName}</p>
                     </div>

@@ -18,32 +18,28 @@ interface PremiumServicesProps {
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
     return (
         <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg">
-            {/* Lado Contenido (Izquierda) */}
             <div className="w-full lg:w-1/2 h-full flex flex-col justify-center px-12 md:px-24 py-12 overflow-y-auto no-scrollbar">
                 <AnimatedSection className="mb-12">
-                    <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">servicios premium.</h2>
+                    <h2 className="subtitulo1 mb-4 tracking-tighter">servicios premium.</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary"></div>
                 </AnimatedSection>
                 
                 <AnimatedSection className="space-y-12 flex-grow flex flex-col justify-center">
                     <div className="space-y-2">
-                         {/* Subtítulo 2 (Nombre Servicio) - Baskerville Regular (font-normal) */}
-                        <h3 className="text-[28px] font-serif font-normal text-vlanc-black">/ {data?.subtitle}</h3>
-                         {/* Subtítulo 3 (Bajada) - Sans Bold Uppercase */}
+                         {/* Subtitulo 2 (Regular/Italic para Nombre Servicio) */}
+                        <h3 className="subtitulo2 text-[28px] font-normal">/ {data?.subtitle}</h3>
+                         {/* Bajada: Montserrat Bold */}
                         <h4 className="text-[12px] font-bold text-vlanc-black tracking-widest font-sans uppercase">{data?.title}</h4>
                     </div>
                     
-                    {/* Cuerpo Marrón */}
-                    <div className="text-[12px] text-vlanc-secondary space-y-6 leading-relaxed text-justify max-w-lg font-sans">
+                    <div className="cuerpo space-y-6">
                         {(data?.description ?? []).map((p, i) => (
                             <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
                         ))}
                     </div>
                     
-                    {/* Nota Italic */}
                     {data?.note && <p className="text-[10px] text-vlanc-black/40 italic uppercase tracking-widest border-t border-vlanc-primary/10 pt-6">{data.note}</p>}
                     
-                    {/* Caja Precio Sólida */}
                     {data?.price && (
                         <div className="mt-8 self-start bg-[#8f4933] text-white px-10 py-4 text-[14px] font-bold tracking-[0.2em] rounded-[1px] shadow-sm uppercase">
                             {data.price}
@@ -52,7 +48,6 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
                 </AnimatedSection>
             </div>
 
-            {/* Lado Imagen (Derecha) */}
             <div className="w-full lg:w-1/2 h-full relative overflow-hidden">
                 <AnimatedSection className="h-full w-full">
                     {image ? (
