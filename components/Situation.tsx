@@ -12,8 +12,14 @@ interface SituationProps {
 
 const Situation: React.FC<SituationProps> = ({ data }) => {
   return (
-    <section className="min-h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
-        <div className="w-full lg:w-3/5 flex flex-col justify-center pl-[120px] pr-10 py-24">
+    <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden items-stretch">
+        
+        {/* COLUMNA TEXTO 
+            - Flex-1: Ocupa el espacio restante.
+            - pl-[120px]: Margen izquierdo global.
+            - pr-[120px]: Gap solicitado entre texto e imagen.
+        */}
+        <div className="w-full lg:flex-1 flex flex-col justify-center px-10 lg:pl-[120px] lg:pr-[120px] py-24">
             <AnimatedSection>
                 <h2 className="subtitulo1 mb-4 tracking-tighter">
                    {data?.title || "la situación."}
@@ -22,7 +28,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
             </AnimatedSection>
             
             <AnimatedSection>
-                <div className="space-y-4 max-w-2xl">
+                <div className="space-y-4">
                     {data?.paragraphs && data.paragraphs.length > 0 ? (
                       data.paragraphs.map((p, i) => (
                         <p 
@@ -38,8 +44,14 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
             </AnimatedSection>
         </div>
         
-        <div className="w-full lg:w-2/5 min-h-[500px] lg:h-auto">
-            <AnimatedSection className="h-full">
+        {/* COLUMNA IMAGEN
+            - w-[720px]: Ancho fijo solicitado.
+            - mr-[120px]: Margen derecho global (no va a sangre lateralmente).
+            - h-full: Va a sangre verticalmente.
+            - shrink-0: Evita que se encoja.
+        */}
+        <div className="hidden lg:block w-[720px] h-full mr-[120px] shrink-0 relative">
+            <AnimatedSection className="h-full w-full">
                 {data?.image ? (
                   <img 
                     src={data.image} 
@@ -48,7 +60,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                   />
                 ) : (
                   <div className="w-full h-full bg-vlanc-black/5 flex items-center justify-center">
-                      <span className="text-[10px] uppercase tracking-widest text-vlanc-black/20">Imagen Situación</span>
+                      <span className="text-[10px] uppercase tracking-widest text-vlanc-black/20">Imagen Situación (720px)</span>
                   </div>
                 )}
             </AnimatedSection>
