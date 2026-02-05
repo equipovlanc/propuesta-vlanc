@@ -9,23 +9,26 @@ interface DividerSlideProps {
 
 const DividerSlide: React.FC<DividerSlideProps> = ({ image, text }) => {
     return (
-        <section className="h-full w-full flex bg-vlanc-bg relative overflow-hidden">
-            <div className="w-full lg:w-2/3 h-full">
-                {image && <img src={image} alt="Divider" className="w-full h-full object-cover grayscale brightness-90" />}
-            </div>
-            
-            <div className="absolute right-0 bottom-0 w-full lg:w-1/2 h-1/2 bg-white flex items-center justify-center p-12 lg:p-24 shadow-2xl border-l border-t border-vlanc-primary/10">
-                 <div className="absolute top-0 right-0 w-2/3 h-2/3 bg-vlanc-bg/30 -z-10"></div>
-                 
-                 <AnimatedSection className="w-full text-right">
-                     <div className="relative inline-block">
-                        <h2 className="text-4xl md:text-[52px] font-serif italic text-vlanc-secondary tracking-tighter leading-tight text-right uppercase">
-                            {text || "¿NOS DEJAS ACOMPAÑARTE?"}
-                        </h2>
-                        <span className="absolute -right-8 top-1/2 -translate-y-1/2 w-[2px] h-32 bg-vlanc-primary transform -rotate-12"></span>
-                     </div>
+        <section className="h-screen w-full flex items-center justify-center bg-vlanc-bg p-12 md:p-24 relative">
+             <div className="max-w-6xl w-full h-[60vh] relative">
+                 <AnimatedSection className="w-full h-full relative z-10">
+                    {/* Imagen Equipo Horizontal */}
+                    {image ? (
+                        <img src={image} alt="Team" className="w-full h-full object-cover grayscale brightness-105 shadow-xl rounded-sm" />
+                    ) : (
+                         <div className="w-full h-full bg-vlanc-primary/10 flex items-center justify-center">
+                            <span className="text-xs uppercase tracking-widest text-vlanc-primary/40">Foto Equipo Horizontal</span>
+                        </div>
+                    )}
                  </AnimatedSection>
-            </div>
+                 
+                 {/* Texto Overlay Inferior Derecho */}
+                 <AnimatedSection className="absolute -bottom-16 right-0 lg:-right-12 z-20">
+                    <h2 className="text-[42px] md:text-[60px] font-serif italic text-vlanc-secondary tracking-tighter leading-none text-right">
+                        {text || "¿Nos dejas acompañarte?"}
+                    </h2>
+                 </AnimatedSection>
+             </div>
         </section>
     );
 };

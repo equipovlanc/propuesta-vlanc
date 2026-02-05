@@ -20,10 +20,14 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber }) => {
         )}
       </div>
 
-      {/* Número de página - Esquina superior derecha */}
+      {/* Número de página con línea vertical negra - Esquina superior derecha */}
       {pageNumber && (
-        <div className="text-[11px] font-sans text-vlanc-black/40 font-bold tracking-[0.2em] pointer-events-auto">
-          {pageNumber}
+        <div className="flex flex-col items-center gap-2 pointer-events-auto">
+            <div className="text-[11px] font-sans text-vlanc-black font-normal tracking-[0.2em]">
+            {pageNumber}
+            </div>
+            {/* Línea vertical negra */}
+            <div className="w-[1px] h-8 bg-black"></div>
         </div>
       )}
     </header>

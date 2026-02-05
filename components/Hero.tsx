@@ -29,7 +29,7 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
                 <p className="font-normal">{headerData?.title}</p>
             </div>
             
-            {/* Línea divisoria solicitada */}
+            {/* Línea divisoria solicitada: Fina y Negra */}
             <div className="w-12 h-[1px] bg-vlanc-black"></div>
 
             <div className="text-[14px] font-sans text-vlanc-secondary leading-tight uppercase tracking-wider">
@@ -51,18 +51,19 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
           <h1 className="title-pdf text-vlanc-secondary font-bold uppercase">
             {data?.line2}
           </h1>
+          {/* Línea decorativa central: Marrón y un poco más gruesa que la divisoria de texto */}
           <div className="w-32 h-[2px] bg-vlanc-primary/80 mx-auto mt-24"></div>
         </div>
       </AnimatedSection>
 
-      {/* Esquina Inferior Derecha: Logo Portada (Aumentado de tamaño) */}
+      {/* Esquina Inferior Derecha: Logo Portada (GIGANTE) */}
       <div className="absolute bottom-16 right-16 text-right flex flex-col items-end">
-        <div className="w-[380px] md:w-[450px] h-[140px] flex items-center justify-end">
+        <div className="w-[500px] md:w-[600px] h-[200px] flex items-center justify-end">
             {logo ? (
                 <img src={logo} alt="Studio Logo" className="max-h-full w-auto object-contain" />
             ) : (
                 <div className="w-full h-full border border-vlanc-black/10 bg-vlanc-black/5 flex flex-col items-center justify-center p-4">
-                    <span className="text-[42px] font-serif font-bold tracking-[0.2em] text-vlanc-black/10 leading-none">VLANC</span>
+                    <span className="text-[52px] font-serif font-bold tracking-[0.2em] text-vlanc-black/10 leading-none">VLANC</span>
                 </div>
             )}
         </div>

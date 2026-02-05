@@ -10,6 +10,7 @@ interface IndexItem {
 interface IndexSectionProps {
     data?: {
         title?: string;
+        image?: string;
         items?: IndexItem[];
     }
 }
@@ -29,18 +30,27 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
   return (
     <section id="index-section" className="min-h-screen w-full flex flex-col md:flex-row bg-vlanc-bg">
       <div className="w-full md:w-1/2 min-h-[400px] md:h-auto overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1513519247388-19345150d5c7?q=80&w=1200&auto=format&fit=crop" 
-          alt="Index Atmosphere" 
-          className="w-full h-full object-cover grayscale brightness-110"
-        />
+        {data?.image ? (
+            <img 
+            src={data.image}
+            alt="" 
+            className="w-full h-full object-cover grayscale brightness-110"
+            />
+        ) : (
+            <div className="w-full h-full bg-vlanc-primary/10 flex items-center justify-center">
+                <span className="text-xs uppercase tracking-widest text-vlanc-primary/40">Imagen Contenido</span>
+            </div>
+        )}
       </div>
-      <div className="w-full md:w-1/2 flex flex-col justify-center px-12 md:px-24 py-20">
+      <div className="w-full md:w-1/2 flex flex-col justify-center px-12 md:px-24 py-20 relative">
+        {/* Sin Header/Logo aquí */}
+        
         <AnimatedSection>
-            {/* Subtítulo 1: Negro, Minúsculas */}
+            {/* Subtítulo 1: Libre Baskerville Regular (font-normal), Negro */}
             <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal lowercase tracking-tighter">
                 {data?.title || "contenido."}
             </h2>
+            {/* Línea horizontal: Marrón, fina */}
             <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
         </AnimatedSection>
         <AnimatedSection className="space-y-4">
@@ -52,7 +62,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
                   className="flex items-center text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer"
                 >
                     <span className="text-[21px] font-serif text-vlanc-black/60 mr-5 group-hover:text-vlanc-primary transition-colors">/</span>
-                    {/* Items: Baskerville Regular (serif), Negro */}
+                    {/* Items: Baskerville Regular, Negro */}
                     <span className="text-[24px] font-serif lowercase tracking-tight font-normal"> {item.title}</span>
                 </a>
             )) : (

@@ -24,32 +24,33 @@ interface PaymentProps {
             points?: string[];
             invoiceInfo?: string;
         }
-    }
+    };
+    investmentTitle?: string;
 }
 
-const Payment: React.FC<PaymentProps> = ({ data }) => {
+const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
     return (
         <section className="min-h-screen py-32 px-12 md:px-24 bg-vlanc-bg flex flex-col justify-center">
             <div className="max-w-7xl mx-auto w-full">
                  <AnimatedSection>
-                    <h2 className="title-xl text-vlanc-secondary mb-4 font-bold tracking-tighter">
-                       {data?.title || "la inversión."}
+                    <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter lowercase">
+                       {investmentTitle || "la inversión."}
                     </h2>
-                    <div className="w-16 h-[2px] bg-vlanc-primary mb-20"></div>
+                    <div className="w-20 h-[2px] bg-vlanc-primary mb-20"></div>
                 </AnimatedSection>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
                     <AnimatedSection>
-                        <h3 className="subtitle-md text-vlanc-primary font-bold mb-10 italic">/ {data?.paymentMethods?.title}</h3>
+                        <h3 className="text-[32px] font-serif italic text-vlanc-black mb-10">{data?.paymentMethods?.title}</h3>
                         <div className="space-y-12">
                            {(data?.paymentMethods?.plans ?? []).map((plan, i) => (
                                 <div key={i}>
-                                    <h4 className="text-[14px] font-bold text-vlanc-secondary uppercase tracking-widest mb-4 border-b border-vlanc-primary/10 pb-2">{plan.title}</h4>
+                                    <h4 className="text-[14px] font-bold text-vlanc-primary uppercase tracking-widest mb-4 border-b border-vlanc-primary/20 pb-2">{plan.title}</h4>
                                     <div className="space-y-3">
                                         {(plan.payments ?? []).map((p, idx) => (
-                                            <div key={idx} className="flex items-start text-vlanc-black/70 text-[12px]">
-                                                <span className="font-bold w-12 shrink-0 text-vlanc-primary">{p.percent}</span>
-                                                <span className="leading-relaxed">{p.description}</span>
+                                            <div key={idx} className="flex items-start text-vlanc-secondary text-[12px]">
+                                                <div className="bg-vlanc-primary text-white text-[10px] font-bold px-2 py-1 mr-4 rounded-[1px] w-12 text-center shrink-0">{p.percent}</div>
+                                                <span className="leading-relaxed font-sans">{p.description}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -59,19 +60,19 @@ const Payment: React.FC<PaymentProps> = ({ data }) => {
                     </AnimatedSection>
                     
                     <AnimatedSection>
-                         <h3 className="subtitle-md text-vlanc-primary font-bold mb-10 italic">/ {data?.finePrint?.title}</h3>
-                         <div className="space-y-4 text-[12px] text-vlanc-black/60 text-justify leading-relaxed">
+                         <h3 className="text-[32px] font-serif italic text-vlanc-black mb-10">{data?.finePrint?.title}</h3>
+                         <div className="space-y-4 text-[11px] text-vlanc-secondary/80 text-justify leading-relaxed font-sans">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
                                 <p key={i} className="flex gap-3">
-                                    <span className="text-vlanc-primary">·</span>
+                                    <span className="text-vlanc-black font-bold">_</span>
                                     {point}
                                 </p>
                             ))}
                          </div>
                          {data?.finePrint?.invoiceInfo && (
                              <div className="mt-16 p-8 border border-vlanc-primary/20 bg-vlanc-primary/5">
-                                 <p className="text-[10px] font-bold text-vlanc-primary tracking-[0.3em] uppercase mb-2">Cuenta de abono</p>
-                                 <p className="text-[14px] font-serif font-bold text-vlanc-secondary">{data?.finePrint?.invoiceInfo}</p>
+                                 <p className="text-[10px] font-bold text-vlanc-primary tracking-[0.3em] uppercase mb-2">Datos de Facturación</p>
+                                 <p className="text-[12px] font-sans text-vlanc-secondary whitespace-pre-line">{data?.finePrint?.invoiceInfo}</p>
                              </div>
                          )}
                     </AnimatedSection>

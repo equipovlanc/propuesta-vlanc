@@ -35,19 +35,21 @@ const App: React.FC = () => {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
           "logos": logos{"smallLogo": smallLogo.asset->url, "mainLogo": mainLogo.asset->url, "finalLogo": finalLogo.asset->url},
+          "index": index{..., "image": image.asset->url},
           "situation": situation{..., "image": image.asset->url},
-          "mission": mission{..., "image": image.asset->url},
+          "mission": mission{..., "image": image.asset->url, "video": video.asset->url},
           "team": team{..., "members": members[]{..., "image": image.asset->url}},
           "testimonials": testimonials{..., "items": items[]{..., "img": img.asset->url}},
-          "scopeIntro": scopeIntro{..., "images": images[].asset->url},
+          "scopeIntro": scopeIntro{..., "image": image.asset->url, "video": video.asset->url},
           "scopePhases": scopePhases1.phases[] {..., "image": image.asset->url} + scopePhases2.phases[] {..., "image": image.asset->url},
           "specialOffers": specialOffers{..., "callToAction": callToAction{..., "image": image.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., "image": image.asset->url},
-          "contact": contact{..., "image": image.asset->url}
+          "contact": contact{..., "image": image.asset->url, "rrss": rrss[]{..., "icon": icon.asset->url}}
         }`;
         const data = await sanityClient.fetch(query, { slug });
         setProposalData(data || localProposalData);
       } catch (err) {
+        console.error(err);
         setProposalData(localProposalData);
       } finally {
         setLoading(false);
@@ -84,8 +86,8 @@ const App: React.FC = () => {
         {/* P1: Portada */}
         <SectionSlide id="hero"><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
 
-        {/* P2: Contenido */}
-        <SectionSlide id="index"><Header logo={d.logos?.smallLogo} pageNumber={2} /><IndexSection data={d.index} /></SectionSlide>
+        {/* P2: Contenido - Sin Header (sin logo) */}
+        <SectionSlide id="index"><IndexSection data={d.index} /></SectionSlide>
 
         {/* P3: Situación */}
         <SectionSlide id="situation"><Header logo={d.logos?.smallLogo} pageNumber={3} /><Situation data={d.situation} /></SectionSlide>
@@ -105,7 +107,7 @@ const App: React.FC = () => {
         {/* P8: Ámbito */}
         <SectionSlide id="scope"><Header logo={d.logos?.smallLogo} pageNumber={8} /><Scope data={d.scopeIntro} /></SectionSlide>
 
-        {/* P9-P13: Trabajos Contemplados (5 Láminas dinámicas) */}
+        {/* P9-P13: Trabajos Contemplados (5 Láminas) */}
         {(d.scopePhases || []).map((phase: any, i: number) => (
             <SectionSlide key={i} id={`phase-${i+1}`}>
                 <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
@@ -113,10 +115,14 @@ const App: React.FC = () => {
             </SectionSlide>
         ))}
 
-        {/* P14-P16: Inversión */}
+        {/* P14: Inversión (Tabla) */}
         <SectionSlide id="investment"><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
-        <SectionSlide id="special-offers"><Header logo={d.logos?.smallLogo} pageNumber={15} /><SpecialOffers data={d.specialOffers} /></SectionSlide>
-        <SectionSlide id="payment"><Header logo={d.logos?.smallLogo} pageNumber={16} /><Payment data={d.payment} /></SectionSlide>
+        
+        {/* P15: Ofertas Especiales (Titulo Inversión también) */}
+        <SectionSlide id="special-offers"><Header logo={d.logos?.smallLogo} pageNumber={15} /><SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} /></SectionSlide>
+        
+        {/* P16: Pagos (Titulo Inversión también) */}
+        <SectionSlide id="payment"><Header logo={d.logos?.smallLogo} pageNumber={16} /><Payment data={d.payment} investmentTitle={d.investment?.title} /></SectionSlide>
 
         {/* P17: Divider / Team Photo */}
         <SectionSlide id="team-photo"><Header logo={d.logos?.smallLogo} pageNumber={17} /><DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /></SectionSlide>

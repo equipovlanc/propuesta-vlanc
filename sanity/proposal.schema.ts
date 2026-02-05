@@ -56,6 +56,7 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
+                defineField({ name: 'image', title: 'Imagen Decorativa', type: 'image' }),
                 defineField({
                     name: 'items', type: 'array', of: [{
                         type: 'object',
@@ -82,7 +83,8 @@ export default defineType({
             title: 'Misión y Objetivos',
             type: 'object',
             fields: [
-                defineField({ name: 'image', type: 'image' }),
+                defineField({ name: 'video', title: 'Video Misión (Opcional)', type: 'file' }),
+                defineField({ name: 'image', title: 'Imagen Misión (Fallback)', type: 'image' }),
                 defineField({
                     name: 'mission', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
@@ -104,7 +106,7 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'badge', title: 'Texto Garantía/Badge', type: 'string' }),
+                defineField({ name: 'badge', title: 'Texto Garantía/Badge (Paso 3)', type: 'string' }),
                 defineField({ name: 'steps', type: 'array', of: [{
                     type: 'object',
                     fields: [
@@ -154,7 +156,8 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'images', type: 'array', of: [{ type: 'image' }] }),
+                defineField({ name: 'video', title: 'Video Ámbito (Opcional)', type: 'file' }),
+                defineField({ name: 'image', title: 'Imagen Ámbito (Fallback)', type: 'image' }),
                 defineField({
                     name: 'intervention', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
@@ -226,15 +229,18 @@ export default defineType({
                 defineField({ name: 'plansDescription', type: 'array', of: [{
                     type: 'object', fields: [ {name: 'name', type: 'string'}, {name: 'desc', type: 'text'} ] 
                 }]}),
-                defineField({ name: 'plans', type: 'array', of: [{
-                     type: 'object',
-                     fields: [
-                         defineField({ name: 'name', type: 'string' }),
-                         defineField({ name: 'price', type: 'string' }),
-                         defineField({ name: 'features', type: 'array', of: [{ type: 'boolean' }] })
-                     ]
+                // Tabla Estructurada para renderizado exacto
+                defineField({ name: 'tableHeaders', title: 'Nombres de Planes (Cabecera)', type: 'array', of: [{type: 'string'}] }),
+                defineField({ name: 'tableRows', title: 'Filas de la Tabla', type: 'array', of: [{
+                    type: 'object',
+                    fields: [
+                         defineField({ name: 'label', type: 'string' }),
+                         defineField({ name: 'isPremiumSeparator', title: '¿Es separador Servicios Premium?', type: 'boolean' }),
+                         defineField({ name: 'highlightColor', title: 'Color de fondo especial (Opcional)', type: 'string', options: {list: ['none', 'light', 'medium', 'dark']} }),
+                         defineField({ name: 'checks', type: 'array', of: [{type: 'boolean'}] })
+                    ]
                 }]}),
-                defineField({ name: 'featureLabels', type: 'array', of: [{type: 'string'}] })
+                defineField({ name: 'prices', title: 'Precios (Pie de tabla)', type: 'array', of: [{type: 'string'}] })
             ]
         }),
         defineField({
@@ -242,6 +248,7 @@ export default defineType({
             title: 'Ofertas Especiales',
             type: 'object',
             fields: [
+                defineField({ name: 'title', title: 'Título Sección', type: 'string' }),
                 defineField({ name: 'conditionalOffer', type: 'object', fields: [
                     { name: 'title', type: 'string' },
                     { name: 'description', type: 'text' },
@@ -297,8 +304,8 @@ export default defineType({
                 defineField({ name: 'services', type: 'array', of: [{
                     type: 'object',
                     fields: [
-                        defineField({ name: 'title', type: 'string' }),
-                        defineField({ name: 'subtitle', type: 'string' }),
+                        defineField({ name: 'subtitle', title: 'Subtítulo 2 (Nombre Servicio)', type: 'string' }),
+                        defineField({ name: 'title', title: 'Subtítulo 3 (Bajada)', type: 'string' }),
                         defineField({ name: 'description', type: 'array', of: [{type: 'text'}] }),
                         defineField({ name: 'note', type: 'string' }),
                         defineField({ name: 'price', type: 'string' }),
@@ -323,6 +330,14 @@ export default defineType({
                 defineField({ name: 'web', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'url', type: 'url' }, { name: 'displayText', type: 'string' }
                 ]}),
+                defineField({ name: 'rrss', title: 'Redes Sociales', type: 'array', of: [{
+                    type: 'object',
+                    fields: [
+                        { name: 'name', type: 'string' },
+                        { name: 'url', type: 'url' },
+                        { name: 'icon', type: 'image' }
+                    ]
+                }]})
             ]
         })
     ]

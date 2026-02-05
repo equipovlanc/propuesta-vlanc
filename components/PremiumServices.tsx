@@ -21,17 +21,20 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
             {/* Lado Contenido */}
             <div className="w-full lg:w-1/2 flex flex-col justify-center px-12 md:px-24 py-24">
                 <AnimatedSection>
-                    <h2 className="subtitle-pdf text-vlanc-secondary font-bold lowercase mb-4">servicios premium.</h2>
-                    <div className="w-16 h-[2px] bg-vlanc-primary mb-16"></div>
+                    <h2 className="subtitle-pdf text-vlanc-black font-normal lowercase mb-4">servicios premium.</h2>
+                    <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
                 </AnimatedSection>
                 
-                <AnimatedSection className="space-y-10">
-                    <div className="space-y-2">
-                        <h3 className="text-[21px] font-serif font-bold text-vlanc-primary italic">/ {data?.subtitle}</h3>
-                        <h4 className="text-[12px] font-bold text-vlanc-black uppercase tracking-widest">{data?.title}</h4>
+                <AnimatedSection className="space-y-12">
+                    <div className="space-y-4">
+                         {/* Subtítulo 2 (Nombre Servicio - NO Italic según PDF P19) */}
+                        <h3 className="text-[24px] font-serif font-normal text-vlanc-black">/ {data?.subtitle}</h3>
+                         {/* Subtítulo 3 (Bajada - Negrita) */}
+                        <h4 className="text-[14px] font-bold text-vlanc-black uppercase tracking-widest font-sans">{data?.title}</h4>
                     </div>
                     
-                    <div className="text-[12px] text-vlanc-black/70 space-y-6 leading-relaxed text-justify max-w-lg">
+                    {/* Cuerpo Marrón */}
+                    <div className="text-[12px] text-vlanc-secondary space-y-6 leading-relaxed text-justify max-w-lg font-sans">
                         {(data?.description ?? []).map((p, i) => (
                             <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
                         ))}
@@ -40,7 +43,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
                     {data?.note && <p className="text-[10px] text-vlanc-black/40 italic uppercase tracking-widest border-t border-vlanc-primary/10 pt-6">{data.note}</p>}
                     
                     {data?.price && (
-                        <div className="inline-block bg-vlanc-primary px-8 py-4 text-white font-bold text-[14px] tracking-[0.2em] rounded-[1px] shadow-lg">
+                        <div className="inline-block bg-[#8f4933] px-8 py-4 text-white font-bold text-[14px] tracking-[0.2em] rounded-[1px] shadow-lg">
                             {data.price}
                         </div>
                     )}

@@ -29,18 +29,19 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                     {(data?.steps ?? []).map((step, index) => (
                         <AnimatedSection key={index}>
                             <div className="space-y-6">
-                                {/* Subtítulo 3 (Negro, Montserrat Bold) */}
-                                <h3 className="text-[21px] text-vlanc-black flex items-center font-bold font-sans">
-                                    <span className="text-vlanc-black mr-3">{`0${index + 1}`} /</span>
-                                    {step.title}
+                                {/* Encabezado paso: Baskerville Display PT (serif), Regular */}
+                                <h3 className="text-[24px] text-vlanc-black flex flex-col font-serif font-normal leading-tight">
+                                    <span className="mb-2">{`0${index + 1}`} /</span>
+                                    <span>{step.title}</span>
                                 </h3>
                                 {/* Cuerpo Marrón */}
                                 <p className="text-vlanc-secondary text-[12px] font-sans leading-relaxed text-justify">
                                     {step.description}
                                 </p>
                                 
+                                {/* Botón Garantía en Paso 3 (Index 2) */}
                                 {index === 2 && data?.badge && (
-                                    <div className="mt-8 inline-block border border-vlanc-secondary/50 px-4 py-2 text-[10px] font-bold text-vlanc-secondary tracking-widest uppercase rounded-sm">
+                                    <div className="mt-6 inline-block border border-vlanc-primary text-vlanc-primary px-4 py-3 text-[10px] font-bold tracking-widest uppercase rounded-[1px] bg-transparent">
                                         {data.badge}
                                     </div>
                                 )}

@@ -32,34 +32,36 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter lowercase">
                    {data?.title || "conoce VLANC."}
                 </h2>
-                <div className="w-20 h-[2px] bg-vlanc-primary mb-20"></div>
+                <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
             </AnimatedSection>
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-24">
+            {/* Textos Propósito e Historia en 2 columnas */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-20">
                  <AnimatedSection>
                     {/* Subtítulo 2 */}
-                    <h3 className="text-[32px] font-serif italic text-vlanc-black mb-6">{data?.purpose?.title}</h3>
+                    <h3 className="text-[24px] font-serif italic text-vlanc-black mb-6">{data?.purpose?.title}</h3>
                     <div 
-                        className="text-vlanc-secondary leading-relaxed text-[12px] text-justify space-y-4"
+                        className="text-vlanc-secondary leading-relaxed text-[12px] text-justify space-y-4 font-sans"
                         dangerouslySetInnerHTML={{ __html: data?.purpose?.description || '' }}
                     />
                  </AnimatedSection>
                  <AnimatedSection>
                     {/* Subtítulo 2 */}
-                    <h3 className="text-[32px] font-serif italic text-vlanc-black mb-6">{data?.history?.title}</h3>
+                    <h3 className="text-[24px] font-serif italic text-vlanc-black mb-6">{data?.history?.title}</h3>
                     <div 
-                        className="text-vlanc-secondary leading-relaxed text-[12px] text-justify space-y-4"
+                        className="text-vlanc-secondary leading-relaxed text-[12px] text-justify space-y-4 font-sans"
                         dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
                     />
                  </AnimatedSection>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
+            {/* Grid de Fotos: 2 filas de 2 o 1 fila de 4 dependiendo del viewport */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
                 {(data?.members ?? []).map((member, index) => (
-                    <AnimatedSection key={index} className="text-center group">
-                        <div className="overflow-hidden mb-6 aspect-[3/4] rounded-sm grayscale group-hover:grayscale-0 transition-all duration-700">
+                    <AnimatedSection key={index} className="text-center group flex flex-col items-center">
+                        <div className="w-full aspect-[3/4] overflow-hidden mb-4 rounded-sm grayscale group-hover:grayscale-0 transition-all duration-700">
                             {member.image ? (
-                                <img src={member.image} alt={member.name} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-1000" />
+                                <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                             ) : (
                                 <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center">
                                     <span className="text-xs text-vlanc-secondary/40">Foto</span>
@@ -67,9 +69,9 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                             )}
                         </div>
                         {/* Nombre: Montserrat Bold Negro */}
-                        <h4 className="text-[14px] font-bold text-vlanc-black tracking-widest uppercase mb-1 font-sans">{member.name}</h4>
+                        <h4 className="text-[11px] font-bold text-vlanc-black tracking-widest uppercase mb-1 font-sans">{member.name}</h4>
                         {/* Cargo: Baskerville Regular Negro */}
-                        <p className="text-[14px] text-vlanc-black font-serif italic">{member.role}</p>
+                        <p className="text-[11px] text-vlanc-black font-serif italic">{member.role}</p>
                     </AnimatedSection>
                 ))}
             </div>

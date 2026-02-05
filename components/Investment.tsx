@@ -2,10 +2,11 @@
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
-interface Plan {
-    name?: string;
-    price?: string;
-    features?: boolean[];
+interface TableRow {
+    label: string;
+    isPremiumSeparator?: boolean;
+    highlightColor?: 'none' | 'light' | 'medium' | 'dark';
+    checks: boolean[];
 }
 
 interface InvestmentProps {
@@ -13,8 +14,9 @@ interface InvestmentProps {
         title?: string;
         introduction?: string;
         plansDescription?: { name?: string; desc?: string }[];
-        plans?: Plan[];
-        featureLabels?: string[];
+        tableHeaders?: string[];
+        tableRows?: TableRow[];
+        prices?: string[];
     }
 }
 
@@ -25,6 +27,18 @@ const CheckIcon = () => (
 );
 
 const Investment: React.FC<InvestmentProps> = ({ data }) => {
+    
+    // Helper para colores de fila basados en PDF
+    const getRowBg = (color?: string, isPremium?: boolean) => {
+        if (isPremium) return 'bg-transparent'; // Separador
+        switch (color) {
+            case 'light': return 'bg-vlanc-primary/5';
+            case 'medium': return 'bg-vlanc-primary/10';
+            case 'dark': return 'bg-vlanc-primary/20';
+            default: return 'bg-transparent';
+        }
+    };
+
     return (
         <section className="min-h-screen py-16 px-12 md:px-24 bg-vlanc-bg flex flex-col justify-center">
             {/* Título Principal */}
@@ -39,7 +53,10 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 {/* Columna Izquierda: Descripción */}
                 <div className="lg:col-span-4 space-y-8">
                     <AnimatedSection>
-                        <div className="text-[12px] text-vlanc-secondary leading-relaxed text-justify mb-8" dangerouslySetInnerHTML={{ __html: data?.introduction || '' }} />
+                        <div 
+                            className="text-[12px] text-vlanc-secondary leading-relaxed text-justify mb-8 [&>strong]:font-bold [&>strong]:text-vlanc-black" 
+                            dangerouslySetInnerHTML={{ __html: data?.introduction || '' }} 
+                        />
                         
                         <div className="space-y-8">
                             {(data?.plansDescription ?? []).map((p, i) => (
@@ -52,37 +69,50 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* Columna Derecha: Tabla Compacta */}
+                {/* Columna Derecha: Tabla Compleja */}
                 <div className="lg:col-span-8">
                     <AnimatedSection className="bg-white/40 border border-vlanc-primary/10 overflow-hidden shadow-sm">
+                        
                         {/* Headers Tabla */}
-                        <div className="grid grid-cols-[1.5fr_repeat(3,1fr)] border-b border-vlanc-primary/10">
+                        <div className="grid grid-cols-[2fr_repeat(3,1fr)] border-b border-vlanc-primary/20 bg-vlanc-primary/10">
                             <div className="p-3"></div>
-                            {(data?.plans ?? []).map((p, i) => (
-                                <div key={i} className="p-3 text-center text-[10px] font-bold uppercase tracking-widest text-vlanc-black/60">{p.name}</div>
+                            {(data?.tableHeaders ?? []).map((h, i) => (
+                                <div key={i} className="p-3 text-center text-[10px] font-bold uppercase tracking-widest text-vlanc-black">{h}</div>
                             ))}
                         </div>
                         
-                        {/* Filas Features (Padding reducido para caber en pantalla) */}
+                        {/* Filas Dinámicas */}
                         <div className="divide-y divide-vlanc-primary/5">
-                            {(data?.featureLabels ?? []).map((label, fIdx) => (
-                                <div key={fIdx} className="grid grid-cols-[1.5fr_repeat(3,1fr)] hover:bg-vlanc-primary/5 transition-colors">
-                                    <div className="py-2.5 px-4 text-[9px] font-bold text-vlanc-black/70 uppercase tracking-widest flex items-center">{label}</div>
-                                    {(data?.plans ?? []).map((p, pIdx) => (
-                                        <div key={pIdx} className="py-2.5 px-2 flex justify-center items-center border-l border-vlanc-primary/5">
-                                            {p.features?.[fIdx] && <CheckIcon />}
+                            {(data?.tableRows ?? []).map((row, i) => {
+                                if (row.isPremiumSeparator) {
+                                    return (
+                                        <div key={i} className="grid grid-cols-[2fr_repeat(3,1fr)] bg-transparent py-4">
+                                            <div className="px-4 text-[9px] font-bold uppercase tracking-widest text-vlanc-black/40 text-right pr-8 col-span-1">SERVICIOS PREMIUM</div>
+                                            <div className="col-span-3"></div>
                                         </div>
-                                    ))}
-                                </div>
-                            ))}
+                                    );
+                                }
+                                return (
+                                    <div key={i} className={`grid grid-cols-[2fr_repeat(3,1fr)] ${getRowBg(row.highlightColor)} transition-colors`}>
+                                        <div className="py-2.5 px-4 text-[10px] font-bold text-vlanc-black/70 uppercase tracking-widest flex items-center leading-tight">
+                                            {row.label}
+                                        </div>
+                                        {(row.checks ?? []).map((isChecked, idx) => (
+                                            <div key={idx} className="py-2.5 px-2 flex justify-center items-center border-l border-vlanc-primary/5">
+                                                {isChecked && <CheckIcon />}
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })}
                         </div>
 
-                        {/* Franja Precios Marrón */}
-                        <div className="grid grid-cols-[1.5fr_repeat(3,1fr)] bg-vlanc-primary/90 text-white border-t border-vlanc-primary/20">
-                            <div className="p-4 flex items-center text-[9px] uppercase tracking-widest opacity-80">Servicios Premium</div>
-                            {(data?.plans ?? []).map((p, i) => (
+                        {/* Franja Precios Marrón (Oscuro sólido #8f4933) */}
+                        <div className="grid grid-cols-[2fr_repeat(3,1fr)] bg-[#8f4933] text-white border-t border-vlanc-primary/20">
+                            <div className="p-4"></div>
+                            {(data?.prices ?? []).map((price, i) => (
                                 <div key={i} className="p-4 text-center flex flex-col justify-center border-l border-white/10">
-                                    <p className="text-[14px] font-serif font-bold tracking-tight">{p.price} € <span className="text-[8px] opacity-60">+ IVA</span></p>
+                                    <p className="text-[14px] font-serif font-bold tracking-tight">{price} € <span className="text-[8px] opacity-60">+ IVA</span></p>
                                 </div>
                             ))}
                         </div>

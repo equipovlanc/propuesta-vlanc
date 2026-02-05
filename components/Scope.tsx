@@ -5,6 +5,8 @@ import AnimatedSection from './AnimatedSection';
 interface ScopeProps {
     data?: {
         title?: string;
+        image?: string;
+        video?: string;
         intervention?: {
             title?: string;
             location?: string;
@@ -14,7 +16,6 @@ interface ScopeProps {
             breakdown?: string[];
             note?: string;
         };
-        images?: string[];
     }
 }
 
@@ -27,14 +28,14 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter lowercase">
                 {data?.title || "qué vamos a hacer por ti."}
             </h2>
-            <div className="w-20 h-[2px] bg-vlanc-primary mb-20"></div>
+            <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
         </AnimatedSection>
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
             <div className="lg:col-span-8 space-y-10">
                 <AnimatedSection>
                     {/* Subtítulo 2 */}
-                    <h3 className="text-[32px] font-serif italic text-vlanc-black mb-8">{data?.intervention?.title}</h3>
+                    <h3 className="text-[24px] font-serif italic text-vlanc-black mb-8">{data?.intervention?.title}</h3>
                     
                     {/* Cuerpo Marrón */}
                     <div className="space-y-4 text-vlanc-secondary text-[12px]">
@@ -65,12 +66,17 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
             
-            <div className="lg:col-span-4">
-                <AnimatedSection>
-                    <div className="space-y-8">
-                        {data?.images?.map((img, i) => (
-                            <img key={i} src={img} alt={`Scope ${i}`} className="w-full grayscale brightness-95 shadow-lg rounded-sm" />
-                        ))}
+            {/* Columna Derecha: Video o Imagen Vertical */}
+            <div className="lg:col-span-4 h-[600px] lg:h-auto self-stretch">
+                <AnimatedSection className="h-full w-full">
+                    <div className="h-full w-full overflow-hidden rounded-sm shadow-lg">
+                        {data?.video ? (
+                             <video src={data.video} autoPlay loop muted playsInline className="w-full h-full object-cover grayscale" />
+                        ) : data?.image ? (
+                            <img src={data.image} alt="Scope" className="w-full h-full object-cover grayscale brightness-95" />
+                        ) : (
+                             <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center text-xs">Media</div>
+                        )}
                     </div>
                 </AnimatedSection>
             </div>

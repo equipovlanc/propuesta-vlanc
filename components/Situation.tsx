@@ -18,11 +18,12 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                 <h2 className="subtitle-pdf text-vlanc-black mb-4 tracking-tighter font-normal lowercase">
                    {data?.title || "la situación."}
                 </h2>
-                <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
+                <div className="w-20 h-[2px] bg-vlanc-primary mb-12"></div>
             </AnimatedSection>
             
             <AnimatedSection>
-                <div className="space-y-8 max-w-2xl">
+                {/* Espacio reducido entre párrafos (space-y-4 en vez de 8) */}
+                <div className="space-y-4 max-w-2xl">
                     {data?.paragraphs && data.paragraphs.length > 0 ? (
                       data.paragraphs.map((p, i) => (
                         <p 
