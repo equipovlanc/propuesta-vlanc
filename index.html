@@ -9,7 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Importamos Baskervville (Serif) y Montserrat (Sans) desde Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -23,7 +24,7 @@
               }
             },
             fontFamily: {
-              serif: ['"Baskerville 10 Pro"', 'serif'],
+              serif: ['"Baskervville"', 'serif'],
               sans: ['Montserrat', 'sans-serif'],
             }
           }
@@ -31,44 +32,6 @@
       }
     </script>
     <style>
-      /* --- FUENTES LOCALES: BASKERVILLE 10 PRO (TTF) --- */
-
-      /* 1. REGULAR (Mapeamos pesos 100 a 400 a este archivo) */
-      @font-face {
-        font-family: 'Baskerville 10 Pro';
-        src: url('/fonts/Baskerville10Pro.ttf') format('truetype');
-        font-weight: 100 400; 
-        font-style: normal;
-        font-display: swap;
-      }
-
-      /* 2. BOLD (Mapeamos pesos 500 a 900 a este archivo) */
-      @font-face {
-        font-family: 'Baskerville 10 Pro';
-        src: url('/fonts/Baskerville10Pro-Bold.ttf') format('truetype');
-        font-weight: 200 900;
-        font-style: normal;
-        font-display: swap;
-      }
-
-      /* 3. ITALIC (Mapeamos pesos 100 a 400 a este archivo) */
-      @font-face {
-        font-family: 'Baskerville 10 Pro';
-        src: url('/fonts/Baskerville10Pro-Italic.ttf') format('truetype');
-        font-weight: 100 400;
-        font-style: italic;
-        font-display: swap;
-      }
-
-      /* 4. BOLD ITALIC (Mapeamos pesos 500 a 900 a este archivo) */
-      @font-face {
-        font-family: 'Baskerville 10 Pro';
-        src: url('/fonts/Baskerville10Pro-BoldItalic.ttf') format('truetype');
-        font-weight: 200 900;
-        font-style: italic;
-        font-display: swap;
-      }
-
       /* --- ESTILOS GLOBALES --- */
 
       body {
@@ -89,7 +52,7 @@
 
       /* 1. TÍTULO PRINCIPAL (Hero) */
       .titulo {
-        font-family: 'Baskerville 10 Pro', serif;
+        font-family: 'Baskervville', serif;
         font-size: 72px;
         line-height: 1.05;
         font-weight: 400; 
@@ -97,20 +60,19 @@
         color: #702622;
       }
 
-      /* 2. SUBTÍTULO 1 (Fino/Light) */
+      /* 2. SUBTÍTULO 1 */
       .subtitulo1 {
-        font-family: 'Baskerville 10 Pro', serif;
+        font-family: 'Baskervville', serif;
         font-size: 60px;
         line-height: 1.1;
-        /* Al poner 300, usará el archivo 'Baskerville10Pro.ttf' definido arriba en rango 100-400 */
-        font-weight: 100; 
+        font-weight: 400;
         letter-spacing: -0.03em;
         color: #000000;
       }
 
       /* 3. SUBTÍTULO 2 (Italic) */
       .subtitulo2 {
-        font-family: 'Baskerville 10 Pro', serif;
+        font-family: 'Baskervville', serif;
         font-size: 28px;
         line-height: 1.2;
         font-weight: 400;
@@ -120,7 +82,7 @@
 
       /* 4. SUBTÍTULO 3 (Regular pequeño) */
       .subtitulo3 {
-        font-family: 'Baskerville 10 Pro', serif;
+        font-family: 'Baskervville', serif;
         font-size: 24px;
         line-height: 1.2;
         font-weight: 400;
