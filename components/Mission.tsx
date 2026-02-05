@@ -38,7 +38,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            <div className="w-full lg:w-[55%] h-1/2 lg:h-full flex flex-col justify-center pl-10 pr-[120px] py-12 space-y-16 overflow-y-auto no-scrollbar">
+            <div className="w-full lg:w-[55%] h-1/2 lg:h-full flex flex-col justify-center pl-10 pr-[120px] pt-32 pb-[120px] space-y-16 overflow-y-auto no-scrollbar">
                 
                 {/* Bloque 1: La Misión */}
                 <AnimatedSection>

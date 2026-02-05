@@ -24,7 +24,7 @@ interface ScopePhases2Props {
 
 const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
   return (
-    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-20 px-[120px]">
+    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-center pt-32 pb-[120px] px-[120px]">
       <div className="max-w-7xl mx-auto w-full">
          <AnimatedSection>
             <div className="relative mb-12">

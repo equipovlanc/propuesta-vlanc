@@ -15,11 +15,12 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
     <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden items-stretch">
         
         {/* COLUMNA TEXTO 
-            - Flex-1: Ocupa el espacio restante.
-            - pl-[120px]: Margen izquierdo global.
-            - pr-[120px]: Gap solicitado entre texto e imagen.
+            - justify-end: Texto pegado abajo.
+            - pb-[120px]: Margen inferior global.
+            - pt-32: Espacio superior para cabecera.
+            - Margenes laterales 120px.
         */}
-        <div className="w-full lg:flex-1 flex flex-col justify-center px-10 lg:pl-[120px] lg:pr-[120px] py-24">
+        <div className="w-full lg:flex-1 flex flex-col justify-end px-10 lg:pl-[120px] lg:pr-[120px] pt-32 pb-[120px]">
             <AnimatedSection>
                 <h2 className="subtitulo1 mb-4 tracking-tighter">
                    {data?.title || "la situación."}
@@ -45,10 +46,9 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
         </div>
         
         {/* COLUMNA IMAGEN
-            - w-[720px]: Ancho fijo solicitado.
-            - mr-[120px]: Margen derecho global (no va a sangre lateralmente).
-            - h-full: Va a sangre verticalmente.
-            - shrink-0: Evita que se encoja.
+            - w-[720px]: Ancho fijo.
+            - mr-[120px]: Margen derecho.
+            - h-full: A sangre verticalmente.
         */}
         <div className="hidden lg:block w-[720px] h-full mr-[120px] shrink-0 relative">
             <AnimatedSection className="h-full w-full">

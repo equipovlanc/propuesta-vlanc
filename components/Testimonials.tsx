@@ -17,7 +17,7 @@ interface TestimonialsProps {
 
 const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
     return (
-        <section className="h-full w-full bg-vlanc-bg flex items-center px-[120px] py-20">
+        <section className="h-full w-full bg-vlanc-bg flex items-center px-[120px] pt-32 pb-[120px]">
             <div className="w-full h-full flex flex-col lg:flex-row gap-16">
                 
                 <div className="w-full lg:w-1/4 pt-10">
