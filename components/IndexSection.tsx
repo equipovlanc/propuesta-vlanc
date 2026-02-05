@@ -51,8 +51,8 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
       {/* Padding izquierdo calculado: 879px (inicio texto) - 802.5px (fin imagen) = 76.5px */}
       <div className="w-full md:w-[44.3%] h-full flex flex-col justify-center px-12 md:px-0 md:pl-[76px] md:pr-12 relative">
         <AnimatedSection>
-            {/* Título: "contenido." */}
-            <h2 className="titulo text-vlanc-secondary mb-6">
+            {/* Título: "contenido." usa la nueva configuración de subtitulo1 (72px, negro) */}
+            <h2 className="subtitulo1 mb-6">
                 {data?.title || "contenido."}
             </h2>
             
