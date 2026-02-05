@@ -18,7 +18,7 @@
               vlanc: {
                 bg: '#efe8e1',
                 primary: '#8f4933',
-                secondary: '#703622',
+                secondary: '#702622',
                 black: '#000000',
               }
             },
@@ -43,40 +43,16 @@
         font-family: 'Libre Baskerville', serif;
       }
 
-      /* Títulos: 60px */
-      .title-xl { font-size: 60px; line-height: 1.1; font-family: 'Libre Baskerville', serif; }
-      /* Subtítulos: 21px */
-      .subtitle-md { font-size: 21px; line-height: 1.4; font-family: 'Libre Baskerville', serif; }
-      /* Texto párrafos: 12px */
-      p, .text-body { font-size: 12px; line-height: 1.6; font-family: 'Montserrat', sans-serif; }
+      .title-pdf { font-size: 72px; line-height: 1.05; font-family: 'Libre Baskerville', serif; letter-spacing: -0.02em; }
+      .subtitle-pdf { font-size: 60px; line-height: 1.1; font-family: 'Libre Baskerville', serif; letter-spacing: -0.03em; }
+      .text-pdf { font-size: 12px; line-height: 1.6; font-family: 'Montserrat', sans-serif; }
 
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-      @keyframes kenburns {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
-      }
-      
       @media print {
         @page { size: A4 landscape; margin: 0; }
-        html { width: 1920px !important; min-width: 1920px !important; }
-        body {
-          width: 1920px !important;
-          min-width: 1920px !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          background-color: #efe8e1 !important;
-          zoom: 0.585 !important; 
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-        }
-        .section-slide {
-            width: 1920px !important;
-            min-height: 1080px !important; 
-            break-after: page !important;
-        }
+        body { zoom: 0.585 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       }
     </style>
   <script type="importmap">
