@@ -23,7 +23,6 @@
               }
             },
             fontFamily: {
-              // Aquí definimos la prioridad: Primero la local, luego el fallback
               serif: ['"Baskerville Display PT"', 'Libre Baskerville', 'serif'],
               sans: ['Montserrat', 'sans-serif'],
             }
@@ -32,29 +31,14 @@
       }
     </script>
     <style>
-      /* 
-       IMPORTANTE: 
-       1. Crea una carpeta llamada 'public' en la raíz.
-       2. Dentro crea una carpeta 'fonts'.
-       3. Sube tus archivos .otf ahí con estos nombres exactos.
-      */
-
+      /* Fuentes Locales */
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/BaskervilleDisplayPT-Regular.otf') format('opentype');
-        font-weight: 400; /* Regular */
+        font-weight: 400;
         font-style: normal;
         font-display: swap;
       }
-
-      @font-face {
-        font-family: 'Baskerville Display PT';
-        src: url('/fonts/BaskervilleDisplayPT-Light.otf') format('opentype');
-        font-weight: 300; /* Light */
-        font-style: normal;
-        font-display: swap;
-      }
-
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/BaskervilleDisplayPT-Italic.otf') format('opentype');
@@ -62,11 +46,12 @@
         font-style: italic;
         font-display: swap;
       }
-
+      /* Mapeamos Bold a Regular si el usuario fuerza bold, o usamos el archivo bold si existe, 
+         pero la petición es usar Regular visualmente. */
       @font-face {
         font-family: 'Baskerville Display PT';
-        src: url('/fonts/BaskervilleDisplayPT-Bold.otf') format('opentype');
-        font-weight: 700; /* Bold */
+        src: url('/fonts/BaskervilleDisplayPT-Regular.otf') format('opentype'); 
+        font-weight: 700; 
         font-style: normal;
         font-display: swap;
       }
@@ -79,15 +64,15 @@
         font-size: 12px;
       }
       
-      /* Aplicar la fuente serif customizada a los encabezados */
-      h1, h2, h3, .font-serif {
-        font-family: 'Baskerville Display PT', 'Libre Baskerville', serif;
+      /* Forzar peso normal en encabezados serif para elegancia */
+      h1.font-serif, h2.font-serif, h3.font-serif, .font-serif {
+        font-weight: 400 !important;
       }
 
-      .title-pdf { font-size: 72px; line-height: 1.05; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; }
-      .subtitle-pdf { font-size: 60px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.03em; }
-      .title-xl { font-size: 42px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; }
-      .subtitle-md { font-size: 24px; line-height: 1.2; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; }
+      .title-pdf { font-size: 72px; line-height: 1.05; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; font-weight: 400; }
+      .subtitle-pdf { font-size: 60px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.03em; font-weight: 400; }
+      .title-xl { font-size: 42px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; font-weight: 400; }
+      .subtitle-md { font-size: 24px; line-height: 1.2; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; font-weight: 400; }
       
       .text-pdf { font-size: 12px; line-height: 1.6; font-family: 'Montserrat', sans-serif; }
 
