@@ -13,7 +13,7 @@ interface SituationProps {
 const Situation: React.FC<SituationProps> = ({ data }) => {
   return (
     <section className="min-h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
-        <div className="w-full lg:w-3/5 flex flex-col justify-center px-12 md:px-24 py-24">
+        <div className="w-full lg:w-3/5 flex flex-col justify-center px-10 py-24">
             <AnimatedSection>
                 <h2 className="subtitulo1 mb-4 tracking-tighter">
                    {data?.title || "la situación."}

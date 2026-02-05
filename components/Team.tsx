@@ -27,7 +27,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   const members = data?.members || [];
 
   return (
-    <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center px-12 md:px-24 py-16">
+    <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center px-10 py-16">
         
         <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
