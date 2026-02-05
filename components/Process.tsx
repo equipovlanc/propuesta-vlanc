@@ -20,7 +20,8 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
         <section className="min-h-screen py-32 px-12 md:px-24 bg-vlanc-bg flex flex-col justify-center">
             <div className="max-w-7xl mx-auto w-full">
                 <AnimatedSection>
-                    <h2 className="title-xl text-vlanc-secondary mb-4 tracking-tighter font-bold">{data?.title || "el proceso Vlanc."}</h2>
+                    {/* Subtítulo 1 */}
+                    <h2 className="subtitle-pdf text-vlanc-black mb-4 tracking-tighter font-normal lowercase">{data?.title || "el proceso Vlanc."}</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mb-20"></div>
                 </AnimatedSection>
                 
@@ -28,16 +29,18 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                     {(data?.steps ?? []).map((step, index) => (
                         <AnimatedSection key={index}>
                             <div className="space-y-6">
-                                <h3 className="subtitle-md text-vlanc-secondary flex items-center font-bold">
-                                    <span className="text-vlanc-primary mr-3">{`0${index + 1}`} /</span>
+                                {/* Subtítulo 3 (Negro, Montserrat Bold) */}
+                                <h3 className="text-[21px] text-vlanc-black flex items-center font-bold font-sans">
+                                    <span className="text-vlanc-black mr-3">{`0${index + 1}`} /</span>
                                     {step.title}
                                 </h3>
-                                <p className="text-vlanc-black/80 text-[12px] font-sans leading-relaxed text-justify">
+                                {/* Cuerpo Marrón */}
+                                <p className="text-vlanc-secondary text-[12px] font-sans leading-relaxed text-justify">
                                     {step.description}
                                 </p>
                                 
                                 {index === 2 && data?.badge && (
-                                    <div className="mt-8 inline-block border border-vlanc-primary/50 px-4 py-2 text-[10px] font-bold text-vlanc-primary tracking-widest uppercase rounded-sm">
+                                    <div className="mt-8 inline-block border border-vlanc-secondary/50 px-4 py-2 text-[10px] font-bold text-vlanc-secondary tracking-widest uppercase rounded-sm">
                                         {data.badge}
                                     </div>
                                 )}
@@ -47,7 +50,7 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                 </div>
                 
                 <AnimatedSection className="mt-20 text-center">
-                    <p className="text-[12px] font-bold text-vlanc-primary tracking-[0.3em] uppercase opacity-70">
+                    <p className="text-[12px] font-bold text-vlanc-secondary tracking-[0.3em] uppercase">
                         · Tu interés es el nuestro ·
                     </p>
                 </AnimatedSection>

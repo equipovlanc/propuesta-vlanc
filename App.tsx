@@ -37,14 +37,11 @@ const App: React.FC = () => {
           "logos": logos{"smallLogo": smallLogo.asset->url, "mainLogo": mainLogo.asset->url, "finalLogo": finalLogo.asset->url},
           "situation": situation{..., "image": image.asset->url},
           "mission": mission{..., "image": image.asset->url},
+          "team": team{..., "members": members[]{..., "image": image.asset->url}},
+          "testimonials": testimonials{..., "items": items[]{..., "img": img.asset->url}},
           "scopeIntro": scopeIntro{..., "images": images[].asset->url},
-          "scopePhases": [
-             scopePhases1.phases[0],
-             scopePhases1.phases[1],
-             scopePhases2.phases[0],
-             scopePhases2.phases[1],
-             scopePhases2.phases[2]
-          ],
+          "scopePhases": scopePhases1.phases[] {..., "image": image.asset->url} + scopePhases2.phases[] {..., "image": image.asset->url},
+          "specialOffers": specialOffers{..., "callToAction": callToAction{..., "image": image.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., "image": image.asset->url},
           "contact": contact{..., "image": image.asset->url}
         }`;
@@ -59,13 +56,30 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
+  // Keyboard navigation for snap scrolling
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (!containerRef.current) return;
+        const h = window.innerHeight;
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            containerRef.current.scrollBy({ top: h, behavior: 'smooth' });
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            containerRef.current.scrollBy({ top: -h, behavior: 'smooth' });
+        }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   if (!slug) return <StudioLanding />;
-  if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center font-bold tracking-widest text-vlanc-primary uppercase">Cargando experiencia...</div>;
+  if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center font-bold tracking-widest text-vlanc-primary uppercase">Cargando...</div>;
   
   const d = proposalData;
 
   return (
-    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-proximity no-scrollbar bg-vlanc-bg">
+    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-proximity no-scrollbar bg-vlanc-bg focus:outline-none" tabIndex={0}>
         
         {/* P1: Portada */}
         <SectionSlide id="hero"><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
@@ -91,11 +105,11 @@ const App: React.FC = () => {
         {/* P8: Ámbito */}
         <SectionSlide id="scope"><Header logo={d.logos?.smallLogo} pageNumber={8} /><Scope data={d.scopeIntro} /></SectionSlide>
 
-        {/* P9-P13: Trabajos Contemplados (5 Láminas) */}
+        {/* P9-P13: Trabajos Contemplados (5 Láminas dinámicas) */}
         {(d.scopePhases || []).map((phase: any, i: number) => (
             <SectionSlide key={i} id={`phase-${i+1}`}>
                 <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
-                <ScopePhases data={phase} />
+                <ScopePhases data={phase} mainTitle={d.scopePhases1?.title} />
             </SectionSlide>
         ))}
 

@@ -15,19 +15,20 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
     <section className="min-h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
         <div className="w-full lg:w-3/5 flex flex-col justify-center px-12 md:px-24 py-24">
             <AnimatedSection>
-                <h2 className="text-[52px] md:text-[60px] font-serif text-vlanc-black mb-4 tracking-tighter font-bold lowercase">
+                <h2 className="subtitle-pdf text-vlanc-black mb-4 tracking-tighter font-normal lowercase">
                    {data?.title || "la situación."}
                 </h2>
-                <div className="w-16 h-[2px] bg-vlanc-primary mb-16"></div>
+                <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
             </AnimatedSection>
             
             <AnimatedSection>
-                <div className="space-y-8 text-vlanc-black/80 max-w-2xl">
+                <div className="space-y-8 max-w-2xl">
                     {data?.paragraphs && data.paragraphs.length > 0 ? (
                       data.paragraphs.map((p, i) => (
                         <p 
                             key={i} 
-                            className="text-[12px] font-sans leading-relaxed text-justify" 
+                            // Cuerpo: Montserrat, Marrón Oscuro (#702622)
+                            className="text-[12px] font-sans leading-relaxed text-justify text-vlanc-secondary" 
                             dangerouslySetInnerHTML={{ __html: p }} 
                         />
                       ))

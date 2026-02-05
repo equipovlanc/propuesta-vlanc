@@ -16,22 +16,20 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
         <footer className="h-screen py-32 px-12 md:px-24 bg-vlanc-bg flex items-center justify-center">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32 items-center w-full">
                 
-                {/* Lado Izquierdo: El "Diagrama de Servicios" Circular del PDF */}
+                {/* Lado Izquierdo: Logo de Cierre Real desde Sanity */}
                 <AnimatedSection className="flex justify-center">
-                    <div className="relative w-full max-w-md aspect-square flex items-center justify-center">
-                        {/* Círculo Central Marrón */}
-                        <div className="w-56 h-56 bg-vlanc-primary rounded-full flex items-center justify-center text-white shadow-2xl z-10">
-                            <span className="text-4xl font-serif font-bold tracking-[0.3em]">VLANC</span>
-                        </div>
-                        
-                        {/* Iconos de servicio orbitando (Placeholder para iconos personalizados) */}
-                        <div className="absolute inset-0 border-[1.5px] border-vlanc-primary/10 rounded-full"></div>
-                        
-                        {/* Etiquetas de Servicio Estilo PDF */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-8 text-[9px] font-bold tracking-widest uppercase text-vlanc-black/50">Distribución</div>
-                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-8 text-[9px] font-bold tracking-widest uppercase text-vlanc-black/50">Gestiones Administrativas</div>
-                        <div className="absolute top-1/2 right-0 translate-x-12 -translate-y-1/2 text-[9px] font-bold tracking-widest uppercase text-vlanc-black/50">Interiorismo</div>
-                        <div className="absolute top-1/2 left-0 -translate-x-12 -translate-y-1/2 text-[9px] font-bold tracking-widest uppercase text-vlanc-black/50">Mobiliario</div>
+                    <div className="w-[400px] h-[400px] flex items-center justify-center">
+                        {finalLogo ? (
+                            <img src={finalLogo} alt="Final Logo" className="w-full h-auto object-contain" />
+                        ) : (
+                             // Fallback visual estilo diagrama solo si no hay logo
+                             <div className="relative w-full max-w-md aspect-square flex items-center justify-center">
+                                <div className="w-56 h-56 bg-vlanc-primary rounded-full flex items-center justify-center text-white shadow-2xl z-10">
+                                    <span className="text-4xl font-serif font-bold tracking-[0.3em]">VLANC</span>
+                                </div>
+                                <div className="absolute inset-0 border-[1.5px] border-vlanc-primary/10 rounded-full"></div>
+                            </div>
+                        )}
                     </div>
                 </AnimatedSection>
 
@@ -61,7 +59,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                         </a>
                     </AnimatedSection>
 
-                    {/* Línea Decorativa Final Marrón */}
                     <div className="w-24 h-[1.5px] bg-vlanc-primary mt-12"></div>
                 </div>
             </div>

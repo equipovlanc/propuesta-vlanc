@@ -10,8 +10,9 @@ interface SubPhase {
 
 interface Phase {
     title?: string;
-    badge?: string;
+    image?: string;
     videoUrl?: string;
+    guaranteeText?: string;
     subPhases?: SubPhase[];
 }
 
@@ -24,51 +25,64 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
   const [showVideo, setShowVideo] = useState(false);
 
   return (
-    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-20 px-12 md:px-24">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-20">
-        <AnimatedSection>
-            <div className="relative mb-16">
-                <h2 className="subtitle-pdf text-vlanc-secondary font-bold lowercase">
-                    {mainTitle}
-                </h2>
-                <div className="w-16 h-[2px] bg-vlanc-primary mt-4"></div>
-            </div>
-            
-            {/* Imagen representativa (estilo PDF) */}
-            <div className="aspect-[4/5] w-full overflow-hidden rounded-sm grayscale opacity-90 brightness-110 shadow-lg">
-                <img src="https://images.unsplash.com/photo-1503387762-592fcf08973b?q=80&w=1200" alt="Atmosphere" className="w-full h-full object-cover" />
-            </div>
-        </AnimatedSection>
+    <section className="min-h-screen bg-vlanc-bg flex items-center py-20 px-12 md:px-24">
+      <div className="w-full h-full flex flex-col lg:flex-row gap-20">
         
-        <div className="flex flex-col justify-center space-y-12">
+        {/* Columna Izquierda: Título Principal e Imagen Fiel */}
+        <div className="w-full lg:w-5/12 flex flex-col">
             <AnimatedSection>
-                <div className="border-b border-vlanc-primary/20 pb-4 mb-10">
-                    <h3 className="text-[21px] font-serif font-bold text-vlanc-secondary lowercase">{data?.title}</h3>
+                <div className="relative mb-12">
+                    {/* Subtítulo 1 */}
+                    <h2 className="subtitle-pdf text-vlanc-black font-normal lowercase tracking-tighter leading-none">
+                        {mainTitle}
+                    </h2>
+                    <div className="w-20 h-[2px] bg-vlanc-primary mt-6"></div>
                 </div>
+            </AnimatedSection>
+            
+            {/* Imagen Vertical Fiel al PDF (aprox mitad altura pantalla o filling space) */}
+            <AnimatedSection className="flex-grow relative min-h-[400px]">
+                {data?.image ? (
+                     <img src={data.image} alt="Phase" className="absolute inset-0 w-full h-full object-cover grayscale opacity-90 brightness-110 shadow-lg" />
+                ) : (
+                    <div className="absolute inset-0 bg-vlanc-secondary/10 flex items-center justify-center">
+                        <span className="text-xs uppercase tracking-widest text-vlanc-secondary/40">Imagen Fase</span>
+                    </div>
+                )}
+            </AnimatedSection>
+        </div>
+        
+        {/* Columna Derecha: Contenido de la Fase */}
+        <div className="w-full lg:w-7/12 flex flex-col justify-center lg:pl-12 pt-12 lg:pt-32">
+            <AnimatedSection>
+                {/* Título de Fase: Montserrat Negrita (o Subtítulo 3 grande) */}
+                <h3 className="text-[24px] font-sans font-bold text-vlanc-black uppercase mb-12">{data?.title}</h3>
                 
-                <div className="space-y-8">
+                <div className="space-y-10">
                     {(data?.subPhases ?? []).map((sub, i) => (
-                        <div key={i} className="text-[12px] leading-relaxed text-vlanc-black/80">
-                            <p className="mb-2 uppercase tracking-widest font-bold text-vlanc-primary">
+                        <div key={i} className="text-[12px] leading-relaxed">
+                            {/* Puntos: Montserrat Regular Negro */}
+                            <p className="mb-2 uppercase tracking-widest font-normal text-vlanc-black">
                                 {sub.number} {sub.title}
                             </p>
-                            <p className="text-justify whitespace-pre-line" dangerouslySetInnerHTML={{ __html: sub.description || '' }} />
+                            {/* Cuerpo: Marrón */}
+                            <p className="text-justify whitespace-pre-line text-vlanc-secondary font-sans" dangerouslySetInnerHTML={{ __html: sub.description || '' }} />
                         </div>
                     ))}
                 </div>
             </AnimatedSection>
 
-            {/* Botones Estilo PDF */}
-            <div className="flex items-center gap-6 pt-10 no-print">
-                {data?.badge && (
-                    <div className="bg-vlanc-primary text-white text-[10px] font-bold px-6 py-4 tracking-[0.2em] uppercase rounded-[1px] shadow-md">
-                        {data.badge}
+            {/* Botones Estilo PDF (Abajo) */}
+            <div className="flex items-center gap-6 pt-16 no-print mt-auto">
+                {data?.guaranteeText && (
+                    <div className="bg-vlanc-primary text-white text-[10px] font-bold px-8 py-4 tracking-[0.2em] uppercase rounded-[1px] shadow-sm">
+                        {data.guaranteeText}
                     </div>
                 )}
                 {data?.videoUrl && (
                     <button 
                         onClick={() => setShowVideo(true)}
-                        className="border border-vlanc-primary text-vlanc-primary px-8 py-3.5 text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px]"
+                        className="border border-vlanc-primary text-vlanc-primary px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px]"
                     >
                         VER VIDEO
                     </button>

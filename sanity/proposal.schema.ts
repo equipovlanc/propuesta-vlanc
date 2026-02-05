@@ -29,7 +29,6 @@ export default defineType({
                 defineField({ name: 'finalLogo', title: 'Logo Cierre (Final de Propuesta)', type: 'image' }),
             ]
         }),
-
         defineField({
             name: 'header',
             title: 'Cabecera',
@@ -39,12 +38,6 @@ export default defineType({
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'clientName', type: 'string' }),
                 defineField({ name: 'location', type: 'string' }),
-                defineField({ 
-                    name: 'company', type: 'object', fields: [
-                        defineField({ name: 'name', type: 'string' }),
-                        defineField({ name: 'tagline', type: 'string' }),
-                    ]
-                }),
             ]
         }),
         defineField({
@@ -122,6 +115,40 @@ export default defineType({
             ]
         }),
         defineField({
+            name: 'team',
+            title: 'Equipo',
+            type: 'object',
+            fields: [
+                defineField({ name: 'title', type: 'string' }),
+                defineField({ name: 'purpose', type: 'object', fields: [{name: 'title', type: 'string'}, {name: 'description', type: 'text'}]}),
+                defineField({ name: 'history', type: 'object', fields: [{name: 'title', type: 'string'}, {name: 'description', type: 'text'}]}),
+                defineField({ name: 'members', type: 'array', of: [{
+                    type: 'object',
+                    fields: [
+                        defineField({ name: 'name', type: 'string' }),
+                        defineField({ name: 'role', type: 'string' }),
+                        defineField({ name: 'image', type: 'image' })
+                    ]
+                }]})
+            ]
+        }),
+        defineField({
+            name: 'testimonials',
+            title: 'Testimonios',
+            type: 'object',
+            fields: [
+                defineField({ name: 'title', type: 'string' }),
+                defineField({ name: 'items', type: 'array', of: [{
+                    type: 'object',
+                    fields: [
+                        defineField({ name: 'name', type: 'string' }),
+                        defineField({ name: 'quote', type: 'text' }),
+                        defineField({ name: 'img', title: 'Imagen', type: 'image' })
+                    ]
+                }]})
+            ]
+        }),
+        defineField({
             name: 'scopeIntro',
             title: 'Ámbito de Intervención',
             type: 'object',
@@ -143,16 +170,41 @@ export default defineType({
         }),
         defineField({
             name: 'scopePhases1',
-            title: 'Trabajos Parte 1',
+            title: 'Trabajos Contemplados (Fases 1-2)',
             type: 'object',
             fields: [
-                defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'phases', type: 'array', of: [{
                     type: 'object',
                     fields: [
                         defineField({ name: 'title', type: 'string' }),
-                        defineField({ name: 'badge', type: 'string' }),
+                        defineField({ name: 'image', type: 'image' }),
+                        defineField({ name: 'videoUrl', title: 'URL del Video (Si aplica)', type: 'string' }),
+                        defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía (Si aplica)', type: 'string' }),
                         defineField({ name: 'subPhases', type: 'array', of: [{
+                            type: 'object',
+                            fields: [
+                                defineField({ name: 'number', type: 'string' }),
+                                defineField({ name: 'title', type: 'string' }),
+                                defineField({ name: 'description', type: 'text' })
+                            ]
+                        }]})
+                    ]
+                }]})
+            ]
+        }),
+        defineField({
+            name: 'scopePhases2',
+            title: 'Trabajos Contemplados (Fases 3-5)',
+            type: 'object',
+            fields: [
+                defineField({ name: 'phases', type: 'array', of: [{
+                    type: 'object',
+                    fields: [
+                         defineField({ name: 'title', type: 'string' }),
+                         defineField({ name: 'image', type: 'image' }),
+                         defineField({ name: 'videoUrl', title: 'URL del Video', type: 'string' }),
+                         defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía', type: 'string' }),
+                         defineField({ name: 'subPhases', type: 'array', of: [{
                             type: 'object',
                             fields: [
                                 defineField({ name: 'number', type: 'string' }),
@@ -171,7 +223,6 @@ export default defineType({
             fields: [
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'introduction', type: 'text' }),
-                defineField({ name: 'specialConditions', title: 'Condiciones Especiales (Texto)', type: 'text' }),
                 defineField({ name: 'plansDescription', type: 'array', of: [{
                     type: 'object', fields: [ {name: 'name', type: 'string'}, {name: 'desc', type: 'text'} ] 
                 }]}),
@@ -187,6 +238,42 @@ export default defineType({
             ]
         }),
         defineField({
+            name: 'specialOffers',
+            title: 'Ofertas Especiales',
+            type: 'object',
+            fields: [
+                defineField({ name: 'conditionalOffer', type: 'object', fields: [
+                    { name: 'title', type: 'string' },
+                    { name: 'description', type: 'text' },
+                    { name: 'discountedPlans', type: 'array', of: [{type: 'object', fields: [{name: 'name', type: 'string'}, {name: 'originalPrice', type: 'string'}, {name: 'discountedPrice', type: 'string'}]}] }
+                ]}),
+                defineField({ name: 'launchOffer', type: 'object', fields: [
+                    { name: 'title', type: 'string' },
+                    { name: 'description', type: 'text' },
+                    { name: 'premiumServiceName', type: 'string' },
+                    { name: 'premiumServiceValue', type: 'string' }
+                ]}),
+                defineField({ name: 'callToAction', type: 'object', fields: [{name: 'text', type: 'string'}, {name: 'image', type: 'image'}] })
+            ]
+        }),
+        defineField({
+            name: 'payment',
+            title: 'Formas de Pago',
+            type: 'object',
+            fields: [
+                defineField({ name: 'title', type: 'string' }),
+                defineField({ name: 'paymentMethods', type: 'object', fields: [
+                    { name: 'title', type: 'string' },
+                    { name: 'plans', type: 'array', of: [{type: 'object', fields: [{name: 'title', type: 'string'}, {name: 'payments', type: 'array', of: [{type: 'object', fields: [{name: 'percent', type: 'string'}, {name: 'description', type: 'string'}]}]}]}] }
+                ]}),
+                defineField({ name: 'finePrint', type: 'object', fields: [
+                    { name: 'title', type: 'string' },
+                    { name: 'points', type: 'array', of: [{ type: 'string' }] },
+                    { name: 'invoiceInfo', type: 'string' }
+                ]})
+            ]
+        }),
+        defineField({
             name: 'guarantees',
             title: 'Garantías',
             type: 'object',
@@ -198,6 +285,24 @@ export default defineType({
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'description', type: 'text' }),
                         defineField({ name: 'note', type: 'string' })
+                    ]
+                }]})
+            ]
+        }),
+        defineField({
+            name: 'premiumServices',
+            title: 'Servicios Premium',
+            type: 'object',
+            fields: [
+                defineField({ name: 'services', type: 'array', of: [{
+                    type: 'object',
+                    fields: [
+                        defineField({ name: 'title', type: 'string' }),
+                        defineField({ name: 'subtitle', type: 'string' }),
+                        defineField({ name: 'description', type: 'array', of: [{type: 'text'}] }),
+                        defineField({ name: 'note', type: 'string' }),
+                        defineField({ name: 'price', type: 'string' }),
+                        defineField({ name: 'image', type: 'image' })
                     ]
                 }]})
             ]
