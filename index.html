@@ -34,7 +34,7 @@
     <style>
       /* Fuentes Locales: Prioridad Absoluta */
       
-      /* Definición principal */
+      /* Peso 400 (Regular) */
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/baskerville-display-pt.otf') format('opentype');
@@ -43,8 +43,25 @@
         font-display: swap;
       }
       
-      /* Mapeos adicionales para evitar saltos a fallback si el navegador pide italic/bold.
-         Usamos el mismo archivo base, el navegador simulará el estilo si no hay archivo específico. */
+      /* Peso 300 (Light) - Mapeado al mismo OTF */
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/baskerville-display-pt.otf') format('opentype');
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      /* Peso 200 (Thin/Extra Light) - Mapeado al mismo OTF */
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/baskerville-display-pt.otf') format('opentype');
+        font-weight: 200;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      /* Mapeos adicionales para Italic/Bold simulados sobre el mismo archivo */
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/baskerville-display-pt.otf') format('opentype');
@@ -68,24 +85,23 @@
         font-size: 12px;
       }
       
-      /* Forzar peso Regular (400) en todos los títulos serif para estética fina */
+      /* Forzar peso Regular (400) por defecto en títulos serif si no tienen clase especifica */
       h1.font-serif, h2.font-serif, h3.font-serif, .font-serif {
-        font-weight: 400 !important;
+        font-weight: 400;
       }
 
       /* Clases de Tipografía PDF */
       .title-pdf { font-size: 72px; line-height: 1.05; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; font-weight: 400; }
       
-      /* NUEVA CLASE: subtitulo1 - Peso reducido a 300 (Light) */
+      /* DEFINICIÓN SUBTITULO1: Peso 300 (Light) */
       .subtitulo1 { 
         font-size: 60px; 
         line-height: 1.1; 
         font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; 
         letter-spacing: -0.03em; 
-        font-weight: 200; 
+        font-weight: 300; 
       }
 
-      /* Legacy class (kept just in case, but replaced in usage) */
       .subtitle-pdf { font-size: 60px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.03em; font-weight: 400; }
       
       .title-xl { font-size: 42px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; font-weight: 400; }
@@ -114,7 +130,6 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <div id="root"></div>
