@@ -1,15 +1,15 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
 interface TeamMember {
     name?: string;
     role?: string;
-    img?: string;
+    image?: string;
 }
 
 interface TeamProps {
     data?: {
-        sectionNumber?: string;
         title?: string;
         purpose?: {
             title?: string;
@@ -23,60 +23,64 @@ interface TeamProps {
     }
 }
 
-const SectionHeader: React.FC<{ number?: string, title?: string }> = ({ number, title }) => (
-    <div className="relative mb-8 ml-8 md:ml-0">
-      <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
-        <span>{number}</span>
-        <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">{title}</span>
-      </h2>
-      <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
-    </div>
-);
-
-const TeamMemberCard: React.FC<{ name?: string, role?: string, img?: string }> = ({ name, role, img }) => (
-    <div className="group">
-        <div className="overflow-hidden mb-3 rounded-lg shadow-md">
-            {/* Aspect square for perfect portraits */}
-            {img && <img src={img} alt={name} className="w-full aspect-square object-cover transform transition-transform duration-500 group-hover:scale-105" />}
-        </div>
-        <h4 className="text-base font-bold text-gray-800">{name}</h4>
-        <p className="text-sm text-gray-500">&gt; {role}</p>
-    </div>
-);
-
-
 const Team: React.FC<TeamProps> = ({ data }) => {
+  const members = data?.members || [];
+
   return (
-    <section className="h-full bg-white flex flex-col justify-center">
-        <div className="max-w-7xl mx-auto w-full">
-            <AnimatedSection>
-                <SectionHeader number={data?.sectionNumber} title={data?.title} />
-            </AnimatedSection>
+    <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start px-[120px] pt-[140px] pb-[120px]">
+        
+        <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-6 lg:mb-8">
+            <div className="h-full max-h-[80vh] grid grid-cols-2 gap-6 items-center content-center">
+                 {members.map((member, index) => (
+                    <AnimatedSection key={index} className="flex flex-col">
+                        <div className="w-full aspect-[4/3] overflow-hidden mb-3 rounded-sm grayscale hover:grayscale-0 transition-all duration-700">
+                            {member.image ? (
+                                <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center">
+                                    <span className="text-xs text-vlanc-secondary/40">Foto</span>
+                                </div>
+                            )}
+                        </div>
+                        <div className="text-left">
+                            <h4 className="text-[11px] font-bold text-vlanc-black tracking-widest uppercase font-sans">{member.name}</h4>
+                            <p className="text-[11px] text-vlanc-black font-serif italic">{member.role}</p>
+                        </div>
+                    </AnimatedSection>
+                 ))}
+            </div>
+
+            <div className="h-full flex flex-col justify-start space-y-12 overflow-y-auto no-scrollbar pr-4">
                  <AnimatedSection>
-                    <h3 className="text-lg font-bold text-teal-600 mb-2">&gt; {data?.purpose?.title}</h3>
+                    <h2 className="subtitulo1 mb-4 tracking-tighter">
+                        {data?.title || "conoce VLANC."}
+                    </h2>
+                    <div className="w-20 h-[2px] bg-vlanc-primary"></div>
+                </AnimatedSection>
+
+                <AnimatedSection>
+                    {/* Subtitulo 2 (Italic) */}
+                    <h3 className="subtitulo2 mb-6">
+                        {data?.purpose?.title}
+                    </h3>
                     <div 
-                        className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line"
+                        className="cuerpo space-y-4"
                         dangerouslySetInnerHTML={{ __html: data?.purpose?.description || '' }}
                     />
-                 </AnimatedSection>
-                 <AnimatedSection>
-                    <h3 className="text-lg font-bold text-teal-600 mb-2">&gt; {data?.history?.title}</h3>
+                </AnimatedSection>
+
+                <AnimatedSection>
+                    <h3 className="subtitulo2 mb-6">
+                        {data?.history?.title}
+                    </h3>
                     <div 
-                        className="text-gray-600 leading-relaxed text-sm text-justify whitespace-pre-line"
+                        className="cuerpo space-y-4"
                         dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
                     />
-                 </AnimatedSection>
+                </AnimatedSection>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                {(data?.members ?? []).map((member, index) => (
-                    <AnimatedSection key={index}>
-                        <TeamMemberCard {...member} />
-                    </AnimatedSection>
-                ))}
-            </div>
         </div>
     </section>
   );

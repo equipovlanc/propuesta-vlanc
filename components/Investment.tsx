@@ -1,140 +1,117 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
-interface Plan {
-    name?: string;
-    price?: string;
-    features?: boolean[];
-}
-
-interface PlanDescription {
-    name?: string;
-    desc?: string;
+interface TableRow {
+    label: string;
+    isPremiumSeparator?: boolean;
+    highlightColor?: 'none' | 'light' | 'medium' | 'dark';
+    checks: boolean[];
 }
 
 interface InvestmentProps {
     data?: {
-        sectionNumber?: string;
         title?: string;
         introduction?: string;
-        subHeader?: string;
-        plansDescription?: PlanDescription[];
-        plans?: Plan[];
-        featureLabels?: string[];
+        plansDescription?: { name?: string; desc?: string }[];
+        tableHeaders?: string[];
+        tableRows?: TableRow[];
+        prices?: string[];
     }
 }
 
-const SectionHeader: React.FC<{ title?: string }> = ({ title }) => (
-    <div className="relative mb-12">
-      <h2 className="title-xl text-vlanc-black tracking-tighter uppercase">{title}</h2>
-      <div className="w-16 h-[2px] bg-vlanc-primary mt-4"></div>
-    </div>
-);
-
 const CheckIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-vlanc-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-vlanc-secondary" fill="none" stroke="currentColor" strokeWidth="4">
+        <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 );
 
 const Investment: React.FC<InvestmentProps> = ({ data }) => {
-    const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
+    
+    const getRowBg = (color?: string) => {
+        if (color === 'light') return 'bg-[#eae0d5]';
+        if (color === 'medium') return 'bg-[#dccbc1]'; 
+        if (color === 'dark') return 'bg-[#cbb6aa]';
+        return 'border-b border-vlanc-primary/10';
+    };
+
     return (
-        <section className="min-h-screen py-32 px-12 md:px-24 bg-vlanc-bg flex flex-col justify-center">
-            <div className="max-w-7xl mx-auto w-full">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
-                    <div className="lg:col-span-5 space-y-8">
-                        <AnimatedSection>
-                            <SectionHeader title={data?.title} />
-                            <div 
-                                className="text-body text-vlanc-black/80 mb-6 whitespace-pre-line text-justify"
-                                dangerouslySetInnerHTML={{ __html: data?.introduction || '' }}
-                            />
-                            <h4 className="subtitle-md italic text-vlanc-primary mb-8">{data?.subHeader}</h4>
-                            
-                            <div className="space-y-8">
-                                {(data?.plansDescription ?? []).map((desc, i) => (
-                                    <div key={i}>
-                                        <p className="font-bold text-vlanc-black text-[11px] tracking-widest uppercase mb-2">{desc.name}</p>
-                                        <div 
-                                            className="text-body text-vlanc-black/70 whitespace-pre-line leading-relaxed"
-                                            dangerouslySetInnerHTML={{ __html: desc.desc || '' }}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </AnimatedSection>
-                    </div>
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[140px] pb-[120px] px-[120px]">
+            <AnimatedSection className="mb-4">
+                <h2 className="subtitulo1 mb-4 tracking-tighter">
+                   {data?.title || "la inversión."}
+                </h2>
+                <div className="w-20 h-[2px] bg-vlanc-primary mb-8"></div>
+            </AnimatedSection>
 
-                    <div className="lg:col-span-7 flex flex-col pt-12">
-                        <AnimatedSection>
-                            <div className="hidden lg:flex flex-col overflow-hidden rounded-sm text-[11px] border border-vlanc-primary/10 shadow-sm bg-white/30">
-                                <div className="grid grid-cols-[2fr_repeat(3,1fr)] bg-vlanc-primary/5">
-                                    <div className="p-4"></div>
-                                    {(data?.plans ?? []).map((plan, i) => (
-                                        <div 
-                                            key={i} 
-                                            className={`p-4 text-center subtitle-md transition-colors duration-300 flex items-center justify-center uppercase tracking-tighter ${hoveredPlan === plan.name ? 'bg-vlanc-primary/10' : ''}`}
-                                            onMouseEnter={() => setHoveredPlan(plan.name || null)}
-                                            onMouseLeave={() => setHoveredPlan(null)}
-                                        >
-                                            {plan.name?.replace('PLAN ', '')}
-                                        </div>
-                                    ))}
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-start h-full overflow-hidden">
+                <div className="lg:col-span-4 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
+                    <AnimatedSection>
+                        <div 
+                            className="cuerpo mb-8" 
+                            dangerouslySetInnerHTML={{ __html: data?.introduction || '' }} 
+                        />
+                        
+                        <div className="space-y-6">
+                            {(data?.plansDescription ?? []).map((p, i) => (
+                                <div key={i} className="space-y-1">
+                                    <p className="text-[12px] font-bold text-vlanc-black tracking-widest uppercase">{p.name}_</p>
+                                    <p className="text-[11px] text-vlanc-secondary leading-relaxed text-justify font-sans">{p.desc}</p>
                                 </div>
+                            ))}
+                        </div>
+                    </AnimatedSection>
+                </div>
+
+                <div className="lg:col-span-8 h-full flex flex-col">
+                    <AnimatedSection className="w-full">
+                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm">
+                            <div className="p-3"></div>
+                            {(data?.tableHeaders ?? []).map((h, i) => (
+                                <div key={i} className="p-3 text-center text-[10px] font-bold tracking-widest text-vlanc-secondary uppercase">{h}</div>
+                            ))}
+                        </div>
+                        
+                        <div className="bg-transparent text-[10px]">
+                            {(data?.tableRows ?? []).map((row, i) => {
+                                if (row.isPremiumSeparator) {
+                                    return (
+                                        <div key={i} className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#e6ded6] py-2 border-b border-vlanc-primary/10">
+                                            <div className="px-4 py-1 font-bold uppercase tracking-widest text-vlanc-secondary text-right pr-4 italic col-span-4">
+                                                SERVICIOS PREMIUM
+                                            </div>
+                                        </div>
+                                    );
+                                }
                                 
-                                <div className="divide-y divide-vlanc-primary/5">
-                                    {(data?.featureLabels ?? []).map((label, featureIndex) => (
-                                        <div key={featureIndex} className="grid grid-cols-[2fr_repeat(3,1fr)]">
-                                            <div className="p-4 font-bold text-vlanc-black/60 flex items-center pl-6 border-r border-vlanc-primary/5 uppercase tracking-wide text-[10px]">{label}</div>
-                                            {(data?.plans ?? []).map((plan, planIndex) => (
-                                                <div 
-                                                    key={planIndex} 
-                                                    className={`p-4 flex justify-center items-center transition-colors duration-300 border-r border-vlanc-primary/5 last:border-none ${hoveredPlan === plan.name ? 'bg-vlanc-primary/5' : ''}`}
-                                                    onMouseEnter={() => setHoveredPlan(plan.name || null)}
-                                                    onMouseLeave={() => setHoveredPlan(null)}
-                                                >
-                                                    {plan.features?.[featureIndex] && <CheckIcon />}
-                                                </div>
-                                            ))}
+                                return (
+                                    <div key={i} className={`grid grid-cols-[3fr_repeat(3,1fr)] ${getRowBg(row.highlightColor)} items-center`}>
+                                        <div className="py-2 px-4 font-bold text-vlanc-secondary uppercase tracking-widest leading-tight">
+                                            {row.label}
                                         </div>
-                                    ))}
-                                </div>
-
-                                <div className="grid grid-cols-[2fr_repeat(3,1fr)] border-t border-vlanc-primary/10">
-                                     <div className="bg-vlanc-primary/5 p-4"></div>
-                                     {(data?.plans ?? []).map((plan, i) => (
-                                        <div 
-                                            key={i} 
-                                            className="p-6 text-center font-serif font-bold text-vlanc-primary bg-vlanc-primary/5 flex flex-col justify-center"
-                                        >
-                                            <div className="text-[21px] tracking-tighter">{plan.price}</div>
-                                            <div className="text-[9px] font-sans font-bold text-vlanc-black/40 uppercase tracking-widest">+ IVA</div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            
-                            {/* Mobile Info */}
-                            <div className="lg:hidden space-y-6">
-                                {(data?.plans ?? []).map((plan, i) => (
-                                    <div key={i} className="p-6 bg-white/40 rounded-sm border border-vlanc-primary/10">
-                                        <h4 className="subtitle-md text-vlanc-primary mb-4">{plan.name}</h4>
-                                        <p className="text-[18px] font-serif font-bold mb-4">{plan.price} + IVA</p>
-                                        <ul className="space-y-2">
-                                            {(data?.featureLabels ?? []).map((label, idx) => (
-                                                plan.features?.[idx] && (
-                                                    <li key={idx} className="text-[11px] flex items-center gap-2">
-                                                        <CheckIcon /> {label}
-                                                    </li>
-                                                )
-                                            ))}
-                                        </ul>
+                                        {(row.checks ?? []).map((isChecked, idx) => (
+                                            <div key={idx} className="py-2 flex justify-center items-center">
+                                                {isChecked && <CheckIcon />}
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                        </AnimatedSection>
+                                );
+                            })}
+                        </div>
+
+                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white mt-auto">
+                            <div className="p-4"></div>
+                            {(data?.prices ?? []).map((price, i) => (
+                                <div key={i} className="p-4 text-center flex flex-col justify-center border-l border-white/20">
+                                    <p className="text-[14px] font-serif font-bold tracking-tight whitespace-nowrap">{price}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </AnimatedSection>
+                    
+                    <div className="mt-4 flex justify-between items-center text-[9px] font-bold tracking-widest uppercase text-vlanc-black/40">
+                        <span>VIVE VLANC SL</span>
+                        <span className="text-right">ACEPTA PRESUPUESTO_FIRMA<br/>En Alcoi a XX de mes de 2025</span>
                     </div>
                 </div>
             </div>

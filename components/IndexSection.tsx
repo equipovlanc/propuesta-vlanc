@@ -3,7 +3,6 @@ import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
 interface IndexItem {
-    number?: string | null;
     title?: string;
     id?: string;
 }
@@ -11,6 +10,7 @@ interface IndexItem {
 interface IndexSectionProps {
     data?: {
         title?: string;
+        image?: string;
         items?: IndexItem[];
     }
 }
@@ -25,32 +25,60 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
     }
   };
 
+  const items = data?.items || [];
+
   return (
-    <section id="index-section" className="min-h-screen w-full flex flex-col md:flex-row bg-vlanc-bg">
-      <div className="w-full md:w-1/2 min-h-[400px] md:h-auto overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1513519247388-19345150d5c7?q=80&w=1200&auto=format&fit=crop" 
-          alt="Index" 
-          className="w-full h-full object-cover grayscale"
-        />
-      </div>
-      <div className="w-full md:w-1/2 flex flex-col justify-center px-12 md:px-24 py-20">
-        <AnimatedSection>
-            <h2 className="title-xl text-vlanc-black mb-4">{data?.title}</h2>
-            <div className="w-12 h-[2px] bg-vlanc-primary mb-12"></div>
+    <section id="index-section" className="h-screen w-full flex bg-vlanc-bg overflow-hidden">
+      
+      {/* Columna Izquierda: Imagen (55.7% del ancho según SVG 802.5/1440) */}
+      <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">
+        <AnimatedSection className="w-full h-full">
+            {data?.image ? (
+                <img 
+                src={data.image}
+                alt="Indice" 
+                className="w-full h-full object-cover grayscale brightness-105"
+                />
+            ) : (
+                <div className="w-full h-full bg-vlanc-primary/10 flex items-center justify-center">
+                    <span className="text-xs uppercase tracking-widest text-vlanc-primary/40">Imagen Contenido</span>
+                </div>
+            )}
         </AnimatedSection>
-        <AnimatedSection className="space-y-4">
-            {(data?.items ?? []).map((item, i) => (
+      </div>
+
+      {/* Columna Derecha: Contenido (44.3%) */}
+      {/* Padding superior 140px. Alineación vertical start (justify-start por defecto en flex-col) */}
+      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-start px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[140px] pb-[120px] relative">
+        <AnimatedSection>
+            {/* Título: "contenido." usa la nueva configuración de subtitulo1 (72px, negro) */}
+            <h2 className="subtitulo1 mb-6">
+                {data?.title || "contenido."}
+            </h2>
+            
+            {/* Línea divisoria: ancho 84px según SVG */}
+            <div className="w-[84px] h-[3px] bg-vlanc-primary mb-12"></div>
+        </AnimatedSection>
+        
+        <AnimatedSection className="space-y-5">
+            {items.length > 0 ? items.map((item, i) => (
                 <a 
                   key={i} 
                   href={`#${item.id}`} 
                   onClick={(e) => handleLinkClick(e, item.id)}
-                  className="flex items-center text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer"
+                  className="flex items-baseline text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer"
                 >
-                    <span className="subtitle-md text-vlanc-primary mr-4 opacity-40 group-hover:opacity-100">/</span>
-                    <span className="subtitle-md lowercase tracking-tight"> {item.title}</span>
+                    {/* Barra inclinada decorativa */}
+                    <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px]">/</span>
+                    
+                    {/* Texto del ítem */}
+                    <span className="subtitulo3 tracking-tight font-normal"> 
+                        {item.title}
+                    </span>
                 </a>
-            ))}
+            )) : (
+              <p className="text-vlanc-black/30 italic font-sans text-xs">Añade secciones en el CMS...</p>
+            )}
         </AnimatedSection>
       </div>
     </section>

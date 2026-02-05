@@ -4,7 +4,6 @@ import AnimatedSection from './AnimatedSection';
 
 interface SituationProps {
   data?: {
-    sectionNumber?: string;
     title?: string;
     paragraphs?: string[];
     image?: string;
@@ -13,36 +12,67 @@ interface SituationProps {
 
 const Situation: React.FC<SituationProps> = ({ data }) => {
   return (
-    <section className="min-h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
-        <div className="w-full lg:w-3/5 flex flex-col justify-center px-12 md:px-24 py-24">
-            <AnimatedSection>
-                <h2 className="title-xl text-vlanc-black mb-4 tracking-tighter">
-                   {data?.title}
-                </h2>
-                <div className="w-16 h-[2px] bg-vlanc-primary mb-16"></div>
-            </AnimatedSection>
+    <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden items-stretch">
+        
+        {/* COLUMNA TEXTO 
+            - Flex-col h-full para controlar la altura.
+            - justify-end ELIMINADO del contenedor principal para permitir distribución interna.
+            - Padding top eliminado (pt-0) para que el espacio vacío cuente desde arriba.
+        */}
+        <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-[120px]">
             
-            <AnimatedSection>
-                <div className="space-y-8 text-vlanc-black/80 max-w-2xl">
-                    {(data?.paragraphs ?? []).map((p, i) => (
-                        <p 
-                            key={i} 
-                            className="text-[12px] font-sans leading-relaxed text-justify" 
-                            dangerouslySetInnerHTML={{ __html: p }} 
-                        />
-                    ))}
-                </div>
-            </AnimatedSection>
+            {/* ESPACIO SUPERIOR / TÍTULO 
+                - flex-grow: Ocupa todo el espacio disponible sobre el texto.
+                - flex items-center: Centra el título verticalmente en este espacio (Punto medio exacto).
+            */}
+            <div className="flex-grow flex flex-col justify-center">
+                <AnimatedSection>
+                    <h2 className="subtitulo1 mb-4 tracking-tighter">
+                    {data?.title || "la situación."}
+                    </h2>
+                    <div className="w-20 h-[2px] bg-vlanc-primary"></div>
+                </AnimatedSection>
+            </div>
+            
+            {/* CUERPO DE TEXTO 
+                - Pegado abajo por el flujo natural (despues del flex-grow) y el pb-[120px] del padre.
+            */}
+            <div className="shrink-0">
+                <AnimatedSection>
+                    <div className="space-y-4">
+                        {data?.paragraphs && data.paragraphs.length > 0 ? (
+                        data.paragraphs.map((p, i) => (
+                            <p 
+                                key={i} 
+                                className="cuerpo" 
+                                dangerouslySetInnerHTML={{ __html: p }} 
+                            />
+                        ))
+                        ) : (
+                        <p className="italic text-vlanc-black/30">Rellena los párrafos de situación en Sanity...</p>
+                        )}
+                    </div>
+                </AnimatedSection>
+            </div>
         </div>
         
-        <div className="w-full lg:w-2/5 min-h-[500px] lg:h-auto">
-            <AnimatedSection className="h-full">
-                {data?.image && (
+        {/* COLUMNA IMAGEN
+            - w-[720px]: Ancho fijo.
+            - mr-[120px]: Margen derecho.
+            - h-full: A sangre verticalmente.
+        */}
+        <div className="hidden lg:block w-[720px] h-full mr-[120px] shrink-0 relative">
+            <AnimatedSection className="h-full w-full">
+                {data?.image ? (
                   <img 
                     src={data.image} 
-                    alt="Situation" 
+                    alt="Atmosphere" 
                     className="w-full h-full object-cover grayscale brightness-90" 
                   />
+                ) : (
+                  <div className="w-full h-full bg-vlanc-black/5 flex items-center justify-center">
+                      <span className="text-[10px] uppercase tracking-widest text-vlanc-black/20">Imagen Situación (720px)</span>
+                  </div>
                 )}
             </AnimatedSection>
         </div>

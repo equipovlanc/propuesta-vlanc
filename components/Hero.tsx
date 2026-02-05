@@ -4,45 +4,70 @@ import AnimatedSection from './AnimatedSection';
 
 interface HeroProps {
   data?: {
+    clientName?: string;
     line1?: string;
     line2?: string;
-    line3?: string;
   };
-  headerData?: any;
+  headerData?: {
+    projectCode?: string;
+    title?: string;
+    clientName?: string;
+    location?: string;
+  };
+  logo?: string | null;
 }
 
-const Hero: React.FC<HeroProps> = ({ data, headerData }) => {
+const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
   return (
-    <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-12 md:px-24 py-32">
-      {/* Top Left Info */}
-      <div className="absolute top-16 left-16 text-left space-y-1">
-        <p className="text-[10px] font-bold tracking-widest text-vlanc-black/40 uppercase font-sans">{headerData?.projectCode}</p>
-        <p className="text-[10px] font-bold tracking-widest text-vlanc-black/40 uppercase font-sans">{headerData?.title}</p>
-        <div className="pt-4">
-          <p className="text-[10px] font-bold tracking-widest text-vlanc-black uppercase font-sans">{headerData?.clientName}</p>
-          <p className="text-[10px] font-bold tracking-widest text-vlanc-black/60 uppercase font-sans">{headerData?.location}</p>
+    <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-[120px] py-32">
+      
+      {/* Esquina Superior Izquierda: Info Técnica (Mantiene Montserrat) */}
+      <div className="absolute top-20 left-20 text-left pointer-events-none">
+        <div className="flex flex-col gap-6">
+            <div className="text-[14px] font-serif text-vlanc-black leading-tight">
+                <p className="font-normal">{headerData?.projectCode}</p>
+                <p className="font-normal">{headerData?.title}</p>
+            </div>
+            
+            <div className="w-12 h-[1px] bg-vlanc-black"></div>
+
+            <div className="text-[14px] font-sans text-vlanc-secondary leading-tight tracking-wider">
+                <p className="font-medium">{data?.clientName || headerData?.clientName}</p>
+                <p className="opacity-80 font-normal">{headerData?.location}</p>
+            </div>
         </div>
       </div>
 
+      {/* Centro: Títulos */}
       <AnimatedSection className="text-center">
-        <div className="space-y-4">
-          <p className="subtitle-md text-vlanc-black uppercase tracking-[0.2em] mb-4">
-            {headerData?.clientName}
+        <div className="space-y-6">
+          <p className="text-[21px] text-vlanc-secondary tracking-[0.4em] mb-10 font-sans font-medium">
+            {data?.clientName || headerData?.clientName}
           </p>
-          <h1 className="title-xl text-vlanc-secondary tracking-tight uppercase">
+          
+          {/* Uso de la clase .titulo */}
+          <h1 className="titulo">
             {data?.line1}
           </h1>
-          <h1 className="title-xl text-vlanc-secondary tracking-tight uppercase">
+          <h1 className="titulo">
             {data?.line2}
           </h1>
-          <div className="w-16 h-[2px] bg-vlanc-primary mx-auto mt-12"></div>
+          
+          <div className="w-32 h-[2px] bg-vlanc-primary/80 mx-auto mt-24"></div>
         </div>
       </AnimatedSection>
 
-      {/* Bottom Right Logo */}
-      <div className="absolute bottom-16 right-16 text-right">
-        <p className="text-[32px] font-serif font-bold tracking-[0.2em] leading-none text-vlanc-black">VLANC</p>
-        <p className="text-[8px] tracking-[0.4em] font-bold text-vlanc-primary uppercase mt-2">ARQUITECTURA + INTERIORISMO</p>
+      {/* Esquina Inferior Derecha: Logo */}
+      <div className="absolute bottom-16 right-16 text-right flex flex-col items-end">
+        <div className="w-[500px] md:w-[600px] h-[200px] flex items-center justify-end">
+            {logo ? (
+                <img src={logo} alt="Studio Logo" className="max-h-full w-auto object-contain" />
+            ) : (
+                <div className="w-full h-full border border-vlanc-black/10 bg-vlanc-black/5 flex flex-col items-center justify-center p-4">
+                    <span className="text-[52px] font-serif font-normal tracking-[0.2em] text-vlanc-black/10 leading-none">VLANC</span>
+                </div>
+            )}
+        </div>
       </div>
     </section>
   );

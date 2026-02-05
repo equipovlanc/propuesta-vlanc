@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -10,61 +11,53 @@ interface Service {
 }
 
 interface PremiumServicesProps {
-    data?: {
-        title?: string;
-        services?: Service[];
-        notes?: string[];
-    }
+    data?: Service;
+    image?: string;
 }
 
-const ServiceCard: React.FC<{ title?: string, subtitle?: string, price?: string, description?: string[], note?: string }> = ({ title, subtitle, price, description, note }) => (
-    <div className="bg-white p-4 md:p-5 h-full transition-all duration-300 hover:shadow-xl border-l-4 border-transparent hover:border-teal-400 flex flex-col">
-        <div className="flex justify-between items-start mb-1 gap-2">
-            <h3 className="text-sm md:text-base font-bold text-teal-600 uppercase leading-tight tracking-tight flex-1">{title}</h3>
-            <span className="bg-gray-100 px-2 py-1 font-bold text-gray-800 text-xs whitespace-nowrap">{price}</span>
-        </div>
-        <h4 className="font-semibold text-gray-700 mb-2 text-xs uppercase tracking-wide">{subtitle}</h4>
-        <div className="text-gray-600 space-y-1 text-xs flex-grow leading-tight">
-            {(description ?? []).map((p, i) => (
-                <div 
-                    key={i} 
-                    className="whitespace-pre-line" 
-                    dangerouslySetInnerHTML={{ __html: p }} 
-                />
-            ))}
-        </div>
-        {note && <p className="text-[10px] text-gray-400 italic mt-2 border-t pt-1 leading-tight">{note}</p>}
-    </div>
-);
-
-const PremiumServices: React.FC<PremiumServicesProps> = ({ data }) => {
+const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
     return (
-        <section className="h-full bg-slate-100 flex flex-col justify-center">
-            <div className="max-w-7xl mx-auto w-full">
-                 <AnimatedSection className="mb-6 lg:mb-8 ml-8 md:ml-0">
-                    <div className="relative inline-block">
-                        <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-gray-800">{data?.title}</h2>
-                        <span className="absolute -left-6 top-1/2 -translate-y-1/2 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
-                    </div>
+        <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg">
+            <div className="w-full lg:w-1/2 h-full flex flex-col justify-start pl-[120px] pr-10 pt-[140px] pb-[120px] overflow-y-auto no-scrollbar">
+                <AnimatedSection className="mb-12">
+                    <h2 className="subtitulo1 mb-4 tracking-tighter">servicios premium.</h2>
+                    <div className="w-20 h-[2px] bg-vlanc-primary"></div>
                 </AnimatedSection>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
-                    {(data?.services ?? []).map((service, i) => (
-                        <AnimatedSection key={i}>
-                            <ServiceCard 
-                                title={service.title}
-                                subtitle={service.subtitle}
-                                price={service.price}
-                                description={service.description}
-                                note={service.note}
-                            />
-                        </AnimatedSection>
-                    ))}
-                </div>
-                <div className="mt-4 text-right space-y-1">
-                    {(data?.notes ?? []).map((note, i) => (
-                        <p key={i} className="text-[10px] text-gray-500 font-medium">{note}</p>
-                    ))}
-                </div>
+                
+                <AnimatedSection className="space-y-12 flex-grow flex flex-col justify-center">
+                    <div className="space-y-2">
+                         {/* Subtitulo 2 (Regular/Italic para Nombre Servicio) */}
+                        <h3 className="subtitulo2 text-[28px] font-normal">/ {data?.subtitle}</h3>
+                         {/* Bajada: Montserrat Bold */}
+                        <h4 className="text-[12px] font-bold text-vlanc-black tracking-widest font-sans uppercase">{data?.title}</h4>
+                    </div>
+                    
+                    <div className="cuerpo space-y-6">
+                        {(data?.description ?? []).map((p, i) => (
+                            <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
+                        ))}
+                    </div>
+                    
+                    {data?.note && <p className="text-[10px] text-vlanc-black/40 italic uppercase tracking-widest border-t border-vlanc-primary/10 pt-6">{data.note}</p>}
+                    
+                    {data?.price && (
+                        <div className="mt-8 self-start bg-[#8f4933] text-white px-10 py-4 text-[14px] font-bold tracking-[0.2em] rounded-[1px] shadow-sm uppercase">
+                            {data.price}
+                        </div>
+                    )}
+                </AnimatedSection>
+            </div>
+
+            <div className="w-full lg:w-1/2 h-full relative overflow-hidden">
+                <AnimatedSection className="h-full w-full">
+                    {image ? (
+                        <img src={image} alt={data?.title} className="w-full h-full object-cover grayscale brightness-95 opacity-90 hover:grayscale-0 transition-all duration-1000" />
+                    ) : (
+                        <div className="w-full h-full bg-vlanc-black/5 flex items-center justify-center">
+                            <span className="text-[10px] uppercase tracking-widest text-vlanc-black/20">Imagen Servicio Premium</span>
+                        </div>
+                    )}
+                </AnimatedSection>
             </div>
         </section>
     );

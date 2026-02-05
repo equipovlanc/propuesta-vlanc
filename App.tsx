@@ -10,7 +10,6 @@ import Team from './components/Team';
 import Testimonials from './components/Testimonials';
 import Scope from './components/Scope';
 import ScopePhases from './components/ScopePhases';
-import ScopePhases2 from './components/ScopePhases2'; 
 import Investment from './components/Investment';
 import SpecialOffers from './components/SpecialOffers';
 import Payment from './components/Payment';
@@ -19,292 +18,113 @@ import PremiumServices from './components/PremiumServices';
 import DividerSlide from './components/DividerSlide';
 import Contact from './components/Contact';
 import SectionSlide from './components/SectionSlide';
-import StudioLanding from './components/StudioLanding'; // New import
+import StudioLanding from './components/StudioLanding'; 
 import { proposalData as localProposalData } from './data/proposal.data';
 import sanityClient from './sanity/client';
 
-// Define the type for your proposal data.
-type ProposalData = typeof localProposalData;
-
 const App: React.FC = () => {
-  const [proposalData, setProposalData] = useState<ProposalData | null>(null);
+  const [proposalData, setProposalData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [dataSource, setDataSource] = useState<'sanity' | 'local' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Obtener el slug de la URL actual (ej: /celia-blanes -> celia-blanes)
   const slug = window.location.pathname.substring(1);
-
-  // --- KEYBOARD NAVIGATION LOGIC ---
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!containerRef.current || !slug) return; // Only if we are in a proposal
-
-      const slides = Array.from(containerRef.current.querySelectorAll('.section-slide')) as HTMLElement[];
-      
-      let currentSlideIndex = slides.findIndex(slide => {
-        const rect = slide.getBoundingClientRect();
-        const middleOfScreen = window.innerHeight / 2;
-        return rect.top <= middleOfScreen && rect.bottom >= middleOfScreen;
-      });
-
-      if (currentSlideIndex === -1) {
-          currentSlideIndex = slides.findIndex(slide => {
-            const rect = slide.getBoundingClientRect();
-            return rect.top >= -100 && rect.top < window.innerHeight / 2; 
-          });
-      }
-
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-        e.preventDefault();
-        const nextSlide = slides[currentSlideIndex + 1];
-        if (nextSlide) {
-          nextSlide.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-        e.preventDefault();
-        const prevSlide = slides[currentSlideIndex - 1];
-        if (prevSlide) {
-          prevSlide.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [loading, slug]);
 
   useEffect(() => {
     const fetchProposalData = async () => {
-      // Si no hay slug (estamos en la raíz), no cargamos nada
-      if (!slug) {
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
-      setError(null);
-      setProposalData(null);
-
-      const isSanityConfigured = sanityClient.config().projectId && sanityClient.config().projectId !== 'your-project-id';
-
-      if (!isSanityConfigured) {
-        console.warn("Sanity no configurado o ID por defecto. Usando datos locales.");
-        setProposalData(localProposalData);
-        setDataSource('local');
-        setLoading(false);
-        return;
-      }
-      
+      if (!slug) { setLoading(false); return; }
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
-          "header": header{...},
-          "hero": hero{...},
-          "index": index{..., "items": items[]{...}},
+          "logos": logos{"smallLogo": smallLogo.asset->url, "mainLogo": mainLogo.asset->url, "finalLogo": finalLogo.asset->url},
+          "index": index{..., "image": image.asset->url},
           "situation": situation{..., "image": image.asset->url},
-          "mission": mission{
-            ...,
-            "videoFile": videoFile.asset->url,
-            "videoUrl": videoUrl,
-            "image": image.asset->url,
-            "printImage": printImage.asset->url,
-            "mission": mission{...},
-            "achievements": achievements{..., "listItems": listItems[]}
-          },
-          "process": process{..., "steps": steps[]{...}},
-          "team": team{
-            ...,
-            "purpose": purpose{...},
-            "history": history{...},
-            "members": members[]{..., "img": img.asset->url}
-          },
+          "mission": mission{..., "image": image.asset->url, "video": video.asset->url},
+          "team": team{..., "members": members[]{..., "image": image.asset->url}},
           "testimonials": testimonials{..., "items": items[]{..., "img": img.asset->url}},
-          "scopeIntro": scopeIntro{
-            ...,
-            "images": images[].asset->url,
-            "intervention": intervention{..., "breakdown": breakdown[]}
-          },
-          "scopePhases1": scopePhases1{
-            ..., 
-            "videoFile": videoFile.asset->url,
-            "videoUrl": videoUrl,
-            "phases": phases[]{..., "subPhases": subPhases[]{...}}
-          },
-          "scopePhases2": scopePhases2{..., "phases": phases[]{..., "subPhases": subPhases[]{...}}},
-          "investment": investment{..., "plansDescription": plansDescription[]{...}, "plans": plans[]{..., "features": features[]}, "featureLabels": featureLabels[]},
-          "specialOffers": specialOffers{
-            ...,
-            "callToAction": callToAction{..., "image": image.asset->url},
-            "conditionalOffer": conditionalOffer{..., "discountedPlans": discountedPlans[]{...}},
-            "launchOffer": launchOffer{...}
-          },
-          "payment": payment{ 
-            ...,
-            "paymentMethods": paymentMethods{..., "plans": plans[]{..., "payments": payments[]{...}}},
-            "finePrint": finePrint{..., "points": points[]}
-          },
-          "dividerSlide": divider{..., "image": image.asset->url},
-          "guarantees": guarantees{..., "items": items[]{...}},
-          "premiumServices": premiumServices{..., "services": services[]{..., "description": description[]}},
-          "contact": contact{
-            ...,
-            "image": image.asset->url,
-            "location": location{...},
-            "phone": phone{..., "numbers": numbers[]},
-            "web": web{...}
-          }
+          "scopeIntro": scopeIntro{..., "image": image.asset->url, "video": video.asset->url},
+          "scopePhases": scopePhases1.phases[] {..., "image": image.asset->url} + scopePhases2.phases[] {..., "image": image.asset->url},
+          "specialOffers": specialOffers{..., "callToAction": callToAction{..., "image": image.asset->url}},
+          "premiumServicesList": premiumServices.services[]{..., "image": image.asset->url},
+          "contact": contact{..., "image": image.asset->url, "rrss": rrss[]{..., "icon": icon.asset->url}}
         }`;
-        const params = { slug };
-        const data = await sanityClient.fetch<ProposalData>(query, params);
-
-        if (data) {
-          setProposalData(data);
-          setDataSource('sanity');
-        } else {
-          setError(`No se encontró la propuesta "${slug}" en Sanity.`);
-          setDataSource(null);
-        }
+        const data = await sanityClient.fetch(query, { slug });
+        setProposalData(data || localProposalData);
       } catch (err) {
-        console.error('Error fetching data from Sanity:', err);
-        setError(`Error de conexión con Sanity: ${(err as any).message}`);
+        console.error(err);
+        setProposalData(localProposalData);
       } finally {
         setLoading(false);
       }
     };
-
     fetchProposalData();
   }, [slug]);
 
-  // --- RENDERIZADO CONDICIONAL ---
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (!containerRef.current) return;
+        const h = window.innerHeight;
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            containerRef.current.scrollBy({ top: h, behavior: 'smooth' });
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            containerRef.current.scrollBy({ top: -h, behavior: 'smooth' });
+        }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
-  // 1. Landing Page Principal del Estudio (Ruta Raíz)
-  if (!slug) {
-    return <StudioLanding />;
-  }
-
-  // 2. Pantalla de Carga
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-pulse flex flex-col items-center">
-            <div className="h-4 w-32 bg-gray-200 rounded mb-4"></div>
-            <p className="text-gray-400 text-sm tracking-widest uppercase">Cargando Propuesta Interactiva...</p>
-        </div>
-    </div>
-  );
+  if (!slug) return <StudioLanding />;
+  if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center font-bold tracking-widest text-vlanc-primary uppercase">Cargando...</div>;
   
-  // 3. Pantalla de Error (Solo si no hay datos)
-  if (error && !proposalData) return (
-    <div className="min-h-screen flex items-center justify-center p-8 text-center bg-white text-gray-800">
-        <div className="max-w-lg">
-             <h2 className="text-2xl font-bold text-red-500 mb-4">¡Vaya!</h2>
-             <p className="text-lg mb-6">{error}</p>
-             <p className="text-sm text-gray-500 mb-6">Asegúrate de que el enlace sea correcto o contacta con el estudio.</p>
-             <a href="/" className="bg-teal-600 text-white px-8 py-3 rounded hover:bg-teal-700 transition-colors uppercase tracking-widest text-xs font-bold">Volver al inicio</a>
-        </div>
-    </div>
-  );
-  
-  // 4. Propuesta (Renderizado Principal)
-  const data = proposalData || localProposalData;
+  const d = proposalData;
 
   return (
-    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll overflow-x-hidden snap-y snap-proximity scroll-smooth no-scrollbar bg-white text-gray-800 relative">
+    // CAMBIO: snap-mandatory para forzar que siempre pare en una sección exacta.
+    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-vlanc-bg focus:outline-none" tabIndex={0}>
         
-        {/* Slide 1: Hero */}
-        <SectionSlide id="hero">
-            <div className="absolute top-0 left-0 w-full z-10 px-8 pt-4">
-                <Header data={data.header} />
-            </div>
-            <Hero data={data.hero} />
-        </SectionSlide>
+        <SectionSlide id="hero"><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
 
-        {/* Slide 2: Index */}
-        <SectionSlide id="index">
-            <IndexSection data={data.index} />
-        </SectionSlide>
+        <SectionSlide id="index"><IndexSection data={d.index} /></SectionSlide>
 
-        {/* Slide 3: Situation */}
-        <SectionSlide id="situation">
-            <Situation data={data.situation} />
-        </SectionSlide>
+        <SectionSlide id="situation"><Header logo={d.logos?.smallLogo} pageNumber={3} /><Situation data={d.situation} /></SectionSlide>
 
-        {/* Slide 4: Mission */}
-        <SectionSlide id="mission">
-            <Mission data={data.mission} />
-        </SectionSlide>
+        <SectionSlide id="mission"><Header logo={d.logos?.smallLogo} pageNumber={4} /><Mission data={d.mission} /></SectionSlide>
 
-        {/* Slide 5: Process */}
-        <SectionSlide id="process">
-            <Process data={data.process} />
-        </SectionSlide>
+        <SectionSlide id="process"><Header logo={d.logos?.smallLogo} pageNumber={5} /><Process data={d.process} /></SectionSlide>
 
-        {/* Slide 6: Team */}
-        <SectionSlide id="team">
-            <Team data={data.team} />
-        </SectionSlide>
+        <SectionSlide id="team"><Header logo={d.logos?.smallLogo} pageNumber={6} /><Team data={d.team} /></SectionSlide>
 
-        {/* Slide 7: Testimonials */}
-        <SectionSlide id="testimonials">
-            <Testimonials data={data.testimonials} />
-        </SectionSlide>
+        <SectionSlide id="testimonials"><Header logo={d.logos?.smallLogo} pageNumber={7} /><Testimonials data={d.testimonials} /></SectionSlide>
 
-        {/* Slide 8: Scope Intro */}
-        <SectionSlide id="scope">
-            <Scope data={data.scopeIntro || (data as any).scope} />
-        </SectionSlide>
+        <SectionSlide id="scope"><Header logo={d.logos?.smallLogo} pageNumber={8} /><Scope data={d.scopeIntro} /></SectionSlide>
 
-        {/* Slide 9: Scope Phases 1 */}
-        <SectionSlide id="scope-phases-1">
-            <ScopePhases 
-                data={data.scopePhases1} 
-                guaranteesData={data.guarantees} 
-            />
-        </SectionSlide>
+        {(d.scopePhases || []).map((phase: any, i: number) => (
+            <SectionSlide key={i} id={`phase-${i+1}`}>
+                <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
+                <ScopePhases data={phase} mainTitle={d.scopePhases1?.title} />
+            </SectionSlide>
+        ))}
 
-         {/* Slide 10: Scope Phases 2 */}
-         <SectionSlide id="scope-phases-2">
-            <ScopePhases2 data={data.scopePhases2} />
-        </SectionSlide>
+        <SectionSlide id="investment"><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
+        
+        <SectionSlide id="special-offers"><Header logo={d.logos?.smallLogo} pageNumber={15} /><SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} /></SectionSlide>
+        
+        <SectionSlide id="payment"><Header logo={d.logos?.smallLogo} pageNumber={16} /><Payment data={d.payment} investmentTitle={d.investment?.title} /></SectionSlide>
 
-        {/* Slide 11: Investment Table */}
-        <SectionSlide id="investment">
-            <Investment data={data.investment} />
-        </SectionSlide>
+        <SectionSlide id="team-photo"><Header logo={d.logos?.smallLogo} pageNumber={17} /><DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /></SectionSlide>
 
-        {/* Slide 12: Special Offers */}
-        <SectionSlide id="special-offers">
-            <SpecialOffers data={data.specialOffers} />
-        </SectionSlide>
+        <SectionSlide id="guarantees"><Header logo={d.logos?.smallLogo} pageNumber={18} /><Guarantees data={d.guarantees} /></SectionSlide>
 
-        {/* Slide 13: Payment & Fine Print */}
-        <SectionSlide id="payment">
-            <Payment data={data.payment} />
-        </SectionSlide>
+        {(d.premiumServicesList || []).map((service: any, i: number) => (
+            <SectionSlide key={i} id={`premium-${i+1}`}>
+                <Header logo={d.logos?.smallLogo} pageNumber={19 + i} />
+                <PremiumServices data={service} image={service.image} />
+            </SectionSlide>
+        ))}
 
-        {/* Slide 14: Divider */}
-        <SectionSlide id="divider">
-            <DividerSlide 
-                image={data.dividerSlide?.image || data.contact?.image}
-                text={data.dividerSlide?.text || data.contact?.callToAction}
-            />
-        </SectionSlide>
-
-        {/* Slide 15: Guarantees */}
-        <SectionSlide id="guarantees">
-             <Guarantees data={data.guarantees} />
-        </SectionSlide>
-
-        {/* Slide 16: Premium Services */}
-        <SectionSlide id="premium-services">
-            <PremiumServices data={data.premiumServices} />
-        </SectionSlide>
-
-        {/* Slide 17: Contact */}
-        <SectionSlide id="contact">
-            <Contact data={data.contact} />
-        </SectionSlide>
+        <SectionSlide id="contact"><Contact data={d.contact} finalLogo={d.logos?.finalLogo} /></SectionSlide>
     </div>
   );
 };

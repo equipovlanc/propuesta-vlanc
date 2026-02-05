@@ -1,16 +1,6 @@
+
 import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
-import Guarantees from './Guarantees';
-
-interface Guarantee {
-    title?: string;
-    description?: string;
-    note?: string;
-}
-interface GuaranteesData {
-    title?: string;
-    items?: Guarantee[];
-}
 
 interface SubPhase {
     number?: string;
@@ -20,155 +10,99 @@ interface SubPhase {
 
 interface Phase {
     title?: string;
+    image?: string;
+    videoUrl?: string;
+    guaranteeText?: string;
     subPhases?: SubPhase[];
 }
 
 interface ScopePhasesProps {
-    data?: {
-        title?: string;
-        videoFile?: string; // New: Uploaded file
-        videoUrl?: string;  // Old: External URL
-        phases?: Phase[];
-    };
-    guaranteesData?: GuaranteesData;
+    data?: Phase;
+    mainTitle?: string;
 }
 
-const ScopePhases: React.FC<ScopePhasesProps> = ({ data, guaranteesData }) => {
+const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados." }) => {
   const [showVideo, setShowVideo] = useState(false);
-  const [showGuarantees, setShowGuarantees] = useState(false);
-
-  // Determine video source
-  const videoSrc = data?.videoFile || data?.videoUrl;
 
   return (
-    <>
-        <section className="h-full bg-white flex flex-col justify-center relative">
-          <div className="max-w-7xl mx-auto w-full h-full flex flex-col">
-            <AnimatedSection>
-                {/* Título corregido: Estilo estándar VLANC */}
-                <div className="relative mb-8 md:mb-12 ml-8 md:ml-0">
-                    <h2 className="flex items-baseline text-6xl md:text-8xl font-bold text-gray-800">
-                        <span>07</span>
-                        <span className="font-light text-4xl md:text-5xl ml-4 tracking-wider">{data?.title}</span>
-                    </h2>
-                    <span className="absolute -top-4 -left-4 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
-                </div>
-            </AnimatedSection>
-            
-            <div className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 relative">
-                 {/* Columna 1: Anteproyecto */}
-                 <div className="flex flex-col justify-between">
-                     <div className="space-y-6">
-                        <div className="border-b border-gray-200 pb-2 mb-4">
-                            <h3 className="text-xl font-bold text-gray-800">{data?.phases?.[0]?.title}</h3>
-                        </div>
-                        <div className="space-y-4">
-                            {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
-                                <AnimatedSection key={i} className="text-gray-600 text-sm leading-relaxed">
-                                    <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                    <p 
-                                        className="whitespace-pre-line mt-1"
-                                        dangerouslySetInnerHTML={{ __html: sub.description || '' }}
-                                    />
-                                </AnimatedSection>
-                            ))}
-                        </div>
-                     </div>
-                     
-                     {/* BOTONES ABAJO IZQUIERDA - HIDDEN ON PRINT */}
-                     <div className="mt-8 flex items-center gap-4 no-print">
-                        {/* Botón Video */}
-                        <button 
-                            onClick={() => setShowVideo(true)}
-                            className="flex items-center gap-2 bg-gray-800 text-white px-4 py-2 rounded-sm text-xs font-semibold hover:bg-black transition shadow-lg tracking-widest"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-                            </svg>
-                            VER VIDEO
-                        </button>
-
-                        {/* Botón Garantías (Sello V) */}
-                        <button 
-                            onClick={() => setShowGuarantees(true)}
-                            className="relative group w-12 h-12 flex items-center justify-center"
-                            title="Ver Garantías"
-                        >
-                             <div className="absolute inset-0 bg-teal-600 rotate-45 rounded-sm shadow-md group-hover:bg-teal-700 transition"></div>
-                             <div className="absolute inset-0 bg-teal-600 -rotate-12 rounded-sm opacity-50"></div>
-                             <span className="relative font-bold text-white text-lg font-serif">V</span>
-                        </button>
-                     </div>
-                </div>
-                
-                {/* Columna 2: Interiorismo */}
-                <div className="space-y-6">
-                     <div className="border-b border-gray-200 pb-2 mb-4">
-                        <h3 className="text-xl font-bold text-gray-800">{data?.phases?.[1]?.title}</h3>
-                     </div>
-                     <div className="space-y-4">
-                        {(data?.phases?.[1]?.subPhases ?? []).map((sub, i) => (
-                            <AnimatedSection key={i} className="text-gray-600 text-sm leading-relaxed">
-                                 <p><strong className="text-teal-700">{sub.number} {sub.title}</strong></p>
-                                 <p 
-                                    className="whitespace-pre-line mt-1"
-                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }}
-                                 />
-                            </AnimatedSection>
-                        ))}
-                     </div>
-                </div>
-            </div>
-          </div>
-        </section>
-
-        {/* MODAL VIDEO */}
-        {showVideo && (
-            <div 
-                className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-                onClick={() => setShowVideo(false)}
-            >
-                <div className="relative w-full max-w-5xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
-                    {videoSrc && (
-                        <video src={videoSrc} controls autoPlay className="w-full h-full" />
-                    )}
-                    <button 
-                        onClick={() => setShowVideo(false)}
-                        className="absolute top-4 right-4 text-white hover:text-gray-300 text-4xl font-bold"
-                    >
-                        &times;
-                    </button>
-                </div>
-            </div>
-        )}
-
-        {/* MODAL GARANTÍAS */}
-        {showGuarantees && (
-            <div 
-                className="fixed inset-0 z-50 bg-white/95 flex items-center justify-center"
-                onClick={() => setShowGuarantees(false)}
-            >
-                <div 
-                    className="w-full h-full max-w-7xl overflow-y-auto bg-white shadow-2xl relative" 
-                    onClick={e => e.stopPropagation()}
-                >
-                    {/* Botón cerrar */}
-                    <button 
-                        onClick={() => setShowGuarantees(false)}
-                        className="fixed top-8 right-8 text-gray-400 hover:text-black text-5xl font-bold z-[60] leading-none"
-                    >
-                        &times;
-                    </button>
-                    
-                    {/* Contenedor con mucho padding para evitar cortes */}
-                    <div className="p-8 md:p-16 lg:p-24 pt-24 md:pt-32 pb-32">
-                        {/* Pasamos isInsideModal=true para que el componente se comporte fluidamente */}
-                        <Guarantees data={guaranteesData} isInsideModal={true} />
+    <section className="h-full w-full bg-vlanc-bg flex relative overflow-hidden">
+        
+        <div className="absolute top-0 left-0 w-full lg:w-[45%] h-full z-0">
+             <AnimatedSection className="w-full h-full">
+                {data?.image ? (
+                        <img src={data.image} alt="Phase" className="w-full h-full object-cover grayscale opacity-90 brightness-110" />
+                ) : (
+                    <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center">
+                        <span className="text-xs tracking-widest text-vlanc-secondary/40">Imagen Vertical</span>
                     </div>
+                )}
+             </AnimatedSection>
+        </div>
+
+        <div className="w-full h-full flex z-10 pointer-events-none">
+            {/* Columna Izquierda: Título alineado a 140px */}
+            <div className="hidden lg:flex w-[25%] h-full pt-[140px] pl-[120px] flex-col bg-vlanc-bg">
+                 <AnimatedSection>
+                    <h2 className="subtitulo1 tracking-tighter leading-none text-left">
+                        {mainTitle}
+                    </h2>
+                    <div className="w-20 h-[2px] bg-vlanc-primary mt-6"></div>
+                </AnimatedSection>
+            </div>
+
+            <div className="w-full lg:w-[35%] h-full relative overflow-hidden pointer-events-auto">
+                  {data?.image && (
+                     <img src={data.image} className="w-full h-full object-cover grayscale" />
+                  )}
+            </div>
+
+            {/* Columna Derecha: Contenido alineado a 140px (justify-start) */}
+            <div className="w-full lg:w-[40%] h-full flex flex-col justify-start px-10 lg:pl-10 lg:pr-[120px] pt-[140px] pb-[120px] overflow-y-auto no-scrollbar pointer-events-auto bg-vlanc-bg">
+                <AnimatedSection>
+                    <h3 className="text-[21px] font-sans font-bold text-vlanc-black uppercase mb-12">{data?.title}</h3>
+                    
+                    <div className="space-y-8">
+                        {(data?.subPhases ?? []).map((sub, i) => (
+                            <div key={i} className="text-[12px] leading-relaxed">
+                                <p className="mb-2 tracking-widest font-bold text-vlanc-black uppercase">
+                                    {sub.number} {sub.title}
+                                </p>
+                                <p 
+                                    className="cuerpo" 
+                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }} 
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="flex items-center gap-6 pt-16 mt-auto">
+                        {data?.guaranteeText && (
+                            <button className="bg-vlanc-primary text-white text-[10px] font-bold px-8 py-4 tracking-[0.2em] uppercase rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-colors">
+                                {data.guaranteeText}
+                            </button>
+                        )}
+                        {data?.videoUrl && (
+                            <button 
+                                onClick={() => setShowVideo(true)}
+                                className="border border-vlanc-primary text-vlanc-primary px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px]"
+                            >
+                                VER VIDEO
+                            </button>
+                        )}
+                    </div>
+                </AnimatedSection>
+            </div>
+        </div>
+
+      {showVideo && (
+            <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 pointer-events-auto" onClick={() => setShowVideo(false)}>
+                <div className="relative w-full max-w-5xl aspect-video bg-black rounded-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+                    <video src={data?.videoUrl} controls autoPlay className="w-full h-full" />
+                    <button onClick={() => setShowVideo(false)} className="absolute -top-12 right-0 text-white text-4xl">&times;</button>
                 </div>
             </div>
-        )}
-    </>
+      )}
+    </section>
   );
 };
 

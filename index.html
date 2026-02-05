@@ -9,7 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Importamos Libre Baskerville (Regular 400, Bold 700 e Italic 400) y Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -18,12 +19,12 @@
               vlanc: {
                 bg: '#efe8e1',
                 primary: '#8f4933',
-                secondary: '#703622',
+                secondary: '#702622',
                 black: '#000000',
               }
             },
             fontFamily: {
-              serif: ['Libre Baskerville', 'serif'],
+              serif: ['"Libre Baskerville"', 'serif'],
               sans: ['Montserrat', 'sans-serif'],
             }
           }
@@ -31,52 +32,83 @@
       }
     </script>
     <style>
+      /* --- ESTILOS GLOBALES --- */
+
       body {
         font-family: 'Montserrat', sans-serif;
         background-color: #efe8e1;
         color: #000000;
         overflow-x: hidden;
         font-size: 12px;
-      }
-      
-      h1, h2, h3, .font-serif {
-        font-family: 'Libre Baskerville', serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
-      /* Títulos: 60px */
-      .title-xl { font-size: 60px; line-height: 1.1; font-family: 'Libre Baskerville', serif; }
-      /* Subtítulos: 21px */
-      .subtitle-md { font-size: 21px; line-height: 1.4; font-family: 'Libre Baskerville', serif; }
-      /* Texto párrafos: 12px */
-      p, .text-body { font-size: 12px; line-height: 1.6; font-family: 'Montserrat', sans-serif; }
-
+      /* Scrollbar Oculta */
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-      @keyframes kenburns {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
+      /* --- JERARQUÍA TIPOGRÁFICA (LIBRE BASKERVILLE) --- */
+
+      /* 1. TÍTULO PRINCIPAL (Hero) - Medium 500 */
+      .titulo {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 72px;
+        line-height: 1.05;
+        font-weight: 500; /* Solicitado Medium */
+        letter-spacing: -0.02em;
+        color: #702622;
+      }
+
+      /* 2. SUBTÍTULO 1 - Regular 400 - Actualizado a estilo 'contenido.' */
+      .subtitulo1 {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 72px;
+        line-height: 1.05;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        color: #000000;
+      }
+
+      /* 3. SUBTÍTULO 2 (Italic) */
+      .subtitulo2 {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 28px;
+        line-height: 1.2;
+        font-weight: 400;
+        font-style: italic;
+        color: #000000;
+      }
+
+      /* 4. SUBTÍTULO 3 (Regular pequeño) */
+      .subtitulo3 {
+        font-family: 'Libre Baskerville', serif;
+        font-size: 20px;
+        line-height: 1.2;
+        font-weight: 400;
+        font-style: normal;
+        color: #000000;
+        letter-spacing: -0.01em;
+      }
+
+      /* 5. CUERPO DE TEXTO */
+      .cuerpo {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        line-height: 1.7;
+        font-weight: 400;
+        color: #702622;
+        text-align: justify;
       }
       
+      .cuerpo strong {
+        font-weight: 700;
+        color: inherit; /* Hereda el color marrón (#702622) del padre */
+      }
+
       @media print {
         @page { size: A4 landscape; margin: 0; }
-        html { width: 1920px !important; min-width: 1920px !important; }
-        body {
-          width: 1920px !important;
-          min-width: 1920px !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          background-color: #efe8e1 !important;
-          zoom: 0.585 !important; 
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-        }
-        .section-slide {
-            width: 1920px !important;
-            min-height: 1080px !important; 
-            break-after: page !important;
-        }
+        body { zoom: 0.585 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
       }
     </style>
   <script type="importmap">

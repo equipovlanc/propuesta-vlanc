@@ -1,3 +1,4 @@
+
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
@@ -12,52 +13,83 @@ interface GuaranteesProps {
         title?: string;
         items?: Guarantee[];
     };
-    isInsideModal?: boolean;
 }
 
-// Sello elaborado CSS (Medalla/Estrella)
-const SealIcon = () => (
-    <div className="relative w-20 h-20 flex items-center justify-center mb-6 flex-shrink-0">
-         {/* Multiple rotated squares to form a star/seal shape */}
-        <div className="absolute inset-0 bg-teal-600 rounded-sm rotate-0 opacity-100"></div>
-        <div className="absolute inset-0 bg-teal-600 rounded-sm rotate-12 opacity-80"></div>
-        <div className="absolute inset-0 bg-teal-600 rounded-sm rotate-45 opacity-60"></div>
-        <div className="absolute inset-0 bg-teal-600 rounded-sm -rotate-12 opacity-80"></div>
-        <div className="absolute inset-0 bg-teal-600 rounded-sm rotate-90 opacity-40"></div>
-        
-        {/* Inner circle border */}
-        <div className="absolute inset-1 border-2 border-white/80 rounded-full z-10 flex items-center justify-center">
-             {/* "V" in the center */}
-            <span className="text-white font-serif text-3xl font-bold drop-shadow-md">V</span>
-        </div>
-    </div>
-);
-
-const Guarantees: React.FC<GuaranteesProps> = ({ data, isInsideModal = false }) => {
+const GuaranteeBadge = ({ index }: { index: number }) => {
     return (
-        <section className={`${isInsideModal ? 'h-auto py-8' : 'h-full flex flex-col justify-center'} bg-white`}>
-            <div className="max-w-7xl mx-auto w-full">
-                <AnimatedSection className="mb-12 ml-8 md:ml-0">
-                    <div className="relative inline-block">
-                        <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-gray-800">{data?.title || "NUESTRAS GARANTÍAS"}</h2>
-                        {/* Only show decorative bar if it won't be cut off, or ensure padding handles it. In modal, we might want to hide it or adjust */}
-                        <span className="absolute -left-6 top-1/2 -translate-y-1/2 w-1 h-24 bg-teal-400 transform -rotate-12"></span>
+        <div className="relative w-20 h-20 mb-8">
+            <svg viewBox="0 0 100 100" className="w-full h-full text-vlanc-black stroke-current fill-none absolute top-0 left-0 animate-[spin_20s_linear_infinite]">
+                 <circle cx="50" cy="50" r="48" strokeWidth="1" />
+                 <path d="M50,2 A48,48 0 0,1 50,98 A48,48 0 0,1 50,2" strokeDasharray="4 4" strokeWidth="0.5" />
+            </svg>
+            
+            <div className="absolute inset-0 flex items-center justify-center">
+                 {index === 0 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 text-vlanc-black">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                 )}
+                 {index === 1 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 text-vlanc-black">
+                         <circle cx="12" cy="12" r="10"></circle>
+                         <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                 )}
+                 {index === 2 && (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 text-vlanc-black">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                 )}
+            </div>
+             
+             <div className="absolute -bottom-1 -right-1 bg-vlanc-bg rounded-full p-1 border border-vlanc-black">
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 text-vlanc-black">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                 </svg>
+             </div>
+        </div>
+    )
+}
+
+const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
+    return (
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start px-[120px] pt-[140px] pb-[120px]">
+            <div className="w-full flex justify-end mb-24">
+                <AnimatedSection>
+                    <div className="text-right flex flex-col items-end">
+                        <h2 className="subtitulo1 mb-4 tracking-tighter">
+                            {data?.title || "nuestras garantías."}
+                        </h2>
+                        <div className="w-24 h-[2px] bg-vlanc-primary"></div>
                     </div>
                 </AnimatedSection>
-                
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-                    {(data?.items ?? []).map((item, i) => (
-                         <AnimatedSection key={i} className="group flex flex-col h-full">
-                            <SealIcon />
-                            <h3 className="text-lg font-bold text-teal-600 mb-4 leading-tight uppercase tracking-wide border-b border-teal-100 pb-2">&gt; {item.title}</h3>
-                            <div 
-                                className="text-gray-600 text-sm leading-relaxed text-justify mb-4 flex-grow whitespace-pre-line"
-                                dangerouslySetInnerHTML={{ __html: item.description || '' }}
-                            />
-                            {item.note && <p className="text-xs text-gray-400 italic pt-2">{item.note}</p>}
-                        </AnimatedSection>
-                    ))}
-                </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 items-start">
+                {(data?.items ?? []).map((item, i) => (
+                     <AnimatedSection key={i} className="flex flex-col items-start">
+                        <GuaranteeBadge index={i} />
+                        
+                        {/* Subtitulo 2 */}
+                        <h3 className="subtitulo2 mb-6 leading-tight">
+                            / {item.title}
+                        </h3>
+                        
+                        <div 
+                            className="cuerpo mb-4"
+                            dangerouslySetInnerHTML={{ __html: item.description || '' }}
+                        />
+                        
+                        {item.note && (
+                            <p className="text-[10px] text-vlanc-secondary/60 italic mt-8 border-t border-vlanc-secondary/10 pt-4 w-full">
+                                {item.note}
+                            </p>
+                        )}
+                    </AnimatedSection>
+                ))}
             </div>
         </section>
     );
