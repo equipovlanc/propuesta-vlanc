@@ -66,7 +66,7 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
             <div className="w-full flex justify-end mb-24">
                 <AnimatedSection>
                     <div className="text-right flex flex-col items-end">
-                        <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">
+                        <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
                             {data?.title || "nuestras garantías."}
                         </h2>
                         <div className="w-24 h-[2px] bg-vlanc-primary"></div>

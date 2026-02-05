@@ -35,7 +35,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
     <section id="special-offers" className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-32 px-12 md:px-24">
       
        <AnimatedSection>
-            <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">
+            <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
                {investmentTitle || "la inversión."}
             </h2>
             <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>

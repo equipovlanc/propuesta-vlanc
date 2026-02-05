@@ -45,7 +45,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                 
                 {/* Bloque 1: La Misión */}
                 <AnimatedSection>
-                    <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">{data?.mission?.title}</h2>
+                    <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">{data?.mission?.title}</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mb-6"></div>
                     
                     <h3 className="text-[24px] font-serif italic text-vlanc-black mb-4 leading-tight font-normal">{data?.mission?.subtitle}</h3>
@@ -57,7 +57,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
 
                 {/* Bloque 2: Qué vas a conseguir */}
                 <AnimatedSection>
-                    <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">{data?.achievements?.title}</h2>
+                    <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">{data?.achievements?.title}</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mb-6"></div>
                     
                     <ul className="space-y-4 max-w-lg">

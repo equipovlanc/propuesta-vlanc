@@ -23,7 +23,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                 {/* Columna Título (Izquierda, estrecha) */}
                 <div className="w-full lg:w-1/4 pt-10">
                     <AnimatedSection>
-                        <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter leading-none">
+                        <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter leading-none">
                         {data?.title || "qué dicen de nosotros."}
                         </h2>
                         <div className="w-20 h-[2px] bg-vlanc-primary"></div>

@@ -58,7 +58,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             <div className="h-full flex flex-col justify-center space-y-12 overflow-y-auto no-scrollbar pr-4">
                  {/* Título Principal */}
                  <AnimatedSection>
-                    <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">
+                    <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
                         {data?.title || "conoce VLANC."}
                     </h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary"></div>

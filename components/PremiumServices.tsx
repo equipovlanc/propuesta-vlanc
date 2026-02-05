@@ -21,7 +21,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
             {/* Lado Contenido (Izquierda) */}
             <div className="w-full lg:w-1/2 h-full flex flex-col justify-center px-12 md:px-24 py-12 overflow-y-auto no-scrollbar">
                 <AnimatedSection className="mb-12">
-                    <h2 className="subtitle-pdf text-vlanc-black font-normal mb-4 tracking-tighter">servicios premium.</h2>
+                    <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">servicios premium.</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary"></div>
                 </AnimatedSection>
                 

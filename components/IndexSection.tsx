@@ -46,8 +46,8 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
         {/* Sin Header/Logo aquí */}
         
         <AnimatedSection>
-            {/* Subtítulo 1: Libre Baskerville Regular (font-normal), Negro */}
-            <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">
+            {/* Subtítulo 1: Aplicando nueva clase subtitulo1 */}
+            <h2 className="subtitulo1 text-vlanc-black mb-4 tracking-tighter">
                 {data?.title || "contenido."}
             </h2>
             {/* Línea horizontal: Marrón, fina */}

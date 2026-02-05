@@ -40,39 +40,20 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
              </AnimatedSection>
         </div>
 
-        {/* Overlay para el Título Principal (Sobre la imagen o desplazado) - Según PDF P9 el título está arriba a la izquierda sobre fondo claro... 
-            Espera, en el PDF P9, el título "trabajos contemplados" está SOBRE la zona crema a la izquierda de la imagen? 
-            No, el PDF P9 muestra: Fondo crema a la izquierda con el título. Imagen en el CENTRO/DERECHA cortada?
-            Ah, viendo el screenshot P9:
-            Izquierda: Fondo Crema. Título "trabajos contemplados".
-            Centro/Derecha: Foto Vertical cortada. 
-            Derecha del todo: Texto.
-            
-            PERO el usuario dijo "imagenes verticales de arriba a abajo de la pagina...". 
-            Vamos a asumir diseño 2 columnas: 
-            Columna 1 (Izq): Título + Imagen debajo? O Imagen Izq y Texto Der?
-            El screenshot P9 muestra: Izquierda (Título). Centro (Foto). Derecha (Texto). Es un layout de 3 columnas o 2 columnas con imagen en medio.
-            
-            Re-interpretación PDF P9:
-            Lado Izquierdo (~30%): Título arriba. Abajo espacio vacío.
-            Centro (~30%): Imagen Vertical a sangre.
-            Derecha (~40%): Textos de la fase.
-        */}
+        {/* Overlay para el Título Principal (Sobre la imagen o desplazado) */}
 
         <div className="w-full h-full flex z-10 pointer-events-none">
             {/* Columna 1: Título */}
             <div className="hidden lg:flex w-[25%] h-full pt-32 pl-12 flex-col bg-vlanc-bg">
                  <AnimatedSection>
-                    <h2 className="subtitle-pdf text-vlanc-black font-normal tracking-tighter leading-none text-left">
+                    <h2 className="subtitulo1 text-vlanc-black tracking-tighter leading-none text-left">
                         {mainTitle}
                     </h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mt-6"></div>
                 </AnimatedSection>
             </div>
 
-            {/* Columna 2: Imagen (La ponemos aquí en el flujo normal si queremos que ocupe espacio, o usamos la absoluta de fondo si es a sangre total) 
-                El usuario dijo "imagenes verticales de arriba a abajo". Hagamos que la imagen sea la columna central.
-            */}
+            {/* Columna 2: Imagen (La ponemos aquí en el flujo normal si queremos que ocupe espacio, o usamos la absoluta de fondo si es a sangre total) */}
             <div className="w-full lg:w-[35%] h-full relative overflow-hidden pointer-events-auto">
                  {/* Si hay imagen en data, la mostramos aquí a full height */}
                   {data?.image && (
