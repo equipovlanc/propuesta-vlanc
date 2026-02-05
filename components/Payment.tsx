@@ -33,7 +33,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
         <section className="min-h-screen py-32 px-12 md:px-24 bg-vlanc-bg flex flex-col justify-center">
             <div className="max-w-7xl mx-auto w-full">
                  <AnimatedSection>
-                    <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter lowercase">
+                    <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">
                        {investmentTitle || "la inversión."}
                     </h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mb-20"></div>
@@ -45,7 +45,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                         <div className="space-y-12">
                            {(data?.paymentMethods?.plans ?? []).map((plan, i) => (
                                 <div key={i}>
-                                    <h4 className="text-[14px] font-bold text-vlanc-primary uppercase tracking-widest mb-4 border-b border-vlanc-primary/20 pb-2">{plan.title}</h4>
+                                    <h4 className="text-[14px] font-bold text-vlanc-primary tracking-widest mb-4 border-b border-vlanc-primary/20 pb-2">{plan.title}</h4>
                                     <div className="space-y-3">
                                         {(plan.payments ?? []).map((p, idx) => (
                                             <div key={idx} className="flex items-start text-vlanc-secondary text-[12px]">

@@ -35,7 +35,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
     <section id="special-offers" className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-32 px-12 md:px-24">
       
        <AnimatedSection>
-            <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter lowercase">
+            <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">
                {investmentTitle || "la inversión."}
             </h2>
             <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
@@ -55,7 +55,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                     <div className="grid grid-cols-3 gap-4">
                         {(data?.conditionalOffer?.discountedPlans ?? []).map((plan, i) => (
                             <div key={i} className="p-4 bg-[#8f4933]/10 border border-[#8f4933]/20 rounded-[1px] text-center">
-                                <p className="font-bold text-[9px] text-vlanc-black uppercase tracking-widest mb-1">{plan.name}</p>
+                                <p className="font-bold text-[9px] text-vlanc-black tracking-widest mb-1">{plan.name}</p>
                                 <p className="line-through text-vlanc-black/40 text-[9px] mb-1">{plan.originalPrice}</p>
                                 <p className="font-serif font-bold text-vlanc-primary text-[16px]">{plan.discountedPrice}</p>
                             </div>
@@ -93,7 +93,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                     />
                 )}
                 <div className="absolute inset-0 bg-vlanc-secondary/40 flex items-center justify-center p-12">
-                    <h3 className="text-3xl lg:text-[42px] font-serif italic text-white text-center tracking-tighter leading-tight uppercase font-normal" dangerouslySetInnerHTML={{ __html: data?.callToAction?.text || '' }} />
+                    <h3 className="text-3xl lg:text-[42px] font-serif italic text-white text-center tracking-tighter leading-tight font-normal" dangerouslySetInnerHTML={{ __html: data?.callToAction?.text || '' }} />
                 </div>
             </div>
         </AnimatedSection>

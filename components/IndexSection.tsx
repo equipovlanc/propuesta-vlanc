@@ -47,7 +47,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
         
         <AnimatedSection>
             {/* Subtítulo 1: Libre Baskerville Regular (font-normal), Negro */}
-            <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal lowercase tracking-tighter">
+            <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">
                 {data?.title || "contenido."}
             </h2>
             {/* Línea horizontal: Marrón, fina */}
@@ -63,7 +63,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
                 >
                     <span className="text-[21px] font-serif text-vlanc-black/60 mr-5 group-hover:text-vlanc-primary transition-colors">/</span>
                     {/* Items: Baskerville Regular, Negro */}
-                    <span className="text-[24px] font-serif lowercase tracking-tight font-normal"> {item.title}</span>
+                    <span className="text-[24px] font-serif tracking-tight font-normal"> {item.title}</span>
                 </a>
             )) : (
               <p className="text-vlanc-black/30 italic font-sans">Añade secciones en Sanity...</p>

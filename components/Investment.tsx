@@ -21,47 +21,44 @@ interface InvestmentProps {
 }
 
 const CheckIcon = () => (
-    <svg viewBox="0 0 24 24" className="w-4 h-4 text-vlanc-primary" fill="none" stroke="currentColor" strokeWidth="4">
+    <svg viewBox="0 0 24 24" className="w-4 h-4 text-vlanc-secondary" fill="none" stroke="currentColor" strokeWidth="4">
         <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
 );
 
 const Investment: React.FC<InvestmentProps> = ({ data }) => {
     
-    // Helper para colores de fila basados en PDF
-    const getRowBg = (color?: string, isPremium?: boolean) => {
-        if (isPremium) return 'bg-transparent'; // Separador
-        switch (color) {
-            case 'light': return 'bg-vlanc-primary/5';
-            case 'medium': return 'bg-vlanc-primary/10';
-            case 'dark': return 'bg-vlanc-primary/20';
-            default: return 'bg-transparent';
-        }
+    // Colores PDF P14 exactos aproximados
+    const getRowBg = (color?: string) => {
+        // Filas alternas o destacadas en color crema/marrón muy suave
+        if (color === 'light') return 'bg-[#eae0d5]'; // Un beige más oscuro que el fondo
+        if (color === 'medium') return 'bg-[#dccbc1]'; 
+        if (color === 'dark') return 'bg-[#cbb6aa]';
+        return 'border-b border-vlanc-primary/10';
     };
 
     return (
-        <section className="min-h-screen py-16 px-12 md:px-24 bg-vlanc-bg flex flex-col justify-center">
-            {/* Título Principal */}
-            <AnimatedSection className="mb-8">
-                <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter lowercase">
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center py-16 px-12 md:px-24">
+            <AnimatedSection className="mb-4">
+                <h2 className="subtitle-pdf text-vlanc-black mb-4 font-normal tracking-tighter">
                    {data?.title || "la inversión."}
                 </h2>
                 <div className="w-20 h-[2px] bg-vlanc-primary mb-8"></div>
             </AnimatedSection>
 
-            <div className="max-w-full w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-start h-full">
-                {/* Columna Izquierda: Descripción */}
-                <div className="lg:col-span-4 space-y-8">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-start h-full overflow-hidden">
+                {/* Columna Izquierda: Texto */}
+                <div className="lg:col-span-4 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection>
                         <div 
                             className="text-[12px] text-vlanc-secondary leading-relaxed text-justify mb-8 [&>strong]:font-bold [&>strong]:text-vlanc-black" 
                             dangerouslySetInnerHTML={{ __html: data?.introduction || '' }} 
                         />
                         
-                        <div className="space-y-8">
+                        <div className="space-y-6">
                             {(data?.plansDescription ?? []).map((p, i) => (
-                                <div key={i} className="space-y-2">
-                                    <p className="text-[12px] font-bold text-vlanc-black uppercase tracking-widest">{p.name}_</p>
+                                <div key={i} className="space-y-1">
+                                    <p className="text-[12px] font-bold text-vlanc-black tracking-widest uppercase">{p.name}_</p>
                                     <p className="text-[11px] text-vlanc-secondary leading-relaxed text-justify">{p.desc}</p>
                                 </div>
                             ))}
@@ -69,36 +66,38 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* Columna Derecha: Tabla Compleja */}
-                <div className="lg:col-span-8">
-                    <AnimatedSection className="bg-white/40 border border-vlanc-primary/10 overflow-hidden shadow-sm">
-                        
-                        {/* Headers Tabla */}
-                        <div className="grid grid-cols-[2fr_repeat(3,1fr)] border-b border-vlanc-primary/20 bg-vlanc-primary/10">
+                {/* Columna Derecha: Tabla */}
+                <div className="lg:col-span-8 h-full flex flex-col">
+                    <AnimatedSection className="w-full">
+                        {/* Cabecera Tabla con color solido #dccbc1 (aprox) del PDF */}
+                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
-                                <div key={i} className="p-3 text-center text-[10px] font-bold uppercase tracking-widest text-vlanc-black">{h}</div>
+                                <div key={i} className="p-3 text-center text-[10px] font-bold tracking-widest text-vlanc-secondary uppercase">{h}</div>
                             ))}
                         </div>
                         
-                        {/* Filas Dinámicas */}
-                        <div className="divide-y divide-vlanc-primary/5">
+                        {/* Cuerpo Tabla */}
+                        <div className="bg-transparent text-[10px]">
                             {(data?.tableRows ?? []).map((row, i) => {
+                                // Fila especial "SERVICIOS PREMIUM"
                                 if (row.isPremiumSeparator) {
                                     return (
-                                        <div key={i} className="grid grid-cols-[2fr_repeat(3,1fr)] bg-transparent py-4">
-                                            <div className="px-4 text-[9px] font-bold uppercase tracking-widest text-vlanc-black/40 text-right pr-8 col-span-1">SERVICIOS PREMIUM</div>
-                                            <div className="col-span-3"></div>
+                                        <div key={i} className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#e6ded6] py-2 border-b border-vlanc-primary/10">
+                                            <div className="px-4 py-1 font-bold uppercase tracking-widest text-vlanc-secondary text-right pr-4 italic col-span-4">
+                                                SERVICIOS PREMIUM
+                                            </div>
                                         </div>
                                     );
                                 }
+                                
                                 return (
-                                    <div key={i} className={`grid grid-cols-[2fr_repeat(3,1fr)] ${getRowBg(row.highlightColor)} transition-colors`}>
-                                        <div className="py-2.5 px-4 text-[10px] font-bold text-vlanc-black/70 uppercase tracking-widest flex items-center leading-tight">
+                                    <div key={i} className={`grid grid-cols-[3fr_repeat(3,1fr)] ${getRowBg(row.highlightColor)} items-center`}>
+                                        <div className="py-2 px-4 font-bold text-vlanc-secondary uppercase tracking-widest leading-tight">
                                             {row.label}
                                         </div>
                                         {(row.checks ?? []).map((isChecked, idx) => (
-                                            <div key={idx} className="py-2.5 px-2 flex justify-center items-center border-l border-vlanc-primary/5">
+                                            <div key={idx} className="py-2 flex justify-center items-center">
                                                 {isChecked && <CheckIcon />}
                                             </div>
                                         ))}
@@ -107,21 +106,20 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Franja Precios Marrón (Oscuro sólido #8f4933) */}
-                        <div className="grid grid-cols-[2fr_repeat(3,1fr)] bg-[#8f4933] text-white border-t border-vlanc-primary/20">
+                        {/* Pie Tabla: Precios con color solido #8f4933 */}
+                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white mt-auto">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
-                                <div key={i} className="p-4 text-center flex flex-col justify-center border-l border-white/10">
-                                    <p className="text-[14px] font-serif font-bold tracking-tight">{price} € <span className="text-[8px] opacity-60">+ IVA</span></p>
+                                <div key={i} className="p-4 text-center flex flex-col justify-center border-l border-white/20">
+                                    <p className="text-[14px] font-serif font-bold tracking-tight whitespace-nowrap">{price}</p>
                                 </div>
                             ))}
                         </div>
                     </AnimatedSection>
                     
-                    <div className="mt-8 flex justify-between items-center text-[9px] font-bold tracking-widest uppercase text-vlanc-black/40">
+                    <div className="mt-4 flex justify-between items-center text-[9px] font-bold tracking-widest uppercase text-vlanc-black/40">
                         <span>VIVE VLANC SL</span>
-                        <span>ACEPTA PRESUPUESTO_FIRMA</span>
-                        <span>En Alcoi a XX de mes de 2025</span>
+                        <span className="text-right">ACEPTA PRESUPUESTO_FIRMA<br/>En Alcoi a XX de mes de 2025</span>
                     </div>
                 </div>
             </div>

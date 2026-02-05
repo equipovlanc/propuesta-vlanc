@@ -21,7 +21,7 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
             <div className="max-w-7xl mx-auto w-full">
                 <AnimatedSection>
                     {/* Subtítulo 1 */}
-                    <h2 className="subtitle-pdf text-vlanc-black mb-4 tracking-tighter font-normal lowercase">{data?.title || "el proceso Vlanc."}</h2>
+                    <h2 className="subtitle-pdf text-vlanc-black mb-4 tracking-tighter font-normal">{data?.title || "el proceso Vlanc."}</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mb-20"></div>
                 </AnimatedSection>
                 

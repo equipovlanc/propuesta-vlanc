@@ -15,7 +15,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
     <section className="min-h-screen flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
         <div className="w-full lg:w-3/5 flex flex-col justify-center px-12 md:px-24 py-24">
             <AnimatedSection>
-                <h2 className="subtitle-pdf text-vlanc-black mb-4 tracking-tighter font-normal lowercase">
+                <h2 className="subtitle-pdf text-vlanc-black mb-4 tracking-tighter font-normal">
                    {data?.title || "la situación."}
                 </h2>
                 <div className="w-20 h-[2px] bg-vlanc-primary mb-12"></div>

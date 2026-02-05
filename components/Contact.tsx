@@ -43,7 +43,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                 {/* Lado Derecho: Bloques de Información */}
                 <div className="space-y-12 text-left">
                     <AnimatedSection>
-                        <h4 className="text-[14px] font-bold text-vlanc-black uppercase tracking-[0.2em] mb-4">/ {data?.location?.title}</h4>
+                        <h4 className="text-[14px] font-bold text-vlanc-black tracking-[0.2em] mb-4">/ {data?.location?.title}</h4>
                         <div className="text-[13px] text-vlanc-secondary space-y-1 leading-relaxed font-sans">
                             <p>{data?.location?.address}</p>
                             <p className="text-vlanc-primary font-bold">{data?.location?.email}</p>
@@ -51,7 +51,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                     </AnimatedSection>
 
                     <AnimatedSection>
-                        <h4 className="text-[14px] font-bold text-vlanc-black uppercase tracking-[0.2em] mb-4">/ {data?.phone?.title}</h4>
+                        <h4 className="text-[14px] font-bold text-vlanc-black tracking-[0.2em] mb-4">/ {data?.phone?.title}</h4>
                         <div className="text-[13px] text-vlanc-secondary space-y-1 font-sans">
                             {(data?.phone?.numbers ?? []).map((n, i) => (
                                 <p key={i} className="font-medium tracking-widest">{n}</p>
@@ -60,22 +60,22 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                     </AnimatedSection>
 
                     <AnimatedSection>
-                        <h4 className="text-[14px] font-bold text-vlanc-black uppercase tracking-[0.2em] mb-4">/ {data?.web?.title}</h4>
-                        <a href={data?.web?.url} target="_blank" className="text-[14px] font-bold border-b border-vlanc-primary text-vlanc-secondary hover:text-vlanc-primary transition-colors tracking-widest uppercase">
+                        <h4 className="text-[14px] font-bold text-vlanc-black tracking-[0.2em] mb-4">/ {data?.web?.title}</h4>
+                        <a href={data?.web?.url} target="_blank" className="text-[14px] font-bold border-b border-vlanc-primary text-vlanc-secondary hover:text-vlanc-primary transition-colors tracking-widest">
                             {data?.web?.displayText}
                         </a>
                     </AnimatedSection>
 
                     {/* Nueva sección RRSS */}
                     <AnimatedSection>
-                         <h4 className="text-[14px] font-bold text-vlanc-black uppercase tracking-[0.2em] mb-4">/ RRSS</h4>
+                         <h4 className="text-[14px] font-bold text-vlanc-black tracking-[0.2em] mb-4">/ RRSS</h4>
                          <div className="flex gap-6">
                             {(data?.rrss ?? []).map((social, i) => (
                                 <a key={i} href={social.url} target="_blank" className="hover:opacity-60 transition-opacity">
                                     {social.icon ? (
                                         <img src={social.icon} alt={social.name} className="w-6 h-6 object-contain" />
                                     ) : (
-                                        <span className="text-[10px] uppercase font-bold text-vlanc-secondary">{social.name}</span>
+                                        <span className="text-[10px] font-bold text-vlanc-secondary">{social.name}</span>
                                     )}
                                 </a>
                             ))}

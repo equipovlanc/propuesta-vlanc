@@ -32,9 +32,9 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
             {/* Línea divisoria solicitada: Fina y Negra */}
             <div className="w-12 h-[1px] bg-vlanc-black"></div>
 
-            <div className="text-[14px] font-sans text-vlanc-secondary leading-tight uppercase tracking-wider">
+            <div className="text-[14px] font-sans text-vlanc-secondary leading-tight tracking-wider">
                 <p className="font-medium">{data?.clientName || headerData?.clientName}</p>
-                <p className="opacity-80 font-normal normal-case">{headerData?.location}</p>
+                <p className="opacity-80 font-normal">{headerData?.location}</p>
             </div>
         </div>
       </div>
@@ -42,13 +42,13 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
       {/* Centro: Títulos */}
       <AnimatedSection className="text-center">
         <div className="space-y-6">
-          <p className="text-[21px] text-vlanc-secondary uppercase tracking-[0.4em] mb-10 font-sans font-medium">
+          <p className="text-[21px] text-vlanc-secondary tracking-[0.4em] mb-10 font-sans font-medium">
             {data?.clientName || headerData?.clientName}
           </p>
-          <h1 className="title-pdf text-vlanc-secondary font-bold uppercase">
+          <h1 className="title-pdf text-vlanc-secondary font-bold">
             {data?.line1}
           </h1>
-          <h1 className="title-pdf text-vlanc-secondary font-bold uppercase">
+          <h1 className="title-pdf text-vlanc-secondary font-bold">
             {data?.line2}
           </h1>
           {/* Línea decorativa central: Marrón y un poco más gruesa que la divisoria de texto */}

@@ -21,7 +21,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
             {/* Lado Contenido */}
             <div className="w-full lg:w-1/2 flex flex-col justify-center px-12 md:px-24 py-24">
                 <AnimatedSection>
-                    <h2 className="subtitle-pdf text-vlanc-black font-normal lowercase mb-4">servicios premium.</h2>
+                    <h2 className="subtitle-pdf text-vlanc-black font-normal mb-4">servicios premium.</h2>
                     <div className="w-20 h-[2px] bg-vlanc-primary mb-16"></div>
                 </AnimatedSection>
                 
@@ -30,7 +30,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
                          {/* Subtítulo 2 (Nombre Servicio - NO Italic según PDF P19) */}
                         <h3 className="text-[24px] font-serif font-normal text-vlanc-black">/ {data?.subtitle}</h3>
                          {/* Subtítulo 3 (Bajada - Negrita) */}
-                        <h4 className="text-[14px] font-bold text-vlanc-black uppercase tracking-widest font-sans">{data?.title}</h4>
+                        <h4 className="text-[14px] font-bold text-vlanc-black tracking-widest font-sans">{data?.title}</h4>
                     </div>
                     
                     {/* Cuerpo Marrón */}

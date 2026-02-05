@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -23,7 +23,8 @@
               }
             },
             fontFamily: {
-              serif: ['Libre Baskerville', 'serif'],
+              // Aquí definimos la prioridad: Primero la local, luego el fallback
+              serif: ['"Baskerville Display PT"', 'Libre Baskerville', 'serif'],
               sans: ['Montserrat', 'sans-serif'],
             }
           }
@@ -31,6 +32,45 @@
       }
     </script>
     <style>
+      /* 
+       IMPORTANTE: 
+       1. Crea una carpeta llamada 'public' en la raíz.
+       2. Dentro crea una carpeta 'fonts'.
+       3. Sube tus archivos .otf ahí con estos nombres exactos.
+      */
+
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/BaskervilleDisplayPT-Regular.otf') format('opentype');
+        font-weight: 400; /* Regular */
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/BaskervilleDisplayPT-Light.otf') format('opentype');
+        font-weight: 300; /* Light */
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/BaskervilleDisplayPT-Italic.otf') format('opentype');
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/BaskervilleDisplayPT-Bold.otf') format('opentype');
+        font-weight: 700; /* Bold */
+        font-style: normal;
+        font-display: swap;
+      }
+
       body {
         font-family: 'Montserrat', sans-serif;
         background-color: #efe8e1;
@@ -39,12 +79,16 @@
         font-size: 12px;
       }
       
+      /* Aplicar la fuente serif customizada a los encabezados */
       h1, h2, h3, .font-serif {
-        font-family: 'Libre Baskerville', serif;
+        font-family: 'Baskerville Display PT', 'Libre Baskerville', serif;
       }
 
-      .title-pdf { font-size: 72px; line-height: 1.05; font-family: 'Libre Baskerville', serif; letter-spacing: -0.02em; }
-      .subtitle-pdf { font-size: 60px; line-height: 1.1; font-family: 'Libre Baskerville', serif; letter-spacing: -0.03em; }
+      .title-pdf { font-size: 72px; line-height: 1.05; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; }
+      .subtitle-pdf { font-size: 60px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.03em; }
+      .title-xl { font-size: 42px; line-height: 1.1; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; letter-spacing: -0.02em; }
+      .subtitle-md { font-size: 24px; line-height: 1.2; font-family: 'Baskerville Display PT', 'Libre Baskerville', serif; }
+      
       .text-pdf { font-size: 12px; line-height: 1.6; font-family: 'Montserrat', sans-serif; }
 
       .no-scrollbar::-webkit-scrollbar { display: none; }
