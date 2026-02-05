@@ -9,8 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Importamos Baskervville (Serif) y Montserrat (Sans) desde Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Importamos Libre Baskerville (Regular 400, Bold 700 e Italic 400) y Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -24,7 +24,7 @@
               }
             },
             fontFamily: {
-              serif: ['"Baskervville"', 'serif'],
+              serif: ['"Libre Baskerville"', 'serif'],
               sans: ['Montserrat', 'sans-serif'],
             }
           }
@@ -48,31 +48,31 @@
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-      /* --- JERARQUÍA TIPOGRÁFICA --- */
+      /* --- JERARQUÍA TIPOGRÁFICA (LIBRE BASKERVILLE) --- */
 
-      /* 1. TÍTULO PRINCIPAL (Hero) */
+      /* 1. TÍTULO PRINCIPAL (Hero) - Medium 500 */
       .titulo {
-        font-family: 'Baskervville', serif;
+        font-family: 'Libre Baskerville', serif;
         font-size: 72px;
         line-height: 1.05;
-        font-weight: 700; 
+        font-weight: 500; /* Solicitado Medium */
         letter-spacing: -0.02em;
         color: #702622;
       }
 
-      /* 2. SUBTÍTULO 1 */
+      /* 2. SUBTÍTULO 1 - Regular 400 */
       .subtitulo1 {
-        font-family: 'Baskervville', serif;
+        font-family: 'Libre Baskerville', serif;
         font-size: 60px;
         line-height: 1.1;
-        font-weight: 400;
+        font-weight: 400; /* Solicitado Regular */
         letter-spacing: -0.03em;
         color: #000000;
       }
 
       /* 3. SUBTÍTULO 2 (Italic) */
       .subtitulo2 {
-        font-family: 'Baskervville', serif;
+        font-family: 'Libre Baskerville', serif;
         font-size: 28px;
         line-height: 1.2;
         font-weight: 400;
@@ -82,7 +82,7 @@
 
       /* 4. SUBTÍTULO 3 (Regular pequeño) */
       .subtitulo3 {
-        font-family: 'Baskervville', serif;
+        font-family: 'Libre Baskerville', serif;
         font-size: 24px;
         line-height: 1.2;
         font-weight: 400;
