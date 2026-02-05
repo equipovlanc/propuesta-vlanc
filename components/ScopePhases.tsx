@@ -40,7 +40,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
         </div>
 
         <div className="w-full h-full flex z-10 pointer-events-none">
-            <div className="hidden lg:flex w-[25%] h-full pt-32 pl-10 flex-col bg-vlanc-bg">
+            <div className="hidden lg:flex w-[25%] h-full pt-32 pl-[120px] flex-col bg-vlanc-bg">
                  <AnimatedSection>
                     <h2 className="subtitulo1 tracking-tighter leading-none text-left">
                         {mainTitle}
@@ -55,7 +55,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                   )}
             </div>
 
-            <div className="w-full lg:w-[40%] h-full flex flex-col justify-center px-10 lg:pr-10 py-20 overflow-y-auto no-scrollbar pointer-events-auto bg-vlanc-bg">
+            <div className="w-full lg:w-[40%] h-full flex flex-col justify-center px-10 lg:pl-10 lg:pr-[120px] py-20 overflow-y-auto no-scrollbar pointer-events-auto bg-vlanc-bg">
                 <AnimatedSection>
                     <h3 className="text-[21px] font-sans font-bold text-vlanc-black uppercase mb-12">{data?.title}</h3>
                     

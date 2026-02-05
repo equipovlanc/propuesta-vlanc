@@ -9,7 +9,7 @@ interface DividerSlideProps {
 
 const DividerSlide: React.FC<DividerSlideProps> = ({ image, text }) => {
     return (
-        <section className="h-screen w-full flex items-center justify-center bg-vlanc-bg p-10 relative">
+        <section className="h-screen w-full flex items-center justify-center bg-vlanc-bg px-[120px] py-10 relative">
              <div className="max-w-6xl w-full h-[60vh] relative">
                  <AnimatedSection className="w-full h-full relative z-10">
                     {/* Imagen Equipo Horizontal */}

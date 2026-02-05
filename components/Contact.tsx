@@ -20,7 +20,7 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
     return (
-        <footer className="h-screen py-32 px-10 bg-vlanc-bg flex items-center justify-center">
+        <footer className="h-screen py-32 px-[120px] bg-vlanc-bg flex items-center justify-center">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32 items-center w-full">
                 
                 {/* Lado Izquierdo: Logo de Cierre */}

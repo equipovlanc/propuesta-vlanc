@@ -32,7 +32,7 @@ interface SpecialOffersProps {
 
 const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) => {
   return (
-    <section id="special-offers" className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-32 px-10">
+    <section id="special-offers" className="min-h-screen bg-vlanc-bg flex flex-col justify-center py-32 px-[120px]">
       
        <AnimatedSection>
             <h2 className="subtitulo1 mb-4 tracking-tighter">

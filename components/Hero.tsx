@@ -19,7 +19,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
   return (
-    <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-10 py-32">
+    <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-[120px] py-32">
       
       {/* Esquina Superior Izquierda: Info Técnica (Mantiene Montserrat) */}
       <div className="absolute top-20 left-20 text-left pointer-events-none">

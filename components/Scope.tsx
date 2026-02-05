@@ -21,7 +21,7 @@ interface ScopeProps {
 
 const Scope: React.FC<ScopeProps> = ({ data }) => {
   return (
-    <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center px-10 py-16">
+    <section className="h-full w-full bg-vlanc-bg flex flex-col justify-center px-[120px] py-16">
       
         <AnimatedSection className="mb-12">
             <h2 className="subtitulo1 mb-4 tracking-tighter">
