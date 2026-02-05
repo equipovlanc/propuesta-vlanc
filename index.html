@@ -23,7 +23,7 @@
               }
             },
             fontFamily: {
-              serif: ['"Baskerville Display PT"', 'serif'],
+              serif: ['"Baskerville 10 Pro"', 'serif'],
               sans: ['Montserrat', 'sans-serif'],
             }
           }
@@ -31,31 +31,40 @@
       }
     </script>
     <style>
-      /* --- FUENTES LOCALES: BASKERVILLE DISPLAY PT --- */
+      /* --- FUENTES LOCALES: BASKERVILLE 10 PRO --- */
       
-      /* Peso 300: LIGHT (Usado en subtitulo1) */
+      /* 1. REGULAR */
       @font-face {
-        font-family: 'Baskerville Display PT';
-        src: url('/fonts/baskerville-display-pt.otf') format('opentype');
-        font-weight: 150;
+        font-family: 'Baskerville 10 Pro';
+        src: url('/fonts/Baskerville10Pro.woff2') format('woff2');
+        font-weight: 400;
         font-style: normal;
         font-display: swap;
       }
 
-      /* Peso 400: REGULAR (Usado en titulos y subtitulo3) */
+      /* 2. BOLD */
       @font-face {
-        font-family: 'Baskerville Display PT';
-        src: url('/fonts/baskerville-display-pt.otf') format('opentype');
-        font-weight: 400;
+        font-family: 'Baskerville 10 Pro';
+        src: url('/fonts/Baskerville10Pro-Bold.woff2') format('woff2');
+        font-weight: 700;
         font-style: normal;
         font-display: swap;
       }
-      
-      /* Peso 400: ITALIC (Simulado o real si el OTF lo soporta, usado en subtitulo2) */
+
+      /* 3. ITALIC */
       @font-face {
-        font-family: 'Baskerville Display PT';
-        src: url('/fonts/baskerville-display-pt.otf') format('opentype');
+        font-family: 'Baskerville 10 Pro';
+        src: url('/fonts/Baskerville10Pro-Italic.woff2') format('woff2');
         font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+      }
+
+      /* 4. BOLD ITALIC */
+      @font-face {
+        font-family: 'Baskerville 10 Pro';
+        src: url('/fonts/Baskerville10Pro-BoldItalic.woff2') format('woff2');
+        font-weight: 700;
         font-style: italic;
         font-display: swap;
       }
@@ -78,27 +87,28 @@
 
       /* 1. TÍTULO PRINCIPAL (Hero) */
       .titulo {
-        font-family: 'Baskerville Display PT', serif;
+        font-family: 'Baskerville 10 Pro', serif;
         font-size: 72px;
         line-height: 1.05;
         font-weight: 400; /* Regular */
         letter-spacing: -0.02em;
-        color: #702622; /* Secundario por defecto en hero */
+        color: #702622;
       }
 
-      /* 2. SUBTÍTULO 1 (Encabezados de Sección: "contenido.", "la situación.") */
+      /* 2. SUBTÍTULO 1 */
       .subtitulo1 {
-        font-family: 'Baskerville Display PT', serif;
+        font-family: 'Baskerville 10 Pro', serif;
         font-size: 60px;
         line-height: 1.1;
-        font-weight: 300; /* Light - Nivel bajado */
+        /* Al no tener archivo Light (300), usamos Regular (400) para evitar renderizado defectuoso */
+        font-weight: 400; 
         letter-spacing: -0.03em;
         color: #000000;
       }
 
-      /* 3. SUBTÍTULO 2 (Destacados Medios: Italic, Nombres, Frases) */
+      /* 3. SUBTÍTULO 2 (Italic) */
       .subtitulo2 {
-        font-family: 'Baskerville Display PT', serif;
+        font-family: 'Baskerville 10 Pro', serif;
         font-size: 28px;
         line-height: 1.2;
         font-weight: 400;
@@ -106,28 +116,27 @@
         color: #000000;
       }
 
-      /* 4. SUBTÍTULO 3 (Listas, Pasos proceso, Items índice) */
+      /* 4. SUBTÍTULO 3 (Regular pequeño) */
       .subtitulo3 {
-        font-family: 'Baskerville Display PT', serif;
+        font-family: 'Baskerville 10 Pro', serif;
         font-size: 24px;
         line-height: 1.2;
-        font-weight: 400; /* Regular */
+        font-weight: 400;
         font-style: normal;
         color: #000000;
         letter-spacing: -0.01em;
       }
 
-      /* 5. CUERPO DE TEXTO (Párrafos generales) */
+      /* 5. CUERPO DE TEXTO */
       .cuerpo {
         font-family: 'Montserrat', sans-serif;
         font-size: 12px;
-        line-height: 1.7; /* Leading relaxed */
+        line-height: 1.7;
         font-weight: 400;
-        color: #702622; /* Marrón secundario por defecto */
+        color: #702622;
         text-align: justify;
       }
       
-      /* Utilidad para negritas dentro de .cuerpo */
       .cuerpo strong {
         font-weight: 700;
         color: #000000;
