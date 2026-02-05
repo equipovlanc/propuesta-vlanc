@@ -31,40 +31,40 @@
       }
     </script>
     <style>
-      /* --- FUENTES LOCALES: BASKERVILLE 10 PRO --- */
-      
-      /* 1. REGULAR */
+      /* --- FUENTES LOCALES: BASKERVILLE 10 PRO (TTF) --- */
+
+      /* 1. REGULAR (Mapeamos pesos 100 a 400 a este archivo) */
       @font-face {
         font-family: 'Baskerville 10 Pro';
-        src: url('/fonts/Baskerville10Pro.woff2') format('woff2');
-        font-weight: 200;
+        src: url('/fonts/Baskerville10Pro.ttf') format('truetype');
+        font-weight: 100 400; 
         font-style: normal;
         font-display: swap;
       }
 
-      /* 2. BOLD */
+      /* 2. BOLD (Mapeamos pesos 500 a 900 a este archivo) */
       @font-face {
         font-family: 'Baskerville 10 Pro';
-        src: url('/fonts/Baskerville10Pro-Bold.woff2') format('woff2');
-        font-weight: 400;
+        src: url('/fonts/Baskerville10Pro-Bold.ttf') format('truetype');
+        font-weight: 500 900;
         font-style: normal;
         font-display: swap;
       }
 
-      /* 3. ITALIC */
+      /* 3. ITALIC (Mapeamos pesos 100 a 400 a este archivo) */
       @font-face {
         font-family: 'Baskerville 10 Pro';
-        src: url('/fonts/Baskerville10Pro-Italic.woff2') format('woff2');
-        font-weight: 200;
+        src: url('/fonts/Baskerville10Pro-Italic.ttf') format('truetype');
+        font-weight: 100 400;
         font-style: italic;
         font-display: swap;
       }
 
-      /* 4. BOLD ITALIC */
+      /* 4. BOLD ITALIC (Mapeamos pesos 500 a 900 a este archivo) */
       @font-face {
         font-family: 'Baskerville 10 Pro';
-        src: url('/fonts/Baskerville10Pro-BoldItalic.woff2') format('woff2');
-        font-weight: 400;
+        src: url('/fonts/Baskerville10Pro-BoldItalic.ttf') format('truetype');
+        font-weight: 500 900;
         font-style: italic;
         font-display: swap;
       }
@@ -77,30 +77,32 @@
         color: #000000;
         overflow-x: hidden;
         font-size: 12px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       /* Scrollbar Oculta */
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-      /* --- JERARQUÍA TIPOGRÁFICA DEFINITIVA --- */
+      /* --- JERARQUÍA TIPOGRÁFICA --- */
 
       /* 1. TÍTULO PRINCIPAL (Hero) */
       .titulo {
         font-family: 'Baskerville 10 Pro', serif;
         font-size: 72px;
         line-height: 1.05;
-        font-weight: 400; /* Regular */
+        font-weight: 400; 
         letter-spacing: -0.02em;
         color: #702622;
       }
 
-      /* 2. SUBTÍTULO 1 */
+      /* 2. SUBTÍTULO 1 (Fino/Light) */
       .subtitulo1 {
         font-family: 'Baskerville 10 Pro', serif;
         font-size: 60px;
         line-height: 1.1;
-        /* Al no tener archivo Light (300), usamos Regular (400) para evitar renderizado defectuoso */
+        /* Al poner 300, usará el archivo 'Baskerville10Pro.ttf' definido arriba en rango 100-400 */
         font-weight: 200; 
         letter-spacing: -0.03em;
         color: #000000;
@@ -111,7 +113,7 @@
         font-family: 'Baskerville 10 Pro', serif;
         font-size: 28px;
         line-height: 1.2;
-        font-weight: 200;
+        font-weight: 400;
         font-style: italic;
         color: #000000;
       }
@@ -121,7 +123,7 @@
         font-family: 'Baskerville 10 Pro', serif;
         font-size: 24px;
         line-height: 1.2;
-        font-weight: 200;
+        font-weight: 400;
         font-style: normal;
         color: #000000;
         letter-spacing: -0.01em;
@@ -160,7 +162,6 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <div id="root"></div>
