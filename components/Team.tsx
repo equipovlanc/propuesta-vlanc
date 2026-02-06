@@ -29,7 +29,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   return (
     <section className="h-screen w-full bg-vlanc-bg flex flex-col relative overflow-hidden">
         
-        {/* Título de Sección: Posición absoluta estándar (140px superior, 120px izquierdo) */}
+        {/* Título de Sección: Posición absoluta (140px superior, 120px izquierdo) */}
         <div className="absolute top-[140px] left-[120px] z-20">
             <AnimatedSection>
                 <h2 className="subtitulo1 mb-4 tracking-tighter text-vlanc-black">
@@ -39,20 +39,21 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             </AnimatedSection>
         </div>
 
-        {/* Eje de Contenido: Comienza a 297px del borde superior */}
-        <div className="flex w-full mt-[297px] h-full">
+        {/* Contenedor Principal: Inicia a 297px del borde superior y termina a 120px del inferior */}
+        <div className="flex w-full mt-[297px] mb-[120px] h-full overflow-hidden">
             
             {/* MITAD IZQUIERDA (50%): IMÁGENES
-                - flex justify-end: Empuja el bloque hacia el centro.
-                - pr-[30px]: El borde derecho de las fotos queda a 30px del eje central.
+                - pl-0: Imágenes "a sangre" (tocan el borde izquierdo).
+                - pr-[30px]: El contenido termina a 30px del eje central.
+                - flex justify-end: Alinea el grid hacia el eje central.
             */}
-            <div className="w-1/2 h-full flex justify-end pr-[30px]">
-                {/* Grid de fotos: gap de 60px entre columnas y filas */}
-                <div className="grid grid-cols-2 gap-x-[60px] gap-y-[60px]">
+            <div className="w-1/2 h-full flex justify-end pr-[30px] pl-0">
+                {/* Grid de fotos: gap de 60px entre ellas */}
+                <div className="grid grid-cols-2 gap-x-[60px] gap-y-[60px] w-full">
                     {members.map((member, index) => (
-                        <AnimatedSection key={index} className="flex flex-col w-[428px]">
-                            {/* Imagen 428x264px */}
-                            <div className="w-[428px] h-[264px] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 rounded-[1px]">
+                        <AnimatedSection key={index} className="flex flex-col w-full h-full">
+                            {/* Contenedor de imagen: adaptable para cubrir hasta el borde izquierdo */}
+                            <div className="w-full aspect-[428/264] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 rounded-[1px]">
                                 {member.image ? (
                                     <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                                 ) : (
@@ -62,7 +63,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                 )}
                             </div>
                             
-                            {/* Pie de foto: Alineado al margen DERECHO de su propia imagen */}
+                            {/* Pie de foto: Alineado al margen derecho de cada imagen individual */}
                             <div className="mt-4 flex justify-end items-baseline gap-2 text-right w-full">
                                 <span className="piedefoto1 whitespace-nowrap">
                                     {member.name}
@@ -77,30 +78,30 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             </div>
 
             {/* MITAD DERECHA (50%): TEXTO
-                - pl-[30px]: El texto comienza exactamente a 30px a la derecha del eje (total 60px de gap).
+                - pl-[30px]: Comienza a 30px a la derecha del eje (60px total de gap central).
                 - pr-[120px]: Margen derecho de la página.
-                - text-right: Todo el texto alineado por la derecha al margen de 120px.
+                - text-left: Texto y subtítulos alineados a la izquierda.
             */}
-            <div className="w-1/2 h-full pl-[30px] pr-[120px] flex flex-col space-y-20 text-right">
+            <div className="w-1/2 h-full pl-[30px] pr-[120px] flex flex-col space-y-20 text-left">
                 
                 {/* Bloque: Nuestro propósito */}
-                <AnimatedSection>
+                <AnimatedSection className="flex flex-col items-start">
                     <h3 className="subtitulo2 mb-6">
                         {data?.purpose?.title || "Nuestro propósito"}
                     </h3>
                     <div 
-                        className="cuerpo2 space-y-4 text-right"
+                        className="cuerpo2 space-y-4 text-left"
                         dangerouslySetInnerHTML={{ __html: data?.purpose?.description || '' }}
                     />
                 </AnimatedSection>
 
                 {/* Bloque: Nuestra historia */}
-                <AnimatedSection>
+                <AnimatedSection className="flex flex-col items-start">
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}
                     </h3>
                     <div 
-                        className="cuerpo2 space-y-4 font-bold text-right"
+                        className="cuerpo2 space-y-4 font-bold text-left"
                         dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
                     />
                 </AnimatedSection>
