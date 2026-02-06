@@ -27,33 +27,33 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                     <div className="w-20 h-[3px] bg-vlanc-primary"></div>
                 </AnimatedSection>
                 
-                {/* Grid de Pasos */}
+                {/* Grid de Pasos - 4 columnas x 2 filas (automático por grid-cols-4) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-16">
                     {(data?.steps ?? []).map((step, index) => (
                         <AnimatedSection key={index}>
                             <div className="space-y-6 flex flex-col items-start">
-                                {/* Título del paso: subtitulo3, misma línea */}
+                                {/* Título del paso: subtitulo3 con número serif */}
                                 <h3 className="subtitulo3 text-vlanc-black leading-tight">
                                     <span className="font-serif mr-2">{`0${index + 1}`} /</span>
                                     <span>{step.title}</span>
                                 </h3>
                                 
-                                {/* Descripción con clase cuerpo2 (14px) */}
-                                <p className="cuerpo2">
+                                {/* Descripción cuerpo2 (14px) con alineación justificada */}
+                                <p className="cuerpo2 text-justify">
                                     {step.description}
                                 </p>
                                 
-                                {/* Botón de Garantía en el punto 3 (índice 2) */}
+                                {/* Botón de Garantía en el paso 03 (índice 2) */}
                                 {index === 2 && (
                                     <button 
-                                        onClick={() => console.log('Abrir Garantía: Somos tu equipo')}
-                                        className="mt-8 inline-flex items-center gap-4 border border-vlanc-primary text-vlanc-primary px-8 py-5 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group"
+                                        onClick={() => console.log('Abrir Garantía')}
+                                        className="mt-6 inline-flex items-center border border-vlanc-primary text-vlanc-primary px-5 py-3 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group"
                                     >
-                                        <span className="text-[14px] font-sans font-bold tracking-[0.2em] uppercase leading-none">
+                                        <span className="text-[14px] font-sans font-bold tracking-[0.1em] uppercase leading-none">
                                             {data?.badge || "GARANTÍA"}
                                         </span>
-                                        <span className="text-[16px] font-serif leading-none opacity-40 group-hover:opacity-100 transition-opacity">/</span>
-                                        <span className="text-[14px] font-serif italic leading-none lowercase first-letter:uppercase">
+                                        <span className="mx-2 text-[14px] font-serif leading-none opacity-60">/</span>
+                                        <span className="text-[14px] font-serif leading-none">
                                             Somos tu equipo
                                         </span>
                                     </button>
@@ -63,7 +63,7 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                     ))}
                 </div>
                 
-                {/* Frase de Cierre alineada al margen izquierdo con cuerpo2 strong */}
+                {/* Frase de Cierre */}
                 <div className="mt-auto pt-10 flex justify-start">
                     <AnimatedSection>
                         <p className="cuerpo2">
