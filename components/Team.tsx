@@ -24,7 +24,6 @@ interface TeamProps {
 }
 
 const Team: React.FC<TeamProps> = ({ data }) => {
-  // Los miembros vienen del PDF: Emilio, David, Alba, Laura
   const members = data?.members || [];
 
   return (
@@ -60,14 +59,14 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                     </div>
                                 )}
                             </div>
-                            {/* Info del miembro debajo de la foto */}
-                            <div className="mt-4 px-4">
-                                <h4 className="text-[11px] font-bold text-vlanc-black tracking-widest uppercase font-sans">
+                            {/* Info del miembro debajo de la foto: Nombre y Cargo en la misma línea */}
+                            <div className="mt-4 px-0 flex items-baseline gap-2">
+                                <span className="piedefoto1">
                                     {member.name}
-                                </h4>
-                                <p className="text-[11px] text-vlanc-black font-serif italic">
+                                </span>
+                                <span className="piedefoto2">
                                     – {member.role}
-                                </p>
+                                </span>
                             </div>
                         </AnimatedSection>
                     ))}
@@ -75,9 +74,10 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             </div>
 
             {/* COLUMNA DERECHA: Textos (44.3% del ancho) 
-                - El texto se alinea al margen derecho (120px)
+                - El margen central entre imágenes y texto se ajusta a 60px (pl-[60px])
+                - Se mantiene el margen derecho de 120px (pr-[120px])
             */}
-            <div className="w-[44.3%] h-full pl-[76px] pr-[120px] flex flex-col space-y-12">
+            <div className="w-[44.3%] h-full pl-[60px] pr-[120px] flex flex-col space-y-12">
                 
                 {/* Bloque: Nuestro propósito */}
                 <AnimatedSection>
