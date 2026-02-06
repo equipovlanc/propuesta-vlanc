@@ -42,13 +42,15 @@ const Team: React.FC<TeamProps> = ({ data }) => {
         {/* Bloque de Contenido: Comienza a 297px del borde superior */}
         <div className="flex w-full mt-[297px] h-full">
             
-            {/* COLUMNA IZQUIERDA: Imágenes (55.7% del ancho) 
-                - Las imágenes de la izquierda van a sangre (margin-left: 0)
+            {/* COLUMNA IZQUIERDA: Bloque de Imágenes (55.7% del ancho)
+                - gap-x: 60px (margen entre columnas de fotos)
+                - gap-y: 60px (margen central vertical entre filas)
+                - Las fotos de la izquierda van a sangre
             */}
             <div className="w-[55.7%] h-full flex justify-start">
-                <div className="grid grid-cols-2 gap-0">
+                <div className="grid grid-cols-2 gap-x-[60px] gap-y-[60px]">
                     {members.map((member, index) => (
-                        <AnimatedSection key={index} className="flex flex-col">
+                        <AnimatedSection key={index} className="flex flex-col w-[428px]">
                             {/* Contenedor de imagen con tamaño exacto 428x264px */}
                             <div className="w-[428px] h-[264px] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000">
                                 {member.image ? (
@@ -59,12 +61,13 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                     </div>
                                 )}
                             </div>
-                            {/* Info del miembro debajo de la foto: Nombre y Cargo en la misma línea */}
-                            <div className="mt-4 px-0 flex items-baseline gap-2">
-                                <span className="piedefoto1">
+                            
+                            {/* Info del miembro: Alineado al margen DERECHO de su imagen */}
+                            <div className="mt-4 flex justify-end items-baseline gap-2 text-right w-[428px]">
+                                <span className="piedefoto1 whitespace-nowrap">
                                     {member.name}
                                 </span>
-                                <span className="piedefoto2">
+                                <span className="piedefoto2 whitespace-nowrap">
                                     – {member.role}
                                 </span>
                             </div>
@@ -73,9 +76,8 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* COLUMNA DERECHA: Textos (44.3% del ancho) 
-                - El margen central entre imágenes y texto se ajusta a 60px (pl-[60px])
-                - Se mantiene el margen derecho de 120px (pr-[120px])
+            {/* COLUMNA DERECHA: Textos (44.3% del ancho)
+                - El margen central entre el bloque de imágenes y el texto es de 60px (pl-[60px])
             */}
             <div className="w-[44.3%] h-full pl-[60px] pr-[120px] flex flex-col space-y-12">
                 
