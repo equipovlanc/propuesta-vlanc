@@ -66,8 +66,8 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                     )}
                                 </div>
                                 
-                                {/* Pie de foto: Siempre debajo de la imagen, alineado al margen derecho de la misma */}
-                                <div className="mt-4 flex justify-end items-baseline gap-2 text-right w-full">
+                                {/* Pie de foto: Espacio reducido a mt-2 */}
+                                <div className="mt-2 flex justify-end items-baseline gap-2 text-right w-full">
                                     <span className="piedefoto1 whitespace-nowrap">
                                         {member.name}
                                     </span>
