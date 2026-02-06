@@ -29,7 +29,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   return (
     <section className="h-screen w-full bg-vlanc-bg flex flex-col relative overflow-hidden">
         
-        {/* Título de Sección: Alineado al margen superior (140px) e izquierdo (120px) */}
+        {/* Título de Sección: Posición absoluta estándar */}
         <div className="absolute top-[140px] left-[120px] z-20">
             <AnimatedSection>
                 <h2 className="subtitulo1 mb-4 tracking-tighter text-vlanc-black">
@@ -39,30 +39,31 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             </AnimatedSection>
         </div>
 
-        {/* Bloque de Contenido: Comienza a 297px del borde superior */}
+        {/* Eje de Contenido: Comienza a 297px del borde superior */}
         <div className="flex w-full mt-[297px] h-full">
             
-            {/* COLUMNA IZQUIERDA: Bloque de Imágenes (55.7% del ancho)
-                - justify-end + pr-[30px]: Ajusta las imágenes al eje central con 30px de margen.
-                - gap-x/y: 60px (margen entre fotos)
+            {/* MITAD IZQUIERDA (50%)
+                - flex justify-end: Empuja el contenido hacia el centro.
+                - pr-[30px]: Crea el margen de 30px antes del eje central.
             */}
-            <div className="w-[55.7%] h-full flex justify-end pr-[30px]">
+            <div className="w-1/2 h-full flex justify-end pr-[30px]">
+                {/* Grid de fotos: gap-x de 60px entre columnas de fotos */}
                 <div className="grid grid-cols-2 gap-x-[60px] gap-y-[60px]">
                     {members.map((member, index) => (
                         <AnimatedSection key={index} className="flex flex-col w-[428px]">
-                            {/* Contenedor de imagen 428x264px */}
+                            {/* Imagen 428x264px */}
                             <div className="w-[428px] h-[264px] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 rounded-[1px]">
                                 {member.image ? (
                                     <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                                 ) : (
-                                    <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center border-r border-b border-vlanc-bg">
+                                    <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center border border-vlanc-bg">
                                         <span className="text-[10px] text-vlanc-secondary/40 uppercase tracking-widest">Foto {member.name}</span>
                                     </div>
                                 )}
                             </div>
                             
-                            {/* Info del miembro: Alineado al margen DERECHO de su imagen */}
-                            <div className="mt-4 flex justify-end items-baseline gap-2 text-right w-[428px]">
+                            {/* Pie de foto: Alineado al margen DERECHO de su propia imagen */}
+                            <div className="mt-4 flex justify-end items-baseline gap-2 text-right w-full">
                                 <span className="piedefoto1 whitespace-nowrap">
                                     {member.name}
                                 </span>
@@ -75,12 +76,12 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* COLUMNA DERECHA: Textos (44.3% del ancho)
-                - pl-[30px]: Margen desde el eje central (total 60px con el pr-30 de la izq).
-                - pr-[120px]: Margen derecho de la página.
-                - text-right: Alineación del texto a la derecha.
+            {/* MITAD DERECHA (50%)
+                - pl-[30px]: Inicia el bloque a 30px del eje central (total 60px de hueco).
+                - pr-[120px]: Margen derecho estándar de la página.
+                - text-right: Todo el contenido alineado a la derecha.
             */}
-            <div className="w-[44.3%] h-full pl-[30px] pr-[120px] flex flex-col space-y-16 text-right">
+            <div className="w-1/2 h-full pl-[30px] pr-[120px] flex flex-col space-y-20 text-right">
                 
                 {/* Bloque: Nuestro propósito */}
                 <AnimatedSection className="flex flex-col items-end">
@@ -88,7 +89,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                         {data?.purpose?.title || "Nuestro propósito"}
                     </h3>
                     <div 
-                        className="cuerpo2 space-y-4 max-w-lg"
+                        className="cuerpo2 space-y-4 max-w-[480px]"
                         dangerouslySetInnerHTML={{ __html: data?.purpose?.description || '' }}
                     />
                 </AnimatedSection>
@@ -99,7 +100,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                         {data?.history?.title || "Nuestra historia"}
                     </h3>
                     <div 
-                        className="cuerpo2 space-y-4 font-bold max-w-lg"
+                        className="cuerpo2 space-y-4 font-bold max-w-[480px]"
                         dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
                     />
                 </AnimatedSection>
