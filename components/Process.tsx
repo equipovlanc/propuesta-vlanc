@@ -56,7 +56,7 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                 {/* Frase de Cierre alineada al margen izquierdo con cuerpo2 strong */}
                 <div className="mt-auto pt-10 flex justify-start">
                     <AnimatedSection>
-                        <p className="cuerpo2 tracking-[0.4em] uppercase">
+                        <p className="cuerpo2">
                             <strong>· Tu interés es el nuestro ·</strong>
                         </p>
                     </AnimatedSection>
