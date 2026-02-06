@@ -47,9 +47,15 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                                 {index === 2 && (
                                     <button 
                                         onClick={() => console.log('Abrir Garantía: Somos tu equipo')}
-                                        className="mt-8 inline-block border border-vlanc-primary text-vlanc-primary px-8 py-4 text-[10px] font-bold tracking-[0.3em] uppercase rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20"
+                                        className="mt-8 inline-flex items-center gap-4 border border-vlanc-primary text-vlanc-primary px-8 py-5 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group"
                                     >
-                                        {data?.badge || "GARANTÍA"}
+                                        <span className="text-[14px] font-sans font-bold tracking-[0.2em] uppercase leading-none">
+                                            {data?.badge || "GARANTÍA"}
+                                        </span>
+                                        <span className="text-[16px] font-serif leading-none opacity-40 group-hover:opacity-100 transition-opacity">/</span>
+                                        <span className="text-[14px] font-serif italic leading-none lowercase first-letter:uppercase">
+                                            Somos tu equipo
+                                        </span>
                                     </button>
                                 )}
                             </div>
