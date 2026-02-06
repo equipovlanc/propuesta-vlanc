@@ -43,10 +43,14 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                                     {step.description}
                                 </p>
                                 
+                                {/* Botón de Garantía en el punto 3 (índice 2) */}
                                 {index === 2 && data?.badge && (
-                                    <div className="mt-8 inline-block border border-vlanc-primary text-vlanc-primary px-6 py-4 text-[10px] font-bold tracking-[0.3em] uppercase rounded-[1px] bg-transparent">
+                                    <button 
+                                        onClick={() => console.log('Abrir Garantía')}
+                                        className="mt-8 inline-block border border-vlanc-primary text-vlanc-primary px-8 py-4 text-[10px] font-bold tracking-[0.3em] uppercase rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98]"
+                                    >
                                         {data.badge}
-                                    </div>
+                                    </button>
                                 )}
                             </div>
                         </AnimatedSection>
