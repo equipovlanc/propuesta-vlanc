@@ -99,13 +99,15 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                     />
                 </AnimatedSection>
 
-                {/* Bloque Inferior: Nuestra historia (Alineado al margen inferior) */}
+                {/* Bloque Inferior: Nuestra historia (Alineado al margen inferior) 
+                    CORRECCIÓN: Eliminado 'font-bold' para respetar etiquetas <strong>
+                */}
                 <AnimatedSection className="flex flex-col items-start pb-0">
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}
                     </h3>
                     <div 
-                        className="cuerpo2 space-y-4 font-bold text-left"
+                        className="cuerpo2 space-y-4 text-left"
                         dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
                     />
                 </AnimatedSection>
