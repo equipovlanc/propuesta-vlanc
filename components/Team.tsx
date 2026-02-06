@@ -29,7 +29,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   return (
     <section className="h-screen w-full bg-vlanc-bg flex flex-col relative overflow-hidden">
         
-        {/* Título de Sección: Posición absoluta estándar */}
+        {/* Título de Sección: Posición absoluta estándar (140px superior, 120px izquierdo) */}
         <div className="absolute top-[140px] left-[120px] z-20">
             <AnimatedSection>
                 <h2 className="subtitulo1 mb-4 tracking-tighter text-vlanc-black">
@@ -42,12 +42,12 @@ const Team: React.FC<TeamProps> = ({ data }) => {
         {/* Eje de Contenido: Comienza a 297px del borde superior */}
         <div className="flex w-full mt-[297px] h-full">
             
-            {/* MITAD IZQUIERDA (50%)
-                - flex justify-end: Empuja el contenido hacia el centro.
-                - pr-[30px]: Crea el margen de 30px antes del eje central.
+            {/* MITAD IZQUIERDA (50%): IMÁGENES
+                - flex justify-end: Empuja el bloque hacia el centro.
+                - pr-[30px]: El borde derecho de las fotos queda a 30px del eje central.
             */}
             <div className="w-1/2 h-full flex justify-end pr-[30px]">
-                {/* Grid de fotos: gap-x de 60px entre columnas de fotos */}
+                {/* Grid de fotos: gap de 60px entre columnas y filas */}
                 <div className="grid grid-cols-2 gap-x-[60px] gap-y-[60px]">
                     {members.map((member, index) => (
                         <AnimatedSection key={index} className="flex flex-col w-[428px]">
@@ -76,31 +76,31 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* MITAD DERECHA (50%)
-                - pl-[30px]: Inicia el bloque a 30px del eje central (total 60px de hueco).
-                - pr-[120px]: Margen derecho estándar de la página.
-                - text-right: Todo el contenido alineado a la derecha.
+            {/* MITAD DERECHA (50%): TEXTO
+                - pl-[30px]: El texto comienza exactamente a 30px a la derecha del eje (total 60px de gap).
+                - pr-[120px]: Margen derecho de la página.
+                - text-right: Todo el texto alineado por la derecha al margen de 120px.
             */}
             <div className="w-1/2 h-full pl-[30px] pr-[120px] flex flex-col space-y-20 text-right">
                 
                 {/* Bloque: Nuestro propósito */}
-                <AnimatedSection className="flex flex-col items-end">
+                <AnimatedSection>
                     <h3 className="subtitulo2 mb-6">
                         {data?.purpose?.title || "Nuestro propósito"}
                     </h3>
                     <div 
-                        className="cuerpo2 space-y-4 max-w-[480px]"
+                        className="cuerpo2 space-y-4 text-right"
                         dangerouslySetInnerHTML={{ __html: data?.purpose?.description || '' }}
                     />
                 </AnimatedSection>
 
                 {/* Bloque: Nuestra historia */}
-                <AnimatedSection className="flex flex-col items-end">
+                <AnimatedSection>
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}
                     </h3>
                     <div 
-                        className="cuerpo2 space-y-4 font-bold max-w-[480px]"
+                        className="cuerpo2 space-y-4 font-bold text-right"
                         dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
                     />
                 </AnimatedSection>
