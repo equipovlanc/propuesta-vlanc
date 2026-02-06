@@ -111,9 +111,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                     <AnimatedSection>
                         <ul className="space-y-4 w-full">
                             {(data?.achievements?.listItems ?? []).map((item, i) => (
-                                <li key={i} className="cuerpo flex gap-4 items-baseline">
-                                    <span className="text-vlanc-primary font-bold">/</span>
-                                    <span>{item}</span>
+                                <li key={i} className="cuerpo">
+                                    {item}
                                 </li>
                             ))}
                         </ul>
