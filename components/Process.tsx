@@ -53,11 +53,11 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                     ))}
                 </div>
                 
-                {/* Frase de Cierre alineada al margen inferior */}
-                <div className="mt-auto pt-10 flex justify-center">
+                {/* Frase de Cierre alineada al margen izquierdo con cuerpo2 strong */}
+                <div className="mt-auto pt-10 flex justify-start">
                     <AnimatedSection>
-                        <p className="text-[12px] font-bold text-vlanc-secondary tracking-[0.4em] uppercase opacity-60">
-                            · Tu interés es el nuestro ·
+                        <p className="cuerpo2 tracking-[0.4em] uppercase">
+                            <strong>· Tu interés es el nuestro ·</strong>
                         </p>
                     </AnimatedSection>
                 </div>
