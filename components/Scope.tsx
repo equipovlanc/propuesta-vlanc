@@ -55,10 +55,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </div>
 
             {/* 3. DATOS TÉCNICOS + SCOPE (Izquierda Abajo - Alineado con borde inferior imagen) 
-                - maxWidth ajustado para evitar solapamiento con imagen.
-                - Etiquetas actualizadas a estilo 'cuerpo' + strong (Montserrat 14px Bold)
+                - Width fijo de 735px para coincidir con el ancho de columna del bloque inferior.
             */}
-            <div className="absolute bottom-0 left-[120px] z-20 pr-[60px]" style={{ maxWidth: 'calc(100% - 975px)' }}>
+            <div className="absolute bottom-0 left-[120px] z-20" style={{ width: '735px' }}>
                  <AnimatedSection>
                     <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
                     
