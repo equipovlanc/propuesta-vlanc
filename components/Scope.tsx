@@ -126,9 +126,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                                     className={`flex gap-4 items-start ${i >= splitIndex ? 'hidden' : 'block'}`}
                                 >
                                     <span className="text-vlanc-primary font-bold mt-1.5 text-[14px]">/</span>
-                                    {/* CAMBIO: text-justify -> text-left */}
+                                    {/* CAMBIO: leading-relaxed -> leading-[1.4] */}
                                     <span 
-                                        className="cuerpo leading-relaxed text-left"
+                                        className="cuerpo leading-[1.4] text-left"
                                         dangerouslySetInnerHTML={{ __html: item }}
                                     />
                                 </div>
@@ -146,9 +146,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         {breakdownCol2.map((item, i) => (
                             <div key={i} className="flex gap-4 items-start">
                                 <span className="text-vlanc-primary font-bold mt-1.5 text-[14px]">/</span>
-                                {/* CAMBIO: text-justify -> text-left */}
+                                {/* CAMBIO: leading-relaxed -> leading-[1.4] */}
                                 <span 
-                                    className="cuerpo leading-relaxed text-left"
+                                    className="cuerpo leading-[1.4] text-left"
                                     dangerouslySetInnerHTML={{ __html: item }}
                                 />
                             </div>
@@ -158,7 +158,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     {/* Nota de pie */}
                     {data?.intervention?.note && (
                         <div className="mt-auto pb-[140px] pt-8 border-t border-vlanc-primary/10">
-                            <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-relaxed">
+                            <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
                                 {data?.intervention?.note}
                             </p>
                         </div>

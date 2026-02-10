@@ -65,7 +65,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                     
                     <div className="space-y-8">
                         {(data?.subPhases ?? []).map((sub, i) => (
-                            <div key={i} className="text-[12px] leading-relaxed">
+                            <div key={i} className="text-[12px] leading-[1.4]">
                                 <p className="mb-2 tracking-widest font-bold text-vlanc-black uppercase">
                                     {sub.number} {sub.title}
                                 </p>

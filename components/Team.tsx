@@ -43,11 +43,10 @@ const Team: React.FC<TeamProps> = ({ data }) => {
         {/* Contenedor Principal: Inicia a 297px del borde superior, pb-[140px] */}
         <div className="flex w-full mt-[297px] h-full pb-[140px]">
             
-            {/* MITAD IZQUIERDA (45%): IMÁGENES 
-                - Cambio de w-1/2 a w-[45%] para desplazar el eje.
-                - gap-x-[50px] ayuda a que las imágenes sean ligeramente más pequeñas dentro del contenedor reducido.
+            {/* MITAD IZQUIERDA (40%): IMÁGENES 
+                - CAMBIO: w-1/2 -> w-[45%] -> w-[40%]
             */}
-            <div className="w-[45%] h-full pr-[30px] pl-0">
+            <div className="w-[40%] h-full pr-[30px] pl-0">
                 <div className="grid grid-cols-2 gap-x-[50px] h-full items-stretch">
                     {members.map((member, index) => {
                         const isBottomRow = index >= 2;
@@ -82,11 +81,10 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* MITAD DERECHA (55%): TEXTO 
-                - Cambio de w-1/2 a w-[55%]
-                - Aumento ligero de pl-[50px] para separar del eje visual.
+            {/* MITAD DERECHA (60%): TEXTO 
+                - CAMBIO: w-1/2 -> w-[55%] -> w-[60%]
             */}
-            <div className="w-[55%] h-full pl-[50px] pr-[120px] flex flex-col justify-between text-left">
+            <div className="w-[60%] h-full pl-[50px] pr-[120px] flex flex-col justify-between text-left">
                 
                 {/* Bloque Superior: Nuestro propósito */}
                 <AnimatedSection className="flex flex-col items-start">

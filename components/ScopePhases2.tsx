@@ -47,7 +47,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                     </div>
                     <div className="space-y-6">
                         {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
-                            <div key={i} className="text-vlanc-black/80 text-[12px] leading-relaxed">
+                            <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                 <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
                                 <p 
                                     className="whitespace-pre-line"
@@ -66,7 +66,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         </div>
                         <div className="space-y-6">
                             {(data?.phases?.[1]?.subPhases ?? []).slice(0, 1).map((sub, i) => (
-                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-relaxed">
+                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                     <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
                                     <p 
                                         className="whitespace-pre-line"
@@ -87,7 +87,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                     <div className="lg:pt-[76px]"> {/* Alineación con el título de la izq */}
                         <div className="space-y-6">
                              {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
-                                 <div key={i} className="text-vlanc-black/80 text-[12px] leading-relaxed">
+                                 <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                     <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
                                     <p 
                                         className="whitespace-pre-line"
@@ -107,7 +107,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         </div>
                         <div className="space-y-6">
                             {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
-                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-relaxed">
+                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                     <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
                                     <p 
                                         className="whitespace-pre-line"

@@ -52,7 +52,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                                         {(plan.payments ?? []).map((p, idx) => (
                                             <div key={idx} className="flex items-start text-vlanc-secondary text-[12px]">
                                                 <div className="bg-vlanc-primary text-white text-[10px] font-bold px-2 py-1 mr-4 rounded-[1px] w-12 text-center shrink-0">{p.percent}</div>
-                                                <span className="leading-relaxed font-sans">{p.description}</span>
+                                                {/* CAMBIO: leading-relaxed -> leading-[1.4] */}
+                                                <span className="leading-[1.4] font-sans">{p.description}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -63,8 +64,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                     
                     <AnimatedSection>
                          <h3 className="subtitulo2 text-[32px] mb-10">{data?.finePrint?.title}</h3>
-                         {/* CAMBIO: text-justify -> text-left */}
-                         <div className="space-y-4 text-[11px] text-vlanc-secondary/80 text-left leading-relaxed font-sans">
+                         {/* CAMBIO: leading-relaxed -> leading-[1.4] */}
+                         <div className="space-y-4 text-[11px] text-vlanc-secondary/80 text-left leading-[1.4] font-sans">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
                                 <p key={i} className="flex gap-3">
                                     <span className="text-vlanc-black font-bold">_</span>
