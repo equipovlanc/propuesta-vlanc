@@ -20,30 +20,25 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
         <section className="h-screen w-full bg-vlanc-bg flex items-center px-[120px] overflow-hidden">
             <div className="w-full h-full flex flex-col lg:flex-row gap-16">
                 
-                {/* COLUMNA TÍTULO: 
-                    - h-full: Ocupa toda la pantalla.
-                    - h-1/2 + justify-end: El contenido se empuja al fondo de la mitad superior,
-                      dejando su borde inferior justo en el centro de la página.
-                */}
+                {/* COLUMNA TÍTULO */}
                 <div className="w-full lg:w-1/4 h-full flex flex-col">
                     <div className="h-1/2 flex flex-col justify-end pb-0">
                         <AnimatedSection>
-                            <h2 className="subtitulo1 mb-4 tracking-tighter leading-none">
+                            <h2 className="subtitulo1 tracking-tighter leading-none">
                                 {data?.title || "qué dicen de nosotros."}
                             </h2>
-                            <div className="w-20 h-[2px] bg-vlanc-primary"></div>
+                            {/* Barra decorativa actualizada */}
+                            <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
                         </AnimatedSection>
                     </div>
                 </div>
                 
-                {/* COLUMNA TESTIMONIOS:
-                    - h-full + justify-center: Mantiene el bloque de testimonios centrado respecto al resto.
-                */}
+                {/* COLUMNA TESTIMONIOS */}
                 <div className="w-full lg:w-3/4 flex flex-col justify-center">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                         {(data?.items ?? []).map((testimonial, index) => (
                             <AnimatedSection key={index} className="flex flex-col h-full">
-                                {/* Contenedor Imagen: mb-10 para mayor separación con el texto inferior */}
+                                {/* Contenedor Imagen */}
                                 <div className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm grayscale hover:grayscale-0 transition-all duration-700 shadow-sm">
                                     {testimonial.img ? (
                                         <img src={testimonial.img} alt={testimonial.name} className="w-full h-full object-cover" />

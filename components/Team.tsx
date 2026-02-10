@@ -29,23 +29,21 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   return (
     <section className="h-screen w-full bg-vlanc-bg flex flex-col relative overflow-hidden">
         
-        {/* Título de Sección: Posición absoluta (140px superior, 120px izquierdo) */}
-        <div className="absolute top-[140px] left-[120px] z-20">
+        {/* Título de Sección: Ajuste top-[150px] */}
+        <div className="absolute top-[150px] left-[120px] z-20">
             <AnimatedSection>
-                <h2 className="subtitulo1 mb-4 tracking-tighter text-vlanc-black">
+                <h2 className="subtitulo1 tracking-tighter text-vlanc-black">
                     {data?.title || "conoce a VLANC"}
                 </h2>
-                <div className="w-20 h-[3px] bg-vlanc-primary"></div>
+                {/* Barra decorativa actualizada */}
+                <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
             </AnimatedSection>
         </div>
 
-        {/* Contenedor Principal: Inicia a 297px del borde superior */}
-        <div className="flex w-full mt-[297px] h-full pb-[120px]">
+        {/* Contenedor Principal: Inicia a 297px (Mantenido) del borde superior, pb-[140px] */}
+        <div className="flex w-full mt-[297px] h-full pb-[140px]">
             
-            {/* MITAD IZQUIERDA (50%): IMÁGENES
-                - pl-0: Imágenes "a sangre" (borde izquierdo).
-                - pr-[30px]: El grid termina a 30px del eje central.
-            */}
+            {/* MITAD IZQUIERDA (50%): IMÁGENES */}
             <div className="w-1/2 h-full pr-[30px] pl-0">
                 <div className="grid grid-cols-2 gap-x-[60px] h-full items-stretch">
                     {members.map((member, index) => {
@@ -66,7 +64,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                     )}
                                 </div>
                                 
-                                {/* Pie de foto: Espacio reducido a mt-2 */}
+                                {/* Pie de foto */}
                                 <div className="mt-2 flex justify-end items-baseline gap-2 text-right w-full">
                                     <span className="piedefoto1 whitespace-nowrap">
                                         {member.name}
@@ -81,11 +79,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* MITAD DERECHA (50%): TEXTO
-                - pl-[30px]: El texto empieza a 30px del centro (eje vertical).
-                - pr-[120px]: Margen derecho estándar.
-                - flex justify-between: Separa "Propósito" de "Historia" (Historia se va al final).
-            */}
+            {/* MITAD DERECHA (50%): TEXTO */}
             <div className="w-1/2 h-full pl-[30px] pr-[120px] flex flex-col justify-between text-left">
                 
                 {/* Bloque Superior: Nuestro propósito */}
@@ -99,9 +93,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                     />
                 </AnimatedSection>
 
-                {/* Bloque Inferior: Nuestra historia (Alineado al margen inferior) 
-                    CORRECCIÓN: Eliminado 'font-bold' para respetar etiquetas <strong>
-                */}
+                {/* Bloque Inferior: Nuestra historia */}
                 <AnimatedSection className="flex flex-col items-start pb-0">
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}

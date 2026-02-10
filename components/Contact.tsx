@@ -20,7 +20,8 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
     return (
-        <footer className="h-screen pt-32 pb-[120px] px-[120px] bg-vlanc-bg flex items-center justify-center">
+        /* Ajuste de márgenes globales: pt-[150px], pb-[140px] */
+        <footer className="h-screen pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex items-center justify-center">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32 items-center w-full">
                 
                 {/* Lado Izquierdo: Logo de Cierre */}
@@ -81,8 +82,9 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                             ))}
                          </div>
                     </AnimatedSection>
-
-                    <div className="w-24 h-[1.5px] bg-vlanc-primary mt-12"></div>
+                    
+                    {/* Barra decorativa actualizada: 112x5px, color #703622, mt-50px */}
+                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
                 </div>
             </div>
         </footer>

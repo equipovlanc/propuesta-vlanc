@@ -48,20 +48,18 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
       </div>
 
       {/* Columna Derecha: Contenido (44.3%) 
-          - justify-between: Separa el título (arriba) de la lista (abajo).
-          - pl-[76px]: Alineación vertical compartida con el resto de la web.
-          - pt-[140px] / pb-[120px]: Márgenes de seguridad.
+          - Ajuste de márgenes globales: pt-[150px], pb-[140px]
       */}
-      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[140px] pb-[120px] relative">
+      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative">
         
         {/* Bloque Superior: Título "contenido." */}
         <AnimatedSection>
-            <h2 className="subtitulo1 mb-6">
+            <h2 className="subtitulo1">
                 {data?.title || "contenido."}
             </h2>
             
-            {/* Línea divisoria decorativa (84px) */}
-            <div className="w-[84px] h-[3px] bg-vlanc-primary"></div>
+            {/* Barra decorativa actualizada: 112x5px, color #703622, a 50px del título */}
+            <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-12"></div>
         </AnimatedSection>
         
         {/* Bloque Inferior: Listado de ítems del índice */}

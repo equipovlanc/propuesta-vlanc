@@ -18,10 +18,12 @@ interface PremiumServicesProps {
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
     return (
         <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg">
-            <div className="w-full lg:w-1/2 h-full flex flex-col justify-start pl-[120px] pr-10 pt-[140px] pb-[120px] overflow-y-auto no-scrollbar">
+            {/* Ajuste de márgenes: pt-[150px], pb-[140px] */}
+            <div className="w-full lg:w-1/2 h-full flex flex-col justify-start pl-[120px] pr-10 pt-[150px] pb-[140px] overflow-y-auto no-scrollbar">
                 <AnimatedSection className="mb-12">
-                    <h2 className="subtitulo1 mb-4 tracking-tighter">servicios premium.</h2>
-                    <div className="w-20 h-[2px] bg-vlanc-primary"></div>
+                    <h2 className="subtitulo1 tracking-tighter">servicios premium.</h2>
+                    {/* Barra decorativa actualizada */}
+                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
                 </AnimatedSection>
                 
                 <AnimatedSection className="space-y-12 flex-grow flex flex-col justify-center">

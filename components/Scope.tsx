@@ -31,7 +31,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
       if (!leftColRef.current) return;
 
       const viewportHeight = window.innerHeight;
-      const marginBottom = 120; // Margen inferior de seguridad según diseño
+      const marginBottom = 140; // AJUSTE GLOBAL MARGEN INFERIOR
       const limit = viewportHeight - marginBottom;
 
       let firstOverflowIndex = breakdown.length;
@@ -81,29 +81,26 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </AnimatedSection>
         </div>
 
-        {/* TÍTULO DE SECCIÓN: 140px top, margen 120px */}
-        <div className="absolute top-[140px] left-[120px] z-20">
+        {/* TÍTULO DE SECCIÓN: Ajuste top-[150px] */}
+        <div className="absolute top-[150px] left-[120px] z-20">
             <AnimatedSection>
-                <h2 className="subtitulo1 mb-4 tracking-tighter text-vlanc-black">
+                <h2 className="subtitulo1 tracking-tighter text-vlanc-black">
                     {data?.title || "qué vamos a hacer por ti."}
                 </h2>
-                <div className="w-20 h-[3px] bg-vlanc-primary"></div>
+                {/* Barra decorativa actualizada */}
+                <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
             </AnimatedSection>
         </div>
         
-        {/* CONTENEDOR DE TEXTO FLUIDO
-            - mt-[297px]: Alineación con el grid de Team
-        */}
+        {/* CONTENEDOR DE TEXTO FLUIDO */}
         <div className="flex w-full mt-[297px] h-full gap-[60px]">
             
-            {/* COLUMNA IZQUIERDA: Bloque Principal (Info + Programa + Inicio Breakdown)
-                - flex-1: Toma el espacio dinámico hasta la columna de la foto
-            */}
+            {/* COLUMNA IZQUIERDA */}
             <div ref={leftColRef} className="flex-1 flex flex-col justify-start">
                 <AnimatedSection>
                     <h3 className="subtitulo2 mb-8">{data?.intervention?.title}</h3>
                     
-                    {/* Datos técnicos (siempre en col 1) */}
+                    {/* Datos técnicos */}
                     <div className="space-y-4 cuerpo text-left mb-6">
                         <p><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
                         <p><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
@@ -120,7 +117,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                             dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }}
                         />
 
-                        {/* Listado de items (Breakdown) - Se ocultan los que sobran por el índice calculado */}
+                        {/* Listado de items (Breakdown) */}
                         <div className="space-y-4">
                             {breakdown.map((item, i) => (
                                 <div 
@@ -140,14 +137,10 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            {/* COLUMNA DERECHA: Salto de contenido bajo la imagen
-                - w-[735px]: Ancho exacto de la imagen superior
-                - pt-12: Separación visual de la media
-                - marginTop: 215px (Calculado: Media 512px - Contenedor top 297px)
-            */}
+            {/* COLUMNA DERECHA */}
             <div className="w-[735px] flex flex-col justify-start pt-12" style={{ marginTop: '215px' }}>
                 <AnimatedSection className="h-full flex flex-col">
-                    {/* Resto del Breakdown que no cupo en la izquierda */}
+                    {/* Resto del Breakdown */}
                     <div className="space-y-4">
                         {breakdownCol2.map((item, i) => (
                             <div key={i} className="flex gap-4 items-start">
@@ -160,9 +153,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         ))}
                     </div>
                     
-                    {/* Nota de pie (se empuja al final de la columna derecha) */}
+                    {/* Nota de pie */}
                     {data?.intervention?.note && (
-                        <div className="mt-auto pb-[120px] pt-8 border-t border-vlanc-primary/10">
+                        <div className="mt-auto pb-[140px] pt-8 border-t border-vlanc-primary/10">
                             <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-relaxed">
                                 {data?.intervention?.note}
                             </p>

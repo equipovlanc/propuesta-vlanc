@@ -15,28 +15,22 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
     <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden items-stretch">
         
         {/* COLUMNA TEXTO 
-            - Flex-col h-full para controlar la altura.
-            - justify-end ELIMINADO del contenedor principal para permitir distribución interna.
-            - Padding top eliminado (pt-0) para que el espacio vacío cuente desde arriba.
+            - Ajuste márgenes: pb-[140px]
         */}
-        <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-[120px]">
+        <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-[140px]">
             
-            {/* ESPACIO SUPERIOR / TÍTULO 
-                - flex-grow: Ocupa todo el espacio disponible sobre el texto.
-                - flex items-center: Centra el título verticalmente en este espacio (Punto medio exacto).
-            */}
+            {/* ESPACIO SUPERIOR / TÍTULO */}
             <div className="flex-grow flex flex-col justify-center">
                 <AnimatedSection>
-                    <h2 className="subtitulo1 mb-4 tracking-tighter">
-                    {data?.title || "la situación."}
+                    <h2 className="subtitulo1 tracking-tighter">
+                        {data?.title || "la situación."}
                     </h2>
-                    <div className="w-20 h-[2px] bg-vlanc-primary"></div>
+                    {/* Barra decorativa actualizada */}
+                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
                 </AnimatedSection>
             </div>
             
-            {/* CUERPO DE TEXTO 
-                - Pegado abajo por el flujo natural (despues del flex-grow) y el pb-[120px] del padre.
-            */}
+            {/* CUERPO DE TEXTO */}
             <div className="shrink-0">
                 <AnimatedSection>
                     <div className="space-y-4">
@@ -56,11 +50,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
             </div>
         </div>
         
-        {/* COLUMNA IMAGEN
-            - w-[720px]: Ancho fijo.
-            - mr-[120px]: Margen derecho.
-            - h-full: A sangre verticalmente.
-        */}
+        {/* COLUMNA IMAGEN */}
         <div className="hidden lg:block w-[720px] h-full mr-[120px] shrink-0 relative">
             <AnimatedSection className="h-full w-full">
                 {data?.image ? (

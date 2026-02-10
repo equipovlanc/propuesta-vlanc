@@ -24,14 +24,16 @@ interface ScopePhases2Props {
 
 const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
   return (
-    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[140px] pb-[120px] px-[120px]">
+    /* Ajuste de márgenes globales: pt-[150px], pb-[140px] */
+    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
       <div className="max-w-7xl mx-auto w-full">
          <AnimatedSection>
             <div className="relative mb-12">
                 <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter">
                     {data?.title || 'trabajos contemplados.'}
                 </h2>
-                <div className="w-16 h-[2px] bg-vlanc-primary mt-4"></div>
+                {/* Barra decorativa actualizada */}
+                <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
             </div>
         </AnimatedSection>
         

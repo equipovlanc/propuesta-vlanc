@@ -56,14 +56,15 @@ const GuaranteeBadge = ({ index }: { index: number }) => {
 
 const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start px-[120px] pt-[140px] pb-[120px]">
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start px-[120px] pt-[150px] pb-[140px]">
             <div className="w-full flex justify-end mb-24">
                 <AnimatedSection>
                     <div className="text-right flex flex-col items-end">
-                        <h2 className="subtitulo1 mb-4 tracking-tighter">
+                        <h2 className="subtitulo1 tracking-tighter">
                             {data?.title || "nuestras garantías."}
                         </h2>
-                        <div className="w-24 h-[2px] bg-vlanc-primary"></div>
+                        {/* Barra decorativa actualizada */}
+                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
                     </div>
                 </AnimatedSection>
             </div>

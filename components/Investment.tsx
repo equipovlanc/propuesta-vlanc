@@ -36,12 +36,13 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
     };
 
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[140px] pb-[120px] px-[120px]">
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
             <AnimatedSection className="mb-4">
-                <h2 className="subtitulo1 mb-4 tracking-tighter">
+                <h2 className="subtitulo1 tracking-tighter">
                    {data?.title || "la inversión."}
                 </h2>
-                <div className="w-20 h-[2px] bg-vlanc-primary mb-8"></div>
+                {/* Barra decorativa actualizada */}
+                <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-8"></div>
             </AnimatedSection>
 
             <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-start h-full overflow-hidden">

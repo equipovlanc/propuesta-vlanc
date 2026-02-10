@@ -36,7 +36,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
     return (
         <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
             
-            {/* Columna Izquierda: Video (55.7% igual que el índice) */}
+            {/* Columna Izquierda: Video */}
             <div className="w-full lg:w-[55.7%] h-full flex items-center justify-center relative bg-vlanc-bg">
                 <AnimatedSection className="flex items-center justify-center w-full h-full px-10">
                     <div 
@@ -74,19 +74,19 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            {/* Columna Derecha: Contenido (44.3%) 
-                - pl-[76px] para alinear con el texto de 'contenido.' en el índice.
-                - pr-[120px] margen derecho global.
+            {/* Columna Derecha: Contenido 
+                - Ajuste de márgenes: pt-[150px], pb-[140px]
             */}
-            <div className="w-full lg:w-[44.3%] h-full flex flex-col justify-between pl-10 lg:pl-[76px] pr-[120px] pt-[140px] pb-[120px]">
+            <div className="w-full lg:w-[44.3%] h-full flex flex-col justify-between pl-10 lg:pl-[76px] pr-[120px] pt-[150px] pb-[140px]">
                 
-                {/* Bloque Superior: La Misión (Alineado a 140px) */}
+                {/* Bloque Superior: La Misión */}
                 <div className="flex flex-col">
                     <AnimatedSection>
-                        <h2 className="subtitulo1 mb-4 tracking-tighter leading-none">
+                        <h2 className="subtitulo1 tracking-tighter leading-none">
                             {data?.mission?.title || "la misión."}
                         </h2>
-                        <div className="w-20 h-[3px] bg-vlanc-primary mb-12"></div>
+                        {/* Barra decorativa actualizada */}
+                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>
@@ -99,13 +99,14 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* Bloque Inferior: Qué vas a conseguir (Alineado al margen inferior 120px) */}
+                {/* Bloque Inferior: Qué vas a conseguir */}
                 <div className="flex flex-col">
                     <AnimatedSection>
-                        <h2 className="subtitulo1 mb-4 tracking-tighter leading-none">
+                        <h2 className="subtitulo1 tracking-tighter leading-none">
                             {data?.achievements?.title || "qué vas a conseguir."}
                         </h2>
-                        <div className="w-20 h-[3px] bg-vlanc-primary mb-12"></div>
+                         {/* Barra decorativa actualizada */}
+                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>

@@ -30,13 +30,14 @@ interface PaymentProps {
 
 const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
     return (
-        <section className="min-h-screen pt-[140px] pb-[120px] px-[120px] bg-vlanc-bg flex flex-col justify-start">
+        <section className="min-h-screen pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex flex-col justify-start">
             <div className="max-w-7xl mx-auto w-full">
                  <AnimatedSection>
-                    <h2 className="subtitulo1 mb-4 tracking-tighter">
+                    <h2 className="subtitulo1 tracking-tighter">
                        {investmentTitle || "la inversión."}
                     </h2>
-                    <div className="w-20 h-[2px] bg-vlanc-primary mb-20"></div>
+                    {/* Barra decorativa actualizada */}
+                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-20"></div>
                 </AnimatedSection>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">

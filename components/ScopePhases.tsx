@@ -6,6 +6,7 @@ interface SubPhase {
     number?: string;
     title?: string;
     description?: string;
+    note?: string;
 }
 
 interface Phase {
@@ -40,13 +41,14 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
         </div>
 
         <div className="w-full h-full flex z-10 pointer-events-none">
-            {/* Columna Izquierda: Título alineado a 140px */}
-            <div className="hidden lg:flex w-[25%] h-full pt-[140px] pl-[120px] flex-col bg-vlanc-bg">
+            {/* Columna Izquierda: Título alineado a 150px */}
+            <div className="hidden lg:flex w-[25%] h-full pt-[150px] pl-[120px] flex-col bg-vlanc-bg">
                  <AnimatedSection>
                     <h2 className="subtitulo1 tracking-tighter leading-none text-left">
                         {mainTitle}
                     </h2>
-                    <div className="w-20 h-[2px] bg-vlanc-primary mt-6"></div>
+                    {/* Barra decorativa actualizada */}
+                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
                 </AnimatedSection>
             </div>
 
@@ -56,8 +58,8 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                   )}
             </div>
 
-            {/* Columna Derecha: Contenido alineado a 140px (justify-start) */}
-            <div className="w-full lg:w-[40%] h-full flex flex-col justify-start px-10 lg:pl-10 lg:pr-[120px] pt-[140px] pb-[120px] overflow-y-auto no-scrollbar pointer-events-auto bg-vlanc-bg">
+            {/* Columna Derecha: Contenido alineado a 150px */}
+            <div className="w-full lg:w-[40%] h-full flex flex-col justify-start px-10 lg:pl-10 lg:pr-[120px] pt-[150px] pb-[140px] overflow-y-auto no-scrollbar pointer-events-auto bg-vlanc-bg">
                 <AnimatedSection>
                     <h3 className="text-[21px] font-sans font-bold text-vlanc-black uppercase mb-12">{data?.title}</h3>
                     
