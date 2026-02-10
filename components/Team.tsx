@@ -99,20 +99,21 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                     </h3>
                     <div 
                         className="cuerpo2 space-y-4 text-left"
-                        dangerouslySetInnerHTML={{ __html: data?.purpose?.description || '' }}
+                        dangerouslySetInnerHTML={{ __html: (data?.purpose?.description || '').trim() }}
                     />
                 </AnimatedSection>
 
                 {/* Bloque Inferior: Nuestra historia 
                    - Alineado abajo gracias a justify-between en el padre.
+                   - shrink-0 evita que se encoja.
                 */}
                 <AnimatedSection className="flex flex-col items-start pb-0 shrink-0">
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}
                     </h3>
                     <div 
-                        className="cuerpo2 space-y-4 text-left"
-                        dangerouslySetInnerHTML={{ __html: data?.history?.description || '' }}
+                        className="cuerpo2 space-y-4 text-left [&>p:last-child]:mb-0"
+                        dangerouslySetInnerHTML={{ __html: (data?.history?.description || '').trim() }}
                     />
                 </AnimatedSection>
             </div>
