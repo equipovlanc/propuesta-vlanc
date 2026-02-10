@@ -72,9 +72,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         </div>
 
         {/* --- BLOQUE INFERIOR (TEXTO EN COLUMNAS FLUIDAS) --- 
-            - Padding top ajustado a pt-4 para mantener consistencia con el espaciado superior.
+            - CAMBIO: pt-4 -> pt-[50px] para alinear texto exactamente 50px bajo el bloque superior.
         */}
-        <div className="flex-grow w-full px-[120px] pt-4 pb-[140px] overflow-y-auto no-scrollbar">
+        <div className="flex-grow w-full px-[120px] pt-[50px] pb-[140px] overflow-y-auto no-scrollbar">
             <AnimatedSection 
                 className="w-full min-h-full" 
                 style={{ 
