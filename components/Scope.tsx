@@ -25,10 +25,12 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
   return (
     <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden flex flex-col">
       
-        {/* --- BLOQUE SUPERIOR (Altura fija 512px) --- */}
+        {/* --- BLOQUE SUPERIOR (Altura fija 512px) --- 
+            Contiene Título y Media. El bloque de texto técnico se ha movido abajo.
+        */}
         <div className="w-full h-[512px] relative shrink-0">
             
-            {/* 1. TÍTULO SECCIÓN (Posición estándar) */}
+            {/* 1. TÍTULO SECCIÓN */}
             <div className="absolute top-[150px] left-[120px] z-20">
                 <AnimatedSection>
                     <h2 className="subtitulo1 text-vlanc-black">
@@ -53,47 +55,40 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     )}
                 </AnimatedSection>
             </div>
+        </div>
 
-            {/* 3. DATOS TÉCNICOS + SCOPE (Izquierda Abajo - Alineado con borde inferior imagen) 
-                - Width fijo de 735px.
-                - Espaciado unificado a space-y-4 (equivalente a un salto de línea).
-            */}
-            <div className="absolute bottom-0 left-[120px] z-20" style={{ width: '735px' }}>
-                 <AnimatedSection>
+        {/* --- BLOQUE INFERIOR (CONTENIDO UNIFICADO) --- 
+            Ahora contiene todo el texto (Datos Técnicos + Programa + Breakdown).
+            Usa h-full y column-fill: auto para llenar la primera columna hasta el fondo
+            antes de saltar a la segunda.
+        */}
+        <div className="flex-grow w-full px-[120px] pt-4 pb-[140px] overflow-hidden">
+            <AnimatedSection 
+                className="w-full h-full" 
+                style={{ 
+                    columnCount: 2, 
+                    columnGap: 'calc(100% - 1470px)', 
+                    columnFill: 'auto' 
+                }}
+            >
+                {/* 1. DATOS TÉCNICOS (Integrados en el flujo) */}
+                <div className="mb-4 break-inside-avoid">
                     <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
-                    
                     <div className="space-y-4 cuerpo text-left">
                         <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
                         <p><strong className="font-bold uppercase">TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
                         <p><strong className="font-bold uppercase">ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
                     </div>
-                </AnimatedSection>
-            </div>
-        </div>
+                </div>
 
-        {/* --- BLOQUE INFERIOR (TEXTO EN COLUMNAS FLUIDAS) --- 
-            - Padding top ajustado a pt-4.
-            - AÑADIDO: flex flex-col justify-end para alinear el bloque de texto abajo.
-        */}
-        <div className="flex-grow w-full px-[120px] pt-4 pb-[140px] overflow-y-auto no-scrollbar flex flex-col justify-end">
-            <AnimatedSection 
-                className="w-full" /* REMOVIDO: min-h-full, para que el bloque ocupe solo lo necesario y baje */
-                style={{ 
-                    columnCount: 2, 
-                    columnGap: 'calc(100% - 1470px)', 
-                    columnFill: 'balance' 
-                }}
-            >
-                {/* 1. Programa 
-                    - Margen inferior ajustado a mb-4.
-                */}
+                {/* 2. PROGRAMA */}
                 <div className="mb-4 break-inside-avoid">
                     <p className="cuerpo text-left">
                         <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
                     </p>
                 </div>
 
-                {/* 2. Breakdown Items */}
+                {/* 3. BREAKDOWN ITEMS (Se moverán a la derecha si no caben) */}
                 {breakdown.map((item, i) => (
                     <div key={i} className="mb-4 break-inside-avoid">
                         <div className="flex gap-4 items-start">
@@ -105,7 +100,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     </div>
                 ))}
 
-                {/* 3. Nota Final */}
+                {/* 4. NOTA FINAL */}
                 {data?.intervention?.note && (
                     <div className="pt-6 mt-4 border-t border-vlanc-primary/5 break-inside-avoid">
                         <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
