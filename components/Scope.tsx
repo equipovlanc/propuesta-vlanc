@@ -54,8 +54,11 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            {/* 3. DATOS TÉCNICOS + SCOPE (Izquierda Abajo - Alineado con borde inferior imagen) */}
-            <div className="absolute bottom-0 left-[120px] z-20 pr-[60px]" style={{ maxWidth: 'calc(100% - 735px - 120px)' }}>
+            {/* 3. DATOS TÉCNICOS + SCOPE (Izquierda Abajo - Alineado con borde inferior imagen) 
+                - maxWidth ajustado para evitar solapamiento con imagen.
+                - Cálculo: 100% - 120px (left) - 735px (img) - 120px (img right margin) = 100% - 975px.
+            */}
+            <div className="absolute bottom-0 left-[120px] z-20 pr-[60px]" style={{ maxWidth: 'calc(100% - 975px)' }}>
                  <AnimatedSection>
                     <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
                     
@@ -85,8 +88,8 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             >
                 {/* 1. Programa */}
                 <div className="mb-8 break-inside-avoid">
-                    <div className="border-t border-vlanc-primary/10 pt-6">
-                        <p className="mb-4"><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">PROGRAMA Y TRABAJOS:</strong></p>
+                    <div className="border-t border-vlanc-primary/40 pt-6">
+                        <p className="mb-4"><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">PROGRAMA:</strong></p>
                         <div 
                             className="cuerpo text-left"
                             dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }}
@@ -98,7 +101,6 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 {breakdown.map((item, i) => (
                     <div key={i} className="mb-4 break-inside-avoid">
                         <div className="flex gap-4 items-start">
-                            <span className="text-vlanc-primary font-bold mt-1.5 text-[14px]">/</span>
                             <span 
                                 className="cuerpo leading-[1.4] text-left"
                                 dangerouslySetInnerHTML={{ __html: item }}
