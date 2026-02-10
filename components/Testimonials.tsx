@@ -27,8 +27,8 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                             <h2 className="subtitulo1 tracking-tighter leading-none">
                                 {data?.title || "qué dicen de nosotros."}
                             </h2>
-                            {/* Barra decorativa actualizada */}
-                            <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
+                            {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+                            <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
                         </AnimatedSection>
                     </div>
                 </div>

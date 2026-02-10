@@ -41,8 +41,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 <h2 className="subtitulo1 tracking-tighter">
                    {data?.title || "la inversión."}
                 </h2>
-                {/* Barra decorativa actualizada */}
-                <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-8"></div>
+                {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+                <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-8"></div>
             </AnimatedSection>
 
             <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-start h-full overflow-hidden">

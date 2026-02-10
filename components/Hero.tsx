@@ -48,7 +48,7 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
             {data?.clientName || headerData?.clientName}
           </p>
           
-          {/* Título Principal: Uso de la clase .titulo (peso 400) */}
+          {/* Título Principal: Uso de la clase .titulo (peso 700 definido en CSS) */}
           <h1 className="titulo leading-[1.05]">
             {data?.line1}
           </h1>
@@ -56,8 +56,8 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
             {data?.line2}
           </h1>
           
-          {/* Barra inferior actualizada: 112x5px, #703622, a 50px del título para consistencia proporcional */}
-          <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
+          {/* Barra inferior actualizada: 112x5px, #703622. CAMBIO: mt-[50px] -> mt-[40px] */}
+          <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
         </div>
       </AnimatedSection>
 

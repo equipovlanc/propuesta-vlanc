@@ -32,8 +32,8 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                 <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter">
                     {data?.title || 'trabajos contemplados.'}
                 </h2>
-                {/* Barra decorativa actualizada */}
-                <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
+                {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+                <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
             </div>
         </AnimatedSection>
         

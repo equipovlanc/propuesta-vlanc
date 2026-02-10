@@ -24,8 +24,8 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                     <h2 className="subtitulo1 tracking-tighter">
                         {data?.title || "el proceso Vlanc."}
                     </h2>
-                    {/* Barra decorativa actualizada */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
+                    {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
                 </AnimatedSection>
                 
                 {/* Grid de Pasos */}
@@ -33,8 +33,8 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                     {(data?.steps ?? []).map((step, index) => (
                         <AnimatedSection key={index}>
                             <div className="space-y-6 flex flex-col items-start">
-                                {/* Título del paso */}
-                                <h3 className="subtitulo3 text-vlanc-black leading-tight">
+                                {/* Título del paso. CAMBIO: Añadido font-bold */}
+                                <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
                                     <span className="font-serif mr-2">{`0${index + 1}`} /</span>
                                     <span>{step.title}</span>
                                 </h3>

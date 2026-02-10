@@ -83,8 +83,8 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                          </div>
                     </AnimatedSection>
                     
-                    {/* Barra decorativa actualizada: 112x5px, color #703622, mt-50px */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
+                    {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
                 </div>
             </div>
         </footer>

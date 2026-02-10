@@ -85,8 +85,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 tracking-tighter leading-none">
                             {data?.mission?.title || "la misión."}
                         </h2>
-                        {/* Barra decorativa actualizada */}
-                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-12"></div>
+                        {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>
@@ -105,8 +105,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 tracking-tighter leading-none">
                             {data?.achievements?.title || "qué vas a conseguir."}
                         </h2>
-                         {/* Barra decorativa actualizada */}
-                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-12"></div>
+                         {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>

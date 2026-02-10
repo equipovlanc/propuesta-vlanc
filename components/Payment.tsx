@@ -36,8 +36,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                     <h2 className="subtitulo1 tracking-tighter">
                        {investmentTitle || "la inversión."}
                     </h2>
-                    {/* Barra decorativa actualizada */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-20"></div>
+                    {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-20"></div>
                 </AnimatedSection>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">

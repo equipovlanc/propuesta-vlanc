@@ -58,8 +58,8 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
                 {data?.title || "contenido."}
             </h2>
             
-            {/* Barra decorativa actualizada: 112x5px, color #703622, a 50px del título */}
-            <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px] mb-12"></div>
+            {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
+            <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-12"></div>
         </AnimatedSection>
         
         {/* Bloque Inferior: Listado de ítems del índice */}
