@@ -70,10 +70,10 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
         <div className="absolute bottom-[140px] left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto">
             <AnimatedSection>
                 {/* Título de la Fase (e.g. 1. FASE ANTEPROYECTO) */}
-                <h3 className="fase-titulo mb-12">{data?.title}</h3>
+                <h3 className="fase-titulo mb-4">{data?.title}</h3>
                 
                 {/* Lista de Subfases */}
-                <div className="space-y-8">
+                <div className="space-y-4">
                     {(data?.subPhases ?? []).map((sub, i) => (
                         <div key={i} className="text-left">
                             <p className="fase-subtitulo mb-2">
