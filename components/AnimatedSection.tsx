@@ -1,8 +1,9 @@
-import React, { useRef, useState, useEffect, ReactNode } from 'react';
+import React, { useRef, useState, useEffect, ReactNode, CSSProperties } from 'react';
 
 interface AnimatedSectionProps {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
 }
 
 /**
@@ -14,7 +15,7 @@ interface AnimatedSectionProps {
  * 
  * It will re-trigger the animation every time the component enters the viewport.
  */
-const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className }) => {
+const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className, style }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -50,6 +51,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className }
       className={`${className} transition-all duration-1000 ease-out transform ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}
+      style={style}
     >
       {children}
     </div>
