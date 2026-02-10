@@ -41,7 +41,7 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
       {/* Centro: Títulos */}
       <AnimatedSection className="text-center">
         <div className="space-y-6">
-          <p className="text-[21px] text-vlanc-secondary tracking-[0.4em] mb-10 font-sans font-medium">
+          <p className="text-[40px] text-vlanc-secondary mb-10 font-sans font-medium">
             {data?.clientName || headerData?.clientName}
           </p>
           
