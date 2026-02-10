@@ -56,17 +56,17 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
             {/* 3. DATOS TÉCNICOS + SCOPE (Izquierda Abajo - Alineado con borde inferior imagen) 
                 - maxWidth ajustado para evitar solapamiento con imagen.
-                - Cálculo: 100% - 120px (left) - 735px (img) - 120px (img right margin) = 100% - 975px.
+                - Etiquetas actualizadas a estilo 'cuerpo' + strong (Montserrat 14px Bold)
             */}
             <div className="absolute bottom-0 left-[120px] z-20 pr-[60px]" style={{ maxWidth: 'calc(100% - 975px)' }}>
                  <AnimatedSection>
                     <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
                     
                     <div className="space-y-2 cuerpo text-left">
-                        <p><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
-                        <p><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
+                        <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
+                        <p><strong className="font-bold uppercase">TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
                         {/* El Scope es la última línea, alineándose visualmente con el final de la imagen */}
-                        <p><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
+                        <p><strong className="font-bold uppercase">ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
                     </div>
                 </AnimatedSection>
             </div>
@@ -77,7 +77,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             - columnGap se calcula dinámicamente: (AnchoTotal - (735px * 2)).
             - Esto fuerza a que las columnas midan 735px cada una y se peguen a los extremos (si hay espacio).
         */}
-        <div className="flex-grow w-full px-[120px] pt-12 pb-[140px] overflow-y-auto no-scrollbar">
+        <div className="flex-grow w-full px-[120px] pt-8 pb-[140px] overflow-y-auto no-scrollbar">
             <AnimatedSection 
                 className="w-full min-h-full" 
                 style={{ 
@@ -86,10 +86,13 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     columnFill: 'balance' 
                 }}
             >
-                {/* 1. Programa */}
+                {/* 1. Programa 
+                    - Eliminada línea de separación (border-t).
+                    - Etiqueta PROGRAMA actualizada a estilo 'cuerpo' + strong.
+                */}
                 <div className="mb-8 break-inside-avoid">
-                    <div className="border-t border-vlanc-primary/40 pt-6">
-                        <p className="mb-4"><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">PROGRAMA:</strong></p>
+                    <div className="">
+                        <p className="mb-2 cuerpo"><strong className="font-bold uppercase">PROGRAMA:</strong></p>
                         <div 
                             className="cuerpo text-left"
                             dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }}
@@ -97,7 +100,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     </div>
                 </div>
 
-                {/* 2. Breakdown Items (Flujo natural) */}
+                {/* 2. Breakdown Items (Flujo natural sin símbolos extraños) */}
                 {breakdown.map((item, i) => (
                     <div key={i} className="mb-4 break-inside-avoid">
                         <div className="flex gap-4 items-start">
