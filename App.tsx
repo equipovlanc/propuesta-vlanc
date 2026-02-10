@@ -86,7 +86,10 @@ const App: React.FC = () => {
         
         <SectionSlide id="hero"><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
 
-        <SectionSlide id="index"><IndexSection data={d.index} /></SectionSlide>
+        <SectionSlide id="index">
+            <Header logo={d.logos?.smallLogo} pageNumber={2} />
+            <IndexSection data={d.index} />
+        </SectionSlide>
 
         <SectionSlide id="situation"><Header logo={d.logos?.smallLogo} pageNumber={3} /><Situation data={d.situation} /></SectionSlide>
 

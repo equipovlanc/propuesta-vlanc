@@ -40,13 +40,15 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             </AnimatedSection>
         </div>
 
-        {/* Contenedor Principal: Inicia a 297px del borde superior, pb-[140px] */}
-        <div className="flex w-full mt-[297px] h-full pb-[140px]">
+        {/* Contenedor Principal: 
+            - mt-[297px]
+            - h-[calc(100vh-297px)]: Calcula el espacio restante exacto para evitar overflow y permitir que pb-[140px] funcione como límite inferior absoluto.
+            - pb-[140px]
+        */}
+        <div className="flex w-full mt-[297px] h-[calc(100vh-297px)] pb-[140px]">
             
-            {/* MITAD IZQUIERDA (40%): IMÁGENES 
-                - CAMBIO: w-1/2 -> w-[45%] -> w-[40%]
-            */}
-            <div className="w-[40%] h-full pr-[30px] pl-0">
+            {/* MITAD IZQUIERDA (50%): IMÁGENES */}
+            <div className="w-1/2 h-full pr-[30px] pl-0">
                 <div className="grid grid-cols-2 gap-x-[50px] h-full items-stretch">
                     {members.map((member, index) => {
                         const isBottomRow = index >= 2;
@@ -66,7 +68,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                     )}
                                 </div>
                                 
-                                {/* Pie de foto */}
+                                {/* Pie de foto: Alineado al fondo del contenedor en la fila inferior */}
                                 <div className="mt-2 flex justify-end items-baseline gap-2 text-right w-full">
                                     <span className="piedefoto1 whitespace-nowrap">
                                         {member.name}
@@ -81,10 +83,10 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* MITAD DERECHA (60%): TEXTO 
-                - CAMBIO: w-1/2 -> w-[55%] -> w-[60%]
+            {/* MITAD DERECHA (50%): TEXTO 
+                - justify-between con h-full asegura que "Nuestra historia" se pegue al padding inferior.
             */}
-            <div className="w-[60%] h-full pl-[50px] pr-[120px] flex flex-col justify-between text-left">
+            <div className="w-1/2 h-full pl-[50px] pr-[120px] flex flex-col justify-between text-left">
                 
                 {/* Bloque Superior: Nuestro propósito */}
                 <AnimatedSection className="flex flex-col items-start">
@@ -97,7 +99,9 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                     />
                 </AnimatedSection>
 
-                {/* Bloque Inferior: Nuestra historia */}
+                {/* Bloque Inferior: Nuestra historia 
+                   - Se alinea visualmente con las imágenes inferiores.
+                */}
                 <AnimatedSection className="flex flex-col items-start pb-0">
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}
