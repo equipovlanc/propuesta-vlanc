@@ -32,7 +32,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
         {/* Título de Sección: Ajuste top-[150px] */}
         <div className="absolute top-[150px] left-[120px] z-20">
             <AnimatedSection>
-                <h2 className="subtitulo1 tracking-tighter text-vlanc-black">
+                <h2 className="subtitulo1 text-vlanc-black">
                     {data?.title || "conoce a VLANC"}
                 </h2>
                 {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}

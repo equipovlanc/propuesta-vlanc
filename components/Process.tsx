@@ -24,7 +24,7 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                     - shrink-0 para evitar que se aplaste
                 */}
                 <AnimatedSection className="mb-12 shrink-0">
-                    <h2 className="subtitulo1 tracking-tighter">
+                    <h2 className="subtitulo1">
                         {data?.title || "el proceso Vlanc."}
                     </h2>
                     {/* Barra decorativa actualizada. */}

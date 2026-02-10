@@ -24,7 +24,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                 <div className="w-full lg:w-1/4 h-full flex flex-col">
                     <div className="h-1/2 flex flex-col justify-end pb-0">
                         <AnimatedSection>
-                            <h2 className="subtitulo1 tracking-tighter leading-none">
+                            <h2 className="subtitulo1 leading-none">
                                 {data?.title || "qué dicen de nosotros."}
                             </h2>
                             {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}

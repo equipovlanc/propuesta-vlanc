@@ -33,7 +33,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
         <section className="min-h-screen pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex flex-col justify-start">
             <div className="max-w-7xl mx-auto w-full">
                  <AnimatedSection>
-                    <h2 className="subtitulo1 tracking-tighter">
+                    <h2 className="subtitulo1">
                        {investmentTitle || "la inversión."}
                     </h2>
                     {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}

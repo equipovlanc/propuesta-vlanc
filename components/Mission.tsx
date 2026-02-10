@@ -82,7 +82,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                 {/* Bloque Superior: La Misión */}
                 <div className="flex flex-col">
                     <AnimatedSection>
-                        <h2 className="subtitulo1 tracking-tighter leading-none">
+                        <h2 className="subtitulo1 leading-none">
                             {data?.mission?.title || "la misión."}
                         </h2>
                         {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
@@ -102,7 +102,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                 {/* Bloque Inferior: Qué vas a conseguir */}
                 <div className="flex flex-col">
                     <AnimatedSection>
-                        <h2 className="subtitulo1 tracking-tighter leading-none">
+                        <h2 className="subtitulo1 leading-none">
                             {data?.achievements?.title || "qué vas a conseguir."}
                         </h2>
                          {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}

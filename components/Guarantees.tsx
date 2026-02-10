@@ -60,7 +60,7 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
             <div className="w-full flex justify-end mb-24">
                 <AnimatedSection>
                     <div className="text-right flex flex-col items-end">
-                        <h2 className="subtitulo1 tracking-tighter">
+                        <h2 className="subtitulo1">
                             {data?.title || "nuestras garantías."}
                         </h2>
                         {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}

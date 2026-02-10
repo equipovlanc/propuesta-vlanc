@@ -22,7 +22,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
             {/* ESPACIO SUPERIOR / TÍTULO */}
             <div className="flex-grow flex flex-col justify-center">
                 <AnimatedSection>
-                    <h2 className="subtitulo1 tracking-tighter">
+                    <h2 className="subtitulo1">
                         {data?.title || "la situación."}
                     </h2>
                     {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}

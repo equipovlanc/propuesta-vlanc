@@ -44,7 +44,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             {/* Columna Izquierda: Título alineado a 150px */}
             <div className="hidden lg:flex w-[25%] h-full pt-[150px] pl-[120px] flex-col bg-vlanc-bg">
                  <AnimatedSection>
-                    <h2 className="subtitulo1 tracking-tighter leading-none text-left">
+                    <h2 className="subtitulo1 leading-none text-left">
                         {mainTitle}
                     </h2>
                     {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}

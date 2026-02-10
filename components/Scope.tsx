@@ -31,7 +31,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             {/* 1. TÍTULO SECCIÓN (Posición estándar) */}
             <div className="absolute top-[150px] left-[120px] z-20">
                 <AnimatedSection>
-                    <h2 className="subtitulo1 tracking-tighter text-vlanc-black">
+                    <h2 className="subtitulo1 text-vlanc-black">
                         {data?.title || "qué vamos a hacer por ti."}
                     </h2>
                     {/* Barra decorativa */}
@@ -72,11 +72,12 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         </div>
 
         {/* --- BLOQUE INFERIOR (TEXTO EN COLUMNAS FLUIDAS) --- 
-            - Padding top ajustado a pt-4 para mantener consistencia con el espaciado superior.
+            - Padding top ajustado a pt-4.
+            - AÑADIDO: flex flex-col justify-end para alinear el bloque de texto abajo.
         */}
-        <div className="flex-grow w-full px-[120px] pt-4 pb-[140px] overflow-y-auto no-scrollbar">
+        <div className="flex-grow w-full px-[120px] pt-4 pb-[140px] overflow-y-auto no-scrollbar flex flex-col justify-end">
             <AnimatedSection 
-                className="w-full min-h-full" 
+                className="w-full" /* REMOVIDO: min-h-full, para que el bloque ocupe solo lo necesario y baje */
                 style={{ 
                     columnCount: 2, 
                     columnGap: 'calc(100% - 1470px)', 
@@ -84,7 +85,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 }}
             >
                 {/* 1. Programa 
-                    - Margen inferior ajustado a mb-4 para consistencia.
+                    - Margen inferior ajustado a mb-4.
                 */}
                 <div className="mb-4 break-inside-avoid">
                     <p className="cuerpo text-left">

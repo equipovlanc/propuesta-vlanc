@@ -35,7 +35,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
     <section id="special-offers" className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
       
        <AnimatedSection>
-            <h2 className="subtitulo1 tracking-tighter">
+            <h2 className="subtitulo1">
                {investmentTitle || "la inversión."}
             </h2>
             {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
