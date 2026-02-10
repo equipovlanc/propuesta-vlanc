@@ -55,16 +55,16 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </div>
 
             {/* 3. DATOS TÉCNICOS + SCOPE (Izquierda Abajo - Alineado con borde inferior imagen) 
-                - Width fijo de 735px para coincidir con el ancho de columna del bloque inferior.
+                - Width fijo de 735px.
+                - Espaciado unificado a space-y-4 (equivalente a un salto de línea).
             */}
             <div className="absolute bottom-0 left-[120px] z-20" style={{ width: '735px' }}>
                  <AnimatedSection>
                     <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
                     
-                    <div className="space-y-2 cuerpo text-left">
+                    <div className="space-y-4 cuerpo text-left">
                         <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
                         <p><strong className="font-bold uppercase">TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
-                        {/* El Scope es la última línea, alineándose visualmente con el final de la imagen */}
                         <p><strong className="font-bold uppercase">ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
                     </div>
                 </AnimatedSection>
@@ -72,11 +72,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         </div>
 
         {/* --- BLOQUE INFERIOR (TEXTO EN COLUMNAS FLUIDAS) --- 
-            - Se usa CSS columns para permitir que el contenido fluya de una columna a otra.
-            - columnGap se calcula dinámicamente: (AnchoTotal - (735px * 2)).
-            - Esto fuerza a que las columnas midan 735px cada una y se peguen a los extremos (si hay espacio).
+            - Padding top ajustado a pt-4 para mantener consistencia con el espaciado superior.
         */}
-        <div className="flex-grow w-full px-[120px] pt-8 pb-[140px] overflow-y-auto no-scrollbar">
+        <div className="flex-grow w-full px-[120px] pt-4 pb-[140px] overflow-y-auto no-scrollbar">
             <AnimatedSection 
                 className="w-full min-h-full" 
                 style={{ 
@@ -86,17 +84,15 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 }}
             >
                 {/* 1. Programa 
-                    - Eliminada línea de separación (border-t).
-                    - Etiqueta PROGRAMA actualizada a estilo 'cuerpo' + strong.
-                    - Texto en línea con la etiqueta (usando span inline).
+                    - Margen inferior ajustado a mb-4 para consistencia.
                 */}
-                <div className="mb-8 break-inside-avoid">
+                <div className="mb-4 break-inside-avoid">
                     <p className="cuerpo text-left">
                         <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
                     </p>
                 </div>
 
-                {/* 2. Breakdown Items (Flujo natural sin símbolos extraños) */}
+                {/* 2. Breakdown Items */}
                 {breakdown.map((item, i) => (
                     <div key={i} className="mb-4 break-inside-avoid">
                         <div className="flex gap-4 items-start">
