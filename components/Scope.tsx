@@ -88,15 +88,12 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 {/* 1. Programa 
                     - Eliminada línea de separación (border-t).
                     - Etiqueta PROGRAMA actualizada a estilo 'cuerpo' + strong.
+                    - Texto en línea con la etiqueta (usando span inline).
                 */}
                 <div className="mb-8 break-inside-avoid">
-                    <div className="">
-                        <p className="mb-2 cuerpo"><strong className="font-bold uppercase">PROGRAMA:</strong></p>
-                        <div 
-                            className="cuerpo text-left"
-                            dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }}
-                        />
-                    </div>
+                    <p className="cuerpo text-left">
+                        <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
+                    </p>
                 </div>
 
                 {/* 2. Breakdown Items (Flujo natural sin símbolos extraños) */}
