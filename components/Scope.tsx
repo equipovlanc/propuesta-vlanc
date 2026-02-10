@@ -111,9 +111,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     <div className="pt-6 border-t border-vlanc-primary/10">
                         <p className="mb-4"><strong className="text-vlanc-primary font-bold uppercase tracking-[0.15em] text-[10px]">PROGRAMA Y TRABAJOS:</strong></p>
                         
-                        {/* El texto de Program precede inmediatamente al listado */}
+                        {/* El texto de Program precede inmediatamente al listado. CAMBIO: text-justify -> text-left */}
                         <div 
-                            className="cuerpo text-justify mb-6"
+                            className="cuerpo text-left mb-6"
                             dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }}
                         />
 
@@ -126,8 +126,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                                     className={`flex gap-4 items-start ${i >= splitIndex ? 'hidden' : 'block'}`}
                                 >
                                     <span className="text-vlanc-primary font-bold mt-1.5 text-[14px]">/</span>
+                                    {/* CAMBIO: text-justify -> text-left */}
                                     <span 
-                                        className="cuerpo leading-relaxed text-justify"
+                                        className="cuerpo leading-relaxed text-left"
                                         dangerouslySetInnerHTML={{ __html: item }}
                                     />
                                 </div>
@@ -145,8 +146,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         {breakdownCol2.map((item, i) => (
                             <div key={i} className="flex gap-4 items-start">
                                 <span className="text-vlanc-primary font-bold mt-1.5 text-[14px]">/</span>
+                                {/* CAMBIO: text-justify -> text-left */}
                                 <span 
-                                    className="cuerpo leading-relaxed text-justify"
+                                    className="cuerpo leading-relaxed text-left"
                                     dangerouslySetInnerHTML={{ __html: item }}
                                 />
                             </div>

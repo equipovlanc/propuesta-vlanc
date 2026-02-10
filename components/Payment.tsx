@@ -63,7 +63,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                     
                     <AnimatedSection>
                          <h3 className="subtitulo2 text-[32px] mb-10">{data?.finePrint?.title}</h3>
-                         <div className="space-y-4 text-[11px] text-vlanc-secondary/80 text-justify leading-relaxed font-sans">
+                         {/* CAMBIO: text-justify -> text-left */}
+                         <div className="space-y-4 text-[11px] text-vlanc-secondary/80 text-left leading-relaxed font-sans">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
                                 <p key={i} className="flex gap-3">
                                     <span className="text-vlanc-black font-bold">_</span>

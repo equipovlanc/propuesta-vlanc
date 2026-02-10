@@ -39,8 +39,8 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                                     <span>{step.title}</span>
                                 </h3>
                                 
-                                {/* Descripción CAMBIO: cuerpo2 -> cuerpo */}
-                                <div className="cuerpo text-justify">
+                                {/* Descripción CAMBIO: cuerpo text-justify -> cuerpo text-left */}
+                                <div className="cuerpo text-left">
                                     <p>{step.description}</p>
                                     
                                     {/* CAMBIO: Texto 'Tu interés es el nuestro' añadido al paso 5 (índice 4) */}
