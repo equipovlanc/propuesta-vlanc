@@ -26,84 +26,89 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
   const [showVideo, setShowVideo] = useState(false);
 
   return (
-    <section className="h-full w-full bg-vlanc-bg flex relative overflow-hidden">
+    <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden">
         
-        <div className="absolute top-0 left-0 w-full lg:w-[45%] h-full z-0">
+        {/* --- 1. TÍTULO SECCIÓN (Posición fija: Top 150, Left 120) --- */}
+        <div className="absolute top-[150px] left-[120px] z-20">
+             <AnimatedSection>
+                <h2 className="subtitulo1 leading-none text-left text-vlanc-black">
+                    {mainTitle}
+                </h2>
+                {/* Barra decorativa */}
+                <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+            </AnimatedSection>
+        </div>
+
+        {/* --- 2. IMAGEN VERTICAL (Posición fija: Left 575px, Width 409px, Height 100%) --- 
+            Va de "sangre a sangre" (top-0 bottom-0)
+        */}
+        <div className="absolute top-0 bottom-0 left-[575px] w-[409px] z-10 overflow-hidden pointer-events-none">
              <AnimatedSection className="w-full h-full">
                 {data?.image ? (
-                        <img src={data.image} alt="Phase" className="w-full h-full object-cover grayscale opacity-90 brightness-110" />
+                    <img src={data.image} alt="Phase" className="w-full h-full object-cover grayscale opacity-90 brightness-110" />
                 ) : (
-                    <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center">
-                        <span className="text-xs tracking-widest text-vlanc-secondary/40">Imagen Vertical</span>
+                    <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center border border-vlanc-secondary/5">
+                        <span className="text-xs tracking-widest text-vlanc-secondary/40">Imagen 409px</span>
                     </div>
                 )}
              </AnimatedSection>
         </div>
 
-        <div className="w-full h-full flex z-10 pointer-events-none">
-            {/* Columna Izquierda: Título alineado a 150px */}
-            <div className="hidden lg:flex w-[25%] h-full pt-[150px] pl-[120px] flex-col bg-vlanc-bg">
-                 <AnimatedSection>
-                    <h2 className="subtitulo1 leading-none text-left">
-                        {mainTitle}
-                    </h2>
-                    {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
-                </AnimatedSection>
-            </div>
+        {/* --- 3. CONTENIDO (Posición: A la derecha de la imagen, alineado al fondo) --- 
+            Left: 575px (inicio img) + 409px (ancho img) + 50px (espacio) = 1034px
+            Bottom: 140px (margen inferior estándar)
+            Right: 120px (margen derecho estándar)
+        */}
+        <div className="absolute bottom-[140px] left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto">
+            <AnimatedSection>
+                {/* Título de la Fase (e.g. 1. FASE ANTEPROYECTO) */}
+                <h3 className="fase-titulo mb-12">{data?.title}</h3>
+                
+                {/* Lista de Subfases */}
+                <div className="space-y-8">
+                    {(data?.subPhases ?? []).map((sub, i) => (
+                        <div key={i} className="text-left">
+                            <p className="fase-subtitulo mb-2">
+                                {sub.number} {sub.title}
+                            </p>
+                            <p 
+                                className="cuerpo text-[14px]" 
+                                dangerouslySetInnerHTML={{ __html: sub.description || '' }} 
+                            />
+                        </div>
+                    ))}
+                </div>
 
-            <div className="w-full lg:w-[35%] h-full relative overflow-hidden pointer-events-auto">
-                  {data?.image && (
-                     <img src={data.image} className="w-full h-full object-cover grayscale" />
-                  )}
-            </div>
-
-            {/* Columna Derecha: Contenido alineado a 150px */}
-            <div className="w-full lg:w-[40%] h-full flex flex-col justify-start px-10 lg:pl-10 lg:pr-[120px] pt-[150px] pb-[140px] overflow-y-auto no-scrollbar pointer-events-auto bg-vlanc-bg">
-                <AnimatedSection>
-                    <h3 className="text-[21px] font-sans font-bold text-vlanc-black uppercase mb-12">{data?.title}</h3>
-                    
-                    <div className="space-y-8">
-                        {(data?.subPhases ?? []).map((sub, i) => (
-                            <div key={i} className="text-[12px] leading-[1.4]">
-                                <p className="mb-2 tracking-widest font-bold text-vlanc-black uppercase">
-                                    {sub.number} {sub.title}
-                                </p>
-                                <p 
-                                    className="cuerpo" 
-                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }} 
-                                />
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center gap-6 pt-16 mt-auto">
+                {/* Botones (Garantía / Video) */}
+                {(data?.guaranteeText || data?.videoUrl) && (
+                    <div className="flex items-center gap-6 pt-16">
                         {data?.guaranteeText && (
-                            <button className="bg-vlanc-primary text-white text-[10px] font-bold px-8 py-4 tracking-[0.2em] uppercase rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-colors">
+                            <button className="bg-vlanc-primary text-white text-[10px] font-bold px-8 py-4 tracking-[0.2em] uppercase rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-colors cursor-pointer">
                                 {data.guaranteeText}
                             </button>
                         )}
                         {data?.videoUrl && (
                             <button 
                                 onClick={() => setShowVideo(true)}
-                                className="border border-vlanc-primary text-vlanc-primary px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px]"
+                                className="border border-vlanc-primary text-vlanc-primary px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer"
                             >
                                 VER VIDEO
                             </button>
                         )}
                     </div>
-                </AnimatedSection>
-            </div>
+                )}
+            </AnimatedSection>
         </div>
 
-      {showVideo && (
+        {/* --- MODAL VIDEO --- */}
+        {showVideo && (
             <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 pointer-events-auto" onClick={() => setShowVideo(false)}>
                 <div className="relative w-full max-w-5xl aspect-video bg-black rounded-lg shadow-2xl" onClick={e => e.stopPropagation()}>
                     <video src={data?.videoUrl} controls autoPlay className="w-full h-full" />
                     <button onClick={() => setShowVideo(false)} className="absolute -top-12 right-0 text-white text-4xl">&times;</button>
                 </div>
             </div>
-      )}
+        )}
     </section>
   );
 };
