@@ -42,14 +42,18 @@ const Team: React.FC<TeamProps> = ({ data }) => {
 
         {/* Contenedor Principal: 
             - mt-[297px]
-            - h-[calc(100vh-297px)]: Calcula el espacio restante exacto para evitar overflow y permitir que pb-[140px] funcione como límite inferior absoluto.
-            - pb-[140px]
+            - h-[calc(100vh-297px)]: Calcula el espacio restante exacto.
+            - pb-[140px]: Define el margen inferior.
         */}
         <div className="flex w-full mt-[297px] h-[calc(100vh-297px)] pb-[140px]">
             
             {/* MITAD IZQUIERDA (50%): IMÁGENES */}
             <div className="w-1/2 h-full pr-[30px] pl-0">
-                <div className="grid grid-cols-2 gap-x-[50px] h-full items-stretch">
+                {/* 
+                   CAMBIO: Agregado `content-between` para forzar que la primera fila esté arriba 
+                   y la segunda fila esté pegada completamente abajo.
+                */}
+                <div className="grid grid-cols-2 gap-x-[50px] h-full items-stretch content-between">
                     {members.map((member, index) => {
                         const isBottomRow = index >= 2;
                         return (
@@ -84,7 +88,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             </div>
 
             {/* MITAD DERECHA (50%): TEXTO 
-                - justify-between con h-full asegura que "Nuestra historia" se pegue al padding inferior.
+                - justify-between asegura que "Nuestra historia" se pegue abajo.
             */}
             <div className="w-1/2 h-full pl-[50px] pr-[120px] flex flex-col justify-between text-left">
                 
@@ -100,9 +104,9 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </AnimatedSection>
 
                 {/* Bloque Inferior: Nuestra historia 
-                   - Se alinea visualmente con las imágenes inferiores.
+                   - Alineado abajo gracias a justify-between en el padre.
                 */}
-                <AnimatedSection className="flex flex-col items-start pb-0">
+                <AnimatedSection className="flex flex-col items-start pb-0 shrink-0">
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}
                     </h3>
