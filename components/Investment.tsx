@@ -57,8 +57,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             {(data?.plansDescription ?? []).map((p, i) => (
                                 <div key={i} className="space-y-1">
                                     <p className="text-[12px] font-bold text-vlanc-black tracking-widest uppercase">{p.name}_</p>
-                                    {/* CAMBIO: text-justify -> text-left */}
-                                    <p className="text-[11px] text-vlanc-secondary leading-relaxed text-left font-sans">{p.desc}</p>
+                                    {/* CAMBIO: text-justify -> text-left + whitespace-pre-line */}
+                                    <p className="text-[11px] text-vlanc-secondary leading-relaxed text-left font-sans whitespace-pre-line">{p.desc}</p>
                                 </div>
                             ))}
                         </div>
