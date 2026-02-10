@@ -21,7 +21,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
             {/* Ajuste de márgenes: pt-[150px], pb-[140px] */}
             <div className="w-full lg:w-1/2 h-full flex flex-col justify-start pl-[120px] pr-10 pt-[150px] pb-[140px] overflow-y-auto no-scrollbar">
                 <AnimatedSection className="mb-12">
-                    <h2 className="subtitulo1">servicios premium.</h2>
+                    <h2 className="subtitulo1">servicios<br />premium.</h2>
                     {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
                     <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
                 </AnimatedSection>

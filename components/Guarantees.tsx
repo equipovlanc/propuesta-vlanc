@@ -55,13 +55,21 @@ const GuaranteeBadge = ({ index }: { index: number }) => {
 }
 
 const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
+    // Función para romper el título en líneas por cada palabra
+    const formattedTitle = (data?.title || "nuestras garantías.").split(' ').map((word, i, arr) => (
+        <React.Fragment key={i}>
+            {word}
+            {i < arr.length - 1 && <br />}
+        </React.Fragment>
+    ));
+
     return (
         <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start px-[120px] pt-[150px] pb-[140px]">
             <div className="w-full flex justify-end mb-24">
                 <AnimatedSection>
                     <div className="text-right flex flex-col items-end">
                         <h2 className="subtitulo1">
-                            {data?.title || "nuestras garantías."}
+                            {formattedTitle}
                         </h2>
                         {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
                         <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>

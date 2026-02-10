@@ -25,6 +25,14 @@ interface ScopePhasesProps {
 const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados." }) => {
   const [showVideo, setShowVideo] = useState(false);
 
+  // Función para romper el título en líneas por cada palabra
+  const formattedTitle = (mainTitle || "trabajos contemplados.").split(' ').map((word, i, arr) => (
+      <React.Fragment key={i}>
+          {word}
+          {i < arr.length - 1 && <br />}
+      </React.Fragment>
+  ));
+
   return (
     <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden">
         
@@ -32,7 +40,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
         <div className="absolute top-[150px] left-[120px] z-20">
              <AnimatedSection>
                 <h2 className="subtitulo1 leading-none text-left text-vlanc-black">
-                    {mainTitle}
+                    {formattedTitle}
                 </h2>
                 {/* Barra decorativa */}
                 <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
