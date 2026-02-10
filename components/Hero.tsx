@@ -29,7 +29,8 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
                 <p className="font-normal">{headerData?.title}</p>
             </div>
             
-            <div className="w-12 h-[1px] bg-vlanc-black"></div>
+            {/* Barra decorativa actualizada: 52x2.4px, #703622 */}
+            <div className="w-[52px] h-[2.4px] bg-[#703622]"></div>
 
             <div className="text-[14px] font-sans text-vlanc-secondary leading-tight tracking-wider">
                 <p className="font-medium">{data?.clientName || headerData?.clientName}</p>
@@ -40,20 +41,23 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
 
       {/* Centro: Títulos */}
       <AnimatedSection className="text-center">
-        <div className="space-y-6">
-          <p className="text-[40px] text-vlanc-secondary mb-10 font-sans font-medium">
+        {/* Eliminado space-y-6 para control manual preciso */}
+        <div className="flex flex-col items-center">
+          {/* Nombre Cliente: Más cerca del título (mb-2) y menos peso (font-normal) */}
+          <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight">
             {data?.clientName || headerData?.clientName}
           </p>
           
-          {/* Uso de la clase .titulo */}
-          <h1 className="titulo">
+          {/* Título Principal: Uso de la clase .titulo (peso 400) */}
+          <h1 className="titulo leading-[1.05]">
             {data?.line1}
           </h1>
-          <h1 className="titulo">
+          <h1 className="titulo leading-[1.05]">
             {data?.line2}
           </h1>
           
-          <div className="w-32 h-[2px] bg-vlanc-primary/80 mx-auto mt-24"></div>
+          {/* Barra inferior actualizada: 112x5px, #703622, a 50px del título para consistencia proporcional */}
+          <div className="w-[112px] h-[5px] bg-[#703622] mt-[50px]"></div>
         </div>
       </AnimatedSection>
 
