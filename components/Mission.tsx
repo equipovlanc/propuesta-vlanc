@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
 
 interface SectionData {
@@ -19,54 +19,105 @@ interface MissionProps {
 }
 
 const Mission: React.FC<MissionProps> = ({ data }) => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    const toggleFullScreen = () => {
+        if (videoRef.current) {
+            if (videoRef.current.requestFullscreen) {
+                videoRef.current.requestFullscreen();
+            } else if ((videoRef.current as any).webkitRequestFullscreen) {
+                (videoRef.current as any).webkitRequestFullscreen();
+            } else if ((videoRef.current as any).msRequestFullscreen) {
+                (videoRef.current as any).msRequestFullscreen();
+            }
+        }
+    };
+
     return (
-        <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg">
+        <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
             
-            <div className="w-full lg:w-[45%] h-1/2 lg:h-full relative overflow-hidden">
-                <AnimatedSection className="h-full w-full">
-                    {data?.video ? (
-                        <div className="relative w-full h-full">
-                            <video src={data.video} autoPlay loop muted playsInline className="w-full h-full object-cover grayscale" />
+            {/* Columna Izquierda: Video (55.7% igual que el índice) */}
+            <div className="w-full lg:w-[55.7%] h-full flex items-center justify-center relative bg-vlanc-bg">
+                <AnimatedSection className="flex items-center justify-center w-full h-full px-10">
+                    <div 
+                        className="relative group cursor-pointer shadow-2xl overflow-hidden rounded-sm"
+                        style={{ width: 'min(852px, 100%)', aspectRatio: '852/469' }}
+                        onClick={toggleFullScreen}
+                    >
+                        {data?.video ? (
+                            <video 
+                                ref={videoRef}
+                                src={data.video} 
+                                autoPlay 
+                                loop 
+                                muted 
+                                playsInline 
+                                className="w-full h-full object-cover grayscale brightness-90 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" 
+                            />
+                        ) : data?.image ? (
+                            <img src={data.image} alt="Mission" className="w-full h-full object-cover grayscale" />
+                        ) : (
+                            <div className="w-full h-full bg-vlanc-primary/5 flex items-center justify-center">
+                                 <span className="text-vlanc-primary/30 font-bold uppercase tracking-widest text-[10px]">Esperando Video (852x469)</span>
+                            </div>
+                        )}
+                        
+                        {/* Overlay decorativo */}
+                        <div className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center">
+                                <svg className="w-6 h-6 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                            </div>
                         </div>
-                    ) : data?.image ? (
-                        <img src={data.image} alt="Mission" className="w-full h-full object-cover grayscale" />
-                    ) : (
-                        <div className="w-full h-full bg-vlanc-primary/10 flex items-center justify-center">
-                             <span className="text-vlanc-primary/30 font-bold uppercase tracking-widest text-xs">Video/Imagen</span>
-                        </div>
-                    )}
+                    </div>
                 </AnimatedSection>
             </div>
 
-            {/* justify-center -> justify-start. pt-32 -> pt-[140px] */}
-            <div className="w-full lg:w-[55%] h-1/2 lg:h-full flex flex-col justify-start pl-10 pr-[120px] pt-[140px] pb-[120px] space-y-16 overflow-y-auto no-scrollbar">
+            {/* Columna Derecha: Contenido (44.3%) 
+                - pl-[76px] para alinear con el texto de 'contenido.' en el índice.
+                - pr-[120px] margen derecho global.
+            */}
+            <div className="w-full lg:w-[44.3%] h-full flex flex-col justify-between pl-10 lg:pl-[76px] pr-[120px] pt-[140px] pb-[120px]">
                 
-                {/* Bloque 1: La Misión */}
-                <AnimatedSection>
-                    <h2 className="subtitulo1 mb-4 tracking-tighter">{data?.mission?.title}</h2>
-                    <div className="w-20 h-[2px] bg-vlanc-primary mb-6"></div>
+                {/* Bloque Superior: La Misión (Alineado a 140px) */}
+                <div className="flex flex-col">
+                    <AnimatedSection>
+                        <h2 className="subtitulo1 mb-4 tracking-tighter leading-none">
+                            {data?.mission?.title || "la misión."}
+                        </h2>
+                        <div className="w-20 h-[3px] bg-vlanc-primary mb-12"></div>
+                    </AnimatedSection>
                     
-                    {/* Subtitulo 2 (Italic) */}
-                    <h3 className="subtitulo2 mb-4 leading-tight">{data?.mission?.subtitle}</h3>
-                    
-                    <p className="cuerpo max-w-lg">
-                        {data?.mission?.description}
-                    </p>
-                </AnimatedSection>
+                    <AnimatedSection>
+                        <h3 className="subtitulo2 mb-6 leading-tight max-w-sm">
+                            {data?.mission?.subtitle}
+                        </h3>
+                        <p className="cuerpo w-full">
+                            {data?.mission?.description}
+                        </p>
+                    </AnimatedSection>
+                </div>
 
-                {/* Bloque 2: Qué vas a conseguir (Excepción, fluye abajo) */}
-                <AnimatedSection>
-                    <h2 className="subtitulo1 mb-4 tracking-tighter">{data?.achievements?.title}</h2>
-                    <div className="w-20 h-[2px] bg-vlanc-primary mb-6"></div>
+                {/* Bloque Inferior: Qué vas a conseguir (Alineado al margen inferior 120px) */}
+                <div className="flex flex-col">
+                    <AnimatedSection>
+                        <h2 className="subtitulo1 mb-4 tracking-tighter leading-none">
+                            {data?.achievements?.title || "qué vas a conseguir."}
+                        </h2>
+                        <div className="w-20 h-[3px] bg-vlanc-primary mb-12"></div>
+                    </AnimatedSection>
                     
-                    <ul className="space-y-4 max-w-lg">
-                        {(data?.achievements?.listItems ?? []).map((item, i) => (
-                            <li key={i} className="cuerpo">
-                                {item}
-                            </li>
-                        ))}
-                    </ul>
-                </AnimatedSection>
+                    <AnimatedSection>
+                        <ul className="space-y-4 w-full">
+                            {(data?.achievements?.listItems ?? []).map((item, i) => (
+                                <li key={i} className="cuerpo">
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </AnimatedSection>
+                </div>
             </div>
         </section>
     );

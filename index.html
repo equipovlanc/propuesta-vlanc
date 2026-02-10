@@ -9,8 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Importamos Libre Baskerville (Regular 400, Bold 700 e Italic 400) y Montserrat -->
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Importamos solo Montserrat de Google Fonts, Baskerville es local -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
@@ -24,7 +24,7 @@
               }
             },
             fontFamily: {
-              serif: ['"Libre Baskerville"', 'serif'],
+              serif: ['"Baskerville Display PT"', 'serif'],
               sans: ['Montserrat', 'sans-serif'],
             }
           }
@@ -32,6 +32,35 @@
       }
     </script>
     <style>
+      /* --- FUENTES LOCALES --- */
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/BaskervilleDisplayPT-Regular.otf') format('opentype');
+        font-weight: 400;
+        font-style: normal;
+      }
+      
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/BaskervilleDisplayPT-Italic.otf') format('opentype');
+        font-weight: 400;
+        font-style: italic;
+      }
+      
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/BaskervilleDisplayPT-Bold.otf') format('opentype');
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+      @font-face {
+        font-family: 'Baskerville Display PT';
+        src: url('/fonts/BaskervilleDisplayPT-BoldItalic.otf') format('opentype');
+        font-weight: 700;
+        font-style: italic;
+      }
+
       /* --- ESTILOS GLOBALES --- */
 
       body {
@@ -39,7 +68,7 @@
         background-color: #efe8e1;
         color: #000000;
         overflow-x: hidden;
-        font-size: 12px;
+        font-size: 14px; /* Aumentado base */
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
@@ -48,22 +77,22 @@
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-      /* --- JERARQUÍA TIPOGRÁFICA (LIBRE BASKERVILLE) --- */
+      /* --- JERARQUÍA TIPOGRÁFICA (Baskerville Display PT) --- */
 
-      /* 1. TÍTULO PRINCIPAL (Hero) - Medium 500 */
+      /* 1. TÍTULO PRINCIPAL (Hero) */
       .titulo {
-        font-family: 'Libre Baskerville', serif;
+        font-family: 'Baskerville Display PT', serif;
         font-size: 72px;
         line-height: 1.05;
-        font-weight: 500; /* Solicitado Medium */
+        font-weight: 400;
         letter-spacing: -0.02em;
         color: #702622;
       }
 
-      /* 2. SUBTÍTULO 1 - Regular 400 - Actualizado a estilo 'contenido.' */
+      /* 2. SUBTÍTULO 1 - Regular 400 */
       .subtitulo1 {
-        font-family: 'Libre Baskerville', serif;
-        font-size: 72px;
+        font-family: 'Baskerville Display PT', serif;
+        font-size: 60px;
         line-height: 1.05;
         font-weight: 400;
         letter-spacing: -0.02em;
@@ -72,8 +101,8 @@
 
       /* 3. SUBTÍTULO 2 (Italic) */
       .subtitulo2 {
-        font-family: 'Libre Baskerville', serif;
-        font-size: 28px;
+        font-family: 'Baskerville Display PT', serif;
+        font-size: 20px;
         line-height: 1.2;
         font-weight: 400;
         font-style: italic;
@@ -82,7 +111,7 @@
 
       /* 4. SUBTÍTULO 3 (Regular pequeño) */
       .subtitulo3 {
-        font-family: 'Libre Baskerville', serif;
+        font-family: 'Baskerville Display PT', serif;
         font-size: 20px;
         line-height: 1.2;
         font-weight: 400;
@@ -91,10 +120,10 @@
         letter-spacing: -0.01em;
       }
 
-      /* 5. CUERPO DE TEXTO */
+      /* 5. CUERPO DE TEXTO ESTÁNDAR (12px -> 14px) */
       .cuerpo {
         font-family: 'Montserrat', sans-serif;
-        font-size: 12px;
+        font-size: 14px;
         line-height: 1.7;
         font-weight: 400;
         color: #702622;
@@ -103,7 +132,41 @@
       
       .cuerpo strong {
         font-weight: 700;
-        color: inherit; /* Hereda el color marrón (#702622) del padre */
+        color: inherit;
+      }
+
+      /* 6. CUERPO DE TEXTO GRANDE (14px -> 16px) */
+      .cuerpo2 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        line-height: 1.7;
+        font-weight: 400;
+        color: #702622;
+        text-align: justify;
+      }
+      
+      .cuerpo2 strong {
+        font-weight: 700;
+        color: inherit;
+      }
+
+      /* 7. PIE DE FOTO 1 (Montserrat Bold Uppercase) */
+      .piedefoto1 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #000000;
+      }
+
+      /* 8. PIE DE FOTO 2 (Baskerville Display PT Normal) */
+      .piedefoto2 {
+        font-family: 'Baskerville Display PT', serif;
+        font-size: 11px;
+        font-weight: 400;
+        font-style: normal;
+        color: #000000;
       }
 
       @media print {

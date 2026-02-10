@@ -30,7 +30,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
   return (
     <section id="index-section" className="h-screen w-full flex bg-vlanc-bg overflow-hidden">
       
-      {/* Columna Izquierda: Imagen (55.7% del ancho según SVG 802.5/1440) */}
+      {/* Columna Izquierda: Imagen (55.7% del ancho según diseño) */}
       <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">
         <AnimatedSection className="w-full h-full">
             {data?.image ? (
@@ -47,19 +47,24 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
         </AnimatedSection>
       </div>
 
-      {/* Columna Derecha: Contenido (44.3%) */}
-      {/* Padding superior 140px. Alineación vertical start (justify-start por defecto en flex-col) */}
-      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-start px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[140px] pb-[120px] relative">
+      {/* Columna Derecha: Contenido (44.3%) 
+          - justify-between: Separa el título (arriba) de la lista (abajo).
+          - pl-[76px]: Alineación vertical compartida con el resto de la web.
+          - pt-[140px] / pb-[120px]: Márgenes de seguridad.
+      */}
+      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[140px] pb-[120px] relative">
+        
+        {/* Bloque Superior: Título "contenido." */}
         <AnimatedSection>
-            {/* Título: "contenido." usa la nueva configuración de subtitulo1 (72px, negro) */}
             <h2 className="subtitulo1 mb-6">
                 {data?.title || "contenido."}
             </h2>
             
-            {/* Línea divisoria: ancho 84px según SVG */}
-            <div className="w-[84px] h-[3px] bg-vlanc-primary mb-12"></div>
+            {/* Línea divisoria decorativa (84px) */}
+            <div className="w-[84px] h-[3px] bg-vlanc-primary"></div>
         </AnimatedSection>
         
+        {/* Bloque Inferior: Listado de ítems del índice */}
         <AnimatedSection className="space-y-5">
             {items.length > 0 ? items.map((item, i) => (
                 <a 
@@ -71,7 +76,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
                     {/* Barra inclinada decorativa */}
                     <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px]">/</span>
                     
-                    {/* Texto del ítem */}
+                    {/* Texto del ítem (Subtitulo 3) */}
                     <span className="subtitulo3 tracking-tight font-normal"> 
                         {item.title}
                     </span>
