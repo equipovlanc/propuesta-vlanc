@@ -61,33 +61,43 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 {/* COLUMNA IZQUIERDA: Textos y Descripciones (Fluida) */}
                 <div className="flex-1 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection>
-                        {/* Introducción Parte 1 (Tamaño 12px mantenido por petición anterior) */}
+                        {/* Introducción Parte 1 
+                            - ELIMINADO .cuerpo para no sobrescribir. 
+                            - Definido estilos base manualmente para 12px.
+                        */}
                         <div 
-                            className="cuerpo text-[12px] leading-[1.6] font-normal [&>strong]:font-bold" 
+                            className="font-sans text-[12px] text-vlanc-secondary leading-[1.6] font-normal [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
                         
-                        {/* Frase Destacada */}
+                        {/* Frase Destacada: cuerpo2 (16px) es correcto aquí */}
                         {data?.highlightPhrase && (
                              <p className="cuerpo2 font-bold text-vlanc-black my-6">
                                 {data.highlightPhrase}
                              </p>
                         )}
                         
-                        {/* Introducción Parte 2 */}
+                        {/* Introducción Parte 2 
+                             - ELIMINADO .cuerpo.
+                        */}
                         <div 
-                            className="cuerpo text-[12px] leading-[1.6] font-normal mb-8 [&>strong]:font-bold" 
+                            className="font-sans text-[12px] text-vlanc-secondary leading-[1.6] font-normal mb-8 [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
                         />
                         
-                        {/* Descripción de Planes - ACTUALIZADO */}
+                        {/* Descripción de Planes */}
                         <div className="space-y-8">
                             {(data?.plansDescription ?? []).map((p, i) => (
                                 <div key={i} className="space-y-2">
-                                    {/* Nombre del plan con clase .fase-titulo */}
-                                    <h3 className="fase-titulo uppercase">{p.name}_</h3>
+                                    {/* Nombre del plan 
+                                        - ELIMINADO .fase-titulo (18px).
+                                        - USADO text-[16px] explícito.
+                                    */}
+                                    <h3 className="font-sans text-[16px] font-bold text-vlanc-black uppercase leading-tight">{p.name}_</h3>
                                     
-                                    {/* Descripción con clase .cuerpo (tamaño estándar 14px) */}
+                                    {/* Descripción 
+                                        - SE MANTIENE .cuerpo porque deseamos 14px estándar.
+                                    */}
                                     <div 
                                         className="cuerpo [&>strong]:font-bold"
                                         dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
@@ -115,14 +125,12 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         {/* Cuerpo Tabla: Flex Grow (Clase TABLA2) */}
                         <div className="flex-grow flex flex-col bg-transparent">
                             {(data?.tableRows ?? []).map((row, i) => {
-                                // Añadido py-1 extra para dar un poco más de aire, confiando en flex-grow para la altura total
                                 const rowClass = "flex-grow grid grid-cols-[3fr_repeat(3,1fr)] items-center";
 
                                 if (row.isPremiumSeparator) {
                                     return (
                                         <div key={i} className={`${rowClass} bg-[#e6ded6] border-b border-vlanc-primary/10`}>
                                             <div className="px-4 text-right pr-4 col-span-4 py-2">
-                                                {/* Separador Premium en Negrita */}
                                                 <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
                                             </div>
                                         </div>
@@ -155,12 +163,12 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA (Clase TABLA1): Separada por línea */}
-                    <div className="w-[720px] flex flex-col">
-                        {/* Línea separadora añadida */}
-                        <div className="w-full h-[1px] bg-[#702622] mt-0 mb-2"></div>
-                        
+                    {/* FIRMA (Clase TABLA1)
+                        - Separada por border-top sólido para asegurar visibilidad.
+                    */}
+                    <div className="w-[720px] flex flex-col border-t border-[#702622] mt-2 pt-1">
                         <div className="flex justify-between items-start">
+                            {/* tabla1 ya tiene el color correcto, pero aseguro con text-[#702622] por si acaso */}
                             <span className="tabla1 text-[#702622]">VIVE VLANC SL</span>
                             <span className="tabla1 text-right text-[#702622]">ACEPTA PRESUPUESTO_FIRMA</span>
                         </div>
@@ -168,7 +176,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* FECHA (Clase CUERPO) */}
+            {/* FECHA (Clase CUERPO, sin opacidad) */}
             <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
                 <p className="cuerpo font-bold text-[#702622] text-right text-[10px]">
                     {data?.locationDate || "En Alcoi a XX de mes de 2025"}
