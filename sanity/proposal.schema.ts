@@ -227,11 +227,13 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'introduction', type: 'text' }),
+                defineField({ name: 'introduction', title: 'Introducción Parte 1', type: 'text' }),
+                defineField({ name: 'highlightPhrase', title: 'Frase Destacada (Negrita/Negro)', type: 'text' }),
+                defineField({ name: 'introduction2', title: 'Introducción Parte 2', type: 'text' }),
+                defineField({ name: 'locationDate', title: 'Lugar y Fecha (Pie de tabla)', type: 'string' }),
                 defineField({ name: 'plansDescription', type: 'array', of: [{
                     type: 'object', fields: [ {name: 'name', type: 'string'}, {name: 'desc', type: 'text'} ] 
                 }]}),
-                // Tabla Estructurada para renderizado exacto
                 defineField({ name: 'tableHeaders', title: 'Nombres de Planes (Cabecera)', type: 'array', of: [{type: 'string'}] }),
                 defineField({ name: 'tableRows', title: 'Filas de la Tabla', type: 'array', of: [{
                     type: 'object',

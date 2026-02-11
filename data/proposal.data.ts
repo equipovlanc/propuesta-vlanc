@@ -187,7 +187,10 @@ export const proposalData = {
     },
     investment: {
         title: "la inversión.",
-        introduction: "Te planteamos formar parte de tu vida, al fin y al cabo, las obras perduran en el tiempo. Y te proponemos implicarnos en la tuya como si fuera para nosotros.",
+        introduction: "Te planteamos formar parte de tu vida, al fin y al cabo, las obras perduran en el tiempo.",
+        highlightPhrase: "Y te proponemos implicarnos en la tuya como si fuera para nosotros.",
+        introduction2: "Porque para nosotros cada proyecto es único y especial, queremos que te sientas acompañada en todo momento.",
+        locationDate: "En Alcoi a 25 de enero de 2025",
         plansDescription: [
             { name: "PLAN ESENCIA", desc: "Descubre la esencia de tu hogar, reflejada en cada detalle. Para quienes quieren un diseño completo: distribución, interiorismo, mobiliario y decoración." },
             { name: "PLAN VIVE", desc: "El arte de despreocuparte, la tranquilidad de confiar. La opción más completa para quienes buscan una transformación integral sin estrés." },
