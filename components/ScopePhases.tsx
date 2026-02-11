@@ -51,6 +51,11 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
       }
   };
 
+  // Lógica para determinar si hay botones y evitar renderizar divs vacíos que afecten al margen inferior
+  const hasGuarantee = !!data?.guaranteeText;
+  const hasVideo = !!(data?.videoButtonText && data?.video); // Solo mostramos si hay texto configurado Y video (o la lógica que prefieras, según el prompt anterior era si hay texto)
+  const hasButtons = hasGuarantee || (data?.videoButtonText && data?.videoButtonText.trim() !== "");
+
   return (
     <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden">
         
@@ -86,58 +91,69 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             Right: 120px (margen derecho estándar)
         */}
         <div className="absolute bottom-[140px] left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto">
-            <AnimatedSection>
-                {/* Título de la Fase (e.g. 1. FASE ANTEPROYECTO) */}
-                <h3 className="fase-titulo mb-4">{data?.title}</h3>
+            <AnimatedSection className="w-full">
+                {/* Título de la Fase (e.g. 1. FASE ANTEPROYECTO) 
+                    - Margen inferior aumentado a mb-8 para separar claramente del contenido
+                */}
+                <h3 className="fase-titulo mb-8 text-vlanc-black">{data?.title}</h3>
                 
-                {/* Lista de Subfases */}
-                <div className="space-y-4">
+                {/* Lista de Subfases 
+                    - space-y-6 para uniformidad entre puntos
+                */}
+                <div className="space-y-6">
                     {(data?.subPhases ?? []).map((sub, i) => (
                         <div key={i} className="text-left">
-                            <p className="fase-subtitulo mb-2">
+                            {/* Título Subfase: Pegado a la descripción (mb-1) */}
+                            <p className="fase-subtitulo mb-1 text-vlanc-black">
                                 {sub.number} {sub.title}
                             </p>
+                            {/* Descripción: Leading estandarizado a 1.5 */}
                             <p 
-                                className="cuerpo text-[14px]" 
+                                className="cuerpo text-[14px] leading-[1.5]" 
                                 dangerouslySetInnerHTML={{ __html: sub.description || '' }} 
                             />
                         </div>
                     ))}
                 </div>
 
-                {/* Botones (Garantía / Video) */}
-                <div className="flex items-center gap-6 pt-12">
-                    {data?.guaranteeText && (() => {
-                        const { badge, desc } = getGuaranteeParts(data.guaranteeText);
-                        return (
-                            <button className="flex items-center bg-vlanc-primary text-white px-6 py-4 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group">
-                                <span className="boton1 text-white">
-                                    {badge}
+                {/* Botones (Garantía / Video) 
+                    - Solo se renderiza si hay botones activos para asegurar que el último elemento (texto o botón) 
+                      toque el margen inferior de 140px sin espacios extra.
+                    - mt-12 para separar del texto.
+                */}
+                {hasButtons && (
+                    <div className="flex items-center gap-6 mt-12">
+                        {hasGuarantee && (() => {
+                            const { badge, desc } = getGuaranteeParts(data!.guaranteeText!);
+                            return (
+                                <button className="flex items-center bg-vlanc-primary text-white px-6 py-4 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group">
+                                    <span className="boton1 text-white">
+                                        {badge}
+                                    </span>
+                                    {desc && (
+                                        <>
+                                            <span className="mx-3 text-[14px] font-serif leading-none opacity-60">/</span>
+                                            <span className="boton2 text-white">
+                                                {desc}
+                                            </span>
+                                        </>
+                                    )}
+                                </button>
+                            );
+                        })()}
+                        
+                        {data?.videoButtonText && (
+                            <button 
+                                onClick={handleVideoClick}
+                                className="border border-vlanc-primary text-vlanc-primary px-8 py-4 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group"
+                            >
+                                <span className="boton1 text-vlanc-primary group-hover:text-white">
+                                    {data.videoButtonText}
                                 </span>
-                                {desc && (
-                                    <>
-                                        <span className="mx-3 text-[14px] font-serif leading-none opacity-60">/</span>
-                                        <span className="boton2 text-white">
-                                            {desc}
-                                        </span>
-                                    </>
-                                )}
                             </button>
-                        );
-                    })()}
-                    
-                    {/* Botón VIDEO visible solo si videoButtonText existe */}
-                    {data?.videoButtonText && (
-                        <button 
-                            onClick={handleVideoClick}
-                            className="border border-vlanc-primary text-vlanc-primary px-8 py-4 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group"
-                        >
-                             <span className="boton1 text-vlanc-primary group-hover:text-white">
-                                {data.videoButtonText}
-                             </span>
-                        </button>
-                    )}
-                </div>
+                        )}
+                    </div>
+                )}
             </AnimatedSection>
         </div>
 
