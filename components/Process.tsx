@@ -19,40 +19,31 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex flex-col justify-start overflow-hidden">
             <div className="w-full flex flex-col h-full">
-                {/* Título de sección 
-                    - Se reduce el margen inferior (mb-12) para dejar que el grid gestione el espacio con content-between
-                    - shrink-0 para evitar que se aplaste
-                */}
+                {/* Título de sección */}
                 <AnimatedSection className="mb-12 shrink-0">
                     <h2 className="subtitulo1">
                         {data?.title || "el proceso Vlanc."}
                     </h2>
-                    {/* Barra decorativa actualizada. */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                    {/* Barra decorativa actualizada (#8f4933) */}
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                 </AnimatedSection>
                 
-                {/* Grid de Pasos 
-                    - flex-grow: Ocupa todo el alto disponible.
-                    - content-between: Separa las filas al máximo (fila 1 arriba, fila 2 abajo).
-                */}
+                {/* Grid de Pasos */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
                     {(data?.steps ?? []).map((step, index) => (
                         <AnimatedSection key={index}>
                             <div className="space-y-6 flex flex-col items-start">
-                                {/* Título del paso. font-bold añadido */}
+                                {/* Título del paso */}
                                 <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
                                     <span className="font-serif mr-2">{`0${index + 1}`} /</span>
                                     <span>{step.title}</span>
                                 </h3>
                                 
-                                {/* Descripción 
-                                    - CAMBIO: cuerpo -> cuerpo2 
-                                    - text-left
-                                */}
+                                {/* Descripción */}
                                 <div className="cuerpo2 text-left">
                                     <p>{step.description}</p>
                                     
-                                    {/* Texto 'Tu interés es el nuestro' añadido al paso 5 (índice 4) */}
+                                    {/* Texto 'Tu interés es el nuestro' */}
                                     {index === 4 && (
                                         <p className="mt-4 font-bold text-vlanc-secondary">
                                             · Tu interés es el nuestro ·
@@ -60,7 +51,7 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                                     )}
                                 </div>
                                 
-                                {/* Botón de Garantía en el paso 03 (índice 2) */}
+                                {/* Botón de Garantía en el paso 03 */}
                                 {index === 2 && (
                                     <button 
                                         onClick={() => console.log('Abrir Garantía')}

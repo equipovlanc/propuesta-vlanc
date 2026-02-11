@@ -74,9 +74,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            {/* Columna Derecha: Contenido 
-                - Ajuste de márgenes: pt-[150px], pb-[140px]
-            */}
+            {/* Columna Derecha: Contenido */}
             <div className="w-full lg:w-[44.3%] h-full flex flex-col justify-between pl-10 lg:pl-[76px] pr-[120px] pt-[150px] pb-[140px]">
                 
                 {/* Bloque Superior: La Misión */}
@@ -85,8 +83,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 leading-none">
                             {data?.mission?.title || "la misión."}
                         </h2>
-                        {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-12"></div>
+                        {/* Barra decorativa actualizada (#8f4933) */}
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>
@@ -105,8 +103,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 leading-none">
                             {data?.achievements?.title || "qué vas a conseguir."}
                         </h2>
-                         {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-12"></div>
+                         {/* Barra decorativa actualizada (#8f4933) */}
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>

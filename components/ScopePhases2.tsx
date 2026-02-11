@@ -24,7 +24,6 @@ interface ScopePhases2Props {
 
 const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
   return (
-    /* Ajuste de márgenes globales: pt-[150px], pb-[140px] */
     <section className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
       <div className="max-w-7xl mx-auto w-full">
          <AnimatedSection>
@@ -32,8 +31,8 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                 <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter">
                     {data?.title || 'trabajos contemplados.'}
                 </h2>
-                {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                {/* Barra decorativa actualizada (#8f4933) */}
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
             </div>
         </AnimatedSection>
         
@@ -84,7 +83,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
             <div className="space-y-12">
                 {/* Fase 4 - Continuación */}
                 {data?.phases?.[1] && (data?.phases?.[1]?.subPhases?.length ?? 0) > 1 && (
-                    <div className="lg:pt-[76px]"> {/* Alineación con el título de la izq */}
+                    <div className="lg:pt-[76px]">
                         <div className="space-y-6">
                              {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
                                  <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">

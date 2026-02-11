@@ -14,9 +14,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
   return (
     <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden items-stretch">
         
-        {/* COLUMNA TEXTO 
-            - Ajuste márgenes: pb-[140px]
-        */}
+        {/* COLUMNA TEXTO */}
         <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-[140px]">
             
             {/* ESPACIO SUPERIOR / TÍTULO */}
@@ -25,8 +23,8 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                     <h2 className="subtitulo1">
                         {data?.title || "la situación."}
                     </h2>
-                    {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                    {/* Barra decorativa actualizada (#8f4933) */}
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                 </AnimatedSection>
             </div>
             

@@ -28,18 +28,18 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         {/* --- BLOQUE SUPERIOR (Altura fija 512px) --- */}
         <div className="w-full h-[512px] relative shrink-0">
             
-            {/* 1. TÍTULO SECCIÓN (Posición estándar) */}
+            {/* 1. TÍTULO SECCIÓN */}
             <div className="absolute top-[150px] left-[120px] z-20">
                 <AnimatedSection>
                     <h2 className="subtitulo1 text-vlanc-black">
                         {data?.title || "qué vamos a hacer por ti."}
                     </h2>
-                    {/* Barra decorativa */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                    {/* Barra decorativa actualizada (#8f4933) */}
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                 </AnimatedSection>
             </div>
 
-            {/* 2. MEDIA (Derecha: 735px) */}
+            {/* 2. MEDIA */}
             <div className="absolute top-0 right-[120px] w-[735px] h-full z-10 overflow-hidden">
                 <AnimatedSection className="h-full w-full">
                     {data?.video ? (
@@ -54,10 +54,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            {/* 3. DATOS TÉCNICOS + SCOPE (Izquierda Abajo - Alineado con borde inferior imagen) 
-                - Width fijo de 735px.
-                - Espaciado unificado a space-y-4 (equivalente a un salto de línea).
-            */}
+            {/* 3. DATOS TÉCNICOS + SCOPE */}
             <div className="absolute bottom-0 left-[120px] z-20" style={{ width: '735px' }}>
                  <AnimatedSection>
                     <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
@@ -71,9 +68,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </div>
         </div>
 
-        {/* --- BLOQUE INFERIOR (TEXTO EN COLUMNAS FLUIDAS) --- 
-            - CAMBIO: pt-4 -> pt-[50px] para alinear texto exactamente 50px bajo el bloque superior.
-        */}
+        {/* --- BLOQUE INFERIOR (TEXTO EN COLUMNAS FLUIDAS) --- */}
         <div className="flex-grow w-full px-[120px] pt-[50px] pb-[140px] overflow-y-auto no-scrollbar">
             <AnimatedSection 
                 className="w-full min-h-full" 
@@ -83,9 +78,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     columnFill: 'balance' 
                 }}
             >
-                {/* 1. Programa 
-                    - Margen inferior ajustado a mb-4 para consistencia.
-                */}
+                {/* 1. Programa */}
                 <div className="mb-4 break-inside-avoid">
                     <p className="cuerpo text-left">
                         <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />

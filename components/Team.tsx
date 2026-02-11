@@ -29,30 +29,22 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   return (
     <section className="h-screen w-full bg-vlanc-bg flex flex-col relative overflow-hidden">
         
-        {/* Título de Sección: Ajuste top-[150px] */}
+        {/* Título de Sección */}
         <div className="absolute top-[150px] left-[120px] z-20">
             <AnimatedSection>
                 <h2 className="subtitulo1 text-vlanc-black">
                     {data?.title || "conoce a VLANC"}
                 </h2>
-                {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                {/* Barra decorativa actualizada (#8f4933) */}
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
             </AnimatedSection>
         </div>
 
-        {/* Contenedor Principal: 
-            - mt-[297px]
-            - h-[calc(100vh-297px)]: Calcula el espacio restante exacto.
-            - pb-[140px]: Define el margen inferior.
-        */}
+        {/* Contenedor Principal */}
         <div className="flex w-full mt-[297px] h-[calc(100vh-297px)] pb-[140px]">
             
             {/* MITAD IZQUIERDA (50%): IMÁGENES */}
             <div className="w-1/2 h-full pr-[30px] pl-0">
-                {/* 
-                   CAMBIO: Agregado `content-between` para forzar que la primera fila esté arriba 
-                   y la segunda fila esté pegada completamente abajo.
-                */}
                 <div className="grid grid-cols-2 gap-x-[50px] h-full items-stretch content-between">
                     {members.map((member, index) => {
                         const isBottomRow = index >= 2;
@@ -61,7 +53,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                 key={index} 
                                 className={`flex flex-col w-full ${isBottomRow ? 'justify-end' : 'justify-start'}`}
                             >
-                                {/* Imagen: Mantiene aspecto 428/264 */}
+                                {/* Imagen */}
                                 <div className="w-full aspect-[428/264] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 rounded-[1px]">
                                     {member.image ? (
                                         <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
@@ -72,7 +64,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                     )}
                                 </div>
                                 
-                                {/* Pie de foto: Alineado al fondo del contenedor en la fila inferior */}
+                                {/* Pie de foto */}
                                 <div className="mt-2 flex justify-end items-baseline gap-2 text-right w-full">
                                     <span className="piedefoto1 whitespace-nowrap">
                                         {member.name}
@@ -87,9 +79,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* MITAD DERECHA (50%): TEXTO 
-                - justify-between asegura que "Nuestra historia" se pegue abajo.
-            */}
+            {/* MITAD DERECHA (50%): TEXTO */}
             <div className="w-1/2 h-full pl-[50px] pr-[120px] flex flex-col justify-between text-left">
                 
                 {/* Bloque Superior: Nuestro propósito */}
@@ -103,10 +93,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                     />
                 </AnimatedSection>
 
-                {/* Bloque Inferior: Nuestra historia 
-                   - Alineado abajo gracias a justify-between en el padre.
-                   - shrink-0 evita que se encoja.
-                */}
+                {/* Bloque Inferior: Nuestra historia */}
                 <AnimatedSection className="flex flex-col items-start pb-0 shrink-0">
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}

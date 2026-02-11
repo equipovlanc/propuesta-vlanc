@@ -20,7 +20,6 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
     return (
-        /* Ajuste de márgenes globales: pt-[150px], pb-[140px] */
         <footer className="h-screen pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex items-center justify-center">
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32 items-center w-full">
                 
@@ -30,7 +29,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                         {finalLogo ? (
                             <img src={finalLogo} alt="Final Logo" className="w-full h-auto object-contain" />
                         ) : (
-                             // Fallback visual
                              <div className="relative w-full max-w-md aspect-square flex items-center justify-center">
                                 <div className="w-56 h-56 bg-vlanc-primary rounded-full flex items-center justify-center text-white shadow-2xl z-10">
                                     <span className="text-4xl font-serif font-bold tracking-[0.3em]">VLANC</span>
@@ -67,7 +65,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                         </a>
                     </AnimatedSection>
 
-                    {/* Nueva sección RRSS */}
                     <AnimatedSection>
                          <h4 className="text-[14px] font-bold text-vlanc-black tracking-[0.2em] mb-4">/ RRSS</h4>
                          <div className="flex gap-6">
@@ -83,8 +80,8 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                          </div>
                     </AnimatedSection>
                     
-                    {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                    {/* Barra decorativa actualizada (#8f4933) */}
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                 </div>
             </div>
         </footer>

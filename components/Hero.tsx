@@ -21,7 +21,7 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
   return (
     <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-[120px] py-32">
       
-      {/* Esquina Superior Izquierda: Info Técnica (Mantiene Montserrat) */}
+      {/* Esquina Superior Izquierda: Info Técnica */}
       <div className="absolute top-20 left-20 text-left pointer-events-none">
         <div className="flex flex-col gap-6">
             <div className="text-[14px] font-serif text-vlanc-black leading-tight">
@@ -29,8 +29,8 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
                 <p className="font-normal">{headerData?.title}</p>
             </div>
             
-            {/* Barra decorativa actualizada: 52x2.4px, #703622 */}
-            <div className="w-[52px] h-[2.4px] bg-[#703622]"></div>
+            {/* Barra decorativa actualizada (#8f4933) */}
+            <div className="w-[52px] h-[2.4px] bg-[#8f4933]"></div>
 
             <div className="text-[14px] font-sans text-vlanc-secondary leading-tight tracking-wider">
                 <p className="font-medium">{data?.clientName || headerData?.clientName}</p>
@@ -41,14 +41,11 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
 
       {/* Centro: Títulos */}
       <AnimatedSection className="text-center">
-        {/* Eliminado space-y-6 para control manual preciso */}
         <div className="flex flex-col items-center">
-          {/* Nombre Cliente: Más cerca del título (mb-2) y menos peso (font-normal) */}
           <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight">
             {data?.clientName || headerData?.clientName}
           </p>
           
-          {/* Título Principal: Uso de la clase .titulo (peso 700 definido en CSS) */}
           <h1 className="titulo leading-[1.05]">
             {data?.line1}
           </h1>
@@ -56,8 +53,8 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
             {data?.line2}
           </h1>
           
-          {/* Barra inferior actualizada: 112x5px, #703622. CAMBIO: mt-[50px] -> mt-[40px] */}
-          <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+          {/* Barra inferior actualizada (#8f4933) */}
+          <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
         </div>
       </AnimatedSection>
 

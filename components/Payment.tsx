@@ -36,13 +36,12 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                     <h2 className="subtitulo1">
                        {investmentTitle || "la inversión."}
                     </h2>
-                    {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-20"></div>
+                    {/* Barra decorativa actualizada (#8f4933) */}
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] mb-20"></div>
                 </AnimatedSection>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
                     <AnimatedSection>
-                        {/* Subtitulo 2 (Italic, grande en este caso) */}
                         <h3 className="subtitulo2 text-[32px] mb-10">{data?.paymentMethods?.title}</h3>
                         <div className="space-y-12">
                            {(data?.paymentMethods?.plans ?? []).map((plan, i) => (
@@ -52,7 +51,6 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                                         {(plan.payments ?? []).map((p, idx) => (
                                             <div key={idx} className="flex items-start text-vlanc-secondary text-[12px]">
                                                 <div className="bg-vlanc-primary text-white text-[10px] font-bold px-2 py-1 mr-4 rounded-[1px] w-12 text-center shrink-0">{p.percent}</div>
-                                                {/* CAMBIO: leading-relaxed -> leading-[1.4] */}
                                                 <span className="leading-[1.4] font-sans">{p.description}</span>
                                             </div>
                                         ))}
@@ -64,7 +62,6 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle }) => {
                     
                     <AnimatedSection>
                          <h3 className="subtitulo2 text-[32px] mb-10">{data?.finePrint?.title}</h3>
-                         {/* CAMBIO: leading-relaxed -> leading-[1.4] */}
                          <div className="space-y-4 text-[11px] text-vlanc-secondary/80 text-left leading-[1.4] font-sans">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
                                 <p key={i} className="flex gap-3">

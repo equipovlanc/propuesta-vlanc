@@ -51,28 +51,25 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
       }
   };
 
-  // Lógica para determinar si hay botones y evitar renderizar divs vacíos que afecten al margen inferior
   const hasGuarantee = !!data?.guaranteeText;
-  const hasVideo = !!(data?.videoButtonText && data?.video); // Solo mostramos si hay texto configurado Y video (o la lógica que prefieras, según el prompt anterior era si hay texto)
+  const hasVideo = !!(data?.videoButtonText && data?.video);
   const hasButtons = hasGuarantee || (data?.videoButtonText && data?.videoButtonText.trim() !== "");
 
   return (
     <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden">
         
-        {/* --- 1. TÍTULO SECCIÓN (Posición fija: Top 150, Left 120) --- */}
+        {/* --- 1. TÍTULO SECCIÓN --- */}
         <div className="absolute top-[150px] left-[120px] z-20">
              <AnimatedSection>
                 <h2 className="subtitulo1 leading-none text-left text-vlanc-black">
                     {formattedTitle}
                 </h2>
-                {/* Barra decorativa */}
-                <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                {/* Barra decorativa actualizada (#8f4933) */}
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
             </AnimatedSection>
         </div>
 
-        {/* --- 2. IMAGEN VERTICAL (Posición fija: Left 575px, Width 409px, Height 100%) --- 
-            Va de "sangre a sangre" (top-0 bottom-0)
-        */}
+        {/* --- 2. IMAGEN VERTICAL --- */}
         <div className="absolute top-0 bottom-0 left-[575px] w-[409px] z-10 overflow-hidden pointer-events-none">
              <AnimatedSection className="w-full h-full">
                 {data?.image ? (
@@ -85,29 +82,19 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
              </AnimatedSection>
         </div>
 
-        {/* --- 3. CONTENIDO (Posición: A la derecha de la imagen, alineado al fondo) --- 
-            Left: 575px (inicio img) + 409px (ancho img) + 50px (espacio) = 1034px
-            Bottom: 140px (margen inferior estándar)
-            Right: 120px (margen derecho estándar)
-        */}
+        {/* --- 3. CONTENIDO --- */}
         <div className="absolute bottom-[140px] left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto">
             <AnimatedSection className="w-full">
-                {/* Título de la Fase (e.g. 1. FASE ANTEPROYECTO) 
-                    - Margen inferior aumentado a mb-8 para separar claramente del contenido
-                */}
+                {/* Título de la Fase */}
                 <h3 className="fase-titulo mb-8 text-vlanc-black">{data?.title}</h3>
                 
-                {/* Lista de Subfases 
-                    - space-y-6 para uniformidad entre puntos
-                */}
+                {/* Lista de Subfases */}
                 <div className="space-y-6">
                     {(data?.subPhases ?? []).map((sub, i) => (
                         <div key={i} className="text-left">
-                            {/* Título Subfase: Pegado a la descripción (mb-1) */}
                             <p className="fase-subtitulo mb-1 text-vlanc-black">
                                 {sub.number} {sub.title}
                             </p>
-                            {/* Descripción: Leading estandarizado a 1.5 */}
                             <p 
                                 className="cuerpo text-[14px] leading-[1.5]" 
                                 dangerouslySetInnerHTML={{ __html: sub.description || '' }} 
@@ -116,11 +103,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                     ))}
                 </div>
 
-                {/* Botones (Garantía / Video) 
-                    - Solo se renderiza si hay botones activos para asegurar que el último elemento (texto o botón) 
-                      toque el margen inferior de 140px sin espacios extra.
-                    - mt-12 para separar del texto.
-                */}
+                {/* Botones */}
                 {hasButtons && (
                     <div className="flex items-center gap-6 mt-12">
                         {hasGuarantee && (() => {

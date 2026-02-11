@@ -22,15 +22,15 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image }) => {
             <div className="w-full lg:w-1/2 h-full flex flex-col justify-start pl-[120px] pr-10 pt-[150px] pb-[140px] overflow-y-auto no-scrollbar">
                 <AnimatedSection className="mb-12">
                     <h2 className="subtitulo1">servicios<br />premium.</h2>
-                    {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                    <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                    {/* Barra decorativa actualizada (#8f4933) */}
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                 </AnimatedSection>
                 
                 <AnimatedSection className="space-y-12 flex-grow flex flex-col justify-center">
                     <div className="space-y-2">
-                         {/* Subtitulo 2 (Regular/Italic para Nombre Servicio) */}
+                         {/* Subtitulo 2 */}
                         <h3 className="subtitulo2 text-[28px] font-normal">/ {data?.subtitle}</h3>
-                         {/* Bajada: Montserrat Bold */}
+                         {/* Bajada */}
                         <h4 className="text-[12px] font-bold text-vlanc-black tracking-widest font-sans uppercase">{data?.title}</h4>
                     </div>
                     

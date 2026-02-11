@@ -38,8 +38,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
             <h2 className="subtitulo1">
                {investmentTitle || "la inversión."}
             </h2>
-            {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-            <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px] mb-16"></div>
+            {/* Barra decorativa actualizada (#8f4933) */}
+            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] mb-16"></div>
       </AnimatedSection>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">

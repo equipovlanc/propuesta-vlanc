@@ -71,8 +71,8 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
                         <h2 className="subtitulo1">
                             {formattedTitle}
                         </h2>
-                        {/* Barra decorativa actualizada. CAMBIO: mt-[50px] -> mt-[40px] */}
-                        <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                        {/* Barra decorativa actualizada (#8f4933) */}
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                     </div>
                 </AnimatedSection>
             </div>

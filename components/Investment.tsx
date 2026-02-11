@@ -51,16 +51,14 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 <h2 className="subtitulo1">
                    {data?.title || "la inversión."}
                 </h2>
-                {/* Barra decorativa */}
-                <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
+                {/* Barra decorativa (Color actualizado #8f4933) */}
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
             </AnimatedSection>
 
             {/* Contenedor Principal */}
             <div className="w-full flex flex-row gap-[160px] items-start h-full relative">
                 
-                {/* COLUMNA IZQUIERDA: Textos y Descripciones 
-                    - Se aplica space-y-6 para igualar TODOS los saltos de línea del bloque.
-                */}
+                {/* COLUMNA IZQUIERDA: Textos y Descripciones */}
                 <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection className="space-y-6">
                         {/* Introducción Parte 1 */}
@@ -69,7 +67,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
                         
-                        {/* Frase Destacada (Sin márgenes propios, usa el space-y-6 del padre) */}
+                        {/* Frase Destacada */}
                         {data?.highlightPhrase && (
                              <p className="cuerpo2 font-bold text-vlanc-black">
                                 {data.highlightPhrase}
@@ -82,11 +80,11 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
                         />
                         
-                        {/* Descripción de Planes (Dentro también space-y-6 para consistencia) */}
+                        {/* Descripción de Planes */}
                         <div className="space-y-6">
                             {(data?.plansDescription ?? []).map((p, i) => (
                                 <div key={i} className="space-y-2">
-                                    {/* Nombre del plan: Montserrat Bold, 15px, Uppercase */}
+                                    {/* Nombre del plan */}
                                     <h3 className="font-sans font-bold text-[15px] text-vlanc-black uppercase leading-tight">{p.name}_</h3>
                                     
                                     {/* Descripción */}
@@ -102,10 +100,10 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
 
                 {/* COLUMNA DERECHA: Tabla y Firmas */}
                 <div className="shrink-0 flex flex-col items-end">
-                    {/* Contenedor Tabla: Altura fija 532px */}
+                    {/* Contenedor Tabla */}
                     <AnimatedSection className="w-[720px] h-[532px] flex flex-col">
                         
-                        {/* Cabecera Tabla: Altura fija 47px */}
+                        {/* Cabecera Tabla */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0 h-[47px]">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
@@ -118,11 +116,9 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         {/* Cuerpo Tabla */}
                         <div className="flex-grow flex flex-col bg-transparent">
                             {(data?.tableRows ?? []).map((row, i) => {
-                                // Base grid layout
                                 const gridClass = "grid grid-cols-[3fr_repeat(3,1fr)] items-center";
 
                                 if (row.isPremiumSeparator) {
-                                    // Fila Separador Premium: Altura fija 31px
                                     return (
                                         <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10`}>
                                             <div className="px-4 text-right pr-4 col-span-4 h-full flex items-center justify-end">
@@ -132,7 +128,6 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                                     );
                                 }
                                 
-                                // Fila Normal: Flex-grow para repartir altura restante
                                 return (
                                     <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`}>
                                         <div className="px-4 leading-tight py-1">
@@ -148,18 +143,18 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Pie Tabla: Altura fija 35px */}
+                        {/* Pie Tabla: Precios - SIN BORDES para efecto continuo */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0 h-[35px]">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
-                                <div key={i} className="px-4 text-center flex flex-col justify-center border-l border-white/20 h-full">
+                                <div key={i} className="px-4 text-center flex flex-col justify-center h-full">
                                     <span className="tabla3 whitespace-nowrap">{price}</span>
                                 </div>
                             ))}
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA: Margen superior de 25px exactos */}
+                    {/* FIRMA */}
                     <div className="w-[720px] flex flex-col border-t border-[#702622] mt-[25px] pt-1">
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
