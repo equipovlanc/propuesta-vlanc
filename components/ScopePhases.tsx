@@ -126,15 +126,17 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                         );
                     })()}
                     
-                    {/* Botón VIDEO visible siempre, funcionalidad condicional */}
-                    <button 
-                        onClick={handleVideoClick}
-                        className="border border-vlanc-primary text-vlanc-primary px-8 py-4 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent"
-                    >
-                         <span className="boton1 text-vlanc-primary group-hover:text-white">
-                            {data?.videoButtonText || "VER VIDEO"}
-                         </span>
-                    </button>
+                    {/* Botón VIDEO visible solo si videoButtonText existe */}
+                    {data?.videoButtonText && (
+                        <button 
+                            onClick={handleVideoClick}
+                            className="border border-vlanc-primary text-vlanc-primary px-8 py-4 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group"
+                        >
+                             <span className="boton1 text-vlanc-primary group-hover:text-white">
+                                {data.videoButtonText}
+                             </span>
+                        </button>
+                    )}
                 </div>
             </AnimatedSection>
         </div>
