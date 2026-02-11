@@ -1,4 +1,5 @@
 
+
 export const proposalData = {
     logos: {
         smallLogo: null,
@@ -120,8 +121,69 @@ export const proposalData = {
         },
         image: ""
     },
-    scopePhases1: { title: "trabajos contemplados.", phases: [] },
-    scopePhases2: { title: "trabajos contemplados.", phases: [] },
+    scopePhases1: { 
+        title: "trabajos contemplados.", 
+        phases: [
+            {
+                title: "1. FASE ANTEPROYECTO",
+                image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1034&auto=format&fit=crop", 
+                videoUrl: "#", 
+                guaranteeText: "GARANTÍA 20 / Proceso de creación de hogares",
+                subPhases: [
+                    { number: "1.1", title: "ENTREVISTA", description: "Nos reuniremos contigo en la vivienda para que nos conozcamos un poco más y nos cuentes todo lo que es importante para ti en este proyecto, cuáles son tus gustos, deseos, sueños e imprescindibles, que conjugaremos con el potencial y la esencia de la vivienda." },
+                    { number: "1.2", title: "TOMA DE DATOS", description: "Analizaremos el ámbito de intervención al detalle y tomaremos todos los datos necesarios para llevar a cabo un diseño en el que todos los condicionantes de partida estén reflejados, de manera que no se deje nada a la improvisación. En esta fase realizaremos un plano del estado actual de la zona de actuación para saber de dónde partimos." },
+                    { number: "1.3", title: "ANTEPROYECTO", description: "A través del análisis de tus necesidades e imprescindibles, realizaremos varias propuestas de distribución para posteriormente mostrarte las mejores, aquellas que cubran todos tus deseos y sean técnicamente viables. Tras la reunión de la presentación de las propuestas, realizaremos los ajustes necesarios sobre la distribución que elijas para adaptarla perfectamente a tus ilusiones y necesidades, y obtener así, la distribución definitiva." },
+                    { number: "1.4", title: "DOCUMENTO", description: "Entregamos el PROYECTO DE DISTRIBUCIÓN, que incluye los planos de planta y sección de la distribución definitiva con cotas y superficies, con el que se puede replantear tu nuevo futuro hogar." }
+                ]
+            },
+            {
+                title: "2. FASE INTERIORISMO",
+                image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1000&auto=format&fit=crop", 
+                guaranteeText: "GARANTÍA / Soporte Ilimitado",
+                subPhases: [
+                    { number: "2.1", title: "MODELADO 3D + PROPUESTA DE ACABADOS", description: "Realizaremos un 3D con una preselección de materiales y acabados asociados al ámbito de intervención según tus preferencias." },
+                    { number: "2.2", title: "SELECCIÓN DE MATERIALES", description: "Te asesoramos y te acompañamos o mostramos la elección definitiva de suelos, pinturas, papeles y azulejos." },
+                    { number: "2.3", title: "PROPUESTA DE MOBILIARIO Y DECORACIÓN", description: "Con los acabados materiales decididos, te presentamos una propuesta valorada de mobiliario, iluminación y complementos que encaje con tu estilo." },
+                    { number: "2.4", title: "3D DEFINITIVO", description: "Con las opciones elegidas, realizamos el modelado definitivo 3D en D5 para que visualices el proyecto antes de empezar las obras, con los acabados y el mobiliario propuesto." },
+                    { number: "2.5", title: "PLANIMETRÍA DE DISEÑOS A MEDIDA", description: "Realizamos el diseño a medida de puertas, armarios, mobiliario y todos los elementos necesarios para que encajen con el resto del proyecto." },
+                    { number: "2.6", title: "ESQUEMA DE LA ELECTRICIDAD E ILUMINACIÓN", description: "Realizamos un esquema básico de instalación eléctrica detallando ubicación de puntos de luz, interruptores, enchufes y tomas de telecomunicación." },
+                    { number: "2.7", title: "DOCUMENTO", description: "Te entregamos el PROYECTO DE INTERIORISMO, documento explicativo de la actuación donde quedan detallados los materiales elegidos y su colocación, así como los modelos de griferías y el mobiliario a medida derivado del proceso de diseño, con imágenes fotorrealistas, una por estancia, para que puedas ver cómo se quedará tu hogar antes de ejecutarlo." }
+                ]
+            }
+        ] 
+    },
+    scopePhases2: { 
+        title: "trabajos contemplados.", 
+        phases: [
+            {
+                title: "3. FASE CONTRATACIÓN",
+                image: "https://images.unsplash.com/photo-1556912172-45b7abe8d7e1?q=80&w=1000&auto=format&fit=crop",
+                subPhases: [
+                     { number: "3.1", title: "GESTIÓN DE PRESUPUESTO DE EJECUCIÓN", description: "Visitamos la vivienda con el constructor y oficios de nuestra confianza que mejores garantías de calidad y precio nos dan, para explicarles el proyecto, facilitarles la MEDICIÓN y los PLANOS DE EJECUCIÓN. Documentos necesarios para que presupuesten todo aquello que está contemplado en el diseño." },
+                     { number: "3.2", title: "NEGOCIACIÓN DE PRESUPUESTO", description: "Realizamos un análisis exhaustivo del presupuesto o presupuestos recibidos, y negociamos por ti un precio justo y acorde a mercado y a las calidades solicitadas, para que no pagues de más por la obra, sin renunciar a tu objetivo de calidad." },
+                     { number: "3.3", title: "DOCUMENTO", description: "En esta fase os entregaremos los PRESUPUESTOS recibidos, así como un resumen económico de la intervención según la hemos diseñado, junto a la MEDICIÓN y los PLANOS DE EJECUCIÓN a partir de los cuales se ha obtenido el precio de la intervención." }
+                ]
+            },
+            {
+                title: "4. FASE DOCUMENTACIÓN",
+                image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop",
+                subPhases: [
+                     { number: "4.1", title: "PROYECTO BÁSICO Y DE EJECUCIÓN", description: "Documento técnico necesario para la solicitud de la licencia de obras y obtención de financiación, para obras de reforma interior.", note: "NOTA: Incluye VISADO por Colegio Profesional imprescindible en el caso de solicitud de financiación bancaria." },
+                     { number: "4.2", title: "ESTUDIO DE SEGURIDAD Y SALUD", description: "Documento que contiene las medidas y sistemas de seguridad necesarios para ejecutar la obra con arreglo a las normativas de Seguridad y Salud Laboral." },
+                     { number: "4.3", title: "ESTUDIO DE GESTIÓN DE RESIDUOS", description: "Documento firmado por el productor de los residuos, el promotor, que tiene por objeto establecer el régimen jurídico de la producción y gestión de los residuos de construcción." },
+                     { number: "4.4", title: "CUESTIONARIO ESTADÍSTICO DEL MINISTERIO DE FOMENTO", description: "Impreso donde el promotor y el técnico responsable deberán consignar los datos de la obra." }
+                ]
+            },
+            {
+                title: "5. FASE OBRA",
+                image: "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=1000&auto=format&fit=crop",
+                subPhases: [
+                     { number: "5.1", title: "GESTIONES ADMINISTRATIVAS", description: "Una vez elaborada la documentación técnica nos encargamos de toda la gestión de licencias y permisos con la administración, de forma que quede todo listo para poder empezar las obras." },
+                     { number: "5.2", title: "GESTIÓN DE OBRA", description: "Planificamos, coordinamos y supervisamos regularmente la obra y nos aseguramos de que el proyecto se lleve a cabo tal cual lo hemos diseñado contigo. En caso de incidencias o cambios durante la ejecución, buscamos soluciones de manera fácil y ventajosa para ti." }
+                ]
+            }
+        ] 
+    },
     investment: {
         title: "la inversión.",
         introduction: "Te planteamos formar parte de tu vida, al fin y al cabo, las obras perduran en el tiempo. Y te proponemos implicarnos en la tuya como si fuera para nosotros.",

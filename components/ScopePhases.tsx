@@ -33,6 +33,15 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
       </React.Fragment>
   ));
 
+  // Función para separar texto de garantía
+  const getGuaranteeParts = (text: string) => {
+      const parts = text.split('/');
+      return {
+          badge: parts[0]?.trim(),
+          desc: parts.slice(1).join('/').trim()
+      };
+  };
+
   return (
     <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden">
         
@@ -89,16 +98,30 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
 
                 {/* Botones (Garantía / Video) */}
                 {(data?.guaranteeText || data?.videoUrl) && (
-                    <div className="flex items-center gap-6 pt-16">
-                        {data?.guaranteeText && (
-                            <button className="bg-vlanc-primary text-white text-[10px] font-bold px-8 py-4 tracking-[0.2em] uppercase rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-colors cursor-pointer">
-                                {data.guaranteeText}
-                            </button>
-                        )}
+                    <div className="flex items-center gap-6 pt-12">
+                        {data?.guaranteeText && (() => {
+                            const { badge, desc } = getGuaranteeParts(data.guaranteeText);
+                            return (
+                                <button className="flex items-center bg-vlanc-primary text-white px-6 py-4 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group">
+                                    <span className="text-[10px] font-bold tracking-[0.2em] uppercase font-sans leading-none">
+                                        {badge}
+                                    </span>
+                                    {desc && (
+                                        <>
+                                            <span className="mx-3 text-[10px] opacity-60 font-serif leading-none italic">/</span>
+                                            <span className="text-[12px] font-serif leading-none font-normal">
+                                                {desc}
+                                            </span>
+                                        </>
+                                    )}
+                                </button>
+                            );
+                        })()}
+                        
                         {data?.videoUrl && (
                             <button 
                                 onClick={() => setShowVideo(true)}
-                                className="border border-vlanc-primary text-vlanc-primary px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer"
+                                className="border border-vlanc-primary text-vlanc-primary px-8 py-4 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent"
                             >
                                 VER VIDEO
                             </button>
