@@ -38,9 +38,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
         return 'border-b border-vlanc-primary/10';
     };
 
-    // Función auxiliar para procesar texto de Sanity:
-    // 1. Reemplaza saltos de línea (\n) por <br />
-    // 2. Permite que dangerouslySetInnerHTML renderice eso + etiquetas como <strong>
+    // Función auxiliar para procesar texto de Sanity
     const formatText = (text?: string) => {
         if (!text) return '';
         return text.replace(/\n/g, '<br />');
@@ -64,16 +62,15 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 <div className="flex-1 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection>
                         {/* Introducción Parte 1 
-                            - Clase 'cuerpo' (14px) forzada con text-[14px]
-                            - Sin whitespace-pre-line para evitar conflictos con HTML
-                            - formatText maneja los saltos de línea
+                            - CAMBIO: Reducido a text-[12px] para mayor elegancia técnica
+                            - Renderiza HTML (negritas)
                         */}
                         <div 
-                            className="cuerpo text-[14px] font-normal" 
+                            className="cuerpo text-[12px] leading-[1.6] font-normal [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
                         
-                        {/* Frase Destacada: Negrita, Negro, cuerpo2 (16px), con margen vertical */}
+                        {/* Frase Destacada: Negrita, Negro, cuerpo2 (16px) */}
                         {data?.highlightPhrase && (
                              <p className="cuerpo2 font-bold text-vlanc-black my-6">
                                 {data.highlightPhrase}
@@ -81,10 +78,10 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         )}
                         
                         {/* Introducción Parte 2 
-                             - Clase 'cuerpo' (14px) forzada
+                             - CAMBIO: Reducido a text-[12px]
                         */}
                         <div 
-                            className="cuerpo text-[14px] font-normal mb-8" 
+                            className="cuerpo text-[12px] leading-[1.6] font-normal mb-8 [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
                         />
                         
@@ -93,7 +90,11 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             {(data?.plansDescription ?? []).map((p, i) => (
                                 <div key={i} className="space-y-1">
                                     <p className="text-[12px] font-bold text-vlanc-black tracking-widest uppercase">{p.name}_</p>
-                                    <p className="text-[11px] text-vlanc-secondary leading-[1.4] text-left font-sans whitespace-pre-line">{p.desc}</p>
+                                    {/* CAMBIO: Usar dangerouslySetInnerHTML para permitir <strong> aquí también */}
+                                    <div 
+                                        className="text-[11px] text-vlanc-secondary leading-[1.4] text-left font-sans [&>strong]:font-bold"
+                                        dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -156,8 +157,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA (Clase TABLA1): Justo debajo de la tabla */}
-                    <div className="w-[720px] mt-4 flex justify-between items-start">
+                    {/* FIRMA (Clase TABLA1): Justo debajo de la tabla (mt-2) */}
+                    <div className="w-[720px] mt-2 flex justify-between items-start">
                         <span className="tabla1 opacity-40">VIVE VLANC SL</span>
                         <span className="tabla1 opacity-40 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
                     </div>
