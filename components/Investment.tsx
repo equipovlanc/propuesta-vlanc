@@ -61,27 +61,22 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 {/* COLUMNA IZQUIERDA: Textos y Descripciones (Fluida) */}
                 <div className="flex-1 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection>
-                        {/* Introducción Parte 1 
-                            - ELIMINADO .cuerpo para no sobrescribir. 
-                            - Definido estilos base manualmente para 12px.
-                        */}
+                        {/* Introducción Parte 1: Uso estricto de .cuerpo */}
                         <div 
-                            className="font-sans text-[12px] text-vlanc-secondary leading-[1.6] font-normal [&>strong]:font-bold" 
+                            className="cuerpo [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
                         
-                        {/* Frase Destacada: cuerpo2 (16px) es correcto aquí */}
+                        {/* Frase Destacada: Uso estricto de .cuerpo2 */}
                         {data?.highlightPhrase && (
                              <p className="cuerpo2 font-bold text-vlanc-black my-6">
                                 {data.highlightPhrase}
                              </p>
                         )}
                         
-                        {/* Introducción Parte 2 
-                             - ELIMINADO .cuerpo.
-                        */}
+                        {/* Introducción Parte 2: Uso estricto de .cuerpo */}
                         <div 
-                            className="font-sans text-[12px] text-vlanc-secondary leading-[1.6] font-normal mb-8 [&>strong]:font-bold" 
+                            className="cuerpo mb-8 [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
                         />
                         
@@ -89,15 +84,10 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         <div className="space-y-8">
                             {(data?.plansDescription ?? []).map((p, i) => (
                                 <div key={i} className="space-y-2">
-                                    {/* Nombre del plan 
-                                        - ELIMINADO .fase-titulo (18px).
-                                        - USADO text-[16px] explícito.
-                                    */}
-                                    <h3 className="font-sans text-[16px] font-bold text-vlanc-black uppercase leading-tight">{p.name}_</h3>
+                                    {/* Nombre del plan: Uso .cuerpo2 (16px) + utilidades de estilo (bold, uppercase, color negro) */}
+                                    <h3 className="cuerpo2 font-bold text-vlanc-black uppercase leading-tight">{p.name}_</h3>
                                     
-                                    {/* Descripción 
-                                        - SE MANTIENE .cuerpo porque deseamos 14px estándar.
-                                    */}
+                                    {/* Descripción: Uso estricto de .cuerpo */}
                                     <div 
                                         className="cuerpo [&>strong]:font-bold"
                                         dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
@@ -112,7 +102,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 <div className="shrink-0 flex flex-col items-end">
                     <AnimatedSection className="w-[720px] h-[532px] flex flex-col">
                         
-                        {/* Cabecera Tabla (Clase TABLA1) */}
+                        {/* Cabecera Tabla: Uso estricto de .tabla1 */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
@@ -122,7 +112,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             ))}
                         </div>
                         
-                        {/* Cuerpo Tabla: Flex Grow (Clase TABLA2) */}
+                        {/* Cuerpo Tabla: Uso estricto de .tabla2 */}
                         <div className="flex-grow flex flex-col bg-transparent">
                             {(data?.tableRows ?? []).map((row, i) => {
                                 const rowClass = "flex-grow grid grid-cols-[3fr_repeat(3,1fr)] items-center";
@@ -152,7 +142,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Pie Tabla: Precios (Clase TABLA3) */}
+                        {/* Pie Tabla: Uso estricto de .tabla3 */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
@@ -163,22 +153,19 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA (Clase TABLA1)
-                        - Separada por border-top sólido para asegurar visibilidad.
-                    */}
+                    {/* FIRMA: Uso estricto de .tabla1 */}
                     <div className="w-[720px] flex flex-col border-t border-[#702622] mt-2 pt-1">
                         <div className="flex justify-between items-start">
-                            {/* tabla1 ya tiene el color correcto, pero aseguro con text-[#702622] por si acaso */}
-                            <span className="tabla1 text-[#702622]">VIVE VLANC SL</span>
-                            <span className="tabla1 text-right text-[#702622]">ACEPTA PRESUPUESTO_FIRMA</span>
+                            <span className="tabla1">VIVE VLANC SL</span>
+                            <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* FECHA (Clase CUERPO, sin opacidad) */}
+            {/* FECHA: Uso estricto de .cuerpo (sin overrides de tamaño) */}
             <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
-                <p className="cuerpo font-bold text-[#702622] text-right text-[10px]">
+                <p className="cuerpo font-bold text-right">
                     {data?.locationDate || "En Alcoi a XX de mes de 2025"}
                 </p>
             </div>
