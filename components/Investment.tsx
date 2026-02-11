@@ -109,7 +109,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                                     return (
                                         <div key={i} className={`${rowClass} bg-[#e6ded6] border-b border-vlanc-primary/10`}>
                                             <div className="px-4 text-right pr-4 col-span-4">
-                                                <span className="tabla2 italic">SERVICIOS PREMIUM</span>
+                                                <span className="tabla2 bold italic">SERVICIOS PREMIUM</span>
                                             </div>
                                         </div>
                                     );
