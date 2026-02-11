@@ -55,39 +55,41 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
             </AnimatedSection>
 
-            {/* Contenedor Principal: Flex para control exacto del layout */}
+            {/* Contenedor Principal */}
             <div className="w-full flex flex-row gap-[160px] items-start h-full relative">
                 
-                {/* COLUMNA IZQUIERDA: Textos y Descripciones (Fluida) */}
-                <div className="flex-1 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
-                    <AnimatedSection>
-                        {/* Introducción Parte 1: Uso estricto de .cuerpo */}
+                {/* COLUMNA IZQUIERDA: Textos y Descripciones 
+                    - Se aplica space-y-6 para igualar TODOS los saltos de línea del bloque.
+                */}
+                <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
+                    <AnimatedSection className="space-y-6">
+                        {/* Introducción Parte 1 */}
                         <div 
                             className="cuerpo [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
                         
-                        {/* Frase Destacada: Uso estricto de .cuerpo2 */}
+                        {/* Frase Destacada (Sin márgenes propios, usa el space-y-6 del padre) */}
                         {data?.highlightPhrase && (
-                             <p className="cuerpo2 font-bold text-vlanc-black my-6">
+                             <p className="cuerpo2 font-bold text-vlanc-black">
                                 {data.highlightPhrase}
                              </p>
                         )}
                         
-                        {/* Introducción Parte 2: Uso estricto de .cuerpo */}
+                        {/* Introducción Parte 2 */}
                         <div 
-                            className="cuerpo mb-8 [&>strong]:font-bold" 
+                            className="cuerpo [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
                         />
                         
-                        {/* Descripción de Planes */}
-                        <div className="space-y-8">
+                        {/* Descripción de Planes (Dentro también space-y-6 para consistencia) */}
+                        <div className="space-y-6">
                             {(data?.plansDescription ?? []).map((p, i) => (
                                 <div key={i} className="space-y-2">
-                                    {/* Nombre del plan: Uso .cuerpo2 (16px) + utilidades de estilo (bold, uppercase, color negro) */}
-                                    <h3 className="cuerpo2 font-bold text-vlanc-black uppercase leading-tight">{p.name}_</h3>
+                                    {/* Nombre del plan: Montserrat Bold, 15px, Uppercase */}
+                                    <h3 className="font-sans font-bold text-[15px] text-vlanc-black uppercase leading-tight">{p.name}_</h3>
                                     
-                                    {/* Descripción: Uso estricto de .cuerpo */}
+                                    {/* Descripción */}
                                     <div 
                                         className="cuerpo [&>strong]:font-bold"
                                         dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
@@ -98,42 +100,46 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* COLUMNA DERECHA: Tabla y Firmas (Ancho Fijo) */}
+                {/* COLUMNA DERECHA: Tabla y Firmas */}
                 <div className="shrink-0 flex flex-col items-end">
+                    {/* Contenedor Tabla: Altura fija 532px */}
                     <AnimatedSection className="w-[720px] h-[532px] flex flex-col">
                         
-                        {/* Cabecera Tabla: Uso estricto de .tabla1 */}
-                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0">
+                        {/* Cabecera Tabla: Altura fija 47px */}
+                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0 h-[47px]">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
-                                <div key={i} className="p-3 text-center flex items-center justify-center">
+                                <div key={i} className="px-3 text-center flex items-center justify-center h-full">
                                     <span className="tabla1">{h}</span>
                                 </div>
                             ))}
                         </div>
                         
-                        {/* Cuerpo Tabla: Uso estricto de .tabla2 */}
+                        {/* Cuerpo Tabla */}
                         <div className="flex-grow flex flex-col bg-transparent">
                             {(data?.tableRows ?? []).map((row, i) => {
-                                const rowClass = "flex-grow grid grid-cols-[3fr_repeat(3,1fr)] items-center";
+                                // Base grid layout
+                                const gridClass = "grid grid-cols-[3fr_repeat(3,1fr)] items-center";
 
                                 if (row.isPremiumSeparator) {
+                                    // Fila Separador Premium: Altura fija 31px
                                     return (
-                                        <div key={i} className={`${rowClass} bg-[#e6ded6] border-b border-vlanc-primary/10`}>
-                                            <div className="px-4 text-right pr-4 col-span-4 py-2">
+                                        <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10`}>
+                                            <div className="px-4 text-right pr-4 col-span-4 h-full flex items-center justify-end">
                                                 <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
                                             </div>
                                         </div>
                                     );
                                 }
                                 
+                                // Fila Normal: Flex-grow para repartir altura restante
                                 return (
-                                    <div key={i} className={`${rowClass} ${getRowBg(row.highlightColor)}`}>
+                                    <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`}>
                                         <div className="px-4 leading-tight py-1">
                                             <span className="tabla2">{row.label}</span>
                                         </div>
                                         {(row.checks ?? []).map((isChecked, idx) => (
-                                            <div key={idx} className="flex justify-center items-center py-1">
+                                            <div key={idx} className="flex justify-center items-center h-full">
                                                 {isChecked && <CheckIcon />}
                                             </div>
                                         ))}
@@ -142,19 +148,19 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Pie Tabla: Uso estricto de .tabla3 */}
-                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0">
+                        {/* Pie Tabla: Altura fija 35px */}
+                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0 h-[35px]">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
-                                <div key={i} className="p-4 text-center flex flex-col justify-center border-l border-white/20">
+                                <div key={i} className="px-4 text-center flex flex-col justify-center border-l border-white/20 h-full">
                                     <span className="tabla3 whitespace-nowrap">{price}</span>
                                 </div>
                             ))}
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA: Uso estricto de .tabla1 */}
-                    <div className="w-[720px] flex flex-col border-t border-[#702622] mt-2 pt-1">
+                    {/* FIRMA: Margen superior de 25px exactos */}
+                    <div className="w-[720px] flex flex-col border-t border-[#702622] mt-[25px] pt-1">
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
@@ -163,7 +169,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* FECHA: Uso estricto de .cuerpo (sin overrides de tamaño) */}
+            {/* FECHA */}
             <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
                 <p className="cuerpo font-bold text-right">
                     {data?.locationDate || "En Alcoi a XX de mes de 2025"}
