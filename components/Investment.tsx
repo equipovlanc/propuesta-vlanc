@@ -39,25 +39,25 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
     };
 
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px] relative">
             {/* Cabecera Sección */}
-            <AnimatedSection className="mb-8">
+            <AnimatedSection className="mb-8 shrink-0">
                 <h2 className="subtitulo1">
                    {data?.title || "la inversión."}
                 </h2>
-                {/* Barra decorativa actualizada. */}
+                {/* Barra decorativa */}
                 <div className="w-[112px] h-[5px] bg-[#703622] mt-[40px]"></div>
             </AnimatedSection>
 
             {/* Contenedor Principal: Flex para control exacto del layout */}
-            <div className="w-full flex flex-row gap-16 items-start h-full">
+            <div className="w-full flex flex-row gap-[160px] items-start h-full relative">
                 
                 {/* COLUMNA IZQUIERDA: Textos y Descripciones (Fluida) */}
                 <div className="flex-1 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection>
-                        {/* Introducción Parte 1 */}
+                        {/* Introducción Parte 1 (Clase CUERPO, respeta HTML) */}
                         <div 
-                            className="cuerpo" 
+                            className="cuerpo whitespace-pre-line" 
                             dangerouslySetInnerHTML={{ __html: data?.introduction || '' }} 
                         />
                         
@@ -68,9 +68,9 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                              </p>
                         )}
                         
-                        {/* Introducción Parte 2 */}
+                        {/* Introducción Parte 2 (Clase CUERPO, respeta HTML) */}
                         <div 
-                            className="cuerpo mb-8" 
+                            className="cuerpo mb-8 whitespace-pre-line" 
                             dangerouslySetInnerHTML={{ __html: data?.introduction2 || '' }} 
                         />
                         
@@ -90,25 +90,26 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 <div className="shrink-0 flex flex-col items-end">
                     <AnimatedSection className="w-[720px] h-[532px] flex flex-col">
                         
-                        {/* Cabecera Tabla */}
+                        {/* Cabecera Tabla (Clase TABLA1) */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
-                                <div key={i} className="p-3 text-center text-[10px] font-bold tracking-widest text-vlanc-secondary uppercase">{h}</div>
+                                <div key={i} className="p-3 text-center flex items-center justify-center">
+                                    <span className="tabla1">{h}</span>
+                                </div>
                             ))}
                         </div>
                         
-                        {/* Cuerpo Tabla: Flex Grow para ocupar espacio restante proporcionalmente */}
-                        <div className="flex-grow flex flex-col bg-transparent text-[10px]">
+                        {/* Cuerpo Tabla: Flex Grow (Clase TABLA2) */}
+                        <div className="flex-grow flex flex-col bg-transparent">
                             {(data?.tableRows ?? []).map((row, i) => {
-                                // Distribución uniforme de filas
                                 const rowClass = "flex-grow grid grid-cols-[3fr_repeat(3,1fr)] items-center";
 
                                 if (row.isPremiumSeparator) {
                                     return (
                                         <div key={i} className={`${rowClass} bg-[#e6ded6] border-b border-vlanc-primary/10`}>
-                                            <div className="px-4 font-bold uppercase tracking-widest text-vlanc-secondary text-right pr-4 italic col-span-4">
-                                                SERVICIOS PREMIUM
+                                            <div className="px-4 text-right pr-4 col-span-4">
+                                                <span className="tabla2 italic">SERVICIOS PREMIUM</span>
                                             </div>
                                         </div>
                                     );
@@ -116,8 +117,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                                 
                                 return (
                                     <div key={i} className={`${rowClass} ${getRowBg(row.highlightColor)}`}>
-                                        <div className="px-4 font-bold text-vlanc-secondary uppercase tracking-widest leading-tight">
-                                            {row.label}
+                                        <div className="px-4 leading-tight">
+                                            <span className="tabla2">{row.label}</span>
                                         </div>
                                         {(row.checks ?? []).map((isChecked, idx) => (
                                             <div key={idx} className="flex justify-center items-center">
@@ -129,25 +130,32 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Pie Tabla: Precios */}
+                        {/* Pie Tabla: Precios (Clase TABLA3) */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
                                 <div key={i} className="p-4 text-center flex flex-col justify-center border-l border-white/20">
-                                    <p className="text-[14px] font-serif font-bold tracking-tight whitespace-nowrap">{price}</p>
+                                    <span className="tabla3 whitespace-nowrap">{price}</span>
                                 </div>
                             ))}
                         </div>
                     </AnimatedSection>
-                    
-                    {/* Firma y Fecha (Editable) */}
-                    <div className="mt-4 w-[720px] flex justify-between items-center text-[9px] font-bold tracking-widest uppercase text-vlanc-black/40">
-                        <span>VIVE VLANC SL</span>
-                        <span className="text-right">
-                            ACEPTA PRESUPUESTO_FIRMA<br/>
-                            {data?.locationDate || "En Alcoi a XX de mes de 2025"}
-                        </span>
-                    </div>
+                </div>
+            </div>
+
+            {/* FIRMA Y FECHA (Posicionamiento Absoluto en margen inferior) 
+                - Bottom: 70px (Punto medio del margen de 140px)
+                - Right: 120px (Alineado con margen derecho y tabla)
+                - Width: 720px (Ancho de tabla)
+            */}
+            <div className="absolute bottom-[70px] right-[120px] w-[720px] flex justify-between items-center z-20 pointer-events-none translate-y-1/2">
+                <span className="tabla1 opacity-40">VIVE VLANC SL</span>
+                <div className="text-right">
+                    <p className="tabla1 opacity-40 mb-1">ACEPTA PRESUPUESTO_FIRMA</p>
+                    {/* Fecha en CUERPO, ajustado visualmente para encajar en bloque de firma */}
+                    <p className="cuerpo font-bold text-[10px] text-vlanc-secondary opacity-60">
+                        {data?.locationDate || "En Alcoi a XX de mes de 2025"}
+                    </p>
                 </div>
             </div>
         </section>
