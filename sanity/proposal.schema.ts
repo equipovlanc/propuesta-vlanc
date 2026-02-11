@@ -181,7 +181,8 @@ export default defineType({
                     fields: [
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'image', type: 'image' }),
-                        defineField({ name: 'videoUrl', title: 'URL del Video (Si aplica)', type: 'string' }),
+                        defineField({ name: 'video', title: 'Archivo Video (Si aplica)', type: 'file' }),
+                        defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
                         defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía (Si aplica)', type: 'string' }),
                         defineField({ name: 'subPhases', type: 'array', of: [{
                             type: 'object',
@@ -205,7 +206,8 @@ export default defineType({
                     fields: [
                          defineField({ name: 'title', type: 'string' }),
                          defineField({ name: 'image', type: 'image' }),
-                         defineField({ name: 'videoUrl', title: 'URL del Video', type: 'string' }),
+                         defineField({ name: 'video', title: 'Archivo Video', type: 'file' }),
+                         defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
                          defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía', type: 'string' }),
                          defineField({ name: 'subPhases', type: 'array', of: [{
                             type: 'object',

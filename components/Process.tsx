@@ -66,11 +66,11 @@ const Process: React.FC<ProcessProps> = ({ data }) => {
                                         onClick={() => console.log('Abrir Garantía')}
                                         className="mt-6 inline-flex items-center border border-vlanc-primary text-vlanc-primary px-5 py-3 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group"
                                     >
-                                        <span className="text-[14px] font-sans font-bold tracking-[0.1em] uppercase leading-none">
+                                        <span className="boton1">
                                             {data?.badge || "GARANTÍA"}
                                         </span>
                                         <span className="mx-2 text-[14px] font-serif leading-none opacity-60">/</span>
-                                        <span className="text-[14px] font-serif leading-none">
+                                        <span className="boton2">
                                             Somos tu equipo
                                         </span>
                                     </button>

@@ -127,7 +127,8 @@ export const proposalData = {
             {
                 title: "1. FASE ANTEPROYECTO",
                 image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1034&auto=format&fit=crop", 
-                videoUrl: "#", 
+                video: "#",
+                videoButtonText: "VER VIDEO",
                 guaranteeText: "GARANTÍA 20 / Proceso de creación de hogares",
                 subPhases: [
                     { number: "1.1", title: "ENTREVISTA", description: "Nos reuniremos contigo en la vivienda para que nos conozcamos un poco más y nos cuentes todo lo que es importante para ti en este proyecto, cuáles son tus gustos, deseos, sueños e imprescindibles, que conjugaremos con el potencial y la esencia de la vivienda." },
