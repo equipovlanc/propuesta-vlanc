@@ -38,6 +38,14 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
         return 'border-b border-vlanc-primary/10';
     };
 
+    // Función auxiliar para procesar texto de Sanity:
+    // 1. Reemplaza saltos de línea (\n) por <br />
+    // 2. Permite que dangerouslySetInnerHTML renderice eso + etiquetas como <strong>
+    const formatText = (text?: string) => {
+        if (!text) return '';
+        return text.replace(/\n/g, '<br />');
+    };
+
     return (
         <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px] relative">
             {/* Cabecera Sección */}
@@ -55,23 +63,29 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 {/* COLUMNA IZQUIERDA: Textos y Descripciones (Fluida) */}
                 <div className="flex-1 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection>
-                        {/* Introducción Parte 1 (Clase CUERPO, respeta HTML) */}
+                        {/* Introducción Parte 1 
+                            - Clase 'cuerpo' (14px) forzada con text-[14px]
+                            - Sin whitespace-pre-line para evitar conflictos con HTML
+                            - formatText maneja los saltos de línea
+                        */}
                         <div 
-                            className="cuerpo whitespace-pre-line" 
-                            dangerouslySetInnerHTML={{ __html: data?.introduction || '' }} 
+                            className="cuerpo text-[14px] font-normal" 
+                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
                         
-                        {/* Frase Destacada: Negrita, Negro, cuerpo2, con margen vertical */}
+                        {/* Frase Destacada: Negrita, Negro, cuerpo2 (16px), con margen vertical */}
                         {data?.highlightPhrase && (
                              <p className="cuerpo2 font-bold text-vlanc-black my-6">
                                 {data.highlightPhrase}
                              </p>
                         )}
                         
-                        {/* Introducción Parte 2 (Clase CUERPO, respeta HTML) */}
+                        {/* Introducción Parte 2 
+                             - Clase 'cuerpo' (14px) forzada
+                        */}
                         <div 
-                            className="cuerpo mb-8 whitespace-pre-line" 
-                            dangerouslySetInnerHTML={{ __html: data?.introduction2 || '' }} 
+                            className="cuerpo text-[14px] font-normal mb-8" 
+                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
                         />
                         
                         {/* Descripción de Planes */}
@@ -86,7 +100,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* COLUMNA DERECHA: Tabla (Ancho y Alto Fijos) */}
+                {/* COLUMNA DERECHA: Tabla y Firmas (Ancho Fijo) */}
                 <div className="shrink-0 flex flex-col items-end">
                     <AnimatedSection className="w-[720px] h-[532px] flex flex-col">
                         
@@ -109,7 +123,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                                     return (
                                         <div key={i} className={`${rowClass} bg-[#e6ded6] border-b border-vlanc-primary/10`}>
                                             <div className="px-4 text-right pr-4 col-span-4">
-                                                <span className="tabla2 bold italic">SERVICIOS PREMIUM</span>
+                                                {/* Separador Premium en Negrita */}
+                                                <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
                                             </div>
                                         </div>
                                     );
@@ -140,23 +155,20 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             ))}
                         </div>
                     </AnimatedSection>
+
+                    {/* FIRMA (Clase TABLA1): Justo debajo de la tabla */}
+                    <div className="w-[720px] mt-4 flex justify-between items-start">
+                        <span className="tabla1 opacity-40">VIVE VLANC SL</span>
+                        <span className="tabla1 opacity-40 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                    </div>
                 </div>
             </div>
 
-            {/* FIRMA Y FECHA (Posicionamiento Absoluto en margen inferior) 
-                - Bottom: 70px (Punto medio del margen de 140px)
-                - Right: 120px (Alineado con margen derecho y tabla)
-                - Width: 720px (Ancho de tabla)
-            */}
-            <div className="absolute bottom-[70px] right-[120px] w-[720px] flex justify-between items-center z-20 pointer-events-none translate-y-1/2">
-                <span className="tabla1 opacity-40">VIVE VLANC SL</span>
-                <div className="text-right">
-                    <p className="tabla1 opacity-40 mb-1">ACEPTA PRESUPUESTO_FIRMA</p>
-                    {/* Fecha en CUERPO, ajustado visualmente para encajar en bloque de firma */}
-                    <p className="cuerpo font-bold text-[10px] text-vlanc-secondary opacity-60">
-                        {data?.locationDate || "En Alcoi a XX de mes de 2025"}
-                    </p>
-                </div>
+            {/* FECHA (Clase CUERPO): Posicionada en el punto medio del margen inferior (70px desde abajo) */}
+            <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
+                <p className="cuerpo font-bold text-vlanc-secondary opacity-60 text-right text-[10px]">
+                    {data?.locationDate || "En Alcoi a XX de mes de 2025"}
+                </p>
             </div>
         </section>
     );
