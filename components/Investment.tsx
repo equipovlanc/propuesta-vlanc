@@ -61,38 +61,35 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 {/* COLUMNA IZQUIERDA: Textos y Descripciones (Fluida) */}
                 <div className="flex-1 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection>
-                        {/* Introducción Parte 1 
-                            - CAMBIO: Reducido a text-[12px] para mayor elegancia técnica
-                            - Renderiza HTML (negritas)
-                        */}
+                        {/* Introducción Parte 1 (Tamaño 12px mantenido por petición anterior) */}
                         <div 
                             className="cuerpo text-[12px] leading-[1.6] font-normal [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
                         
-                        {/* Frase Destacada: Negrita, Negro, cuerpo2 (16px) */}
+                        {/* Frase Destacada */}
                         {data?.highlightPhrase && (
                              <p className="cuerpo2 font-bold text-vlanc-black my-6">
                                 {data.highlightPhrase}
                              </p>
                         )}
                         
-                        {/* Introducción Parte 2 
-                             - CAMBIO: Reducido a text-[12px]
-                        */}
+                        {/* Introducción Parte 2 */}
                         <div 
                             className="cuerpo text-[12px] leading-[1.6] font-normal mb-8 [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
                         />
                         
-                        {/* Descripción de Planes */}
-                        <div className="space-y-6">
+                        {/* Descripción de Planes - ACTUALIZADO */}
+                        <div className="space-y-8">
                             {(data?.plansDescription ?? []).map((p, i) => (
-                                <div key={i} className="space-y-1">
-                                    <p className="text-[12px] font-bold text-vlanc-black tracking-widest uppercase">{p.name}_</p>
-                                    {/* CAMBIO: Usar dangerouslySetInnerHTML para permitir <strong> aquí también */}
+                                <div key={i} className="space-y-2">
+                                    {/* Nombre del plan con clase .fase-titulo */}
+                                    <h3 className="fase-titulo uppercase">{p.name}_</h3>
+                                    
+                                    {/* Descripción con clase .cuerpo (tamaño estándar 14px) */}
                                     <div 
-                                        className="text-[11px] text-vlanc-secondary leading-[1.4] text-left font-sans [&>strong]:font-bold"
+                                        className="cuerpo [&>strong]:font-bold"
                                         dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
                                     />
                                 </div>
@@ -118,12 +115,13 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         {/* Cuerpo Tabla: Flex Grow (Clase TABLA2) */}
                         <div className="flex-grow flex flex-col bg-transparent">
                             {(data?.tableRows ?? []).map((row, i) => {
+                                // Añadido py-1 extra para dar un poco más de aire, confiando en flex-grow para la altura total
                                 const rowClass = "flex-grow grid grid-cols-[3fr_repeat(3,1fr)] items-center";
 
                                 if (row.isPremiumSeparator) {
                                     return (
                                         <div key={i} className={`${rowClass} bg-[#e6ded6] border-b border-vlanc-primary/10`}>
-                                            <div className="px-4 text-right pr-4 col-span-4">
+                                            <div className="px-4 text-right pr-4 col-span-4 py-2">
                                                 {/* Separador Premium en Negrita */}
                                                 <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
                                             </div>
@@ -133,11 +131,11 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                                 
                                 return (
                                     <div key={i} className={`${rowClass} ${getRowBg(row.highlightColor)}`}>
-                                        <div className="px-4 leading-tight">
+                                        <div className="px-4 leading-tight py-1">
                                             <span className="tabla2">{row.label}</span>
                                         </div>
                                         {(row.checks ?? []).map((isChecked, idx) => (
-                                            <div key={idx} className="flex justify-center items-center">
+                                            <div key={idx} className="flex justify-center items-center py-1">
                                                 {isChecked && <CheckIcon />}
                                             </div>
                                         ))}
@@ -157,19 +155,22 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA (Clase TABLA1): Justo debajo de la tabla (mt-2) */}
-                    <div className="w-[720px] mt-2 flex justify-between items-start">
-                        {/* Eliminada opacity-40 para color completo */}
-                        <span className="tabla1">VIVE VLANC SL</span>
-                        <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                    {/* FIRMA (Clase TABLA1): Separada por línea */}
+                    <div className="w-[720px] flex flex-col">
+                        {/* Línea separadora añadida */}
+                        <div className="w-full h-[1px] bg-[#702622] mt-0 mb-2"></div>
+                        
+                        <div className="flex justify-between items-start">
+                            <span className="tabla1 text-[#702622]">VIVE VLANC SL</span>
+                            <span className="tabla1 text-right text-[#702622]">ACEPTA PRESUPUESTO_FIRMA</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* FECHA (Clase CUERPO): Posicionada en el punto medio del margen inferior (70px desde abajo) */}
+            {/* FECHA (Clase CUERPO) */}
             <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
-                {/* Eliminada opacity-60 para color completo */}
-                <p className="cuerpo font-bold text-vlanc-secondary text-right text-[10px]">
+                <p className="cuerpo font-bold text-[#702622] text-right text-[10px]">
                     {data?.locationDate || "En Alcoi a XX de mes de 2025"}
                 </p>
             </div>
