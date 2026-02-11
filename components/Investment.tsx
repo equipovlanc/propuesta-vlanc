@@ -159,15 +159,17 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
 
                     {/* FIRMA (Clase TABLA1): Justo debajo de la tabla (mt-2) */}
                     <div className="w-[720px] mt-2 flex justify-between items-start">
-                        <span className="tabla1 opacity-40">VIVE VLANC SL</span>
-                        <span className="tabla1 opacity-40 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                        {/* Eliminada opacity-40 para color completo */}
+                        <span className="tabla1">VIVE VLANC SL</span>
+                        <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
                     </div>
                 </div>
             </div>
 
             {/* FECHA (Clase CUERPO): Posicionada en el punto medio del margen inferior (70px desde abajo) */}
             <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
-                <p className="cuerpo font-bold text-vlanc-secondary opacity-60 text-right text-[10px]">
+                {/* Eliminada opacity-60 para color completo */}
+                <p className="cuerpo font-bold text-vlanc-secondary text-right text-[10px]">
                     {data?.locationDate || "En Alcoi a XX de mes de 2025"}
                 </p>
             </div>
