@@ -31,72 +31,89 @@ interface SpecialOffersProps {
 }
 
 const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) => {
-  return (
-    <section id="special-offers" className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
-      
-       <AnimatedSection>
-            <h2 className="subtitulo1">
-               {investmentTitle || "la inversión."}
-            </h2>
-            {/* Barra decorativa actualizada (#8f4933) */}
-            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] mb-16"></div>
-      </AnimatedSection>
+  // Datos para los 3 botones superiores
+  const plans = data?.conditionalOffer?.discountedPlans || [];
+  
+  // Texto descriptivo (usamos la descripción de la oferta de lanzamiento o condicional como fallback)
+  const descriptionText = data?.launchOffer?.description || data?.conditionalOffer?.description;
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-        <div className="space-y-20">
-            {/* Oferta Condicional */}
-            <AnimatedSection>
-                <div className="border-l-2 border-vlanc-primary pl-10">
-                    <h3 className="subtitulo2 mb-6 text-[21px]">{data?.conditionalOffer?.title}</h3>
-                    <div 
-                        className="cuerpo mb-8"
-                        dangerouslySetInnerHTML={{ __html: data?.conditionalOffer?.description || '' }}
-                    />
-                    <div className="grid grid-cols-3 gap-4">
-                        {(data?.conditionalOffer?.discountedPlans ?? []).map((plan, i) => (
-                            <div key={i} className="p-4 bg-[#8f4933]/10 border border-[#8f4933]/20 rounded-[1px] text-center">
-                                <p className="font-bold text-[9px] text-vlanc-black tracking-widest mb-1">{plan.name}</p>
-                                <p className="line-through text-vlanc-black/40 text-[9px] mb-1">{plan.originalPrice}</p>
-                                <p className="font-serif font-bold text-vlanc-primary text-[16px]">{plan.discountedPrice}</p>
-                            </div>
-                        ))}
+  return (
+    <section id="special-offers" className="h-full w-full bg-vlanc-bg flex flex-row pt-[150px] pb-[140px] px-[120px] overflow-hidden">
+      
+      {/* COLUMNA IZQUIERDA: Botones, Texto y Firma */}
+      {/* Padding derecho de 69.5px (mitad de 139px) */}
+      <div className="w-1/2 h-full flex flex-col pr-[69.5px]">
+          
+          {/* Cabecera */}
+          <AnimatedSection className="shrink-0 mb-8">
+                <h2 className="subtitulo1">
+                   {investmentTitle || "la inversión."}
+                </h2>
+                {/* Barra decorativa #8f4933 */}
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
+          </AnimatedSection>
+
+          <AnimatedSection className="flex-grow flex flex-col justify-center">
+                {/* 1. LOS 3 BOTONES (250x108px) */}
+                <div className="flex flex-col gap-6 mb-8">
+                    {plans.map((plan, i) => (
+                        <div 
+                            key={i} 
+                            className="w-[250px] h-[108px] border border-[#8f4933] flex flex-col items-center justify-center gap-2 bg-transparent transition-all duration-300 hover:bg-[#8f4933]/5"
+                        >
+                            {/* Tipografía Tabla 1 (Bold Uppercase) */}
+                            <span className="tabla1 text-[#8f4933]">{plan.name}</span>
+                            {/* Tipografía Tabla 2 (Regular Uppercase) */}
+                            <span className="tabla2 text-[#8f4933]">{plan.discountedPrice}</span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* 2. BOTÓN "TU HOGAR COMO NUNCA LO IMAGINASTE" */}
+                {/* Alto 41px, Ancho Columna, Pulsable */}
+                <button 
+                    className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#8f4933] group mb-8"
+                    onClick={() => console.log('CTA Clicked')}
+                >
+                    <span className="tabla1 text-[#8f4933] group-hover:text-white transition-colors">
+                        TU HOGAR COMO NUNCA LO IMAGINASTE
+                    </span>
+                </button>
+
+                {/* 3. CUERPO DE TEXTO */}
+                <div 
+                    className="cuerpo mb-8"
+                    dangerouslySetInnerHTML={{ __html: descriptionText || '' }}
+                />
+
+                {/* 4. FIRMA (Estética idéntica a Inversión) */}
+                <div className="w-full flex flex-col border-t border-[#8f4933] mt-auto pt-1">
+                    <div className="flex justify-between items-start">
+                        <span className="tabla1">VIVE VLANC SL</span>
+                        <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
                     </div>
                 </div>
-            </AnimatedSection>
-            
-            {/* Oferta Lanzamiento */}
-            <AnimatedSection>
-                 <div className="border-l-2 border-vlanc-primary pl-10">
-                    <h3 className="subtitulo2 mb-6 text-[21px]">{data?.launchOffer?.title}</h3>
-                    <div 
-                        className="cuerpo mb-8"
-                        dangerouslySetInnerHTML={{ __html: data?.launchOffer?.description || '' }}
-                    />
-                    <div className="w-full bg-[#8f4933] text-white p-6 text-center shadow-md rounded-[1px]">
-                         <p className="font-bold text-[14px] tracking-[0.2em] uppercase mb-2">{data?.launchOffer?.premiumServiceName}</p>
-                    </div>
-                    <p className="text-[10px] text-vlanc-black/50 font-bold tracking-[0.1em] mt-4 uppercase text-center">
-                        Valorado en <span className="text-vlanc-primary ml-1">{data?.launchOffer?.premiumServiceValue} + IVA</span>
-                    </p>
-                </div>
-            </AnimatedSection>
-        </div>
-        
-        <AnimatedSection>
-            <div className="relative group overflow-hidden rounded-[1px] shadow-2xl h-full min-h-[500px]">
-                {data?.callToAction?.image && (
+          </AnimatedSection>
+      </div>
+
+      {/* COLUMNA DERECHA: Imagen */}
+      {/* Padding izquierdo de 69.5px (mitad de 139px) */}
+      <div className="w-1/2 h-full pl-[69.5px]">
+          <AnimatedSection className="w-full h-full relative overflow-hidden">
+                {data?.callToAction?.image ? (
                     <img 
                         src={data.callToAction.image} 
-                        alt="Interior" 
-                        className="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-1000 group-hover:scale-105 group-hover:grayscale-0" 
+                        alt="Special Offer" 
+                        className="w-full h-full object-cover grayscale brightness-95 hover:grayscale-0 transition-all duration-1000" 
                     />
+                ) : (
+                    <div className="w-full h-full bg-[#8f4933]/10 flex items-center justify-center border border-[#8f4933]/20">
+                        <span className="tabla1 opacity-40">IMAGEN OFERTA</span>
+                    </div>
                 )}
-                <div className="absolute inset-0 bg-vlanc-secondary/40 flex items-center justify-center p-12">
-                    <h3 className="text-3xl lg:text-[42px] font-serif italic text-white text-center tracking-tighter leading-tight font-normal" dangerouslySetInnerHTML={{ __html: data?.callToAction?.text || '' }} />
-                </div>
-            </div>
-        </AnimatedSection>
+          </AnimatedSection>
       </div>
+
     </section>
   );
 };
