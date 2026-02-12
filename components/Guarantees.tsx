@@ -31,7 +31,7 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
             
             {/* 2. DESCRIPCIÓN */}
             <div 
-                className="cuerpo mb-8"
+                className="cuerpo mb-12"
                 dangerouslySetInnerHTML={{ __html: item.description || '' }}
             />
 
@@ -54,8 +54,8 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
                         )}
                     </div>
 
-                    {/* Rectángulo: Transparente con borde negro MÁS GRUESO (border-2) y MÁS PADDING (px-10) */}
-                    <div className="border-2 border-vlanc-black bg-transparent px-10 py-6 min-w-[200px] relative z-0">
+                    {/* Rectángulo: Transparente con borde negro (border-2) y Padding restaurado (px-6) */}
+                    <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
                         <div 
                             className="cuerpo !text-vlanc-black text-[14px] leading-snug"
                             dangerouslySetInnerHTML={{ __html: item.badgeContent || '' }}
