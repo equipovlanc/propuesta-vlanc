@@ -2,11 +2,19 @@
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
+interface DescriptionBlock {
+    text: string;
+    style: 'normal' | 'title';
+    isNumbered?: boolean;
+    number?: string;
+    hasSeparator?: boolean;
+}
+
 interface Service {
     title?: string;
     subtitle?: string;
     price?: string;
-    description?: string[];
+    description?: DescriptionBlock[];
     note?: string;
 }
 
@@ -17,68 +25,113 @@ interface PremiumServicesProps {
 }
 
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 0 }) => {
+    
+    // Helper para renderizar cada bloque de descripción según sus flags
+    const renderDescriptionBlock = (block: DescriptionBlock, key: number) => {
+        const isTitle = block.style === 'title';
+        
+        return (
+            <div key={key} className="w-full">
+                
+                {/* Contenido Principal */}
+                {isTitle ? (
+                    // CASO 1: Estilo Título (Bajada)
+                    <h4 className="subtitulo4 mb-2">
+                        <span dangerouslySetInnerHTML={{ __html: block.text }} />
+                    </h4>
+                ) : (
+                    // CASO 2: Estilo Normal (Puede ser numerado o no)
+                    <div className="flex flex-row items-start gap-4">
+                        {/* Badge de Número si aplica */}
+                        {block.isNumbered && block.number && (
+                            <div className="shrink-0 h-[24px] bg-[#8f4933] text-white px-2 flex items-center justify-center rounded-[1px] mt-0.5">
+                                <span className="text-[10px] font-bold tracking-widest leading-none">
+                                    {block.number}
+                                </span>
+                            </div>
+                        )}
+                        
+                        {/* Texto */}
+                        <p 
+                            className="cuerpo"
+                            dangerouslySetInnerHTML={{ __html: block.text }} 
+                        />
+                    </div>
+                )}
+
+                {/* Separador Opcional */}
+                {block.hasSeparator && (
+                    <div className="w-full h-[1px] bg-[#8f4933] mt-5 mb-5 opacity-30"></div>
+                )}
+                
+                {/* Si no hay separador, añadimos un espacio estándar entre bloques, 
+                    salvo que sea el último o lleve separador */}
+                {!block.hasSeparator && <div className="h-5"></div>}
+            </div>
+        );
+    };
+
     return (
         <section className="h-full w-full flex flex-row">
             {/* Left Column: Fixed 888px width, vlanc-bg (#efe8e1) */}
-            <div className="w-[888px] h-full bg-vlanc-bg flex flex-col justify-start pl-[120px] pr-10 pt-[150px] pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
+            <div className="w-[888px] h-full bg-vlanc-bg flex flex-col justify-between pl-[120px] pr-10 pt-[150px] pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
                 
-                {/* Cabecera Principal */}
-                <AnimatedSection className="mb-12 shrink-0">
-                    <h2 className="subtitulo1">
-                        {index === 0 ? (
-                            <>servicios<br />premium.</>
-                        ) : (
-                            "servicios premium."
+                {/* 1. Cabecera Principal (Arriba) */}
+                <div className="shrink-0">
+                    <AnimatedSection>
+                        <h2 className="subtitulo1">
+                            {index === 0 ? (
+                                <>servicios<br />premium.</>
+                            ) : (
+                                "servicios premium."
+                            )}
+                        </h2>
+                        {/* Barra decorativa (#8f4933) */}
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
+                    </AnimatedSection>
+                </div>
+                
+                {/* 2. Contenido del Servicio (Abajo) */}
+                <div className="flex flex-col justify-end max-w-xl">
+                    <AnimatedSection>
+                        
+                        {/* Nombre Servicio (Subtítulo 2) */}
+                        <h3 className="subtitulo2 not-italic mb-8">
+                            / {data?.subtitle}
+                        </h3>
+
+                        {/* Bajada Principal (Subtítulo 4) */}
+                        <h4 className="subtitulo4 mb-8">
+                            {data?.title}
+                        </h4>
+
+                        {/* Descripción Dinámica (Iteramos bloques) */}
+                        <div className="w-full">
+                            {(data?.description ?? []).map((block, i) => renderDescriptionBlock(block, i))}
+                        </div>
+                        
+                        {/* Notas */}
+                        {data?.note && (
+                            <div className="mt-4">
+                                <p 
+                                    className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary"
+                                    dangerouslySetInnerHTML={{ __html: data.note }}
+                                />
+                            </div>
                         )}
-                    </h2>
-                    {/* Barra decorativa (#8f4933) */}
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
-                </AnimatedSection>
-                
-                <AnimatedSection className="flex-grow flex flex-col justify-center max-w-xl">
-                    
-                    {/* 1. Nombre Servicio (Subtítulo 2) */}
-                    <h3 className="subtitulo2 not-italic mb-4">
-                        / {data?.subtitle}
-                    </h3>
-                    
-                    {/* 2. Línea separadora (Entre títulos) */}
-                    <div className="w-full h-[1px] bg-[#8f4933] mb-8"></div>
-
-                    {/* 3. Bajada (Subtítulo 4) */}
-                    {/* mb-5 para igualar visualmente el space-y-5 del cuerpo */}
-                    <h4 className="subtitulo4 mb-5">
-                        {data?.title}
-                    </h4>
-
-                    {/* 4. Descripción Cuerpo Normal */}
-                    {/* space-y-5 (20px) para los saltos de línea del texto */}
-                    <div className="cuerpo space-y-5">
-                        {(data?.description ?? []).map((p, i) => (
-                            <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
-                        ))}
-                    </div>
-                    
-                    {/* Notas */}
-                    {data?.note && (
-                        <div className="mt-8">
-                             <p className="text-[10px] text-vlanc-secondary/60 italic w-full uppercase tracking-wider">
-                                {data.note}
-                            </p>
-                        </div>
-                    )}
-                    
-                    {/* Botón Precio */}
-                    {data?.price && (
-                        <div className="mt-8 self-start bg-[#8f4933] text-white px-8 py-3 rounded-[1px] shadow-sm flex items-center justify-center cursor-default">
-                            <span className="boton1 text-white tracking-[0.1em]">{data.price}</span>
-                        </div>
-                    )}
-                </AnimatedSection>
+                        
+                        {/* Botón Precio */}
+                        {data?.price && (
+                            <div className="mt-8 self-start bg-[#8f4933] text-white px-8 py-3 rounded-[1px] shadow-sm flex items-center justify-center cursor-default">
+                                <span className="boton1 text-white tracking-[0.1em]">{data.price}</span>
+                            </div>
+                        )}
+                    </AnimatedSection>
+                </div>
             </div>
 
-            {/* Right Column: Rest of width, white bg, centered image 827x709 */}
-            <div className="flex-grow h-full bg-white flex items-center justify-center relative overflow-hidden z-0">
+            {/* Right Column: Rest of width, white bg */}
+            <div className="flex-grow h-full bg-white flex flex-col justify-end items-center pb-[140px] relative overflow-hidden z-0">
                 <AnimatedSection>
                     <div className="w-[827px] h-[709px] relative shrink-0">
                         {image ? (

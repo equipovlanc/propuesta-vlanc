@@ -318,8 +318,75 @@ export default defineType({
                     fields: [
                         defineField({ name: 'subtitle', title: 'Subtítulo 2 (Nombre Servicio)', type: 'string' }),
                         defineField({ name: 'title', title: 'Subtítulo 3 (Bajada)', type: 'string' }),
-                        defineField({ name: 'description', type: 'array', of: [{type: 'text'}] }),
-                        defineField({ name: 'note', type: 'string' }),
+                        
+                        // CAMBIO AQUÍ: Description ahora es un array de objetos complejos
+                        defineField({ 
+                            name: 'description', 
+                            title: 'Bloques de Descripción',
+                            type: 'array', 
+                            of: [{
+                                type: 'object',
+                                title: 'Bloque de Texto',
+                                fields: [
+                                    defineField({ 
+                                        name: 'text', 
+                                        title: 'Texto', 
+                                        type: 'text', 
+                                        rows: 3 
+                                    }),
+                                    defineField({ 
+                                        name: 'style', 
+                                        title: 'Estilo de Texto', 
+                                        type: 'string',
+                                        options: {
+                                            list: [
+                                                { title: 'Normal (Cuerpo)', value: 'normal' },
+                                                { title: 'Título (Estilo Bajada)', value: 'title' }
+                                            ],
+                                            layout: 'radio'
+                                        },
+                                        initialValue: 'normal'
+                                    }),
+                                    defineField({ 
+                                        name: 'isNumbered', 
+                                        title: '¿Es un punto numerado?', 
+                                        type: 'boolean', 
+                                        initialValue: false 
+                                    }),
+                                    defineField({ 
+                                        name: 'number', 
+                                        title: 'Número (Ej: 01)', 
+                                        type: 'string', 
+                                        hidden: ({parent}) => !parent?.isNumbered 
+                                    }),
+                                    defineField({ 
+                                        name: 'hasSeparator', 
+                                        title: '¿Añadir línea separadora debajo?', 
+                                        type: 'boolean', 
+                                        initialValue: false 
+                                    })
+                                ],
+                                preview: {
+                                    select: {
+                                        title: 'text',
+                                        style: 'style',
+                                        num: 'number',
+                                        sep: 'hasSeparator'
+                                    },
+                                    prepare({title, style, num, sep}) {
+                                        const type = style === 'title' ? '[TIT]' : '[TXT]';
+                                        const number = num ? `(#${num})` : '';
+                                        const line = sep ? '___' : '';
+                                        return {
+                                            title: title,
+                                            subtitle: `${type} ${number} ${line}`
+                                        }
+                                    }
+                                }
+                            }] 
+                        }),
+                        
+                        defineField({ name: 'note', title: 'Nota (Texto con saltos de línea)', type: 'text' }),
                         defineField({ name: 'price', type: 'string' }),
                         defineField({ name: 'image', type: 'image' })
                     ]
