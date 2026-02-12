@@ -39,8 +39,8 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
             {hasBadge && (
                 <div className="relative ml-6 mb-2"> {/* mb-2 reserva espacio mínimo antes del borde inferior */}
                     
-                    {/* Icono: Posición absoluta en la esquina superior izquierda (superpuesto) */}
-                    <div className="absolute -top-8 -left-8 w-[80px] h-[80px] z-10 flex items-center justify-center">
+                    {/* Icono: Reducido a 60px y ajustado posicionamiento para no invadir tanto */}
+                    <div className="absolute -top-7 -left-7 w-[60px] h-[60px] z-10 flex items-center justify-center">
                         {item.icon ? (
                             <img 
                                 src={item.icon} 
@@ -48,14 +48,14 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
                                 className="w-full h-full object-contain drop-shadow-sm" 
                             />
                         ) : (
-                            <div className="w-[50px] h-[50px] bg-vlanc-bg border border-vlanc-black rounded-full flex items-center justify-center">
-                                <span className="text-[8px] font-bold">ICON</span>
+                            <div className="w-[40px] h-[40px] bg-vlanc-bg border border-vlanc-black rounded-full flex items-center justify-center">
+                                <span className="text-[6px] font-bold">ICON</span>
                             </div>
                         )}
                     </div>
 
-                    {/* Rectángulo: Transparente con borde negro */}
-                    <div className="border border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
+                    {/* Rectángulo: Transparente con borde negro MÁS GRUESO (border-2) y MÁS PADDING (px-10) */}
+                    <div className="border-2 border-vlanc-black bg-transparent px-10 py-6 min-w-[200px] relative z-0">
                         <div 
                             className="cuerpo !text-vlanc-black text-[14px] leading-snug"
                             dangerouslySetInnerHTML={{ __html: item.badgeContent || '' }}
