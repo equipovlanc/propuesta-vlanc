@@ -32,7 +32,8 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                 
                 {/* COLUMNA IZQUIERDA: Logo Final (60%) */}
                 <AnimatedSection className="flex items-center justify-center h-full w-full">
-                    <div className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4">
+                    {/* MOVIDO 100px A LA IZQUIERDA (-translate-x-[100px]) */}
+                    <div className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px]">
                          {finalLogo ? (
                             <img src={finalLogo} alt="VLANC Final Logo" className="w-full h-full object-contain" />
                         ) : (
@@ -46,14 +47,16 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                 {/* COLUMNA DERECHA: Datos (40%) */}
                 <div className="flex items-center justify-center h-full w-full pl-10">
                     {/* Bloque de texto con ancho controlado, alineado a la izquierda internamente */}
-                    <div className="flex flex-col space-y-12 text-left w-full max-w-md">
+                    {/* MOVIDO 100px A LA DERECHA (translate-x-[100px]) */}
+                    <div className="flex flex-col space-y-12 text-left w-full max-w-md translate-x-[100px]">
                         
                         {/* 1. DÓNDE ESTAMOS */}
                         <AnimatedSection>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.location?.title}
                             </h4>
-                            <div className="cuerpo space-y-1 text-vlanc-secondary">
+                            {/* INDENTADO pl-6 para alinear con el texto del título (saltando la barra) */}
+                            <div className="cuerpo space-y-1 text-vlanc-secondary pl-6">
                                 <p>{data?.location?.address}</p>
                                 <p className="font-bold">{data?.location?.email}</p>
                             </div>
@@ -64,7 +67,8 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.phone?.title}
                             </h4>
-                            <div className="cuerpo space-y-4 text-vlanc-secondary">
+                            {/* INDENTADO pl-6 */}
+                            <div className="cuerpo space-y-4 text-vlanc-secondary pl-6">
                                 {/* Teléfono Fijo */}
                                 {data?.phone?.landline?.number && (
                                     <div className="flex items-center gap-4">
@@ -100,9 +104,12 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.web?.title}
                             </h4>
-                            <a href={data?.web?.url} target="_blank" className="cuerpo border-b border-vlanc-primary text-vlanc-secondary hover:text-vlanc-primary transition-colors">
-                                {data?.web?.displayText}
-                            </a>
+                            {/* INDENTADO pl-6 */}
+                            <div className="pl-6">
+                                <a href={data?.web?.url} target="_blank" className="cuerpo border-b border-vlanc-primary text-vlanc-secondary hover:text-vlanc-primary transition-colors">
+                                    {data?.web?.displayText}
+                                </a>
+                            </div>
                         </AnimatedSection>
 
                         {/* 4. RRSS */}
@@ -110,7 +117,8 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                              <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / RRSS
                              </h4>
-                             <div className="flex gap-6 items-center">
+                             {/* INDENTADO pl-6 */}
+                             <div className="flex gap-6 items-center pl-6">
                                 {(data?.rrss ?? []).map((social, i) => (
                                     <a 
                                         key={i} 
@@ -131,8 +139,8 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                              </div>
                         </AnimatedSection>
                         
-                        {/* Barra decorativa */}
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-4"></div>
+                        {/* Barra decorativa - Indentada también para mantener consistencia visual */}
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-4 ml-6"></div>
                     </div>
                 </div>
             </div>
