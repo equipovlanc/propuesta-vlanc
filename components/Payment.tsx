@@ -61,7 +61,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                                         {(plan.payments ?? []).map((p, idx) => (
                                             <div key={idx} className="flex items-center text-vlanc-secondary">
                                                 {/* Rectángulo de porcentaje 50x20px */}
-                                                <div className="w-[50px] h-[20px] bg-vlanc-primary text-white text-[10px] font-bold flex items-center justify-center mr-4 rounded-[1px] shrink-0">
+                                                <div className="w-[50px] h-[20px] bg-vlanc-primary text-white text-[14px] font-bold flex items-center justify-center mr-4 rounded-[1px] shrink-0">
                                                     {p.percent}
                                                 </div>
                                                 {/* Descripción: Usa .cuerpo estándar (14px) */}
@@ -83,8 +83,9 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                         </div>
                     </AnimatedSection>
                     
-                    {/* COLUMNA DERECHA: LETRA PEQUEÑA + FIRMA (Ancho completo, posición absoluta) */}
-                    <AnimatedSection className="flex flex-col h-full relative">
+                    {/* COLUMNA DERECHA: LETRA PEQUEÑA + FIRMA */}
+                    {/* Quitamos 'h-full' y posicionamiento absoluto para la firma */}
+                    <AnimatedSection className="flex flex-col relative">
                          <h3 className="subtitulo2 text-[32px] mb-10">{data?.finePrint?.title}</h3>
                          
                          {/* Letra pequeña: Usa .cuerpo estándar (14px) */}
@@ -96,11 +97,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                             ))}
                          </div>
 
-                         {/* FIRMA: Posicionada a 55px del bottom del contenedor (que es pb-140 de pantalla).
-                             Total desde bottom screen = 140 + 55 = 195px.
-                             Fecha está a 70px + ~20px texto = 90px top.
-                             Gap = 195 - 90 = 105px. */}
-                         <div className="absolute bottom-[55px] w-full flex flex-col border-t border-[#8f4933] pt-1">
+                         {/* FIRMA: Posicionada en flujo relativo con margen superior de 50px */}
+                         <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mt-[50px]">
                             <div className="flex justify-between items-start">
                                 <span className="tabla1">VIVE VLANC SL</span>
                                 <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
