@@ -318,8 +318,6 @@ export default defineType({
                     fields: [
                         defineField({ name: 'subtitle', title: 'Subtítulo 2 (Nombre Servicio)', type: 'string' }),
                         defineField({ name: 'title', title: 'Subtítulo 3 (Bajada)', type: 'string' }),
-                        
-                        // CAMBIO AQUÍ: Description ahora es un array de objetos complejos
                         defineField({ 
                             name: 'description', 
                             title: 'Bloques de Descripción',
@@ -385,7 +383,6 @@ export default defineType({
                                 }
                             }] 
                         }),
-                        
                         defineField({ name: 'note', title: 'Nota (Texto con saltos de línea)', type: 'text' }),
                         defineField({ name: 'price', type: 'string' }),
                         defineField({ name: 'image', type: 'image' })
@@ -398,13 +395,15 @@ export default defineType({
             title: 'Contacto',
             type: 'object',
             fields: [
-                defineField({ name: 'image', type: 'image' }),
-                defineField({ name: 'callToAction', type: 'string' }),
+                defineField({ name: 'image', title: 'Imagen Izquierda (785x691)', type: 'image' }),
                 defineField({ name: 'location', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'address', type: 'string' }, { name: 'email', type: 'string' }
                 ]}),
+                // CAMBIO: Estructura de teléfono actualizada para diferenciar Fijo vs Móvil
                 defineField({ name: 'phone', type: 'object', fields: [
-                    defineField({ name: 'title', type: 'string' }), { name: 'numbers', type: 'array', of: [{ type: 'string' }] }
+                    defineField({ name: 'title', type: 'string' }), 
+                    defineField({ name: 'landline', title: 'Teléfono Fijo', type: 'string' }),
+                    defineField({ name: 'mobile', title: 'Móvil (WhatsApp)', type: 'string' })
                 ]}),
                 defineField({ name: 'web', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'url', type: 'url' }, { name: 'displayText', type: 'string' }
@@ -414,7 +413,7 @@ export default defineType({
                     fields: [
                         { name: 'name', type: 'string' },
                         { name: 'url', type: 'url' },
-                        { name: 'icon', type: 'image' }
+                        { name: 'icon', title: 'Icono (SVG/PNG)', type: 'image' }
                     ]
                 }]})
             ]

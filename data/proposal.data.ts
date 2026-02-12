@@ -259,17 +259,22 @@ export const proposalData = {
     premiumServices: {
         title: "servicios premium.",
         services: [
-            { subtitle: "Soluciones en el momento justo", title: "ASISTENCIA EN OBRA", description: ["Nuestro equipo se traslada a tu inmueble para resolver dudas durante la ejecución."], price: "150€ / visita" }
+            { subtitle: "Soluciones en el momento justo", title: "ASISTENCIA EN OBRA", description: [{text: "Nuestro equipo se traslada a tu inmueble para resolver dudas durante la ejecución.", style: 'normal'}], price: "150€ / visita" }
         ]
     },
     contact: {
         image: "",
         callToAction: "¿Nos dejas acompañarte?",
         location: { title: "Dónde estamos", address: "C/ Na Saurina d’Entença, 69 Bajo | ALCOI", email: "hola@vivevlanc.com" },
-        phone: { title: "Contáctanos", numbers: ["(+34) 965 54 73 24", "613 05 44 80"] },
+        // Actualizado teléfonos y redes sociales
+        phone: { title: "Contáctanos", landline: "(+34) 965 54 73 24", mobile: "613 05 44 80" },
         web: { title: "Nuestra web", url: "https://vivevlanc.com", displayText: "vivevlanc.com" },
         rrss: [
-            { name: "Instagram", url: "#" }
+            { name: "Instagram", url: "#", icon: "" },
+            { name: "LinkedIn", url: "#", icon: "" },
+            { name: "Pinterest", url: "#", icon: "" },
+            { name: "Behance", url: "#", icon: "" },
+            { name: "Facebook", url: "#", icon: "" }
         ]
     }
 };
