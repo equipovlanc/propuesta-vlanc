@@ -42,7 +42,12 @@ const App: React.FC = () => {
           "testimonials": testimonials{..., "items": items[]{..., "img": img.asset->url}},
           "scopeIntro": scopeIntro{..., "image": image.asset->url, "video": video.asset->url},
           "scopePhases": scopePhases1.phases[] {..., "image": image.asset->url, "video": video.asset->url} + scopePhases2.phases[] {..., "image": image.asset->url, "video": video.asset->url},
-          "specialOffers": specialOffers{..., "callToAction": callToAction{..., "image": image.asset->url}},
+          "specialOffers": specialOffers{
+            ..., 
+            conditionalOffer,
+            launchOffer,
+            "callToAction": callToAction{..., "image": image.asset->url}
+          },
           "premiumServicesList": premiumServices.services[]{..., "image": image.asset->url},
           "contact": contact{..., "image": image.asset->url, "rrss": rrss[]{..., "icon": icon.asset->url}}
         }`;

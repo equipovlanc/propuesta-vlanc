@@ -54,7 +54,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
           {/* Contenido Flexible */}
           <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar">
                 
-                {/* 0. CONDICIONES ESPECIALES Y TEXTO INTRODUCTORIO (Recuperado) */}
+                {/* 0. CONDICIONES ESPECIALES Y TEXTO INTRODUCTORIO */}
                 <div className="mb-6">
                     {data?.conditionalOffer?.title && (
                         <h3 className="subtitulo2 mb-4 text-vlanc-black">{data.conditionalOffer.title}</h3>
@@ -67,10 +67,28 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                     )}
                 </div>
 
-                {/* 0.5 TÍTULO OFERTA LANZAMIENTO (Recuperado) */}
-                {data?.launchOffer?.title && (
-                    <h3 className="subtitulo2 mb-6 text-vlanc-black">{data.launchOffer.title}</h3>
-                )}
+                {/* 0.5 OFERTA LANZAMIENTO */}
+                <div className="mb-6">
+                    {data?.launchOffer?.title && (
+                        <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.launchOffer.title}</h3>
+                    )}
+                    
+                    {/* Renderizado de Descripción de Lanzamiento (FALTABA ESTO) */}
+                    {data?.launchOffer?.description && (
+                         <div 
+                            className="cuerpo mb-2"
+                            dangerouslySetInnerHTML={{ __html: data.launchOffer.description }}
+                        />
+                    )}
+
+                    {/* Servicio Premium Extra (Si aplica) */}
+                    {data?.launchOffer?.premiumServiceName && (
+                        <p className="text-[12px] font-bold text-vlanc-secondary tracking-widest uppercase mt-2">
+                            {data.launchOffer.premiumServiceName} 
+                            {data.launchOffer.premiumServiceValue && ` - ${data.launchOffer.premiumServiceValue}`}
+                        </p>
+                    )}
+                </div>
 
                 {/* 1. LOS 3 BOTONES (250x108px) - HORIZONTAL */}
                 <div className="flex flex-row justify-between gap-2 mb-6 w-full flex-wrap xl:flex-nowrap shrink-0">
