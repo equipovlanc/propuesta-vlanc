@@ -215,8 +215,8 @@ export const proposalData = {
         title: "la inversión.",
         offerFooterText: "Incluye la <strong>TOTALIDAD DE LOS HONORARIOS</strong> de las Fases descritas anteriormente.",
         conditionalOffer: {
-            title: "Oferta Condicional",
-            description: "Descripción de la oferta condicional...",
+            title: "Condiciones especiales",
+            description: "Para VLANC es muy importante la organización y la confianza. Teniendo en cuenta que a fecha de hoy tu proyecto podríamos empezarlo la tercera semana de septiembre, si cuentas con nosotros hasta el próximo 24 de junio de 2025 a las 23:59 se te aplicará un descuento de un 20% sobre el Plan que elijas.",
             discountedPlans: [
                 {name: "PLAN ESENCIA", originalPrice: "0000 €", discountedPrice: "0000 €"},
                 {name: "PLAN VIVE", originalPrice: "0000 €", discountedPrice: "0000 €"},
@@ -224,8 +224,8 @@ export const proposalData = {
             ]
         },
         launchOffer: {
-            title: "Oferta Lanzamiento",
-            description: "Descripción de la oferta de lanzamiento...",
+            title: "Oferta especial lanzamiento",
+            description: "",
             premiumServiceName: "SERVICIO PREMIUM INCLUIDO",
             premiumServiceValue: "000 €"
         },

@@ -43,7 +43,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
       <div className="w-1/2 h-full flex flex-col pr-[69.5px]">
           
           {/* Cabecera */}
-          <AnimatedSection className="shrink-0 mb-8">
+          <AnimatedSection className="shrink-0 mb-6">
                 <h2 className="subtitulo1">
                    {investmentTitle || "la inversión."}
                 </h2>
@@ -51,9 +51,29 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                 <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
           </AnimatedSection>
 
-          <AnimatedSection className="flex-grow flex flex-col justify-center">
+          {/* Contenido Flexible */}
+          <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar">
+                
+                {/* 0. CONDICIONES ESPECIALES Y TEXTO INTRODUCTORIO (Recuperado) */}
+                <div className="mb-6">
+                    {data?.conditionalOffer?.title && (
+                        <h3 className="subtitulo2 mb-4 text-vlanc-black">{data.conditionalOffer.title}</h3>
+                    )}
+                    {data?.conditionalOffer?.description && (
+                        <div 
+                            className="cuerpo"
+                            dangerouslySetInnerHTML={{ __html: data.conditionalOffer.description }}
+                        />
+                    )}
+                </div>
+
+                {/* 0.5 TÍTULO OFERTA LANZAMIENTO (Recuperado) */}
+                {data?.launchOffer?.title && (
+                    <h3 className="subtitulo2 mb-6 text-vlanc-black">{data.launchOffer.title}</h3>
+                )}
+
                 {/* 1. LOS 3 BOTONES (250x108px) - HORIZONTAL */}
-                <div className="flex flex-row justify-between gap-2 mb-8 w-full flex-wrap xl:flex-nowrap">
+                <div className="flex flex-row justify-between gap-2 mb-6 w-full flex-wrap xl:flex-nowrap shrink-0">
                     {plans.map((plan, i) => (
                         <div 
                             key={i} 
@@ -70,7 +90,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                 {/* 2. BOTÓN "TU HOGAR COMO NUNCA LO IMAGINASTE" */}
                 {/* Alto 41px, Ancho Columna, Pulsable */}
                 <button 
-                    className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#8f4933] group mb-8"
+                    className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#8f4933] group mb-6 shrink-0"
                     onClick={() => console.log('CTA Clicked')}
                 >
                     <span className="tabla1 text-[#8f4933] group-hover:text-white transition-colors">
@@ -78,14 +98,14 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                     </span>
                 </button>
 
-                {/* 3. CUERPO DE TEXTO (Nuevo campo offerFooterText) */}
+                {/* 3. CUERPO DE TEXTO (OfferFooterText) */}
                 <div 
-                    className="cuerpo mb-8"
+                    className="cuerpo mb-6"
                     dangerouslySetInnerHTML={{ __html: data?.offerFooterText || '' }}
                 />
 
                 {/* 4. FIRMA (Estética idéntica a Inversión) */}
-                <div className="w-full flex flex-col border-t border-[#8f4933] mt-auto pt-1">
+                <div className="w-full flex flex-col border-t border-[#8f4933] mt-auto pt-1 shrink-0">
                     <div className="flex justify-between items-start">
                         <span className="tabla1">VIVE VLANC SL</span>
                         <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
