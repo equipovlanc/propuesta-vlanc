@@ -22,10 +22,10 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
     const hasBadge = item.badgeContent && item.badgeContent.trim().length > 0;
 
     return (
-        <AnimatedSection className="flex flex-col items-start w-full h-full">
+        <AnimatedSection className="flex flex-col items-start w-full relative">
             
-            {/* 1. TÍTULO GARANTÍA */}
-            <h3 className="subtitulo2 mb-6 leading-tight">
+            {/* 1. TÍTULO GARANTÍA (Sin cursiva) */}
+            <h3 className="subtitulo2 not-italic mb-6 leading-tight">
                 / {item.title}
             </h3>
             
@@ -35,9 +35,9 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
                 dangerouslySetInnerHTML={{ __html: item.description || '' }}
             />
 
-            {/* 3. CONJUNTO VISUAL: ICONO + RECTÁNGULO (Alineado al margen inferior del contenido) */}
+            {/* 3. CONJUNTO VISUAL: ICONO + RECTÁNGULO (Bloque compacto) */}
             {hasBadge && (
-                <div className="relative mt-auto mb-4 ml-6"> {/* mt-auto empuja hacia abajo, ml-6 compensa el icono */}
+                <div className="relative ml-6 mb-2"> {/* mb-2 reserva espacio mínimo antes del borde inferior */}
                     
                     {/* Icono: Posición absoluta en la esquina superior izquierda (superpuesto) */}
                     <div className="absolute -top-8 -left-8 w-[80px] h-[80px] z-10 flex items-center justify-center">
@@ -64,11 +64,13 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
                 </div>
             )}
             
-            {/* 4. NOTA AL PIE (Sin líneas divisorias) */}
+            {/* 4. NOTA AL PIE (Posicionada absoluta por debajo del flujo para alinear badges) */}
             {item.note && (
-                <p className="text-[10px] text-vlanc-secondary/60 italic w-full mt-4">
-                    {item.note}
-                </p>
+                <div className="absolute top-full left-0 w-full mt-4">
+                    <p className="text-[10px] text-vlanc-secondary/60 italic w-full">
+                        {item.note}
+                    </p>
+                </div>
             )}
         </AnimatedSection>
     );
@@ -91,22 +93,22 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
     return (
         <section className="h-full w-full bg-vlanc-bg pt-[150px] pb-[140px] px-[120px] overflow-hidden">
             {/* GRID DE 3 COLUMNAS */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 h-full items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 h-full">
                 
-                {/* COLUMNA 1: Garantía 1 */}
-                <div className="flex flex-col justify-start pt-[120px] h-full">
+                {/* COLUMNA 1: Alineada al fondo */}
+                <div className="flex flex-col justify-end h-full">
                     {item1 && <GuaranteeItem item={item1} />}
                 </div>
 
-                {/* COLUMNA 2: Garantía 2 */}
-                <div className="flex flex-col justify-start pt-[120px] h-full">
+                {/* COLUMNA 2: Alineada al fondo */}
+                <div className="flex flex-col justify-end h-full">
                     {item2 && <GuaranteeItem item={item2} />}
                 </div>
 
-                {/* COLUMNA 3: Título + Garantía 3 */}
-                <div className="flex flex-col h-full">
+                {/* COLUMNA 3: Título arriba, Garantía al fondo */}
+                <div className="flex flex-col h-full justify-between">
                     {/* Título Alineado al margen superior y a la izquierda de la columna */}
-                    <AnimatedSection className="mb-12 shrink-0">
+                    <AnimatedSection className="shrink-0">
                          <h2 className="subtitulo1 text-left">
                             {formattedTitle}
                         </h2>
@@ -114,8 +116,8 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
                         <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                     </AnimatedSection>
 
-                    {/* Garantía 3 debajo del título, ocupando el resto de la altura */}
-                    <div className="flex-grow">
+                    {/* Garantía 3 alineada al fondo */}
+                    <div className="mt-auto">
                         {item3 && <GuaranteeItem item={item3} />}
                     </div>
                 </div>
