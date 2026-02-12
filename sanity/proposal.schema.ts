@@ -294,6 +294,9 @@ export default defineType({
                 defineField({ name: 'items', type: 'array', of: [{
                     type: 'object',
                     fields: [
+                        defineField({ name: 'icon', title: 'Icono SVG', type: 'image' }),
+                        defineField({ name: 'badgeTitle', title: 'Título Badge (Rectángulo Negro)', type: 'string' }),
+                        defineField({ name: 'badgeSubtitle', title: 'Subtítulo Badge (Rectángulo Negro)', type: 'string' }),
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'description', type: 'text' }),
                         defineField({ name: 'note', type: 'string' })

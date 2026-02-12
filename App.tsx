@@ -48,6 +48,7 @@ const App: React.FC = () => {
             launchOffer,
             "callToAction": callToAction{..., "image": image.asset->url}
           },
+          "guarantees": guarantees{..., "items": items[]{..., "icon": icon.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., "image": image.asset->url},
           "contact": contact{..., "image": image.asset->url, "rrss": rrss[]{..., "icon": icon.asset->url}}
         }`;
