@@ -42,7 +42,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                 </AnimatedSection>
                 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-                    {/* COLUMNA IZQUIERDA: PLANES */}
+                    {/* COLUMNA IZQUIERDA: PLANES + FACTURACIÓN */}
                     <AnimatedSection>
                         <h3 className="subtitulo2 text-[32px] mb-10">{data?.paymentMethods?.title}</h3>
                         <div className="space-y-12">
@@ -53,7 +53,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                                         {plan.title}
                                     </h4>
                                     
-                                    <div className="space-y-3">
+                                    {/* Lista de pagos con separación de 5px */}
+                                    <div className="flex flex-col gap-[5px]">
                                         {(plan.payments ?? []).map((p, idx) => (
                                             <div key={idx} className="flex items-center text-vlanc-secondary text-[12px]">
                                                 {/* Rectángulo de porcentaje 50x20px fijo */}
@@ -66,10 +67,20 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                                     </div>
                                 </div>
                            ))}
+
+                           {/* DATOS DE FACTURACIÓN (Movido aquí, sin caja, estilo ajustado) */}
+                           {data?.finePrint?.invoiceInfo && (
+                                <div className="mt-8">
+                                    {/* Estilo .cuerpo strong pero 4px más pequeño (14px - 4px = 10px) */}
+                                    <p className="cuerpo font-bold text-[10px] whitespace-pre-line uppercase text-vlanc-secondary">
+                                        {data?.finePrint?.invoiceInfo}
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </AnimatedSection>
                     
-                    {/* COLUMNA DERECHA: LETRA PEQUEÑA Y FACTURACIÓN */}
+                    {/* COLUMNA DERECHA: SOLO LETRA PEQUEÑA */}
                     <AnimatedSection>
                          <h3 className="subtitulo2 text-[32px] mb-10">{data?.finePrint?.title}</h3>
                          
@@ -81,13 +92,6 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                                 </p>
                             ))}
                          </div>
-
-                         {data?.finePrint?.invoiceInfo && (
-                             <div className="mt-16 p-8 border border-vlanc-primary/20 bg-vlanc-primary/5">
-                                 <p className="text-[10px] font-bold text-vlanc-primary tracking-[0.3em] uppercase mb-2">Datos de Facturación</p>
-                                 <p className="text-[12px] font-sans text-vlanc-secondary whitespace-pre-line">{data?.finePrint?.invoiceInfo}</p>
-                             </div>
-                         )}
                     </AnimatedSection>
                 </div>
             </div>
