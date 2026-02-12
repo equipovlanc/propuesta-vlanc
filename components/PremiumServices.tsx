@@ -127,10 +127,12 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                             </div>
                         )}
                         
-                        {/* Botón Precio */}
+                        {/* Botón Precio (Posicionado en el padding inferior mediante h-0 absolute) */}
                         {data?.price && (
-                            <div className="mt-8 self-start bg-[#8f4933] text-white px-8 py-3 rounded-[1px] shadow-sm flex items-center justify-center cursor-default">
-                                <span className="boton1 text-white tracking-[0.1em]">{data.price}</span>
+                            <div className="relative h-0 w-full">
+                                <div className="absolute top-8 left-0 bg-[#8f4933] text-white px-8 py-3 rounded-[1px] shadow-sm flex items-center justify-center cursor-default whitespace-nowrap">
+                                    <span className="boton1 text-white tracking-[0.1em]">{data.price}</span>
+                                </div>
                             </div>
                         )}
                     </AnimatedSection>
