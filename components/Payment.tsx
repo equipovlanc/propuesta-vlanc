@@ -64,18 +64,18 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                                                 <div className="w-[50px] h-[20px] bg-vlanc-primary text-white text-[10px] font-bold flex items-center justify-center mr-4 rounded-[1px] shrink-0">
                                                     {p.percent}
                                                 </div>
-                                                {/* Descripción con clase .cuerpo (ajustado a 12px para proporción) */}
-                                                <span className="cuerpo text-[12px]">{p.description}</span>
+                                                {/* Descripción: Usa .cuerpo estándar (14px) */}
+                                                <span className="cuerpo">{p.description}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                            ))}
 
-                           {/* DATOS DE FACTURACIÓN */}
+                           {/* DATOS DE FACTURACIÓN: Respetar casing original (sin uppercase) */}
                            {data?.finePrint?.invoiceInfo && (
                                 <div className="mt-8">
-                                    <p className="cuerpo font-bold text-[10px] whitespace-pre-line uppercase text-vlanc-secondary">
+                                    <p className="cuerpo font-bold text-[10px] whitespace-pre-line text-vlanc-secondary">
                                         {data?.finePrint?.invoiceInfo}
                                     </p>
                                 </div>
@@ -83,26 +83,24 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                         </div>
                     </AnimatedSection>
                     
-                    {/* COLUMNA DERECHA: LETRA PEQUEÑA + FIRMA (Ancho completo) */}
+                    {/* COLUMNA DERECHA: LETRA PEQUEÑA + FIRMA (Ancho completo, posición absoluta) */}
                     <AnimatedSection className="flex flex-col h-full relative">
                          <h3 className="subtitulo2 text-[32px] mb-10">{data?.finePrint?.title}</h3>
                          
-                         {/* Letra pequeña con clase .cuerpo (ajustado a 11px) */}
+                         {/* Letra pequeña: Usa .cuerpo estándar (14px) */}
                          <div className="flex flex-col gap-[2px]">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
-                                <p key={i} className="cuerpo text-[11px] text-vlanc-secondary/80">
+                                <p key={i} className="cuerpo text-vlanc-secondary/80">
                                     {point}
                                 </p>
                             ))}
                          </div>
 
-                         {/* Espaciador para empujar la firma abajo */}
-                         <div className="flex-grow"></div>
-
-                         {/* FIRMA: Ocupa todo el ancho de la columna */}
-                         {/* mb-9 (36px) + pb-140px del contenedor = ~176px del bottom. 
-                             La fecha está a 70px. Diferencia ~106px (Cercano a los 105px pedidos) */}
-                         <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mb-9">
+                         {/* FIRMA: Posicionada a 55px del bottom del contenedor (que es pb-140 de pantalla).
+                             Total desde bottom screen = 140 + 55 = 195px.
+                             Fecha está a 70px + ~20px texto = 90px top.
+                             Gap = 195 - 90 = 105px. */}
+                         <div className="absolute bottom-[55px] w-full flex flex-col border-t border-[#8f4933] pt-1">
                             <div className="flex justify-between items-start">
                                 <span className="tabla1">VIVE VLANC SL</span>
                                 <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
