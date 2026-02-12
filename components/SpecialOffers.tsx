@@ -103,10 +103,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
 
                 {/* D. BOTÓN CTA PRINCIPAL */}
                 <button 
-                    className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#8f4933] group mb-6 shrink-0"
+                    className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-6 shrink-0"
                     onClick={() => console.log('CTA Clicked')}
                 >
-                    <span className="tabla1 text-[#8f4933] group-hover:text-white transition-colors">
+                    <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors">
                         TU HOGAR COMO NUNCA LO IMAGINASTE
                     </span>
                 </button>
