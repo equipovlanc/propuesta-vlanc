@@ -117,7 +117,14 @@ const App: React.FC = () => {
 
         <SectionSlide id="investment"><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
         
-        <SectionSlide id="special-offers"><Header logo={d.logos?.smallLogo} pageNumber={15} /><SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} /></SectionSlide>
+        <SectionSlide id="special-offers">
+            <Header logo={d.logos?.smallLogo} pageNumber={15} />
+            <SpecialOffers 
+                data={d.specialOffers} 
+                investmentTitle={d.investment?.title}
+                locationDate={d.investment?.locationDate} 
+            />
+        </SectionSlide>
         
         <SectionSlide id="payment"><Header logo={d.logos?.smallLogo} pageNumber={16} /><Payment data={d.payment} investmentTitle={d.investment?.title} /></SectionSlide>
 
