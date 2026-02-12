@@ -143,11 +143,21 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
       <div className="w-1/2 h-full pl-[69.5px]">
           <AnimatedSection className="w-full h-full relative overflow-hidden">
                 {data?.callToAction?.image ? (
-                    <img 
-                        src={data.callToAction.image} 
-                        alt="Special Offer" 
-                        className="w-full h-full object-cover grayscale brightness-95 hover:grayscale-0 transition-all duration-1000" 
-                    />
+                    <>
+                        <img 
+                            src={data.callToAction.image} 
+                            alt="Special Offer" 
+                            className="w-full h-full object-cover grayscale brightness-95 hover:grayscale-0 transition-all duration-1000" 
+                        />
+                        {/* Texto superpuesto: ¿Quieres vivir la experiencia Vlanc? */}
+                        {data.callToAction.text && (
+                            <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 pointer-events-none px-8">
+                                <h2 className="font-serif text-[70px] leading-[1.05] font-bold italic text-white text-center drop-shadow-lg">
+                                    {data.callToAction.text}
+                                </h2>
+                            </div>
+                        )}
+                    </>
                 ) : (
                     <div className="w-full h-full bg-[#8f4933]/10 flex items-center justify-center border border-[#8f4933]/20">
                         <span className="tabla1 opacity-40">IMAGEN OFERTA</span>
