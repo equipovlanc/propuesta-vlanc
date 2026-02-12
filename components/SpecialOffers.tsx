@@ -152,7 +152,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                         {/* Texto superpuesto: ¿Quieres vivir la experiencia Vlanc? */}
                         {data.callToAction.text && (
                             <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 pointer-events-none px-8">
-                                <h2 className="font-serif text-[70px] leading-[1.05] font-bold italic text-white text-center drop-shadow-lg">
+                                <h2 className="especial1">
                                     {data.callToAction.text}
                                 </h2>
                             </div>
