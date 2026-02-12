@@ -27,9 +27,16 @@ interface PremiumServicesProps {
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 0 }) => {
     
     // Helper para renderizar cada bloque de descripción según sus flags
-    const renderDescriptionBlock = (block: DescriptionBlock, key: number) => {
+    const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
+        const nextBlock = allBlocks[key + 1];
         
+        // Lógica de espaciado:
+        // Si el actual es numerado y el siguiente también, reducimos el margen a 5px (visual grouping).
+        // En caso contrario (o si es el último), mantenemos el estándar h-5 (20px).
+        const isConsecutiveNumbered = block.isNumbered && nextBlock?.isNumbered;
+        const marginBottomClass = isConsecutiveNumbered ? "h-[5px]" : "h-5";
+
         return (
             <div key={key} className="w-full">
                 
@@ -44,7 +51,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     <div className="flex flex-row items-start gap-4">
                         {/* Badge de Número si aplica */}
                         {block.isNumbered && block.number && (
-                            <div className="shrink-0 h-[24px] bg-[#8f4933] text-white px-2 flex items-center justify-center rounded-[1px] mt-0.5">
+                            // CAMBIO: Tamaño fijo 35x20px
+                            <div className="shrink-0 w-[35px] h-[20px] bg-[#8f4933] text-white flex items-center justify-center rounded-[1px] mt-0.5">
                                 <span className="text-[10px] font-bold tracking-widest leading-none">
                                     {block.number}
                                 </span>
@@ -64,9 +72,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     <div className="w-full h-[1px] bg-[#8f4933] mt-5 mb-5 opacity-30"></div>
                 )}
                 
-                {/* Si no hay separador, añadimos un espacio estándar entre bloques, 
-                    salvo que sea el último o lleve separador */}
-                {!block.hasSeparator && <div className="h-5"></div>}
+                {/* Si no hay separador, añadimos espacio (condicional si son consecutivos) */}
+                {!block.hasSeparator && <div className={marginBottomClass}></div>}
             </div>
         );
     };
@@ -107,7 +114,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
 
                         {/* Descripción Dinámica (Iteramos bloques) */}
                         <div className="w-full">
-                            {(data?.description ?? []).map((block, i) => renderDescriptionBlock(block, i))}
+                            {(data?.description ?? []).map((block, i, arr) => renderDescriptionBlock(block, i, arr))}
                         </div>
                         
                         {/* Notas */}
