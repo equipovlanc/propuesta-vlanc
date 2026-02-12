@@ -20,8 +20,6 @@ interface SpecialOffersProps {
         launchOffer?: {
             title?: string;
             description?: string;
-            premiumServiceName?: string;
-            premiumServiceValue?: string;
         };
         callToAction?: {
             text?: string;
@@ -50,55 +48,28 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                 <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
           </AnimatedSection>
 
-          {/* 2. Contenido Flexible (Scrollable si es necesario) */}
+          {/* 2. Contenido Flexible */}
           <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar">
                 
-                {/* A. BLOQUE DE TEXTOS (Condiciones y Lanzamiento) - AHORA VA PRIMERO */}
-                <div className="mb-8 space-y-6">
-                    {/* Condiciones Especiales */}
-                    {data?.conditionalOffer && (
-                        <div>
-                            {data.conditionalOffer.title && (
-                                <h3 className="subtitulo2 mb-3 text-vlanc-black">
-                                    {data.conditionalOffer.title}
-                                </h3>
-                            )}
-                            {data.conditionalOffer.description && (
-                                <div 
-                                    className="cuerpo leading-relaxed"
-                                    dangerouslySetInnerHTML={{ __html: data.conditionalOffer.description }}
-                                />
-                            )}
-                        </div>
-                    )}
+                {/* A. CONDICIONES ESPECIALES (Título y Descripción) */}
+                {data?.conditionalOffer && (
+                    <div className="mb-6">
+                        {data.conditionalOffer.title && (
+                            <h3 className="subtitulo2 mb-3 text-vlanc-black">
+                                {data.conditionalOffer.title}
+                            </h3>
+                        )}
+                        {data.conditionalOffer.description && (
+                            <div 
+                                className="cuerpo leading-relaxed"
+                                dangerouslySetInnerHTML={{ __html: data.conditionalOffer.description }}
+                            />
+                        )}
+                    </div>
+                )}
 
-                    {/* Oferta Lanzamiento */}
-                    {data?.launchOffer && (
-                        <div>
-                            {data.launchOffer.title && (
-                                <h3 className="subtitulo2 mb-2 text-vlanc-black">
-                                    {data.launchOffer.title}
-                                </h3>
-                            )}
-                            {data.launchOffer.description && (
-                                <div 
-                                    className="cuerpo mb-2 leading-relaxed"
-                                    dangerouslySetInnerHTML={{ __html: data.launchOffer.description }}
-                                />
-                            )}
-                            {/* Servicio Premium Extra */}
-                            {data.launchOffer.premiumServiceName && (
-                                <p className="text-[12px] font-bold text-vlanc-secondary tracking-widest uppercase mt-2">
-                                    {data.launchOffer.premiumServiceName} 
-                                    {data.launchOffer.premiumServiceValue && ` - ${data.launchOffer.premiumServiceValue}`}
-                                </p>
-                            )}
-                        </div>
-                    )}
-                </div>
-
-                {/* B. BLOQUE DE BOTONES (Planes) - AHORA VA DESPUÉS DEL TEXTO */}
-                <div className="flex flex-row justify-between gap-2 mb-6 w-full flex-wrap xl:flex-nowrap shrink-0">
+                {/* B. BOTONES DE PLANES (Justo después de condiciones) */}
+                <div className="flex flex-row justify-between gap-2 mb-8 w-full flex-wrap xl:flex-nowrap shrink-0">
                     {plans.map((plan, i) => (
                         <div 
                             key={i} 
@@ -112,7 +83,25 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                     ))}
                 </div>
 
-                {/* C. BOTÓN CTA PRINCIPAL */}
+                {/* C. OFERTA LANZAMIENTO (Título y Descripción) - Antes del CTA */}
+                {data?.launchOffer && (
+                    <div className="mb-6">
+                        {data.launchOffer.title && (
+                            <h3 className="subtitulo2 mb-2 text-vlanc-black">
+                                {data.launchOffer.title}
+                            </h3>
+                        )}
+                        {data.launchOffer.description && (
+                            <div 
+                                className="cuerpo leading-relaxed"
+                                dangerouslySetInnerHTML={{ __html: data.launchOffer.description }}
+                            />
+                        )}
+                        {/* Eliminado el bloque premiumServiceName que causaba duplicados */}
+                    </div>
+                )}
+
+                {/* D. BOTÓN CTA PRINCIPAL */}
                 <button 
                     className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 hover:bg-[#8f4933] group mb-6 shrink-0"
                     onClick={() => console.log('CTA Clicked')}
@@ -122,7 +111,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                     </span>
                 </button>
 
-                {/* D. TEXTO PIE DE OFERTA (Debajo del botón) */}
+                {/* E. TEXTO PIE DE OFERTA */}
                 {data?.offerFooterText && (
                     <div 
                         className="cuerpo mb-6 text-sm"
