@@ -33,9 +33,10 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
         
         // Lógica de espaciado:
         // Si el actual es numerado y el siguiente también, reducimos el margen a 5px (visual grouping).
+        // Si es un título (bajada), también reducimos el margen para que conecte visualmente con el siguiente punto (salto de línea normal).
         // En caso contrario (o si es el último), mantenemos el estándar h-5 (20px).
         const isConsecutiveNumbered = block.isNumbered && nextBlock?.isNumbered;
-        const marginBottomClass = isConsecutiveNumbered ? "h-[5px]" : "h-5";
+        const marginBottomClass = (isConsecutiveNumbered || isTitle) ? "h-[5px]" : "h-5";
 
         return (
             <div key={key} className="w-full">
@@ -43,7 +44,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 {/* Contenido Principal */}
                 {isTitle ? (
                     // CASO 1: Estilo Título (Bajada)
-                    <h4 className="subtitulo4 mb-2">
+                    // CAMBIO: Reducido mb-2 a mb-1 para un ajuste más fino con el siguiente texto
+                    <h4 className="subtitulo4 mb-1">
                         <span dangerouslySetInnerHTML={{ __html: block.text }} />
                     </h4>
                 ) : (
@@ -51,7 +53,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     <div className="flex flex-row items-start gap-4">
                         {/* Badge de Número si aplica */}
                         {block.isNumbered && block.number && (
-                            // CAMBIO: Tamaño fijo 35x20px, Texto 14px
+                            // Tamaño fijo 35x20px, Texto 14px
                             <div className="shrink-0 w-[35px] h-[20px] bg-[#8f4933] text-white flex items-center justify-center rounded-[1px] mt-0.5">
                                 <span className="text-[14px] font-bold tracking-widest leading-none">
                                     {block.number}
@@ -69,11 +71,10 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
 
                 {/* Separador Opcional */}
                 {block.hasSeparator && (
-                    // CAMBIO: Reducido margen vertical (mt-2 mb-2)
                     <div className="w-full h-[1px] bg-[#8f4933] mt-2 mb-2 opacity-30"></div>
                 )}
                 
-                {/* Si no hay separador, añadimos espacio (condicional si son consecutivos) */}
+                {/* Si no hay separador, añadimos espacio (condicional) */}
                 {!block.hasSeparator && <div className={marginBottomClass}></div>}
             </div>
         );
