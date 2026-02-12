@@ -33,10 +33,9 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
         
         // Lógica de espaciado:
         // Si el actual es numerado y el siguiente también, reducimos el margen a 5px (visual grouping).
-        // Si es un título (bajada), también reducimos el margen para que conecte visualmente con el siguiente punto (salto de línea normal).
-        // En caso contrario (o si es el último), mantenemos el estándar h-5 (20px).
+        // En caso contrario (títulos o texto normal), mantenemos el estándar h-5 (20px) para simular un salto de línea normal.
         const isConsecutiveNumbered = block.isNumbered && nextBlock?.isNumbered;
-        const marginBottomClass = (isConsecutiveNumbered || isTitle) ? "h-[5px]" : "h-5";
+        const marginBottomClass = isConsecutiveNumbered ? "h-[5px]" : "h-5";
 
         return (
             <div key={key} className="w-full">
@@ -44,8 +43,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 {/* Contenido Principal */}
                 {isTitle ? (
                     // CASO 1: Estilo Título (Bajada)
-                    // CAMBIO: Reducido mb-2 a mb-1 para un ajuste más fino con el siguiente texto
-                    <h4 className="subtitulo4 mb-1">
+                    // CAMBIO: mb-0 para que el espaciado lo dicte únicamente el contenedor separador (h-5), igualando al texto normal.
+                    <h4 className="subtitulo4 mb-0">
                         <span dangerouslySetInnerHTML={{ __html: block.text }} />
                     </h4>
                 ) : (
@@ -74,7 +73,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     <div className="w-full h-[1px] bg-[#8f4933] mt-2 mb-2 opacity-30"></div>
                 )}
                 
-                {/* Si no hay separador, añadimos espacio (condicional) */}
+                {/* Si no hay separador, añadimos espacio */}
                 {!block.hasSeparator && <div className={marginBottomClass}></div>}
             </div>
         );
@@ -110,7 +109,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                         </h3>
 
                         {/* Bajada Principal (Subtítulo 4) */}
-                        <h4 className="subtitulo4 mb-8">
+                        {/* CAMBIO: Reducido de mb-8 a mb-5 para igualar el salto de línea normal (20px) */}
+                        <h4 className="subtitulo4 mb-5">
                             {data?.title}
                         </h4>
 
