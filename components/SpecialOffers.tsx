@@ -38,7 +38,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
     <section id="special-offers" className="h-full w-full bg-vlanc-bg flex flex-row pt-[150px] pb-[140px] px-[120px] overflow-hidden">
       
       {/* COLUMNA IZQUIERDA: Contenido */}
-      <div className="w-1/2 h-full flex flex-col pr-[69.5px]">
+      <div className="w-1/2 h-full flex flex-col pr-[69.5px] relative">
           
           {/* 1. Cabecera Fija */}
           <AnimatedSection className="shrink-0 mb-6">
@@ -119,27 +119,24 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                     />
                 )}
 
-                {/* F. FIRMA Y FECHA (Integrados en el flujo para mantener distancias exactas) */}
+                {/* F. FIRMA (Integrada en el flujo, 50px margen superior) */}
                 <div className="w-full shrink-0">
-                    
-                    {/* 3. Firma (Margen superior de 50px respecto al último texto) */}
                     <div className="w-full flex flex-col border-t border-[#8f4933] mt-[50px] pt-1">
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
                         </div>
                     </div>
-
-                    {/* 4. Fecha (Distancia visual para coincidir con Pág 14) */}
-                    <div className="mt-12 text-right">
-                        <p className="cuerpo font-bold">
-                            {locationDate || "En Alcoi a XX de mes de 2025"}
-                        </p>
-                    </div>
-
                 </div>
 
           </AnimatedSection>
+          
+          {/* 3. FECHA (Posición absoluta en el margen inferior, alineada a la derecha de la columna) */}
+          <div className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20">
+                <p className="cuerpo font-bold text-right">
+                    {locationDate || "En Alcoi a XX de mes de 2025"}
+                </p>
+          </div>
       </div>
 
       {/* COLUMNA DERECHA: Imagen */}
