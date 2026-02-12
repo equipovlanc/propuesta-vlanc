@@ -4,8 +4,7 @@ import AnimatedSection from './AnimatedSection';
 
 interface Guarantee {
     icon?: string;
-    badgeTitle?: string;
-    badgeSubtitle?: string;
+    badgeContent?: string;
     title?: string;
     description?: string;
     note?: string;
@@ -19,43 +18,42 @@ interface GuaranteesProps {
 }
 
 const GuaranteeItem = ({ item }: { item: Guarantee }) => {
+    // Solo mostramos el bloque visual (Icono + Rectángulo) si hay contenido real
+    const hasBadge = item.badgeContent && item.badgeContent.trim().length > 0;
+
     return (
         <AnimatedSection className="flex flex-col items-start w-full">
-            {/* CONJUNTO VISUAL: ICONO + RECTÁNGULO NEGRO */}
-            <div className="flex flex-col items-start mb-10 gap-4">
-                {/* Icono (SVG subido) */}
-                <div className="w-[80px] h-[80px] flex items-center justify-start">
-                    {item.icon ? (
-                        <img 
-                            src={item.icon} 
-                            alt={item.title || "Icono Garantía"} 
-                            className="w-full h-full object-contain" 
-                        />
-                    ) : (
-                        <div className="w-[60px] h-[60px] border border-vlanc-black/20 rounded-full flex items-center justify-center">
-                            <span className="text-[8px]">ICON</span>
-                        </div>
-                    )}
-                </div>
-
-                {/* Rectángulo Negro (Badge) */}
-                {(item.badgeTitle || item.badgeSubtitle) && (
-                    <div className="bg-vlanc-black text-white px-5 py-3 rounded-[1px] min-w-[200px] flex flex-col justify-center">
-                        {item.badgeTitle && (
-                            <span className="boton1 text-white mb-1">
-                                {item.badgeTitle}
-                            </span>
-                        )}
-                        {item.badgeSubtitle && (
-                            <span className="boton2 text-white/80 text-[12px]">
-                                {item.badgeSubtitle}
-                            </span>
+            
+            {/* CONJUNTO VISUAL: ICONO + RECTÁNGULO */}
+            {hasBadge && (
+                <div className="relative mt-8 mb-10 ml-6"> {/* Márgenes para compensar el icono absoluto */}
+                    
+                    {/* Icono: Posición absoluta en la esquina superior izquierda (superpuesto) */}
+                    <div className="absolute -top-8 -left-8 w-[80px] h-[80px] z-10 flex items-center justify-center">
+                        {item.icon ? (
+                            <img 
+                                src={item.icon} 
+                                alt="Garantía" 
+                                className="w-full h-full object-contain drop-shadow-sm" 
+                            />
+                        ) : (
+                            <div className="w-[50px] h-[50px] bg-vlanc-bg border border-vlanc-black rounded-full flex items-center justify-center">
+                                <span className="text-[8px] font-bold">ICON</span>
+                            </div>
                         )}
                     </div>
-                )}
-            </div>
+
+                    {/* Rectángulo: Transparente con borde negro */}
+                    <div className="border border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
+                        <div 
+                            className="cuerpo !text-vlanc-black text-[14px] leading-snug"
+                            dangerouslySetInnerHTML={{ __html: item.badgeContent || '' }}
+                        />
+                    </div>
+                </div>
+            )}
             
-            {/* TEXTOS DESCRIPTIVOS */}
+            {/* TEXTOS DESCRIPTIVOS (Siempre visibles) */}
             <div className="w-full pr-4">
                 {/* Título Garantía */}
                 <h3 className="subtitulo2 mb-6 leading-tight">

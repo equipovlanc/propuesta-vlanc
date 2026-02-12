@@ -295,8 +295,12 @@ export default defineType({
                     type: 'object',
                     fields: [
                         defineField({ name: 'icon', title: 'Icono SVG', type: 'image' }),
-                        defineField({ name: 'badgeTitle', title: 'Título Badge (Rectángulo Negro)', type: 'string' }),
-                        defineField({ name: 'badgeSubtitle', title: 'Subtítulo Badge (Rectángulo Negro)', type: 'string' }),
+                        defineField({ 
+                            name: 'badgeContent', 
+                            title: 'Contenido Badge (Rectángulo Negro)', 
+                            type: 'text',
+                            description: 'Texto dentro del recuadro negro. Usa tags HTML como <strong>...</strong> para negritas.'
+                        }),
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'description', type: 'text' }),
                         defineField({ name: 'note', type: 'string' })
