@@ -51,9 +51,9 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     <div className="flex flex-row items-start gap-4">
                         {/* Badge de Número si aplica */}
                         {block.isNumbered && block.number && (
-                            // CAMBIO: Tamaño fijo 35x20px
+                            // CAMBIO: Tamaño fijo 35x20px, Texto 14px
                             <div className="shrink-0 w-[35px] h-[20px] bg-[#8f4933] text-white flex items-center justify-center rounded-[1px] mt-0.5">
-                                <span className="text-[10px] font-bold tracking-widest leading-none">
+                                <span className="text-[14px] font-bold tracking-widest leading-none">
                                     {block.number}
                                 </span>
                             </div>
@@ -69,7 +69,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
 
                 {/* Separador Opcional */}
                 {block.hasSeparator && (
-                    <div className="w-full h-[1px] bg-[#8f4933] mt-5 mb-5 opacity-30"></div>
+                    // CAMBIO: Reducido margen vertical (mt-2 mb-2)
+                    <div className="w-full h-[1px] bg-[#8f4933] mt-2 mb-2 opacity-30"></div>
                 )}
                 
                 {/* Si no hay separador, añadimos espacio (condicional si son consecutivos) */}
