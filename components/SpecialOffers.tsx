@@ -27,9 +27,10 @@ interface SpecialOffersProps {
         };
     };
     investmentTitle?: string;
+    locationDate?: string;
 }
 
-const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) => {
+const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, locationDate }) => {
   // Datos para los 3 botones superiores
   const plans = data?.conditionalOffer?.discountedPlans || [];
   
@@ -97,7 +98,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                                 dangerouslySetInnerHTML={{ __html: data.launchOffer.description }}
                             />
                         )}
-                        {/* Eliminado el bloque premiumServiceName que causaba duplicados */}
                     </div>
                 )}
 
@@ -114,20 +114,32 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                 {/* E. TEXTO PIE DE OFERTA */}
                 {data?.offerFooterText && (
                     <div 
-                        className="cuerpo mb-6 text-sm"
+                        className="cuerpo text-sm"
                         dangerouslySetInnerHTML={{ __html: data.offerFooterText }}
                     />
                 )}
 
-          </AnimatedSection>
+                {/* F. FIRMA Y FECHA (Integrados en el flujo para mantener distancias exactas) */}
+                <div className="w-full shrink-0">
+                    
+                    {/* 3. Firma (Margen superior de 50px respecto al último texto) */}
+                    <div className="w-full flex flex-col border-t border-[#8f4933] mt-[50px] pt-1">
+                        <div className="flex justify-between items-start">
+                            <span className="tabla1">VIVE VLANC SL</span>
+                            <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                        </div>
+                    </div>
 
-          {/* 3. Firma Fija al pie */}
-          <div className="w-full flex flex-col border-t border-[#8f4933] mt-auto pt-1 shrink-0">
-              <div className="flex justify-between items-start">
-                  <span className="tabla1">VIVE VLANC SL</span>
-                  <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
-              </div>
-          </div>
+                    {/* 4. Fecha (Distancia visual para coincidir con Pág 14) */}
+                    <div className="mt-12 text-right">
+                        <p className="cuerpo font-bold">
+                            {locationDate || "En Alcoi a XX de mes de 2025"}
+                        </p>
+                    </div>
+
+                </div>
+
+          </AnimatedSection>
       </div>
 
       {/* COLUMNA DERECHA: Imagen */}
