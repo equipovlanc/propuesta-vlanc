@@ -146,7 +146,7 @@ const App: React.FC = () => {
         {(d.premiumServicesList || []).map((service: any, i: number) => (
             <SectionSlide key={i} id={`premium-${i+1}`}>
                 <Header logo={d.logos?.smallLogo} pageNumber={19 + i} />
-                <PremiumServices data={service} image={service.image} />
+                <PremiumServices data={service} image={service.image} index={i} />
             </SectionSlide>
         ))}
 
