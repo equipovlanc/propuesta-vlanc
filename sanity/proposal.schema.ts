@@ -399,11 +399,27 @@ export default defineType({
                 defineField({ name: 'location', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'address', type: 'string' }, { name: 'email', type: 'string' }
                 ]}),
-                // CAMBIO: Estructura de teléfono actualizada para diferenciar Fijo vs Móvil
+                // CAMBIO: Estructura de teléfono actualizada a Objetos (Número + Icono)
                 defineField({ name: 'phone', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), 
-                    defineField({ name: 'landline', title: 'Teléfono Fijo', type: 'string' }),
-                    defineField({ name: 'mobile', title: 'Móvil (WhatsApp)', type: 'string' })
+                    defineField({ 
+                        name: 'landline', 
+                        title: 'Teléfono Fijo', 
+                        type: 'object',
+                        fields: [
+                            defineField({ name: 'number', type: 'string', title: 'Número' }),
+                            defineField({ name: 'icon', type: 'image', title: 'Icono Teléfono' })
+                        ]
+                    }),
+                    defineField({ 
+                        name: 'mobile', 
+                        title: 'Móvil (WhatsApp)', 
+                        type: 'object', 
+                        fields: [
+                            defineField({ name: 'number', type: 'string', title: 'Número' }),
+                            defineField({ name: 'icon', type: 'image', title: 'Icono WhatsApp' })
+                        ]
+                    })
                 ]}),
                 defineField({ name: 'web', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'url', type: 'url' }, { name: 'displayText', type: 'string' }

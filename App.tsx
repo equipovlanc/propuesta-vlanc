@@ -50,7 +50,16 @@ const App: React.FC = () => {
           },
           "guarantees": guarantees{..., "items": items[]{..., "icon": icon.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., "image": image.asset->url},
-          "contact": contact{..., "image": image.asset->url, "rrss": rrss[]{..., "icon": icon.asset->url}}
+          "contact": contact{
+            ..., 
+            "image": image.asset->url, 
+            "phone": phone{
+                ...,
+                "landline": landline{..., "icon": icon.asset->url},
+                "mobile": mobile{..., "icon": icon.asset->url}
+            },
+            "rrss": rrss[]{..., "icon": icon.asset->url}
+          }
         }`;
         const data = await sanityClient.fetch(query, { slug });
         setProposalData(data || localProposalData);

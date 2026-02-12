@@ -266,8 +266,12 @@ export const proposalData = {
         image: "",
         callToAction: "¿Nos dejas acompañarte?",
         location: { title: "Dónde estamos", address: "C/ Na Saurina d’Entença, 69 Bajo | ALCOI", email: "hola@vivevlanc.com" },
-        // Actualizado teléfonos y redes sociales
-        phone: { title: "Contáctanos", landline: "(+34) 965 54 73 24", mobile: "613 05 44 80" },
+        // Actualizado teléfonos para coincidir con el esquema nuevo (Objetos con number y icon)
+        phone: { 
+            title: "Contáctanos", 
+            landline: { number: "(+34) 965 54 73 24", icon: "" },
+            mobile: { number: "613 05 44 80", icon: "" }
+        },
         web: { title: "Nuestra web", url: "https://vivevlanc.com", displayText: "vivevlanc.com" },
         rrss: [
             { name: "Instagram", url: "#", icon: "" },
