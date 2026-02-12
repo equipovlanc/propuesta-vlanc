@@ -43,7 +43,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 {/* Contenido Principal */}
                 {isTitle ? (
                     // CASO 1: Estilo Título (Bajada)
-                    // CAMBIO: mb-0 para que el espaciado lo dicte únicamente el contenedor separador (h-5), igualando al texto normal.
+                    // mb-0 para que el espaciado lo dicte únicamente el contenedor separador (h-5 o marginBottomClass), igualando al texto normal.
                     <h4 className="subtitulo4 mb-0">
                         <span dangerouslySetInnerHTML={{ __html: block.text }} />
                     </h4>
@@ -70,7 +70,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
 
                 {/* Separador Opcional */}
                 {block.hasSeparator && (
-                    <div className="w-full h-[1px] bg-[#8f4933] mt-2 mb-2 opacity-30"></div>
+                    // CAMBIO: Aumentado de mt-2 mb-2 a mt-3 mb-3
+                    <div className="w-full h-[1px] bg-[#8f4933] mt-3 mb-3 opacity-30"></div>
                 )}
                 
                 {/* Si no hay separador, añadimos espacio */}
@@ -104,12 +105,13 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     <AnimatedSection>
                         
                         {/* Nombre Servicio (Subtítulo 2) */}
-                        <h3 className="subtitulo2 not-italic mb-8">
+                        {/* CAMBIO: Añadido font-bold */}
+                        <h3 className="subtitulo2 not-italic font-bold mb-8">
                             / {data?.subtitle}
                         </h3>
 
                         {/* Bajada Principal (Subtítulo 4) */}
-                        {/* CAMBIO: Reducido de mb-8 a mb-5 para igualar el salto de línea normal (20px) */}
+                        {/* mb-5 para igualar el salto de línea normal (20px) */}
                         <h4 className="subtitulo4 mb-5">
                             {data?.title}
                         </h4>
