@@ -27,11 +27,10 @@ interface ContactProps {
 const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
     return (
         <footer className="h-screen w-full bg-vlanc-bg flex flex-col pt-[150px] pb-[140px] px-[120px]">
-            {/* GRID DE 2 COLUMNAS: Sin restricción de ancho máximo para ocupar las mitades reales de la pantalla */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
+            {/* GRID DE 2 COLUMNAS: Ajustado a 60% / 40% */}
+            <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
                 
-                {/* COLUMNA IZQUIERDA: Logo Final */}
-                {/* Centrado en su mitad */}
+                {/* COLUMNA IZQUIERDA: Logo Final (60%) */}
                 <AnimatedSection className="flex items-center justify-center h-full w-full">
                     <div className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4">
                          {finalLogo ? (
@@ -44,9 +43,8 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                     </div>
                 </AnimatedSection>
 
-                {/* COLUMNA DERECHA: Datos */}
-                {/* Centrado en su mitad */}
-                <div className="flex items-center justify-center h-full w-full">
+                {/* COLUMNA DERECHA: Datos (40%) */}
+                <div className="flex items-center justify-center h-full w-full pl-10">
                     {/* Bloque de texto con ancho controlado, alineado a la izquierda internamente */}
                     <div className="flex flex-col space-y-12 text-left w-full max-w-md">
                         
