@@ -211,6 +211,29 @@ export const proposalData = {
         ],
         prices: ["0000 € + IVA", "0000 € + IVA", "0000 € + IVA"]
     },
+    specialOffers: {
+        title: "la inversión.",
+        offerFooterText: "Incluye la <strong>TOTALIDAD DE LOS HONORARIOS</strong> de las Fases descritas anteriormente.",
+        conditionalOffer: {
+            title: "Oferta Condicional",
+            description: "Descripción de la oferta condicional...",
+            discountedPlans: [
+                {name: "PLAN ESENCIA", originalPrice: "0000 €", discountedPrice: "0000 €"},
+                {name: "PLAN VIVE", originalPrice: "0000 €", discountedPrice: "0000 €"},
+                {name: "PLAN VLANC", originalPrice: "0000 €", discountedPrice: "0000 €"}
+            ]
+        },
+        launchOffer: {
+            title: "Oferta Lanzamiento",
+            description: "Descripción de la oferta de lanzamiento...",
+            premiumServiceName: "SERVICIO PREMIUM INCLUIDO",
+            premiumServiceValue: "000 €"
+        },
+        callToAction: {
+            text: "¿Hablamos?",
+            image: ""
+        }
+    },
     payment: {
         title: "la inversión.",
         paymentMethods: { 

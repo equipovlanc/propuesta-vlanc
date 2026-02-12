@@ -253,6 +253,7 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', title: 'Título Sección', type: 'string' }),
+                defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón)', type: 'text' }),
                 defineField({ name: 'conditionalOffer', type: 'object', fields: [
                     { name: 'title', type: 'string' },
                     { name: 'description', type: 'text' },

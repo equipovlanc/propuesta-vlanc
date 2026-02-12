@@ -11,6 +11,7 @@ interface DiscountedPlan {
 interface SpecialOffersProps {
     data?: {
         title?: string;
+        offerFooterText?: string;
         conditionalOffer?: {
             title?: string;
             description?: string;
@@ -34,9 +35,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
   // Datos para los 3 botones superiores
   const plans = data?.conditionalOffer?.discountedPlans || [];
   
-  // Texto descriptivo (usamos la descripción de la oferta de lanzamiento o condicional como fallback)
-  const descriptionText = data?.launchOffer?.description || data?.conditionalOffer?.description;
-
   return (
     <section id="special-offers" className="h-full w-full bg-vlanc-bg flex flex-row pt-[150px] pb-[140px] px-[120px] overflow-hidden">
       
@@ -54,12 +52,12 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
           </AnimatedSection>
 
           <AnimatedSection className="flex-grow flex flex-col justify-center">
-                {/* 1. LOS 3 BOTONES (250x108px) */}
-                <div className="flex flex-col gap-6 mb-8">
+                {/* 1. LOS 3 BOTONES (250x108px) - HORIZONTAL */}
+                <div className="flex flex-row justify-between gap-2 mb-8 w-full flex-wrap xl:flex-nowrap">
                     {plans.map((plan, i) => (
                         <div 
                             key={i} 
-                            className="w-[250px] h-[108px] border border-[#8f4933] flex flex-col items-center justify-center gap-2 bg-transparent transition-all duration-300 hover:bg-[#8f4933]/5"
+                            className="w-[250px] h-[108px] border border-[#8f4933] flex flex-col items-center justify-center gap-2 bg-transparent transition-all duration-300 hover:bg-[#8f4933]/5 shrink-0"
                         >
                             {/* Tipografía Tabla 1 (Bold Uppercase) */}
                             <span className="tabla1 text-[#8f4933]">{plan.name}</span>
@@ -80,10 +78,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle }) 
                     </span>
                 </button>
 
-                {/* 3. CUERPO DE TEXTO */}
+                {/* 3. CUERPO DE TEXTO (Nuevo campo offerFooterText) */}
                 <div 
                     className="cuerpo mb-8"
-                    dangerouslySetInnerHTML={{ __html: descriptionText || '' }}
+                    dangerouslySetInnerHTML={{ __html: data?.offerFooterText || '' }}
                 />
 
                 {/* 4. FIRMA (Estética idéntica a Inversión) */}
