@@ -135,7 +135,10 @@ const App: React.FC = () => {
             />
         </SectionSlide>
 
-        <SectionSlide id="team-photo"><Header logo={d.logos?.smallLogo} pageNumber={17} /><DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /></SectionSlide>
+        <SectionSlide id="team-photo">
+            {/* Header eliminado */}
+            <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" />
+        </SectionSlide>
 
         <SectionSlide id="guarantees"><Header logo={d.logos?.smallLogo} pageNumber={18} /><Guarantees data={d.guarantees} /></SectionSlide>
 
