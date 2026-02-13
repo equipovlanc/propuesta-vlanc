@@ -68,7 +68,7 @@
         background-color: #efe8e1;
         color: #000000;
         overflow-x: hidden;
-        font-size: 14px; /* Aumentado base */
+        font-size: 14px;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
@@ -77,19 +77,17 @@
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-      /* --- JERARQUÍA TIPOGRÁFICA (Baskerville Display PT) --- */
+      /* --- JERARQUÍA TIPOGRÁFICA --- */
 
-      /* 1. TÍTULO PRINCIPAL (Hero) */
       .titulo {
         font-family: 'Baskerville Display PT', serif;
         font-size: 96px;
         line-height: 1.05;
-        font-weight: 700; /* CAMBIO: 400 -> 700 (Bold) */
+        font-weight: 700;
         letter-spacing: 0.01em;
         color: #702622;
       }
 
-      /* 2. SUBTÍTULO 1 - Regular 400 */
       .subtitulo1 {
         font-family: 'Baskerville Display PT', serif;
         font-size: 72px;
@@ -98,7 +96,6 @@
         color: #000000;
       }
 
-      /* 3. SUBTÍTULO 2 (Italic) */
       .subtitulo2 {
         font-family: 'Baskerville Display PT', serif;
         font-size: 24px;
@@ -108,7 +105,6 @@
         color: #000000;
       }
 
-      /* 4. SUBTÍTULO 3 (Regular pequeño) */
       .subtitulo3 {
         font-family: 'Baskerville Display PT', serif;
         font-size: 24px;
@@ -118,7 +114,6 @@
         color: #000000;
       }
 
-      /* 4.5. SUBTÍTULO 4 (Montserrat Bold Uppercase - Estilo Planes) */
       .subtitulo4 {
         font-family: 'Montserrat', sans-serif;
         font-size: 15px;
@@ -128,39 +123,30 @@
         color: #000000;
       }
 
-      /* 5. CUERPO DE TEXTO ESTÁNDAR */
       .cuerpo {
         font-family: 'Montserrat', sans-serif;
         font-size: 14px;
-        line-height: 1.4; /* CAMBIO: 1.7 -> 1.4 */
+        line-height: 1.4;
         font-weight: 400;
         color: #702622;
         text-align: start;
-        white-space: pre-line; /* Respetar saltos de línea */
+        white-space: pre-line;
       }
       
-      .cuerpo strong {
-        font-weight: 700;
-        color: inherit;
-      }
+      .cuerpo strong { font-weight: 700; color: inherit; }
 
-      /* 6. CUERPO DE TEXTO GRANDE */
       .cuerpo2 {
         font-family: 'Montserrat', sans-serif;
         font-size: 16px;
-        line-height: 1.4; /* CAMBIO: 1.7 -> 1.4 */
+        line-height: 1.4;
         font-weight: 400;
         color: #702622;
         text-align: start;
-        white-space: pre-line; /* Respetar saltos de línea */
+        white-space: pre-line;
       }
       
-      .cuerpo2 strong {
-        font-weight: 700;
-        color: inherit;
-      }
+      .cuerpo2 strong { font-weight: 700; color: inherit; }
 
-      /* 7. PIE DE FOTO 1 (Montserrat Bold Uppercase) */
       .piedefoto1 {
         font-family: 'Montserrat', sans-serif;
         font-size: 12px;
@@ -169,7 +155,6 @@
         color: #000000;
       }
 
-      /* 8. PIE DE FOTO 2 (Baskerville Display PT Normal) */
       .piedefoto2 {
         font-family: 'Baskerville Display PT', serif;
         font-size: 14px;
@@ -178,7 +163,6 @@
         color: #000000;
       }
 
-      /* 9. TEXTO ESPECIAL IMAGEN (Montserrat Bold Italic) */
       .especial1 {
         font-family: 'Montserrat', sans-serif;
         font-size: 50px;
@@ -189,19 +173,15 @@
         text-shadow: 0 2px 10px rgba(0,0,0,0.5);
       }
       
-      /* 10. TEXTO ESPECIAL 2 (Baskerville Bold 72px) */
       .especial2 {
         font-family: 'Baskerville Display PT', serif;
         font-size: 72px;
         line-height: 1.05;
         font-weight: 700;
         color: #702622;
-        text-align: right; /* Alineación derecha */
+        text-align: right;
       }
       
-      /* --- ESTILOS FASES TRABAJO --- */
-      
-      /* Título Fase (e.g., 1. FASE ANTEPROYECTO) */
       .fase-titulo {
         font-family: 'Montserrat', sans-serif;
         font-size: 18px;
@@ -210,7 +190,6 @@
         line-height: 1.2;
       }
       
-      /* Subtítulo Fase (e.g., 1.1 ENTREVISTA) */
       .fase-subtitulo {
         font-family: 'Montserrat', sans-serif;
         font-size: 15px;
@@ -219,7 +198,6 @@
         line-height: 1.4;
       }
 
-      /* --- ESTILOS BOTONES --- */
       .boton1 {
         font-family: 'Montserrat', sans-serif;
         font-size: 14px;
@@ -236,18 +214,14 @@
         line-height: 1;
       }
       
-      /* --- ESTILOS TABLA INVERSIÓN --- */
-      
-      /* Cabecera Tabla + Firma (Montserrat Bold Uppercase) */
       .tabla1 {
         font-family: 'Montserrat', sans-serif;
         font-size: 12px;
         font-weight: 700;
         text-transform: uppercase;
-        color: #702622; /* vlanc-secondary */
+        color: #702622;
       }
 
-      /* Filas Tabla (Igual a tabla1 pero conceptualmente separado) */
       .tabla2 {
         font-family: 'Montserrat', sans-serif;
         font-size: 11px;
@@ -256,7 +230,6 @@
         color: #702622;
       }
       
-      /* Precios Pie Tabla (Baskerville Bold) */
       .tabla3 {
         font-family: 'Montserrat', sans-serif;
         font-size: 11px;
@@ -265,9 +238,63 @@
         letter-spacing: normal;
       }
 
+      /* --- ESTILOS DE IMPRESIÓN A3 --- */
       @media print {
-        @page { size: A4 landscape; margin: 0; }
-        body { zoom: 0.585 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        @page { 
+          size: A3 landscape; 
+          margin: 0; 
+        }
+        
+        html, body {
+          height: auto !important;
+          overflow: visible !important;
+          background-color: white !important;
+        }
+
+        #app-container {
+          overflow: visible !important;
+          height: auto !important;
+          snap-type: none !important;
+          scroll-snap-type: none !important;
+        }
+
+        /* Cada slide se convierte en una página A3 de 420x297mm */
+        .section-slide {
+          width: 420mm !important;
+          height: 297mm !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: center !important; /* Centrado vertical del lienzo 16:9 */
+          align-items: center !important;
+          page-break-after: always !important;
+          break-after: page !important;
+          background-color: #efe8e1 !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          overflow: hidden !important;
+        }
+
+        /* El contenedor interno (1920x1080) se escala para caber en los 420mm del A3 */
+        /* Zoom = 420mm / 1920px ≈ 0.8267 */
+        .section-slide > div {
+          width: 1920px !important;
+          height: 1080px !important;
+          zoom: 0.8267 !important; 
+          transform-origin: center center !important;
+          flex-shrink: 0 !important;
+        }
+
+        /* Forzar visibilidad de AnimatedSection ignorando el estado de IntersectionObserver */
+        .transition-all {
+          transition: none !important;
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        
+        .opacity-0 { opacity: 1 !important; }
+        .translate-y-10 { transform: translateY(0) !important; }
+
+        .no-print { display: none !important; }
       }
     </style>
   <script type="importmap">
