@@ -33,31 +33,24 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex flex-col justify-start overflow-hidden relative">
             <div className="w-full flex flex-col h-full">
-                {/* Título de sección */}
                 <AnimatedSection className="mb-12 shrink-0">
                     <h2 className="subtitulo1">
                         {data?.title || "el proceso Vlanc."}
                     </h2>
-                    {/* Barra decorativa actualizada (#8f4933) */}
                     <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                 </AnimatedSection>
                 
-                {/* Grid de Pasos */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
                     {(data?.steps ?? []).map((step, index) => (
                         <AnimatedSection key={index}>
                             <div className="space-y-6 flex flex-col items-start">
-                                {/* Título del paso */}
                                 <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
                                     <span className="font-serif mr-2">{`0${index + 1}`} /</span>
                                     <span>{step.title}</span>
                                 </h3>
                                 
-                                {/* Descripción */}
                                 <div className="cuerpo2 text-left">
                                     <p>{step.description}</p>
-                                    
-                                    {/* Texto 'Tu interés es el nuestro' en el paso 05 (index 4) */}
                                     {index === 4 && (
                                         <p className="mt-4 font-bold text-vlanc-secondary">
                                             · Tu interés es el nuestro ·
@@ -65,7 +58,6 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                                     )}
                                 </div>
                                 
-                                {/* Botón de Garantía en el paso 03 (index 2) */}
                                 {index === 2 && (
                                     <button 
                                         onClick={openModal}
@@ -86,17 +78,16 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                 </div>
             </div>
 
-            {/* MODAL DE GARANTÍA - Ajustado a 517px para respetar el ancho de columna de la sección Garantías */}
+            {/* MODAL DE GARANTÍA - 613px para garantizar 517px de contenido útil */}
             {isModalOpen && guaranteeItem && (
                 <div 
                     className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10"
                     onClick={closeModal}
                 >
                     <AnimatedSection 
-                        className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[517px] w-full relative"
+                        className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[613px] w-full relative"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Botón Cerrar */}
                         <button 
                             onClick={closeModal}
                             className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none"
@@ -105,28 +96,20 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                         </button>
 
                         <div className="flex flex-col items-start w-full relative">
-                            {/* 1. TÍTULO GARANTÍA */}
                             <h3 className="subtitulo2 not-italic mb-6 leading-tight">
                                 / {guaranteeItem.title}
                             </h3>
                             
-                            {/* 2. DESCRIPCIÓN */}
                             <div 
                                 className="cuerpo mb-12"
                                 dangerouslySetInnerHTML={{ __html: guaranteeItem.description || '' }}
                             />
 
-                            {/* 3. CONJUNTO VISUAL: ICONO + RECTÁNGULO */}
                             {(guaranteeItem.badgeContent && guaranteeItem.badgeContent.trim().length > 0) && (
                                 <div className="relative ml-6 mb-2">
-                                    {/* Icono */}
                                     <div className="absolute -top-7 -left-7 w-[60px] h-[60px] z-10 flex items-center justify-center">
                                         {guaranteeItem.icon ? (
-                                            <img 
-                                                src={guaranteeItem.icon} 
-                                                alt="Garantía" 
-                                                className="w-full h-full object-contain drop-shadow-sm" 
-                                            />
+                                            <img src={guaranteeItem.icon} alt="Garantía" className="w-full h-full object-contain drop-shadow-sm" />
                                         ) : (
                                             <div className="w-[40px] h-[40px] bg-vlanc-bg border border-vlanc-black rounded-full flex items-center justify-center">
                                                 <span className="text-[6px] font-bold">ICON</span>
@@ -134,7 +117,6 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                                         )}
                                     </div>
 
-                                    {/* Rectángulo */}
                                     <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
                                         <div 
                                             className="cuerpo !text-vlanc-black text-[14px] leading-snug"
@@ -144,7 +126,6 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                                 </div>
                             )}
                             
-                            {/* 4. NOTA AL PIE */}
                             {guaranteeItem.note && (
                                 <div className="mt-8 border-t border-vlanc-primary/10 pt-4 w-full">
                                     <p className="text-[10px] text-vlanc-secondary/60 italic">
