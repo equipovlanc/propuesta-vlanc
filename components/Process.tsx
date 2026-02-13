@@ -57,8 +57,8 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                                 <div className="cuerpo2 text-left">
                                     <p>{step.description}</p>
                                     
-                                    {/* Texto 'Tu interés es el nuestro' en el paso 08 (index 7) */}
-                                    {index === 7 && (
+                                    {/* Texto 'Tu interés es el nuestro' en el paso 05 (index 4) */}
+                                    {index === 4 && (
                                         <p className="mt-4 font-bold text-vlanc-secondary">
                                             · Tu interés es el nuestro ·
                                         </p>
@@ -138,6 +138,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                                     <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
                                         <div 
                                             className="cuerpo !text-vlanc-black text-[14px] leading-snug"
+                                            /* FIX: Changed 'item.badgeContent' to 'guaranteeItem.badgeContent' to fix undefined error */
                                             dangerouslySetInnerHTML={{ __html: guaranteeItem.badgeContent || '' }}
                                         />
                                     </div>
