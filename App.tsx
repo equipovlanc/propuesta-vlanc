@@ -174,7 +174,8 @@ const App: React.FC = () => {
                 data={d.specialOffers} 
                 investmentTitle={d.investment?.title}
                 locationDate={d.investment?.locationDate} 
-                premiumService={d.premiumServicesList?.[0]}
+                {/* FIX: Cambiado de [0] a [1] para que el botón de la página 15 abra el servicio premium de la página 20 */}
+                premiumService={d.premiumServicesList?.[1]}
             />
         </SectionSlide>
         
