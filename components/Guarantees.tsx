@@ -3,6 +3,8 @@ import React from 'react';
 import AnimatedSection from './AnimatedSection';
 
 interface Guarantee {
+    icon?: string;
+    badgeContent?: string;
     title?: string;
     description?: string;
     note?: string;
@@ -15,81 +17,110 @@ interface GuaranteesProps {
     };
 }
 
-const GuaranteeBadge = ({ index }: { index: number }) => {
+const GuaranteeItem = ({ item }: { item: Guarantee }) => {
+    // Solo mostramos el bloque visual (Icono + Rectángulo) si hay contenido real
+    const hasBadge = item.badgeContent && item.badgeContent.trim().length > 0;
+
     return (
-        <div className="relative w-20 h-20 mb-8">
-            <svg viewBox="0 0 100 100" className="w-full h-full text-vlanc-black stroke-current fill-none absolute top-0 left-0 animate-[spin_20s_linear_infinite]">
-                 <circle cx="50" cy="50" r="48" strokeWidth="1" />
-                 <path d="M50,2 A48,48 0 0,1 50,98 A48,48 0 0,1 50,2" strokeDasharray="4 4" strokeWidth="0.5" />
-            </svg>
+        <AnimatedSection className="flex flex-col items-start w-full relative">
             
-            <div className="absolute inset-0 flex items-center justify-center">
-                 {index === 0 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 text-vlanc-black">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                 )}
-                 {index === 1 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 text-vlanc-black">
-                         <circle cx="12" cy="12" r="10"></circle>
-                         <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                 )}
-                 {index === 2 && (
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="w-8 h-8 text-vlanc-black">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                 )}
-            </div>
-             
-             <div className="absolute -bottom-1 -right-1 bg-vlanc-bg rounded-full p-1 border border-vlanc-black">
-                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 text-vlanc-black">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                 </svg>
-             </div>
-        </div>
-    )
-}
+            {/* 1. TÍTULO GARANTÍA (Sin cursiva) */}
+            <h3 className="subtitulo2 not-italic mb-6 leading-tight">
+                / {item.title}
+            </h3>
+            
+            {/* 2. DESCRIPCIÓN */}
+            <div 
+                className="cuerpo mb-12"
+                dangerouslySetInnerHTML={{ __html: item.description || '' }}
+            />
+
+            {/* 3. CONJUNTO VISUAL: ICONO + RECTÁNGULO (Bloque compacto) */}
+            {hasBadge && (
+                <div className="relative ml-6 mb-2"> {/* mb-2 reserva espacio mínimo antes del borde inferior */}
+                    
+                    {/* Icono: Reducido a 60px y ajustado posicionamiento para no invadir tanto */}
+                    <div className="absolute -top-7 -left-7 w-[60px] h-[60px] z-10 flex items-center justify-center">
+                        {item.icon ? (
+                            <img 
+                                src={item.icon} 
+                                alt="Garantía" 
+                                className="w-full h-full object-contain drop-shadow-sm" 
+                            />
+                        ) : (
+                            <div className="w-[40px] h-[40px] bg-vlanc-bg border border-vlanc-black rounded-full flex items-center justify-center">
+                                <span className="text-[6px] font-bold">ICON</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Rectángulo: Transparente con borde negro (border-2) y Padding restaurado (px-6) */}
+                    <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
+                        <div 
+                            className="cuerpo !text-vlanc-black text-[14px] leading-snug"
+                            dangerouslySetInnerHTML={{ __html: item.badgeContent || '' }}
+                        />
+                    </div>
+                </div>
+            )}
+            
+            {/* 4. NOTA AL PIE (Posicionada absoluta por debajo del flujo para alinear badges) */}
+            {item.note && (
+                <div className="absolute top-full left-0 w-full mt-4">
+                    <p className="text-[10px] text-vlanc-secondary/60 italic w-full">
+                        {item.note}
+                    </p>
+                </div>
+            )}
+        </AnimatedSection>
+    );
+};
 
 const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
+    // Función para formatear título (saltos de línea)
+    const formattedTitle = (data?.title || "nuestras garantías.").split(' ').map((word, i, arr) => (
+        <React.Fragment key={i}>
+            {word}
+            {i < arr.length - 1 && <br />}
+        </React.Fragment>
+    ));
+
+    const items = data?.items || [];
+    const item1 = items[0];
+    const item2 = items[1];
+    const item3 = items[2];
+
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start px-[120px] pt-[140px] pb-[120px]">
-            <div className="w-full flex justify-end mb-24">
-                <AnimatedSection>
-                    <div className="text-right flex flex-col items-end">
-                        <h2 className="subtitulo1 mb-4 tracking-tighter">
-                            {data?.title || "nuestras garantías."}
+        <section className="h-full w-full bg-vlanc-bg pt-[150px] pb-[140px] px-[120px] overflow-hidden">
+            {/* GRID DE 3 COLUMNAS */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 h-full">
+                
+                {/* COLUMNA 1: Alineada al fondo */}
+                <div className="flex flex-col justify-end h-full">
+                    {item1 && <GuaranteeItem item={item1} />}
+                </div>
+
+                {/* COLUMNA 2: Alineada al fondo */}
+                <div className="flex flex-col justify-end h-full">
+                    {item2 && <GuaranteeItem item={item2} />}
+                </div>
+
+                {/* COLUMNA 3: Título arriba, Garantía al fondo */}
+                <div className="flex flex-col h-full justify-between">
+                    {/* Título Alineado al margen superior y a la izquierda de la columna */}
+                    <AnimatedSection className="shrink-0">
+                         <h2 className="subtitulo1 text-left">
+                            {formattedTitle}
                         </h2>
-                        <div className="w-24 h-[2px] bg-vlanc-primary"></div>
-                    </div>
-                </AnimatedSection>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 items-start">
-                {(data?.items ?? []).map((item, i) => (
-                     <AnimatedSection key={i} className="flex flex-col items-start">
-                        <GuaranteeBadge index={i} />
-                        
-                        {/* Subtitulo 2 */}
-                        <h3 className="subtitulo2 mb-6 leading-tight">
-                            / {item.title}
-                        </h3>
-                        
-                        <div 
-                            className="cuerpo mb-4"
-                            dangerouslySetInnerHTML={{ __html: item.description || '' }}
-                        />
-                        
-                        {item.note && (
-                            <p className="text-[10px] text-vlanc-secondary/60 italic mt-8 border-t border-vlanc-secondary/10 pt-4 w-full">
-                                {item.note}
-                            </p>
-                        )}
+                        {/* Barra decorativa actualizada (#8f4933) */}
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
                     </AnimatedSection>
-                ))}
+
+                    {/* Garantía 3 alineada al fondo */}
+                    <div className="mt-auto">
+                        {item3 && <GuaranteeItem item={item3} />}
+                    </div>
+                </div>
             </div>
         </section>
     );

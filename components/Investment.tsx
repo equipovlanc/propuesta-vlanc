@@ -13,6 +13,9 @@ interface InvestmentProps {
     data?: {
         title?: string;
         introduction?: string;
+        highlightPhrase?: string;
+        introduction2?: string;
+        locationDate?: string;
         plansDescription?: { name?: string; desc?: string }[];
         tableHeaders?: string[];
         tableRows?: TableRow[];
@@ -35,62 +38,103 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
         return 'border-b border-vlanc-primary/10';
     };
 
+    // Función auxiliar para procesar texto de Sanity
+    const formatText = (text?: string) => {
+        if (!text) return '';
+        return text.replace(/\n/g, '<br />');
+    };
+
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[140px] pb-[120px] px-[120px]">
-            <AnimatedSection className="mb-4">
-                <h2 className="subtitulo1 mb-4 tracking-tighter">
+        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px] relative">
+            {/* Cabecera Sección */}
+            <AnimatedSection className="mb-8 shrink-0">
+                <h2 className="subtitulo1">
                    {data?.title || "la inversión."}
                 </h2>
-                <div className="w-20 h-[2px] bg-vlanc-primary mb-8"></div>
+                {/* Barra decorativa (Color actualizado #8f4933) */}
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
             </AnimatedSection>
 
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-start h-full overflow-hidden">
-                <div className="lg:col-span-4 space-y-8 overflow-y-auto max-h-full no-scrollbar pr-4">
-                    <AnimatedSection>
+            {/* Contenedor Principal */}
+            <div className="w-full flex flex-row gap-[160px] items-start h-full relative">
+                
+                {/* COLUMNA IZQUIERDA: Textos y Descripciones */}
+                <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
+                    <AnimatedSection className="space-y-6">
+                        {/* Introducción Parte 1 */}
                         <div 
-                            className="cuerpo mb-8" 
-                            dangerouslySetInnerHTML={{ __html: data?.introduction || '' }} 
+                            className="cuerpo [&>strong]:font-bold" 
+                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
                         
+                        {/* Frase Destacada */}
+                        {data?.highlightPhrase && (
+                             <p className="cuerpo2 font-bold text-vlanc-black">
+                                {data.highlightPhrase}
+                             </p>
+                        )}
+                        
+                        {/* Introducción Parte 2 */}
+                        <div 
+                            className="cuerpo [&>strong]:font-bold" 
+                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
+                        />
+                        
+                        {/* Descripción de Planes */}
                         <div className="space-y-6">
                             {(data?.plansDescription ?? []).map((p, i) => (
-                                <div key={i} className="space-y-1">
-                                    <p className="text-[12px] font-bold text-vlanc-black tracking-widest uppercase">{p.name}_</p>
-                                    <p className="text-[11px] text-vlanc-secondary leading-relaxed text-justify font-sans">{p.desc}</p>
+                                <div key={i} className="space-y-2">
+                                    {/* Nombre del plan */}
+                                    <h3 className="font-sans font-bold text-[15px] text-vlanc-black uppercase leading-tight">{p.name}_</h3>
+                                    
+                                    {/* Descripción */}
+                                    <div 
+                                        className="cuerpo [&>strong]:font-bold"
+                                        dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
+                                    />
                                 </div>
                             ))}
                         </div>
                     </AnimatedSection>
                 </div>
 
-                <div className="lg:col-span-8 h-full flex flex-col">
-                    <AnimatedSection className="w-full">
-                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm">
+                {/* COLUMNA DERECHA: Tabla y Firmas */}
+                <div className="shrink-0 flex flex-col items-end">
+                    {/* Contenedor Tabla */}
+                    <AnimatedSection className="w-[720px] h-[532px] flex flex-col">
+                        
+                        {/* Cabecera Tabla */}
+                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0 h-[47px]">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
-                                <div key={i} className="p-3 text-center text-[10px] font-bold tracking-widest text-vlanc-secondary uppercase">{h}</div>
+                                <div key={i} className="px-3 text-center flex items-center justify-center h-full">
+                                    <span className="tabla1">{h}</span>
+                                </div>
                             ))}
                         </div>
                         
-                        <div className="bg-transparent text-[10px]">
+                        {/* Cuerpo Tabla */}
+                        <div className="flex-grow flex flex-col bg-transparent">
                             {(data?.tableRows ?? []).map((row, i) => {
+                                const gridClass = "grid grid-cols-[3fr_repeat(3,1fr)] items-center";
+
                                 if (row.isPremiumSeparator) {
                                     return (
-                                        <div key={i} className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#e6ded6] py-2 border-b border-vlanc-primary/10">
-                                            <div className="px-4 py-1 font-bold uppercase tracking-widest text-vlanc-secondary text-right pr-4 italic col-span-4">
-                                                SERVICIOS PREMIUM
+                                        <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10`}>
+                                            <div className="px-4 text-right pr-4 col-span-4 h-full flex items-center justify-end">
+                                                <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
                                             </div>
                                         </div>
                                     );
                                 }
                                 
                                 return (
-                                    <div key={i} className={`grid grid-cols-[3fr_repeat(3,1fr)] ${getRowBg(row.highlightColor)} items-center`}>
-                                        <div className="py-2 px-4 font-bold text-vlanc-secondary uppercase tracking-widest leading-tight">
-                                            {row.label}
+                                    <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`}>
+                                        <div className="px-4 leading-tight py-1">
+                                            <span className="tabla2">{row.label}</span>
                                         </div>
                                         {(row.checks ?? []).map((isChecked, idx) => (
-                                            <div key={idx} className="py-2 flex justify-center items-center">
+                                            <div key={idx} className="flex justify-center items-center h-full">
                                                 {isChecked && <CheckIcon />}
                                             </div>
                                         ))}
@@ -99,21 +143,32 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white mt-auto">
+                        {/* Pie Tabla: Precios - SIN BORDES para efecto continuo */}
+                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0 h-[35px]">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
-                                <div key={i} className="p-4 text-center flex flex-col justify-center border-l border-white/20">
-                                    <p className="text-[14px] font-serif font-bold tracking-tight whitespace-nowrap">{price}</p>
+                                <div key={i} className="px-4 text-center flex flex-col justify-center h-full">
+                                    <span className="tabla3 whitespace-nowrap">{price}</span>
                                 </div>
                             ))}
                         </div>
                     </AnimatedSection>
-                    
-                    <div className="mt-4 flex justify-between items-center text-[9px] font-bold tracking-widest uppercase text-vlanc-black/40">
-                        <span>VIVE VLANC SL</span>
-                        <span className="text-right">ACEPTA PRESUPUESTO_FIRMA<br/>En Alcoi a XX de mes de 2025</span>
+
+                    {/* FIRMA */}
+                    <div className="w-[720px] flex flex-col border-t border-[#702622] mt-[25px] pt-1">
+                        <div className="flex justify-between items-start">
+                            <span className="tabla1">VIVE VLANC SL</span>
+                            <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            {/* FECHA */}
+            <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
+                <p className="cuerpo font-bold text-right">
+                    {data?.locationDate || "En Alcoi a XX de mes de 2025"}
+                </p>
             </div>
         </section>
     );

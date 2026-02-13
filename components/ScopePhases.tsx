@@ -6,13 +6,15 @@ interface SubPhase {
     number?: string;
     title?: string;
     description?: string;
+    note?: string;
 }
 
 interface Phase {
     title?: string;
     image?: string;
-    videoUrl?: string;
+    video?: string;
     guaranteeText?: string;
+    videoButtonText?: string;
     subPhases?: SubPhase[];
 }
 
@@ -24,84 +26,129 @@ interface ScopePhasesProps {
 const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados." }) => {
   const [showVideo, setShowVideo] = useState(false);
 
+  // Función para romper el título en líneas por cada palabra
+  const formattedTitle = (mainTitle || "trabajos contemplados.").split(' ').map((word, i, arr) => (
+      <React.Fragment key={i}>
+          {word}
+          {i < arr.length - 1 && <br />}
+      </React.Fragment>
+  ));
+
+  // Función para separar texto de garantía
+  const getGuaranteeParts = (text: string) => {
+      const parts = text.split('/');
+      return {
+          badge: parts[0]?.trim(),
+          desc: parts.slice(1).join('/').trim()
+      };
+  };
+
+  const handleVideoClick = () => {
+      if (data?.video) {
+          setShowVideo(true);
+      } else {
+          console.log("No hay video cargado");
+      }
+  };
+
+  const hasGuarantee = !!data?.guaranteeText;
+  const hasVideo = !!(data?.videoButtonText && data?.video);
+  const hasButtons = hasGuarantee || (data?.videoButtonText && data?.videoButtonText.trim() !== "");
+
   return (
-    <section className="h-full w-full bg-vlanc-bg flex relative overflow-hidden">
+    <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden">
         
-        <div className="absolute top-0 left-0 w-full lg:w-[45%] h-full z-0">
+        {/* --- 1. TÍTULO SECCIÓN --- */}
+        <div className="absolute top-[150px] left-[120px] z-20">
+             <AnimatedSection>
+                <h2 className="subtitulo1 leading-none text-left text-vlanc-black">
+                    {formattedTitle}
+                </h2>
+                {/* Barra decorativa actualizada (#8f4933) */}
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
+            </AnimatedSection>
+        </div>
+
+        {/* --- 2. IMAGEN VERTICAL --- */}
+        <div className="absolute top-0 bottom-0 left-[575px] w-[409px] z-10 overflow-hidden pointer-events-none">
              <AnimatedSection className="w-full h-full">
                 {data?.image ? (
-                        <img src={data.image} alt="Phase" className="w-full h-full object-cover grayscale opacity-90 brightness-110" />
+                    <img src={data.image} alt="Phase" className="w-full h-full object-cover grayscale opacity-90 brightness-110" />
                 ) : (
-                    <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center">
-                        <span className="text-xs tracking-widest text-vlanc-secondary/40">Imagen Vertical</span>
+                    <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center border border-vlanc-secondary/5">
+                        <span className="text-xs tracking-widest text-vlanc-secondary/40">Imagen 409px</span>
                     </div>
                 )}
              </AnimatedSection>
         </div>
 
-        <div className="w-full h-full flex z-10 pointer-events-none">
-            {/* Columna Izquierda: Título alineado a 140px */}
-            <div className="hidden lg:flex w-[25%] h-full pt-[140px] pl-[120px] flex-col bg-vlanc-bg">
-                 <AnimatedSection>
-                    <h2 className="subtitulo1 tracking-tighter leading-none text-left">
-                        {mainTitle}
-                    </h2>
-                    <div className="w-20 h-[2px] bg-vlanc-primary mt-6"></div>
-                </AnimatedSection>
-            </div>
+        {/* --- 3. CONTENIDO --- */}
+        <div className="absolute bottom-[140px] left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto">
+            <AnimatedSection className="w-full">
+                {/* Título de la Fase */}
+                <h3 className="fase-titulo mb-8 text-vlanc-black">{data?.title}</h3>
+                
+                {/* Lista de Subfases */}
+                <div className="space-y-6">
+                    {(data?.subPhases ?? []).map((sub, i) => (
+                        <div key={i} className="text-left">
+                            <p className="fase-subtitulo mb-1 text-vlanc-black">
+                                {sub.number} {sub.title}
+                            </p>
+                            <p 
+                                className="cuerpo text-[14px] leading-[1.5]" 
+                                dangerouslySetInnerHTML={{ __html: sub.description || '' }} 
+                            />
+                        </div>
+                    ))}
+                </div>
 
-            <div className="w-full lg:w-[35%] h-full relative overflow-hidden pointer-events-auto">
-                  {data?.image && (
-                     <img src={data.image} className="w-full h-full object-cover grayscale" />
-                  )}
-            </div>
-
-            {/* Columna Derecha: Contenido alineado a 140px (justify-start) */}
-            <div className="w-full lg:w-[40%] h-full flex flex-col justify-start px-10 lg:pl-10 lg:pr-[120px] pt-[140px] pb-[120px] overflow-y-auto no-scrollbar pointer-events-auto bg-vlanc-bg">
-                <AnimatedSection>
-                    <h3 className="text-[21px] font-sans font-bold text-vlanc-black uppercase mb-12">{data?.title}</h3>
-                    
-                    <div className="space-y-8">
-                        {(data?.subPhases ?? []).map((sub, i) => (
-                            <div key={i} className="text-[12px] leading-relaxed">
-                                <p className="mb-2 tracking-widest font-bold text-vlanc-black uppercase">
-                                    {sub.number} {sub.title}
-                                </p>
-                                <p 
-                                    className="cuerpo" 
-                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }} 
-                                />
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="flex items-center gap-6 pt-16 mt-auto">
-                        {data?.guaranteeText && (
-                            <button className="bg-vlanc-primary text-white text-[10px] font-bold px-8 py-4 tracking-[0.2em] uppercase rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-colors">
-                                {data.guaranteeText}
-                            </button>
-                        )}
-                        {data?.videoUrl && (
+                {/* Botones */}
+                {hasButtons && (
+                    <div className="flex items-center gap-6 mt-12">
+                        {hasGuarantee && (() => {
+                            const { badge, desc } = getGuaranteeParts(data!.guaranteeText!);
+                            return (
+                                <button className="flex items-center bg-vlanc-primary text-white px-6 py-4 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group">
+                                    <span className="boton1 text-white">
+                                        {badge}
+                                    </span>
+                                    {desc && (
+                                        <>
+                                            <span className="mx-3 text-[14px] font-serif leading-none opacity-60">/</span>
+                                            <span className="boton2 text-white">
+                                                {desc}
+                                            </span>
+                                        </>
+                                    )}
+                                </button>
+                            );
+                        })()}
+                        
+                        {data?.videoButtonText && (
                             <button 
-                                onClick={() => setShowVideo(true)}
-                                className="border border-vlanc-primary text-vlanc-primary px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px]"
+                                onClick={handleVideoClick}
+                                className="border border-vlanc-primary text-vlanc-primary px-8 py-4 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group"
                             >
-                                VER VIDEO
+                                <span className="boton1 text-vlanc-primary group-hover:text-white">
+                                    {data.videoButtonText}
+                                </span>
                             </button>
                         )}
                     </div>
-                </AnimatedSection>
-            </div>
+                )}
+            </AnimatedSection>
         </div>
 
-      {showVideo && (
+        {/* --- MODAL VIDEO --- */}
+        {showVideo && data?.video && (
             <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 pointer-events-auto" onClick={() => setShowVideo(false)}>
                 <div className="relative w-full max-w-5xl aspect-video bg-black rounded-lg shadow-2xl" onClick={e => e.stopPropagation()}>
-                    <video src={data?.videoUrl} controls autoPlay className="w-full h-full" />
+                    <video src={data.video} controls autoPlay className="w-full h-full" />
                     <button onClick={() => setShowVideo(false)} className="absolute -top-12 right-0 text-white text-4xl">&times;</button>
                 </div>
             </div>
-      )}
+        )}
     </section>
   );
 };

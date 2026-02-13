@@ -9,22 +9,29 @@ interface DividerSlideProps {
 
 const DividerSlide: React.FC<DividerSlideProps> = ({ image, text }) => {
     return (
-        <section className="h-screen w-full flex items-center justify-center bg-vlanc-bg px-[120px] py-10 relative">
-             <div className="max-w-6xl w-full h-[60vh] relative">
-                 <AnimatedSection className="w-full h-full relative z-10">
-                    {/* Imagen Equipo Horizontal */}
-                    {image ? (
-                        <img src={image} alt="Team" className="w-full h-full object-cover grayscale brightness-105 shadow-xl rounded-sm" />
-                    ) : (
-                         <div className="w-full h-full bg-vlanc-primary/10 flex items-center justify-center">
-                            <span className="text-xs uppercase tracking-widest text-vlanc-primary/40">Foto Equipo Horizontal</span>
-                        </div>
-                    )}
-                 </AnimatedSection>
+        <section className="h-full w-full bg-vlanc-bg flex flex-col items-center pt-[150px] px-[120px] relative">
+             {/* Wrapper para alinear imagen y texto juntos */}
+             <div className="w-full max-w-[1320px] flex flex-col">
+                 {/* Contenedor Imagen: 1320x670px */}
+                 <div className="w-full aspect-[1320/670] shrink-0">
+                     <AnimatedSection className="w-full h-full">
+                        {image ? (
+                            <img 
+                                src={image} 
+                                alt="Team" 
+                                className="w-full h-full object-cover grayscale brightness-105 shadow-xl rounded-[1px]" 
+                            />
+                        ) : (
+                             <div className="w-full h-full bg-vlanc-primary/10 flex items-center justify-center border border-vlanc-primary/5">
+                                <span className="text-xs uppercase tracking-widest text-vlanc-primary/40 font-bold">Foto Equipo 1320x670</span>
+                            </div>
+                        )}
+                     </AnimatedSection>
+                 </div>
                  
-                 {/* Texto Overlay Inferior Derecho */}
-                 <AnimatedSection className="absolute -bottom-16 right-0 lg:-right-12 z-20">
-                    <h2 className="text-[42px] md:text-[60px] font-serif italic text-vlanc-secondary tracking-tighter leading-none text-right">
+                 {/* Texto debajo, alineado a la derecha del contenedor */}
+                 <AnimatedSection className="mt-12 text-right">
+                    <h2 className="especial2">
                         {text || "¿Nos dejas acompañarte?"}
                     </h2>
                  </AnimatedSection>

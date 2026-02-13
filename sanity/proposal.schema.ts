@@ -181,7 +181,8 @@ export default defineType({
                     fields: [
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'image', type: 'image' }),
-                        defineField({ name: 'videoUrl', title: 'URL del Video (Si aplica)', type: 'string' }),
+                        defineField({ name: 'video', title: 'Archivo Video (Si aplica)', type: 'file' }),
+                        defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
                         defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía (Si aplica)', type: 'string' }),
                         defineField({ name: 'subPhases', type: 'array', of: [{
                             type: 'object',
@@ -205,7 +206,8 @@ export default defineType({
                     fields: [
                          defineField({ name: 'title', type: 'string' }),
                          defineField({ name: 'image', type: 'image' }),
-                         defineField({ name: 'videoUrl', title: 'URL del Video', type: 'string' }),
+                         defineField({ name: 'video', title: 'Archivo Video', type: 'file' }),
+                         defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
                          defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía', type: 'string' }),
                          defineField({ name: 'subPhases', type: 'array', of: [{
                             type: 'object',
@@ -225,11 +227,13 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'introduction', type: 'text' }),
+                defineField({ name: 'introduction', title: 'Introducción Parte 1', type: 'text' }),
+                defineField({ name: 'highlightPhrase', title: 'Frase Destacada (Negrita/Negro)', type: 'text' }),
+                defineField({ name: 'introduction2', title: 'Introducción Parte 2', type: 'text' }),
+                defineField({ name: 'locationDate', title: 'Lugar y Fecha (Pie de tabla)', type: 'string' }),
                 defineField({ name: 'plansDescription', type: 'array', of: [{
                     type: 'object', fields: [ {name: 'name', type: 'string'}, {name: 'desc', type: 'text'} ] 
                 }]}),
-                // Tabla Estructurada para renderizado exacto
                 defineField({ name: 'tableHeaders', title: 'Nombres de Planes (Cabecera)', type: 'array', of: [{type: 'string'}] }),
                 defineField({ name: 'tableRows', title: 'Filas de la Tabla', type: 'array', of: [{
                     type: 'object',
@@ -249,6 +253,7 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', title: 'Título Sección', type: 'string' }),
+                defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón)', type: 'text' }),
                 defineField({ name: 'conditionalOffer', type: 'object', fields: [
                     { name: 'title', type: 'string' },
                     { name: 'description', type: 'text' },
@@ -289,6 +294,13 @@ export default defineType({
                 defineField({ name: 'items', type: 'array', of: [{
                     type: 'object',
                     fields: [
+                        defineField({ name: 'icon', title: 'Icono SVG', type: 'image' }),
+                        defineField({ 
+                            name: 'badgeContent', 
+                            title: 'Contenido Badge (Rectángulo Negro)', 
+                            type: 'text',
+                            description: 'Texto dentro del recuadro negro. Usa tags HTML como <strong>...</strong> para negritas.'
+                        }),
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'description', type: 'text' }),
                         defineField({ name: 'note', type: 'string' })
@@ -306,8 +318,72 @@ export default defineType({
                     fields: [
                         defineField({ name: 'subtitle', title: 'Subtítulo 2 (Nombre Servicio)', type: 'string' }),
                         defineField({ name: 'title', title: 'Subtítulo 3 (Bajada)', type: 'string' }),
-                        defineField({ name: 'description', type: 'array', of: [{type: 'text'}] }),
-                        defineField({ name: 'note', type: 'string' }),
+                        defineField({ 
+                            name: 'description', 
+                            title: 'Bloques de Descripción',
+                            type: 'array', 
+                            of: [{
+                                type: 'object',
+                                title: 'Bloque de Texto',
+                                fields: [
+                                    defineField({ 
+                                        name: 'text', 
+                                        title: 'Texto', 
+                                        type: 'text', 
+                                        rows: 3 
+                                    }),
+                                    defineField({ 
+                                        name: 'style', 
+                                        title: 'Estilo de Texto', 
+                                        type: 'string',
+                                        options: {
+                                            list: [
+                                                { title: 'Normal (Cuerpo)', value: 'normal' },
+                                                { title: 'Título (Estilo Bajada)', value: 'title' }
+                                            ],
+                                            layout: 'radio'
+                                        },
+                                        initialValue: 'normal'
+                                    }),
+                                    defineField({ 
+                                        name: 'isNumbered', 
+                                        title: '¿Es un punto numerado?', 
+                                        type: 'boolean', 
+                                        initialValue: false 
+                                    }),
+                                    defineField({ 
+                                        name: 'number', 
+                                        title: 'Número (Ej: 01)', 
+                                        type: 'string', 
+                                        hidden: ({parent}) => !parent?.isNumbered 
+                                    }),
+                                    defineField({ 
+                                        name: 'hasSeparator', 
+                                        title: '¿Añadir línea separadora debajo?', 
+                                        type: 'boolean', 
+                                        initialValue: false 
+                                    })
+                                ],
+                                preview: {
+                                    select: {
+                                        title: 'text',
+                                        style: 'style',
+                                        num: 'number',
+                                        sep: 'hasSeparator'
+                                    },
+                                    prepare({title, style, num, sep}) {
+                                        const type = style === 'title' ? '[TIT]' : '[TXT]';
+                                        const number = num ? `(#${num})` : '';
+                                        const line = sep ? '___' : '';
+                                        return {
+                                            title: title,
+                                            subtitle: `${type} ${number} ${line}`
+                                        }
+                                    }
+                                }
+                            }] 
+                        }),
+                        defineField({ name: 'note', title: 'Nota (Texto con saltos de línea)', type: 'text' }),
                         defineField({ name: 'price', type: 'string' }),
                         defineField({ name: 'image', type: 'image' })
                     ]
@@ -319,13 +395,31 @@ export default defineType({
             title: 'Contacto',
             type: 'object',
             fields: [
-                defineField({ name: 'image', type: 'image' }),
-                defineField({ name: 'callToAction', type: 'string' }),
+                defineField({ name: 'image', title: 'Imagen Izquierda (785x691)', type: 'image' }),
                 defineField({ name: 'location', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'address', type: 'string' }, { name: 'email', type: 'string' }
                 ]}),
+                // CAMBIO: Estructura de teléfono actualizada a Objetos (Número + Icono)
                 defineField({ name: 'phone', type: 'object', fields: [
-                    defineField({ name: 'title', type: 'string' }), { name: 'numbers', type: 'array', of: [{ type: 'string' }] }
+                    defineField({ name: 'title', type: 'string' }), 
+                    defineField({ 
+                        name: 'landline', 
+                        title: 'Teléfono Fijo', 
+                        type: 'object',
+                        fields: [
+                            defineField({ name: 'number', type: 'string', title: 'Número' }),
+                            defineField({ name: 'icon', type: 'image', title: 'Icono Teléfono' })
+                        ]
+                    }),
+                    defineField({ 
+                        name: 'mobile', 
+                        title: 'Móvil (WhatsApp)', 
+                        type: 'object', 
+                        fields: [
+                            defineField({ name: 'number', type: 'string', title: 'Número' }),
+                            defineField({ name: 'icon', type: 'image', title: 'Icono WhatsApp' })
+                        ]
+                    })
                 ]}),
                 defineField({ name: 'web', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'url', type: 'url' }, { name: 'displayText', type: 'string' }
@@ -335,7 +429,7 @@ export default defineType({
                     fields: [
                         { name: 'name', type: 'string' },
                         { name: 'url', type: 'url' },
-                        { name: 'icon', type: 'image' }
+                        { name: 'icon', title: 'Icono (SVG/PNG)', type: 'image' }
                     ]
                 }]})
             ]

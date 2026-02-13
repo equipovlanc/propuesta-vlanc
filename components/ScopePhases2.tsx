@@ -24,14 +24,15 @@ interface ScopePhases2Props {
 
 const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
   return (
-    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[140px] pb-[120px] px-[120px]">
+    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
       <div className="max-w-7xl mx-auto w-full">
          <AnimatedSection>
             <div className="relative mb-12">
                 <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter">
                     {data?.title || 'trabajos contemplados.'}
                 </h2>
-                <div className="w-16 h-[2px] bg-vlanc-primary mt-4"></div>
+                {/* Barra decorativa actualizada (#8f4933) */}
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
             </div>
         </AnimatedSection>
         
@@ -45,7 +46,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                     </div>
                     <div className="space-y-6">
                         {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
-                            <div key={i} className="text-vlanc-black/80 text-[12px] leading-relaxed">
+                            <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                 <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
                                 <p 
                                     className="whitespace-pre-line"
@@ -64,7 +65,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         </div>
                         <div className="space-y-6">
                             {(data?.phases?.[1]?.subPhases ?? []).slice(0, 1).map((sub, i) => (
-                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-relaxed">
+                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                     <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
                                     <p 
                                         className="whitespace-pre-line"
@@ -82,10 +83,10 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
             <div className="space-y-12">
                 {/* Fase 4 - Continuación */}
                 {data?.phases?.[1] && (data?.phases?.[1]?.subPhases?.length ?? 0) > 1 && (
-                    <div className="lg:pt-[76px]"> {/* Alineación con el título de la izq */}
+                    <div className="lg:pt-[76px]">
                         <div className="space-y-6">
                              {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
-                                 <div key={i} className="text-vlanc-black/80 text-[12px] leading-relaxed">
+                                 <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                     <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
                                     <p 
                                         className="whitespace-pre-line"
@@ -105,7 +106,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         </div>
                         <div className="space-y-6">
                             {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
-                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-relaxed">
+                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                     <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
                                     <p 
                                         className="whitespace-pre-line"

@@ -41,10 +41,25 @@ const App: React.FC = () => {
           "team": team{..., "members": members[]{..., "image": image.asset->url}},
           "testimonials": testimonials{..., "items": items[]{..., "img": img.asset->url}},
           "scopeIntro": scopeIntro{..., "image": image.asset->url, "video": video.asset->url},
-          "scopePhases": scopePhases1.phases[] {..., "image": image.asset->url} + scopePhases2.phases[] {..., "image": image.asset->url},
-          "specialOffers": specialOffers{..., "callToAction": callToAction{..., "image": image.asset->url}},
+          "scopePhases": scopePhases1.phases[] {..., "image": image.asset->url, "video": video.asset->url} + scopePhases2.phases[] {..., "image": image.asset->url, "video": video.asset->url},
+          "specialOffers": specialOffers{
+            ..., 
+            conditionalOffer,
+            launchOffer,
+            "callToAction": callToAction{..., "image": image.asset->url}
+          },
+          "guarantees": guarantees{..., "items": items[]{..., "icon": icon.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., "image": image.asset->url},
-          "contact": contact{..., "image": image.asset->url, "rrss": rrss[]{..., "icon": icon.asset->url}}
+          "contact": contact{
+            ..., 
+            "image": image.asset->url, 
+            "phone": phone{
+                ...,
+                "landline": landline{..., "icon": icon.asset->url},
+                "mobile": mobile{..., "icon": icon.asset->url}
+            },
+            "rrss": rrss[]{..., "icon": icon.asset->url}
+          }
         }`;
         const data = await sanityClient.fetch(query, { slug });
         setProposalData(data || localProposalData);
@@ -81,18 +96,23 @@ const App: React.FC = () => {
   const d = proposalData;
 
   return (
-    // CAMBIO: snap-mandatory para forzar que siempre pare en una sección exacta.
     <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-vlanc-bg focus:outline-none" tabIndex={0}>
         
         <SectionSlide id="hero"><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
 
-        <SectionSlide id="index"><IndexSection data={d.index} /></SectionSlide>
+        <SectionSlide id="index">
+            <Header logo={d.logos?.smallLogo} pageNumber={2} />
+            <IndexSection data={d.index} />
+        </SectionSlide>
 
         <SectionSlide id="situation"><Header logo={d.logos?.smallLogo} pageNumber={3} /><Situation data={d.situation} /></SectionSlide>
 
         <SectionSlide id="mission"><Header logo={d.logos?.smallLogo} pageNumber={4} /><Mission data={d.mission} /></SectionSlide>
 
-        <SectionSlide id="process"><Header logo={d.logos?.smallLogo} pageNumber={5} /><Process data={d.process} /></SectionSlide>
+        <SectionSlide id="process">
+            <Header logo={d.logos?.smallLogo} pageNumber={5} />
+            <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} />
+        </SectionSlide>
 
         <SectionSlide id="team"><Header logo={d.logos?.smallLogo} pageNumber={6} /><Team data={d.team} /></SectionSlide>
 
@@ -109,18 +129,34 @@ const App: React.FC = () => {
 
         <SectionSlide id="investment"><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
         
-        <SectionSlide id="special-offers"><Header logo={d.logos?.smallLogo} pageNumber={15} /><SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} /></SectionSlide>
+        <SectionSlide id="special-offers">
+            <Header logo={d.logos?.smallLogo} pageNumber={15} />
+            <SpecialOffers 
+                data={d.specialOffers} 
+                investmentTitle={d.investment?.title}
+                locationDate={d.investment?.locationDate} 
+            />
+        </SectionSlide>
         
-        <SectionSlide id="payment"><Header logo={d.logos?.smallLogo} pageNumber={16} /><Payment data={d.payment} investmentTitle={d.investment?.title} /></SectionSlide>
+        <SectionSlide id="payment">
+            <Header logo={d.logos?.smallLogo} pageNumber={16} />
+            <Payment 
+                data={d.payment} 
+                investmentTitle={d.investment?.title} 
+                locationDate={d.investment?.locationDate}
+            />
+        </SectionSlide>
 
-        <SectionSlide id="team-photo"><Header logo={d.logos?.smallLogo} pageNumber={17} /><DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /></SectionSlide>
+        <SectionSlide id="team-photo">
+            <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" />
+        </SectionSlide>
 
         <SectionSlide id="guarantees"><Header logo={d.logos?.smallLogo} pageNumber={18} /><Guarantees data={d.guarantees} /></SectionSlide>
 
         {(d.premiumServicesList || []).map((service: any, i: number) => (
             <SectionSlide key={i} id={`premium-${i+1}`}>
                 <Header logo={d.logos?.smallLogo} pageNumber={19 + i} />
-                <PremiumServices data={service} image={service.image} />
+                <PremiumServices data={service} image={service.image} index={i} />
             </SectionSlide>
         ))}
 

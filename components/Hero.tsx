@@ -21,7 +21,7 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
   return (
     <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-[120px] py-32">
       
-      {/* Esquina Superior Izquierda: Info Técnica (Mantiene Montserrat) */}
+      {/* Esquina Superior Izquierda: Info Técnica */}
       <div className="absolute top-20 left-20 text-left pointer-events-none">
         <div className="flex flex-col gap-6">
             <div className="text-[14px] font-serif text-vlanc-black leading-tight">
@@ -29,7 +29,8 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
                 <p className="font-normal">{headerData?.title}</p>
             </div>
             
-            <div className="w-12 h-[1px] bg-vlanc-black"></div>
+            {/* Barra decorativa actualizada (#8f4933) */}
+            <div className="w-[52px] h-[2.4px] bg-[#8f4933]"></div>
 
             <div className="text-[14px] font-sans text-vlanc-secondary leading-tight tracking-wider">
                 <p className="font-medium">{data?.clientName || headerData?.clientName}</p>
@@ -40,20 +41,20 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
 
       {/* Centro: Títulos */}
       <AnimatedSection className="text-center">
-        <div className="space-y-6">
-          <p className="text-[21px] text-vlanc-secondary tracking-[0.4em] mb-10 font-sans font-medium">
+        <div className="flex flex-col items-center">
+          <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight">
             {data?.clientName || headerData?.clientName}
           </p>
           
-          {/* Uso de la clase .titulo */}
-          <h1 className="titulo">
+          <h1 className="titulo leading-[1.05]">
             {data?.line1}
           </h1>
-          <h1 className="titulo">
+          <h1 className="titulo leading-[1.05]">
             {data?.line2}
           </h1>
           
-          <div className="w-32 h-[2px] bg-vlanc-primary/80 mx-auto mt-24"></div>
+          {/* Barra inferior actualizada (#8f4933) */}
+          <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
         </div>
       </AnimatedSection>
 
