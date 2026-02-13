@@ -1,9 +1,12 @@
+
 import React, { useRef, useState, useEffect, ReactNode, CSSProperties } from 'react';
 
 interface AnimatedSectionProps {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
+  // Added onClick support to allow stopping propagation or handling clicks on animated containers
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 /**
@@ -15,7 +18,7 @@ interface AnimatedSectionProps {
  * 
  * It will re-trigger the animation every time the component enters the viewport.
  */
-const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className, style }) => {
+const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className, style, onClick }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -48,6 +51,8 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className, 
   return (
     <div
       ref={sectionRef}
+      // Pass through the onClick handler to the underlying div
+      onClick={onClick}
       className={`${className} transition-all duration-1000 ease-out transform ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       }`}

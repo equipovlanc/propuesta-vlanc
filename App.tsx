@@ -123,7 +123,14 @@ const App: React.FC = () => {
         {(d.scopePhases || []).map((phase: any, i: number) => (
             <SectionSlide key={i} id={`phase-${i+1}`}>
                 <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
-                <ScopePhases data={phase} mainTitle={d.scopePhases1?.title} />
+                <ScopePhases 
+                    data={phase} 
+                    mainTitle={d.scopePhases1?.title} 
+                    // Pasamos la garantía correspondiente: 
+                    // Fase 1 -> Garantía index 1 ("Proceso de creación")
+                    // Fase 2 -> Garantía index 2 ("Soporte ilimitado")
+                    guaranteeItem={d.guarantees?.items?.[i + 1]} 
+                />
             </SectionSlide>
         ))}
 

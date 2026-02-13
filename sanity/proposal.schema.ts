@@ -145,7 +145,8 @@ export default defineType({
                     fields: [
                         defineField({ name: 'name', type: 'string' }),
                         defineField({ name: 'quote', type: 'text' }),
-                        defineField({ name: 'img', title: 'Imagen', type: 'image' })
+                        defineField({ name: 'img', title: 'Imagen', type: 'image' }),
+                        defineField({ name: 'url', title: 'URL del Proyecto', type: 'url' })
                     ]
                 }]})
             ]
