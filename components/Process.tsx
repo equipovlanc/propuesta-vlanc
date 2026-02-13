@@ -78,7 +78,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                 </div>
             </div>
 
-            {/* MODAL DE GARANTÍA - 613px para garantizar 517px de contenido útil */}
+            {/* MODAL DE GARANTÍA - Unificado a 613px (517px de contenido + 96px de padding) */}
             {isModalOpen && guaranteeItem && (
                 <div 
                     className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10"
@@ -96,7 +96,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                         </button>
 
                         <div className="flex flex-col items-start w-full relative">
-                            <h3 className="subtitulo2 not-italic mb-6 leading-tight">
+                            <h3 className="subtitulo2 not-italic mb-6 leading-tight text-vlanc-black">
                                 / {guaranteeItem.title}
                             </h3>
                             

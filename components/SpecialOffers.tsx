@@ -141,7 +141,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
           </AnimatedSection>
       </div>
 
-      {/* MODAL SERVICIO PREMIUM - 672px para garantizar 576px (max-w-xl) de contenido útil */}
+      {/* MODAL SERVICIO PREMIUM - Consistente con el estilo de subtítulos negros */}
       {isModalOpen && premiumService && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10" onClick={closeModal}>
             <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[672px] w-full relative max-h-[90vh] overflow-y-auto no-scrollbar" onClick={(e) => e.stopPropagation()}>
