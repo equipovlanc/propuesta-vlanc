@@ -30,7 +30,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchProposalData = async () => {
-      // Si no hay slug, estamos en la landing del estudio
       if (!slug) { 
         setLoading(false); 
         return; 
@@ -83,7 +82,6 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-  // Navegación por teclado (Flechas)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
         if (!containerRef.current) return;
@@ -100,10 +98,8 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // 1. Si no hay slug, mostramos la web del estudio (Landing)
   if (!slug) return <StudioLanding />;
 
-  // 2. Estado de carga
   if (loading) {
     return (
       <div className="h-screen bg-vlanc-bg flex items-center justify-center">
@@ -115,7 +111,6 @@ const App: React.FC = () => {
     );
   }
 
-  // 3. Estado de error (Propuesta no encontrada o fallo de red)
   if (error || !proposalData) {
     return (
       <div className="h-screen bg-vlanc-bg flex items-center justify-center p-10 text-center">
@@ -179,6 +174,7 @@ const App: React.FC = () => {
                 data={d.specialOffers} 
                 investmentTitle={d.investment?.title}
                 locationDate={d.investment?.locationDate} 
+                premiumService={d.premiumServicesList?.[0]}
             />
         </SectionSlide>
         
