@@ -79,7 +79,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                         </div>
                     )}
                     <p 
-                        className="cuerpo text-vlanc-black"
+                        className="cuerpo"
                         dangerouslySetInnerHTML={{ __html: block.text }} 
                     />
                 </div>
@@ -218,7 +218,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
             onClick={closeModal}
         >
             <AnimatedSection 
-                className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-xl w-full relative max-h-[90vh] overflow-y-auto no-scrollbar"
+                className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[888px] w-full relative max-h-[90vh] overflow-y-auto no-scrollbar"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button 

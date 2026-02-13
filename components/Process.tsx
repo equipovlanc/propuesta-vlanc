@@ -93,7 +93,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                     onClick={closeModal}
                 >
                     <AnimatedSection 
-                        className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-xl w-full relative"
+                        className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[450px] w-full relative"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Botón Cerrar */}
@@ -138,7 +138,6 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                                     <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
                                         <div 
                                             className="cuerpo !text-vlanc-black text-[14px] leading-snug"
-                                            /* FIX: Changed 'item.badgeContent' to 'guaranteeItem.badgeContent' to fix undefined error */
                                             dangerouslySetInnerHTML={{ __html: guaranteeItem.badgeContent || '' }}
                                         />
                                     </div>

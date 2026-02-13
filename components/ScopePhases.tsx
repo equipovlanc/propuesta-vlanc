@@ -175,7 +175,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                 onClick={closeGuaranteeModal}
             >
                 <AnimatedSection 
-                    className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-xl w-full relative"
+                    className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[766px] w-full relative"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {/* Botón Cerrar */}
