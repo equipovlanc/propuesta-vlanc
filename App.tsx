@@ -19,18 +19,23 @@ import DividerSlide from './components/DividerSlide';
 import Contact from './components/Contact';
 import SectionSlide from './components/SectionSlide';
 import StudioLanding from './components/StudioLanding'; 
-import { proposalData as localProposalData } from './data/proposal.data';
 import sanityClient from './sanity/client';
 
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const slug = window.location.pathname.substring(1);
 
   useEffect(() => {
     const fetchProposalData = async () => {
-      if (!slug) { setLoading(false); return; }
+      // Si no hay slug, estamos en la landing del estudio
+      if (!slug) { 
+        setLoading(false); 
+        return; 
+      }
+
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
@@ -62,10 +67,15 @@ const App: React.FC = () => {
           }
         }`;
         const data = await sanityClient.fetch(query, { slug });
-        setProposalData(data || localProposalData);
+        
+        if (!data) {
+          setError("No se ha encontrado la propuesta solicitada.");
+        } else {
+          setProposalData(data);
+        }
       } catch (err) {
-        console.error(err);
-        setProposalData(localProposalData);
+        console.error("Error fetching from Sanity:", err);
+        setError("Error de conexión al cargar la propuesta.");
       } finally {
         setLoading(false);
       }
@@ -73,7 +83,7 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-  // Keyboard navigation
+  // Navegación por teclado (Flechas)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
         if (!containerRef.current) return;
@@ -90,8 +100,33 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // 1. Si no hay slug, mostramos la web del estudio (Landing)
   if (!slug) return <StudioLanding />;
-  if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center font-bold tracking-widest text-vlanc-primary uppercase">Cargando...</div>;
+
+  // 2. Estado de carga
+  if (loading) {
+    return (
+      <div className="h-screen bg-vlanc-bg flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-vlanc-primary border-t-transparent rounded-full animate-spin"></div>
+          <span className="font-sans text-[10px] font-bold tracking-[0.3em] text-vlanc-primary uppercase">Cargando propuesta...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // 3. Estado de error (Propuesta no encontrada o fallo de red)
+  if (error || !proposalData) {
+    return (
+      <div className="h-screen bg-vlanc-bg flex items-center justify-center p-10 text-center">
+        <div className="max-w-md">
+          <h1 className="subtitulo2 mb-4">Lo sentimos</h1>
+          <p className="cuerpo mb-8">{error || "No hemos podido cargar los datos."}</p>
+          <a href="/" className="boton1 bg-vlanc-primary text-white px-8 py-3 rounded-sm">Volver al inicio</a>
+        </div>
+      </div>
+    );
+  }
   
   const d = proposalData;
 
@@ -120,19 +155,21 @@ const App: React.FC = () => {
 
         <SectionSlide id="scope"><Header logo={d.logos?.smallLogo} pageNumber={8} /><Scope data={d.scopeIntro} /></SectionSlide>
 
-        {(d.scopePhases || []).map((phase: any, i: number) => (
-            <SectionSlide key={i} id={`phase-${i+1}`}>
-                <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
-                <ScopePhases 
-                    data={phase} 
-                    mainTitle={d.scopePhases1?.title} 
-                    // Pasamos la garantía correspondiente: 
-                    // Fase 1 -> Garantía index 1 ("Proceso de creación")
-                    // Fase 2 -> Garantía index 2 ("Soporte ilimitado")
-                    guaranteeItem={d.guarantees?.items?.[i + 1]} 
-                />
-            </SectionSlide>
-        ))}
+        {(d.scopePhases || []).map((phase: any, i: number) => {
+            const numPhases1 = d.scopePhases1?.phases?.length || 0;
+            const currentSectionTitle = i < numPhases1 ? d.scopePhases1?.title : d.scopePhases2?.title;
+
+            return (
+                <SectionSlide key={i} id={`phase-${i+1}`}>
+                    <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
+                    <ScopePhases 
+                        data={phase} 
+                        mainTitle={currentSectionTitle} 
+                        guaranteeItem={d.guarantees?.items?.[i + 1]} 
+                    />
+                </SectionSlide>
+            );
+        })}
 
         <SectionSlide id="investment"><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
         

@@ -44,8 +44,11 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
       </React.Fragment>
   ));
 
-  // Función para separar texto de garantía
+  // Función para separar texto de garantía (Badge / Descripción)
   const getGuaranteeParts = (text: string) => {
+      if (!text.includes('/')) {
+          return { badge: text.trim(), desc: '' };
+      }
       const parts = text.split('/');
       return {
           badge: parts[0]?.trim(),
