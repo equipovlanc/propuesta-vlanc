@@ -12,11 +12,10 @@ const SectionSlide: React.FC<SectionSlideProps> = ({ children, id, className = "
   return (
     <div 
       id={id}
-      // CAMBIO: h-screen estricto, overflow-hidden para evitar scroll interno que rompa el snap.
       className={`section-slide w-full h-screen relative snap-start snap-always overflow-hidden flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
     >
-      {/* Contenedor interno para asegurar layout */}
-      <div className="w-full h-full flex flex-col box-border">
+      {/* Contenedor rígido 1920x1080 forzado en impresión */}
+      <div className="print-strict-container w-full h-full flex flex-col box-border">
           {children}
       </div>
     </div>
