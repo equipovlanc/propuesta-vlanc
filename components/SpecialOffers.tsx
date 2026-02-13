@@ -66,7 +66,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
     return (
         <div key={key} className="w-full">
             {isTitle ? (
-                <h4 className="subtitulo4 mb-0">
+                <h4 className="subtitulo4 mb-0 text-vlanc-secondary">
                     <span dangerouslySetInnerHTML={{ __html: block.text }} />
                 </h4>
             ) : (
@@ -229,11 +229,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                 </button>
 
                 <div className="flex flex-col items-start w-full relative">
-                    <h3 className="subtitulo2 not-italic font-bold mb-8 text-vlanc-black">
+                    <h3 className="subtitulo2 not-italic font-bold mb-8 text-vlanc-secondary">
                         / {premiumService.subtitle}
                     </h3>
 
-                    <h4 className="subtitulo4 mb-5 text-vlanc-black">
+                    <h4 className="subtitulo4 mb-5 text-vlanc-secondary">
                         {premiumService.title}
                     </h4>
 

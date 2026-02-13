@@ -86,14 +86,14 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                 </div>
             </div>
 
-            {/* MODAL DE GARANTÍA */}
+            {/* MODAL DE GARANTÍA - Ajustado a 517px para respetar el ancho de columna de la sección Garantías */}
             {isModalOpen && guaranteeItem && (
                 <div 
                     className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10"
                     onClick={closeModal}
                 >
                     <AnimatedSection 
-                        className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[450px] w-full relative"
+                        className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[517px] w-full relative"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Botón Cerrar */}
@@ -105,7 +105,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                         </button>
 
                         <div className="flex flex-col items-start w-full relative">
-                            {/* 1. TÍTULO GARANTÍA (Sin cursiva) */}
+                            {/* 1. TÍTULO GARANTÍA */}
                             <h3 className="subtitulo2 not-italic mb-6 leading-tight">
                                 / {guaranteeItem.title}
                             </h3>
