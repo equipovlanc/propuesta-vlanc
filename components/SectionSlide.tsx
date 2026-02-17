@@ -20,11 +20,20 @@ const SectionSlide: React.FC<SectionSlideProps> = ({ children, id, className = "
     offset: ["start start", "end start"]
   });
 
-  // Negative Z-axis effects (receding)
-  // As we scroll through the section, it scales down and fades out
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
+  // Negative Z-axis effects (receding "Rear Window" effect)
+  
+  // 1. Scale: Drastic reduction to simulate object moving far away quickly.
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.6]); 
+  
+  // 2. Opacity: Fade out as it moves away.
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  
+  // 3. Y Axis Counter-Movement:
+  // When user scrolls down, the content naturally moves UP.
+  // To simulate "staying behind" or moving deep into Z space without moving up, 
+  // we translate Y downwards (positive value). 
+  // "50%" means it moves up at half the speed of the scroll, creating a parallax lag.
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
     <div 
@@ -34,7 +43,7 @@ const SectionSlide: React.FC<SectionSlideProps> = ({ children, id, className = "
     >
       <motion.div 
         style={{ scale, opacity, y }}
-        className="print-strict-container w-full h-full flex flex-col box-border origin-center"
+        className="print-strict-container w-full h-full flex flex-col box-border origin-center will-change-transform"
       >
           {children}
       </motion.div>

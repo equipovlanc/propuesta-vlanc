@@ -64,7 +64,12 @@
         font-size: 14px;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        cursor: none; /* Hide default cursor for the custom one */
+        cursor: none !important; /* Force hide default cursor globally */
+      }
+
+      /* Ocultar cursor en elementos interactivos para que no se superponga al custom */
+      a, button, input, select, textarea, [role="button"], label {
+        cursor: none !important;
       }
 
       /* Grain Filter Overlay */
@@ -121,6 +126,11 @@
           overflow: visible !important;
           background-color: white !important;
           cursor: auto !important;
+        }
+
+        /* Restaurar cursores en impresión */
+        a, button, input, select, textarea, [role="button"], label {
+            cursor: pointer !important;
         }
 
         .bg-grain::before { display: none !important; }
