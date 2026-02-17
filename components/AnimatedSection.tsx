@@ -1,6 +1,7 @@
 
 import React, { ReactNode, CSSProperties } from 'react';
 import { motion, Variants } from 'framer-motion';
+import { useScrollDirection } from '../context/ScrollContext';
 
 interface AnimatedSectionProps {
   children?: ReactNode;
@@ -8,7 +9,7 @@ interface AnimatedSectionProps {
   style?: CSSProperties;
   hierarchy?: number; 
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
-  mode?: 'default' | 'bar'; // Nuevo modo para la barra
+  mode?: 'default' | 'bar'; 
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
@@ -21,22 +22,15 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   direction = 'up',
   mode = 'default'
 }) => {
+  const scrollDir = useScrollDirection(); // 1 (Avance/Next) o -1 (Retroceso/Prev)
   
-  // LOGICA DE TIEMPOS REFINADA
-  // H0 (Media): Inmediato.
-  // H1 (Títulos): 0.4s (Rápido, establece contexto).
-  // H2 (Texto): 1.2s (Gran pausa para respirar y leer después del título).
-  
+  // LOGICA DE TIEMPOS
   const isMedia = hierarchy === 0;
-  
-  // Base 0.4s para H1.
-  // Step 0.8s para separar mucho H2 de H1.
   const baseDelay = isMedia ? 0 : 0.4; 
   const stepDelay = 0.8; 
-  
   const calculatedDelay = isMedia ? 0 : baseDelay + ((hierarchy - 1) * stepDelay);
 
-  // Variantes por defecto (Fade + Slide)
+  // Variantes por defecto (Contenido normal)
   const defaultVariants: Variants = {
     hidden: { 
       opacity: isMedia ? 1 : 0, 
@@ -61,29 +55,35 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
     }
   };
 
-  // Variantes para el modo 'bar' (Viaje lateral)
-  // Entra desde la izquierda (-100vw) hacia su sitio.
-  // Sale hacia la derecha (+100vw).
+  // Variantes para la BARRA (Motion Blur + Dirección Dinámica)
+  // Si scrollDir > 0 (Vamos a la siguiente): Entra desde IZQ (-120vw), Sale por DER (120vw)
+  // Si scrollDir < 0 (Volvemos a la anterior): Entra desde DER (120vw), Sale por IZQ (-120vw)
   const barVariants: Variants = {
       hidden: {
-          x: '-110vw',
-          opacity: 1, // La barra es sólida, viaja físicamente
+          x: scrollDir > 0 ? '-120vw' : '120vw', 
+          opacity: 1,
+          scaleX: 2.5, // Estiramiento para efecto velocidad
+          filter: 'blur(10px)', // Blur de movimiento
       },
       visible: {
           x: 0,
           opacity: 1,
+          scaleX: 1,
+          filter: 'blur(0px)',
           transition: {
-              duration: 1.4, // Viaje largo y suave
-              ease: [0.22, 1, 0.36, 1], // Ease out cubic custom
-              delay: 0.2 // Empieza un poco antes que el título para cruzar la pantalla
+              duration: 1.2, 
+              ease: [0.16, 1, 0.3, 1], // Ease Out muy suave
+              delay: 0.1 // Pequeño delay respecto a la carga de página
           }
       },
       exit: {
-          x: '110vw', // Sale disparada a la derecha
+          x: scrollDir > 0 ? '120vw' : '-120vw',
           opacity: 1,
+          scaleX: 3.0, // Más estiramiento al salir disparada
+          filter: 'blur(15px)',
           transition: {
-              duration: 0.6,
-              ease: "easeIn"
+              duration: 0.8,
+              ease: "easeIn" // Aceleración al salir
           }
       }
   };

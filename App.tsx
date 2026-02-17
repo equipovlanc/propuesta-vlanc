@@ -18,10 +18,11 @@ import Guarantees from './components/Guarantees';
 import PremiumServices from './components/PremiumServices';
 import DividerSlide from './components/DividerSlide';
 import Contact from './components/Contact';
-import SectionSlide from './components/SectionSlide'; // Ahora es el Z-Slide
+import SectionSlide from './components/SectionSlide';
 import StudioLanding from './components/StudioLanding'; 
 import CustomCursor from './components/CustomCursor';
 import sanityClient from './sanity/client';
+import { ScrollContext } from './context/ScrollContext';
 
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
@@ -90,12 +91,6 @@ const App: React.FC = () => {
   const sections = useMemo(() => {
     if (!proposalData) return [];
     const d = proposalData;
-    
-    // Helper para mapear IDs a índices
-    const mapIdToSection = (id: string) => {
-        // Esta lógica debe coincidir con el orden de abajo
-        // Simplemente definimos el orden y luego podemos buscar
-    };
 
     const list = [
         // 0: Hero
@@ -210,40 +205,41 @@ const App: React.FC = () => {
   const activeSection = sections[currentIndex];
 
   return (
-    // CAMBIO IMPORTANTE: Se elimina bg-vlanc-bg para ver el grid del body
-    <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
-        <CustomCursor />
-        
-        {/* Renderizado Condicional del Header: Solo si no es Hero */}
-        {currentIndex > 0 && (
-             <Header 
-                logo={proposalData.logos?.smallLogo} 
-                pageNumber={activeSection.headerPage} 
-                onNavigate={navigate}
-             />
-        )}
+    <ScrollContext.Provider value={direction}>
+        <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
+            <CustomCursor />
+            
+            {/* Renderizado Condicional del Header: Solo si no es Hero */}
+            {currentIndex > 0 && (
+                <Header 
+                    logo={proposalData.logos?.smallLogo} 
+                    pageNumber={activeSection.headerPage} 
+                    onNavigate={navigate}
+                />
+            )}
 
-        {/* 3D STAGE */}
-        <div className="relative w-full h-full perspective-[1000px]">
-             <AnimatePresence initial={false} custom={direction} mode="popLayout">
-                <SectionSlide 
-                    key={currentIndex} 
-                    id={activeSection.id}
-                    isActive={true}
-                    direction={direction}
-                >
-                    {activeSection.comp}
-                </SectionSlide>
-             </AnimatePresence>
-        </div>
+            {/* 3D STAGE */}
+            <div className="relative w-full h-full perspective-[1000px]">
+                <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                    <SectionSlide 
+                        key={currentIndex} 
+                        id={activeSection.id}
+                        isActive={true}
+                        direction={direction}
+                    >
+                        {activeSection.comp}
+                    </SectionSlide>
+                </AnimatePresence>
+            </div>
 
-        {/* Navigation Dots (Opcional, visual feedback) */}
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20">
-            {sections.map((_, i) => (
-                <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
-            ))}
+            {/* Navigation Dots */}
+            <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20">
+                {sections.map((_, i) => (
+                    <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
+                ))}
+            </div>
         </div>
-    </div>
+    </ScrollContext.Provider>
   );
 };
 
