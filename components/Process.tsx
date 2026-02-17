@@ -33,7 +33,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex flex-col justify-start overflow-hidden relative">
             <div className="w-full flex flex-col h-full">
-                <AnimatedSection className="mb-12 shrink-0">
+                <AnimatedSection className="mb-12 shrink-0" hierarchy={1}>
                     <h2 className="subtitulo1">
                         {data?.title || "el proceso Vlanc."}
                     </h2>
@@ -42,7 +42,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
                     {(data?.steps ?? []).map((step, index) => (
-                        <AnimatedSection key={index}>
+                        <AnimatedSection key={index} hierarchy={2}>
                             <div className="space-y-6 flex flex-col items-start">
                                 <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
                                     <span className="font-serif mr-2">{`0${index + 1}`} /</span>
@@ -78,7 +78,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                 </div>
             </div>
 
-            {/* MODAL DE GARANTÍA - Unificado a 613px (517px de contenido + 96px de padding) */}
+            {/* MODAL DE GARANTÍA */}
             {isModalOpen && guaranteeItem && (
                 <div 
                     className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10"
@@ -87,6 +87,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                     <AnimatedSection 
                         className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[613px] w-full relative"
                         onClick={(e) => e.stopPropagation()}
+                        hierarchy={2}
                     >
                         <button 
                             onClick={closeModal}

@@ -31,11 +31,11 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
 
     return (
         <footer className="h-screen w-full bg-vlanc-bg flex flex-col pt-[150px] pb-[140px] px-[120px] relative">
-            {/* GRID DE 2 COLUMNAS: Ajustado a 60% / 40% */}
+            {/* GRID DE 2 COLUMNAS */}
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
                 
-                {/* COLUMNA IZQUIERDA: Logo Final (60%) */}
-                <AnimatedSection className="flex items-center justify-center h-full w-full">
+                {/* COLUMNA IZQUIERDA: Logo Final (J3) */}
+                <AnimatedSection className="flex items-center justify-center h-full w-full" hierarchy={3}>
                     <div className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px]">
                          {finalLogo ? (
                             <img src={finalLogo} alt="VLANC Final Logo" className="w-full h-full object-contain" />
@@ -47,12 +47,12 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                     </div>
                 </AnimatedSection>
 
-                {/* COLUMNA DERECHA: Datos (40%) */}
+                {/* COLUMNA DERECHA: Datos (J2) */}
                 <div className="flex items-center justify-center h-full w-full pl-10">
                     <div className="flex flex-col space-y-12 text-left w-full max-w-md translate-x-[100px]">
                         
                         {/* 1. DÓNDE ESTAMOS */}
-                        <AnimatedSection>
+                        <AnimatedSection hierarchy={2}>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.location?.title}
                             </h4>
@@ -63,7 +63,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                         </AnimatedSection>
 
                         {/* 2. CONTÁCTANOS */}
-                        <AnimatedSection>
+                        <AnimatedSection hierarchy={2}>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.phone?.title}
                             </h4>
@@ -96,7 +96,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                         </AnimatedSection>
 
                         {/* 3. WEB */}
-                        <AnimatedSection>
+                        <AnimatedSection hierarchy={2}>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.web?.title}
                             </h4>
@@ -108,7 +108,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                         </AnimatedSection>
 
                         {/* 4. RRSS */}
-                        <AnimatedSection>
+                        <AnimatedSection hierarchy={2}>
                              <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / RRSS
                              </h4>
@@ -138,7 +138,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                 </div>
             </div>
 
-            {/* BOTÓN DE IMPRESIÓN - Minimalista y sutil */}
+            {/* BOTÓN DE IMPRESIÓN */}
             <div className="absolute bottom-8 left-12 no-print">
                 <button 
                     onClick={handlePrint}

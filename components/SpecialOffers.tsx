@@ -87,11 +87,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
   return (
     <section id="special-offers" className="h-full w-full bg-vlanc-bg flex flex-row pt-[150px] pb-[140px] px-[120px] overflow-hidden">
       <div className="w-1/2 h-full flex flex-col pr-[69.5px] relative">
-          <AnimatedSection className="shrink-0 mb-6">
+          <AnimatedSection className="shrink-0 mb-6" hierarchy={1}>
                 <h2 className="subtitulo1">{investmentTitle || "la inversión."}</h2>
                 <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
           </AnimatedSection>
-          <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar">
+          <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar" hierarchy={2}>
                 {data?.conditionalOffer && (
                     <div className="mb-6">
                         <h3 className="subtitulo2 mb-3 text-vlanc-black">{data.conditionalOffer.title}</h3>
@@ -131,7 +131,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
       </div>
 
       <div className="w-1/2 h-full pl-[69.5px]">
-          <AnimatedSection className="w-full h-full relative overflow-hidden">
+          <AnimatedSection className="w-full h-full relative overflow-hidden" hierarchy={3}>
                 {imageSrc && (
                     <div className="w-full h-full relative">
                         <img src={imageSrc} alt="Special Offer" className="w-full h-full object-cover" />
@@ -147,10 +147,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
           </AnimatedSection>
       </div>
 
-      {/* MODAL SERVICIO PREMIUM - Consistente con el estilo de subtítulos negros */}
+      {/* MODAL SERVICIO PREMIUM */}
       {isModalOpen && premiumService && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10" onClick={closeModal}>
-            <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[672px] w-full relative max-h-[90vh] overflow-y-auto no-scrollbar" onClick={(e) => e.stopPropagation()}>
+            <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[672px] w-full relative max-h-[90vh] overflow-y-auto no-scrollbar" onClick={(e) => e.stopPropagation()} hierarchy={2}>
                 <button onClick={closeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                 <div className="flex flex-col items-start w-full relative">
                     <h3 className="subtitulo2 not-italic font-bold mb-8 text-vlanc-black">/ {premiumService.subtitle}</h3>

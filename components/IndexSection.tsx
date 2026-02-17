@@ -29,9 +29,9 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
   return (
     <section id="index-section" className="h-full w-full flex bg-vlanc-bg overflow-hidden absolute inset-0">
       
-      {/* Columna Izquierda: Imagen (Ken Burns) */}
+      {/* Columna Izquierda: Imagen (J3) */}
       <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">
-        <AnimatedSection direction="none" className="w-full h-full">
+        <AnimatedSection direction="none" hierarchy={3} className="w-full h-full">
             {imageSrc ? (
                 <div className="relative w-full h-full ken-burns">
                     <img 
@@ -55,8 +55,8 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
       {/* Columna Derecha: Contenido */}
       <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative bg-vlanc-bg">
         
-        {/* Bloque Superior */}
-        <AnimatedSection direction="up" delay={0.2}>
+        {/* Bloque Superior: Título (J1) */}
+        <AnimatedSection direction="up" hierarchy={1}>
             <h2 className="subtitulo1">
                 {data?.title || "contenido."}
             </h2>
@@ -64,10 +64,10 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
             <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
         </AnimatedSection>
         
-        {/* Bloque Inferior: Staggered links */}
+        {/* Bloque Inferior: Links (J2) */}
         <div className="space-y-5">
             {items.length > 0 ? items.map((item, i) => (
-                <AnimatedSection key={i} direction="up" delay={0.3 + (i * 0.05)}>
+                <AnimatedSection key={i} direction="up" hierarchy={2}>
                   <a 
                     href={`#${item.id}`} 
                     onClick={(e) => handleLinkClick(e, item.id)}

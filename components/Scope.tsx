@@ -30,20 +30,19 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         {/* --- BLOQUE SUPERIOR (Altura fija 512px) --- */}
         <div className="w-full h-[512px] relative shrink-0">
             
-            {/* 1. TÍTULO SECCIÓN */}
+            {/* 1. TÍTULO SECCIÓN (J1) */}
             <div className="absolute top-[150px] left-[120px] z-20">
-                <AnimatedSection>
+                <AnimatedSection hierarchy={1}>
                     <h2 className="subtitulo1 text-vlanc-black">
                         {data?.title || "qué vamos a hacer por ti."}
                     </h2>
-                    {/* Barra decorativa actualizada (#8f4933) */}
                     <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                 </AnimatedSection>
             </div>
 
-            {/* 2. MEDIA */}
+            {/* 2. MEDIA (J3) */}
             <div className="absolute top-0 right-[120px] w-[735px] h-full z-10 overflow-hidden bg-vlanc-bg">
-                <AnimatedSection className="h-full w-full relative">
+                <AnimatedSection className="h-full w-full relative" hierarchy={3}>
                     {/* VIDEO */}
                     {data?.video && (
                          <video 
@@ -53,7 +52,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         />
                     )}
                     
-                    {/* IMAGEN: Si hay video, es fallback (hidden en web, block en print). Si no, block siempre. */}
+                    {/* IMAGEN */}
                     {imageSrc ? (
                         <div className={`absolute inset-0 w-full h-full z-0 ${data?.video ? 'hidden print:block' : 'block'}`}>
                             <img src={imageSrc} alt="Scope" className="w-full h-full object-cover" />
@@ -70,9 +69,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            {/* 3. DATOS TÉCNICOS + SCOPE */}
+            {/* 3. DATOS TÉCNICOS + SCOPE (J2) */}
             <div className="absolute bottom-0 left-[120px] z-20" style={{ width: '735px' }}>
-                 <AnimatedSection>
+                 <AnimatedSection hierarchy={2}>
                     <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
                     
                     <div className="space-y-4 cuerpo text-left">
@@ -84,10 +83,11 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </div>
         </div>
 
-        {/* --- BLOQUE INFERIOR (TEXTO EN COLUMNAS FLUIDAS) --- */}
+        {/* --- BLOQUE INFERIOR (TEXTO EN COLUMNAS FLUIDAS) (J2) --- */}
         <div className="flex-grow w-full px-[120px] pt-[50px] pb-[140px] overflow-y-auto no-scrollbar">
             <AnimatedSection 
                 className="w-full min-h-full" 
+                hierarchy={2}
                 style={{ 
                     columnCount: 2, 
                     columnGap: 'calc(100% - 1470px)', 

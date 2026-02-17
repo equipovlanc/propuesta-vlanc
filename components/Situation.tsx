@@ -20,20 +20,19 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
         {/* COLUMNA TEXTO */}
         <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-[140px]">
             
-            {/* ESPACIO SUPERIOR / TÍTULO */}
+            {/* ESPACIO SUPERIOR / TÍTULO (J1) */}
             <div className="flex-grow flex flex-col justify-center">
-                <AnimatedSection>
+                <AnimatedSection hierarchy={1}>
                     <h2 className="subtitulo1">
                         {data?.title || "la situación."}
                     </h2>
-                    {/* Barra decorativa actualizada (#8f4933) */}
                     <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                 </AnimatedSection>
             </div>
             
-            {/* CUERPO DE TEXTO */}
+            {/* CUERPO DE TEXTO (J2) */}
             <div className="shrink-0">
-                <AnimatedSection>
+                <AnimatedSection hierarchy={2}>
                     <div className="space-y-4">
                         {data?.paragraphs && data.paragraphs.length > 0 ? (
                         data.paragraphs.map((p, i) => (
@@ -51,9 +50,9 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
             </div>
         </div>
         
-        {/* COLUMNA IMAGEN */}
+        {/* COLUMNA IMAGEN (J3) */}
         <div className="hidden lg:block w-[720px] h-full mr-[120px] shrink-0 relative">
-            <AnimatedSection className="h-full w-full">
+            <AnimatedSection className="h-full w-full" hierarchy={3}>
                 {imageSrc ? (
                   <div className="relative w-full h-full">
                     <img 

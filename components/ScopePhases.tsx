@@ -68,8 +68,9 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
 
   return (
     <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden">
+        {/* TÍTULO (J1) */}
         <div className="absolute top-[150px] left-[120px] z-20">
-             <AnimatedSection>
+             <AnimatedSection hierarchy={1}>
                 <h2 className="subtitulo1 leading-none text-left text-vlanc-black">
                     {formattedTitle}
                 </h2>
@@ -77,8 +78,9 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             </AnimatedSection>
         </div>
 
+        {/* IMAGEN (J3) */}
         <div className="absolute top-0 bottom-0 left-[575px] w-[409px] z-10 overflow-hidden pointer-events-none">
-             <AnimatedSection className="w-full h-full relative">
+             <AnimatedSection className="w-full h-full relative" hierarchy={3}>
                 {imageSrc ? (
                     <div className="w-full h-full relative">
                          <img src={imageSrc} alt="Phase" className="w-full h-full object-cover" />
@@ -95,8 +97,9 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
              </AnimatedSection>
         </div>
 
+        {/* FASES Y BOTONES (J2) */}
         <div className="absolute bottom-[140px] left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto">
-            <AnimatedSection className="w-full">
+            <AnimatedSection className="w-full" hierarchy={2}>
                 <h3 className="fase-titulo mb-8 text-vlanc-black">{data?.title}</h3>
                 <div className="space-y-6">
                     {(data?.subPhases ?? []).map((sub, i) => (
@@ -135,10 +138,10 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             </AnimatedSection>
         </div>
 
-        {/* MODAL GARANTÍA - Unificado a 613px (Contenido 517px + Padding 96px) */}
+        {/* MODAL GARANTÍA */}
         {isGuaranteeModalOpen && guaranteeItem && (
             <div className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10 pointer-events-auto" onClick={closeGuaranteeModal}>
-                <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[613px] w-full relative" onClick={(e) => e.stopPropagation()}>
+                <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[613px] w-full relative" onClick={(e) => e.stopPropagation()} hierarchy={2}>
                     <button onClick={closeGuaranteeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                     <div className="flex flex-col items-start w-full relative">
                         <h3 className="subtitulo2 not-italic mb-6 leading-tight text-vlanc-black">/ {guaranteeItem.title}</h3>

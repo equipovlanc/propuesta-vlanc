@@ -10,16 +10,14 @@ interface ZSlideProps {
   direction: number; // 1 (forward) or -1 (backward)
 }
 
-// Variantes para el efecto de profundidad Z
+// Variantes para el efecto de profundidad Z "Gran Recorrido"
 const slideVariants = {
   enter: (direction: number) => ({
-    scale: direction > 0 ? 1.4 : 0.8, // Si voy adelante, la nueva viene desde "detrás" de mi cabeza (grande) o del fondo?
-    // Corrección: El usuario quiere "Alejarse en el horizonte".
-    // NEXT (1): La actual se aleja (scale down). La NUEVA debe venir desde "delante" (Scale > 1) hacia su sitio.
-    // PREV (-1): La actual se hace grande (va hacia mi). La NUEVA viene del fondo (Scale < 1).
+    // Aumentamos la escala inicial para que parezca que viene de MUY lejos o MUY cerca
+    scale: direction > 0 ? 2.5 : 0.6, 
     opacity: 0,
-    zIndex: direction > 0 ? 10 : 0, // La nueva tapa a la vieja si voy adelante
-    filter: 'blur(10px)',
+    zIndex: direction > 0 ? 10 : 0, 
+    filter: 'blur(20px)', // Más desenfoque inicial para suavizar la llegada
   }),
   center: {
     scale: 1,
@@ -27,18 +25,21 @@ const slideVariants = {
     zIndex: 1,
     filter: 'blur(0px)',
     transition: {
-      duration: 1.2,
-      ease: [0.16, 1, 0.3, 1], // Ease personalizado ultra suave
+      // Duración aumentada para elegancia extrema
+      duration: 2.0, 
+      // Curva Bezier personalizada para un "aterrizaje" muy suave
+      ease: [0.25, 1, 0.5, 1], 
     }
   },
   exit: (direction: number) => ({
-    scale: direction > 0 ? 0.8 : 1.4, // Si voy adelante, la vieja se va al fondo (0.8). Si voy atrás, la vieja viene hacia mi (1.4)
+    // La página que se va se aleja mucho más (0.6) o se acerca mucho más (2.5)
+    scale: direction > 0 ? 0.6 : 2.5, 
     opacity: 0,
     zIndex: direction > 0 ? 0 : 10,
-    filter: 'blur(10px)',
+    filter: 'blur(20px)',
     transition: {
-      duration: 1.0,
-      ease: [0.16, 1, 0.3, 1],
+      duration: 2.0,
+      ease: [0.25, 1, 0.5, 1],
     }
   })
 };
@@ -55,10 +56,10 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
       exit="exit"
       style={{
         backfaceVisibility: 'hidden',
-        perspective: 1000,
+        perspective: 1500, // Aumentamos perspectiva para exagerar la profundidad 3D
       }}
     >
-        {/* Capa de contenido: Se anima internamente para el efecto parallax si los hijos usan motion */}
+        {/* Capa de contenido */}
         <div className="w-full h-full relative">
             {children}
         </div>

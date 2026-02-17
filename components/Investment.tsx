@@ -46,21 +46,20 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
 
     return (
         <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px] relative">
-            {/* Cabecera Sección */}
-            <AnimatedSection className="mb-8 shrink-0">
+            {/* Cabecera Sección (J1) */}
+            <AnimatedSection className="mb-8 shrink-0" hierarchy={1}>
                 <h2 className="subtitulo1">
                    {data?.title || "la inversión."}
                 </h2>
-                {/* Barra decorativa (Color actualizado #8f4933) */}
                 <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
             </AnimatedSection>
 
             {/* Contenedor Principal */}
             <div className="w-full flex flex-row gap-[160px] items-start h-full relative">
                 
-                {/* COLUMNA IZQUIERDA: Textos y Descripciones */}
+                {/* COLUMNA IZQUIERDA (J2) */}
                 <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
-                    <AnimatedSection className="space-y-6">
+                    <AnimatedSection className="space-y-6" hierarchy={2}>
                         {/* Introducción Parte 1 */}
                         <div 
                             className="cuerpo [&>strong]:font-bold" 
@@ -98,10 +97,10 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* COLUMNA DERECHA: Tabla y Firmas */}
+                {/* COLUMNA DERECHA: Tabla (J2) */}
                 <div className="shrink-0 flex flex-col items-end">
                     {/* Contenedor Tabla */}
-                    <AnimatedSection className="w-[720px] h-[532px] flex flex-col">
+                    <AnimatedSection className="w-[720px] h-[532px] flex flex-col" hierarchy={2}>
                         
                         {/* Cabecera Tabla */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0 h-[47px]">
@@ -143,7 +142,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Pie Tabla: Precios - SIN BORDES para efecto continuo */}
+                        {/* Pie Tabla: Precios */}
                         <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0 h-[35px]">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
@@ -164,7 +163,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* FECHA */}
+            {/* FECHA (J2) */}
             <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
                 <p className="cuerpo font-bold text-right">
                     {data?.locationDate || "En Alcoi a XX de mes de 2025"}

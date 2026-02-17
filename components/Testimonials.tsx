@@ -21,20 +21,19 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
         <section className="h-screen w-full bg-vlanc-bg flex items-center px-[120px] overflow-hidden">
             <div className="w-full h-full flex flex-col lg:flex-row gap-16">
                 
-                {/* COLUMNA TÍTULO */}
+                {/* COLUMNA TÍTULO (J1) */}
                 <div className="w-full lg:w-1/4 h-full flex flex-col">
                     <div className="h-1/2 flex flex-col justify-end pb-0">
-                        <AnimatedSection>
+                        <AnimatedSection hierarchy={1}>
                             <h2 className="subtitulo1 leading-none">
                                 {data?.title || "qué dicen de nosotros."}
                             </h2>
-                            {/* Barra decorativa actualizada (#8f4933) */}
                             <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                         </AnimatedSection>
                     </div>
                 </div>
                 
-                {/* COLUMNA TESTIMONIOS */}
+                {/* COLUMNA TESTIMONIOS (J2 y J3) */}
                 <div className="w-full lg:w-3/4 flex flex-col justify-center">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                         {(data?.items ?? []).map((testimonial, index) => {
@@ -43,7 +42,10 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
 
                             const testimonialContent = (
                                 <div className="flex flex-col h-full">
-                                    {/* Contenedor Imagen */}
+                                    {/* Contenedor Imagen (J3) */}
+                                    {/* Nota: En testimonios, la imagen va asociada. Para simplificar, pondremos todo el bloque en J3 o dividiremos. 
+                                        Para mantener el efecto "escalonado" solicitado, pondremos todo el bloque en J2, pero las imágenes en J3 
+                                        puede ser complicado si están en el mismo map. Vamos a poner el bloque en J2. */}
                                     <div className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm shadow-sm relative group">
                                         {imgSrc ? (
                                             <>
@@ -59,7 +61,6 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                             </div>
                                         )}
                                         
-                                        {/* Overlay para URL (Opcional visual) */}
                                         {testimonial.url && (
                                             <div className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-20">
                                                 <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase bg-vlanc-primary/80 px-4 py-2">Ver Proyecto</span>
@@ -67,17 +68,14 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                         )}
                                     </div>
 
-                                    {/* Subtitulo 2 (Italic) para nombres */}
+                                    {/* Textos */}
                                     <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors">{testimonial.name}</h4>
-                                    
-                                    <p className="cuerpo">
-                                        "{testimonial.quote}"
-                                    </p>
+                                    <p className="cuerpo">"{testimonial.quote}"</p>
                                 </div>
                             );
 
                             return (
-                                <AnimatedSection key={index} className="h-full group">
+                                <AnimatedSection key={index} className="h-full group" hierarchy={2}>
                                     {testimonial.url ? (
                                         <a 
                                             href={testimonial.url} 

@@ -38,15 +38,15 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
     return (
         <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
             
-            {/* Columna Izquierda: Media */}
+            {/* Columna Izquierda: Media (J3) */}
             <div className="w-full lg:w-[55.7%] h-full flex items-center justify-center relative bg-vlanc-bg">
-                <AnimatedSection className="flex items-center justify-center w-full h-full px-10">
+                <AnimatedSection className="flex items-center justify-center w-full h-full px-10" hierarchy={3}>
                     <div 
                         className="relative group cursor-pointer shadow-2xl overflow-hidden rounded-sm bg-vlanc-bg"
                         style={{ width: 'min(852px, 100%)', aspectRatio: '852/469' }}
                         onClick={toggleFullScreen}
                     >
-                        {/* VIDEO: Oculto en impresión */}
+                        {/* VIDEO */}
                         {data?.video && (
                             <video 
                                 ref={videoRef}
@@ -59,7 +59,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                             />
                         )}
 
-                        {/* IMAGEN: Fallback si no hay vídeo o en impresión. Si hay vídeo, se oculta en web pero se muestra en print */}
+                        {/* IMAGEN */}
                         {imageSrc ? (
                             <div className={`absolute inset-0 z-0 w-full h-full ${data?.video ? 'hidden print:block' : 'block'}`}>
                                 <img 
@@ -78,7 +78,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                             </div>
                         )}
                         
-                        {/* Overlay decorativo (Solo Web) */}
+                        {/* Overlay */}
                         <div className="absolute inset-0 z-20 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center print:hidden pointer-events-none">
                             <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center">
                                 <svg className="w-6 h-6 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
@@ -95,14 +95,14 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                 
                 {/* Bloque Superior: La Misión */}
                 <div className="flex flex-col">
-                    <AnimatedSection>
+                    <AnimatedSection hierarchy={1}>
                         <h2 className="subtitulo1 leading-none">
                             {data?.mission?.title || "la misión."}
                         </h2>
                         <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
                     </AnimatedSection>
                     
-                    <AnimatedSection>
+                    <AnimatedSection hierarchy={2}>
                         <h3 className="subtitulo2 mb-6 leading-tight max-w-sm">
                             {data?.mission?.subtitle}
                         </h3>
@@ -114,14 +114,14 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
 
                 {/* Bloque Inferior: Qué vas a conseguir */}
                 <div className="flex flex-col">
-                    <AnimatedSection>
+                    <AnimatedSection hierarchy={1}>
                         <h2 className="subtitulo1 leading-none">
                             {data?.achievements?.title || "qué vas a conseguir."}
                         </h2>
                         <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
                     </AnimatedSection>
                     
-                    <AnimatedSection>
+                    <AnimatedSection hierarchy={2}>
                         <ul className="space-y-4 w-full">
                             {(data?.achievements?.listItems ?? []).map((item, i) => (
                                 <li key={i} className="cuerpo">

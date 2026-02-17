@@ -29,13 +29,12 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   return (
     <section className="h-screen w-full bg-vlanc-bg flex flex-col relative overflow-hidden">
         
-        {/* Título de Sección */}
+        {/* Título de Sección (J1) */}
         <div className="absolute top-[150px] left-[120px] z-20">
-            <AnimatedSection>
+            <AnimatedSection hierarchy={1}>
                 <h2 className="subtitulo1 text-vlanc-black">
                     {data?.title || "conoce a VLANC"}
                 </h2>
-                {/* Barra decorativa actualizada (#8f4933) */}
                 <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
             </AnimatedSection>
         </div>
@@ -43,7 +42,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
         {/* Contenedor Principal */}
         <div className="flex w-full mt-[297px] h-[calc(100vh-297px)] pb-[140px]">
             
-            {/* MITAD IZQUIERDA (50%): IMÁGENES */}
+            {/* MITAD IZQUIERDA (50%): IMÁGENES (J3) */}
             <div className="w-1/2 h-full pr-[30px] pl-0">
                 <div className="grid grid-cols-2 gap-x-[50px] h-full items-stretch content-between">
                     {members.map((member, index) => {
@@ -54,6 +53,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                         return (
                             <AnimatedSection 
                                 key={index} 
+                                hierarchy={3}
                                 className={`flex flex-col w-full ${isBottomRow ? 'justify-end' : 'justify-start'}`}
                             >
                                 {/* Imagen */}
@@ -61,7 +61,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                     {imgSrc ? (
                                         <div className="w-full h-full relative group">
                                             <img src={imgSrc} alt={member.name} className="w-full h-full object-cover" />
-                                            {/* Overlay estático (controlado por sanity) */}
+                                            {/* Overlay estático */}
                                             <div 
                                                 className="absolute inset-0 bg-[#8f4933] pointer-events-none transition-opacity duration-300 group-hover:opacity-0"
                                                 style={{ opacity: imgOpacity / 100 }}
@@ -89,11 +89,11 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* MITAD DERECHA (50%): TEXTO */}
+            {/* MITAD DERECHA (50%): TEXTO (J2) */}
             <div className="w-1/2 h-full pl-[50px] pr-[120px] flex flex-col justify-between text-left">
                 
                 {/* Bloque Superior: Nuestro propósito */}
-                <AnimatedSection className="flex flex-col items-start">
+                <AnimatedSection className="flex flex-col items-start" hierarchy={2}>
                     <h3 className="subtitulo2 mb-6">
                         {data?.purpose?.title || "Nuestro propósito"}
                     </h3>
@@ -104,7 +104,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </AnimatedSection>
 
                 {/* Bloque Inferior: Nuestra historia */}
-                <AnimatedSection className="flex flex-col items-start pb-0 shrink-0">
+                <AnimatedSection className="flex flex-col items-start pb-0 shrink-0" hierarchy={2}>
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}
                     </h3>

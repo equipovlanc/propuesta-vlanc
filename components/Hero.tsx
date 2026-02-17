@@ -21,8 +21,8 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
   return (
     <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-[120px] py-32 overflow-hidden">
       
-      {/* Esquina Superior Izquierda: Info Técnica */}
-      <AnimatedSection direction="right" delay={0.2} className="absolute top-20 left-20 text-left pointer-events-none">
+      {/* Esquina Superior Izquierda: Info Técnica (J2) */}
+      <AnimatedSection direction="right" hierarchy={2} className="absolute top-20 left-20 text-left pointer-events-none">
         <div className="flex flex-col gap-6">
             <div className="text-[14px] font-serif text-vlanc-black leading-tight">
                 <p className="font-normal">{headerData?.projectCode}</p>
@@ -38,9 +38,9 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
         </div>
       </AnimatedSection>
 
-      {/* Centro: Títulos con Stagger sutil */}
+      {/* Centro: Títulos (J1) */}
       <div className="text-center relative z-10">
-        <AnimatedSection direction="up" delay={0.4} className="flex flex-col items-center">
+        <AnimatedSection direction="up" hierarchy={1} className="flex flex-col items-center">
           <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight">
             {data?.clientName || headerData?.clientName}
           </p>
@@ -56,8 +56,8 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
         </AnimatedSection>
       </div>
 
-      {/* Esquina Inferior Derecha: Logo */}
-      <AnimatedSection direction="left" delay={0.6} className="absolute bottom-16 right-16 text-right flex flex-col items-end">
+      {/* Esquina Inferior Derecha: Logo (J3) */}
+      <AnimatedSection direction="left" hierarchy={3} className="absolute bottom-16 right-16 text-right flex flex-col items-end">
         <div className="w-[500px] md:w-[600px] h-[200px] flex items-center justify-end">
             {logo ? (
                 <img src={logo} alt="Studio Logo" className="max-h-full w-auto object-contain" />

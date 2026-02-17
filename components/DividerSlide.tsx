@@ -13,11 +13,10 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ image, text }) => {
 
     return (
         <section className="h-full w-full bg-vlanc-bg flex flex-col items-center pt-[150px] px-[120px] relative">
-             {/* Wrapper para alinear imagen y texto juntos */}
              <div className="w-full max-w-[1320px] flex flex-col">
-                 {/* Contenedor Imagen: 1320x670px */}
+                 {/* Imagen (J3) */}
                  <div className="w-full aspect-[1320/670] shrink-0 relative">
-                     <AnimatedSection className="w-full h-full">
+                     <AnimatedSection className="w-full h-full" hierarchy={3}>
                         {imageSrc ? (
                             <div className="w-full h-full relative">
                                 <img 
@@ -38,8 +37,8 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ image, text }) => {
                      </AnimatedSection>
                  </div>
                  
-                 {/* Texto debajo, alineado a la derecha del contenedor */}
-                 <AnimatedSection className="mt-12 text-right">
+                 {/* Texto (J2) */}
+                 <AnimatedSection className="mt-12 text-right" hierarchy={2}>
                     <h2 className="especial2">
                         {text || "¿Nos dejas acompañarte?"}
                     </h2>
