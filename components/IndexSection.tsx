@@ -12,17 +12,14 @@ interface IndexSectionProps {
         title?: string;
         image?: { src: string; opacity?: number };
         items?: IndexItem[];
-    }
+    };
+    onNavigate: (id: string) => void;
 }
 
-const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
+const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
   const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, id?: string) => {
-    if (!id) return;
     event.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (id) onNavigate(id);
   };
 
   const items = data?.items || [];
@@ -30,7 +27,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
   const imageOpacity = data?.image?.opacity ?? 15;
 
   return (
-    <section id="index-section" className="h-screen w-full flex bg-vlanc-bg overflow-hidden">
+    <section id="index-section" className="h-full w-full flex bg-vlanc-bg overflow-hidden absolute inset-0">
       
       {/* Columna Izquierda: Imagen (Ken Burns) */}
       <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">

@@ -4,15 +4,16 @@ import React from 'react';
 interface HeaderProps {
   logo?: string | null;
   pageNumber?: number;
+  onNavigate?: (index: number) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ logo, pageNumber }) => {
+const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate }) => {
   return (
-    <header className="absolute top-0 left-0 w-full pointer-events-none z-50">
-      {/* Logo Small - Coordenadas fijas - Clickable */}
-      <a 
-        href="#index"
-        className="absolute top-8 left-8 md:left-10 w-[100px] h-[25px] flex items-center justify-start pointer-events-auto cursor-pointer group"
+    <header className="absolute top-0 left-0 w-full pointer-events-none z-50 mix-blend-multiply">
+      {/* Logo Small - Navegación al Índice (Sección 1, índice 1) */}
+      <button 
+        onClick={() => onNavigate && onNavigate(1)} 
+        className="absolute top-8 left-8 md:left-10 w-[100px] h-[25px] flex items-center justify-start pointer-events-auto cursor-pointer group bg-transparent border-none p-0 outline-none"
       >
         {logo ? (
           <img src={logo} alt="VLANC Studio" className="max-h-full w-auto object-contain transition-opacity group-hover:opacity-70" />
@@ -21,12 +22,12 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber }) => {
             <span className="text-[6px] uppercase tracking-[0.3em] text-vlanc-primary/50 font-bold">Logo Small</span>
           </div>
         )}
-      </a>
+      </button>
 
       {/* Número de página y línea vertical - Coordenadas fijas */}
       {pageNumber && (
         <div className="absolute top-0 right-[60px] flex flex-col items-center pointer-events-auto">
-            {/* Línea vertical: Se ha reforzado el grosor en el CSS de impresión */}
+            {/* Línea vertical */}
             <div className="w-[1px] h-[90px] bg-[#703622]"></div>
             
             <div className="mt-2 text-[11px] font-sans text-[#703622] font-normal tracking-[0.2em]">

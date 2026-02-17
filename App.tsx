@@ -1,5 +1,6 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import IndexSection from './components/IndexSection';
@@ -17,7 +18,7 @@ import Guarantees from './components/Guarantees';
 import PremiumServices from './components/PremiumServices';
 import DividerSlide from './components/DividerSlide';
 import Contact from './components/Contact';
-import SectionSlide from './components/SectionSlide';
+import SectionSlide from './components/SectionSlide'; // Ahora es el Z-Slide
 import StudioLanding from './components/StudioLanding'; 
 import CustomCursor from './components/CustomCursor';
 import sanityClient from './sanity/client';
@@ -26,16 +27,22 @@ const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Virtual Scroll State
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(0); // 1 = forward, -1 = backward
+  const [isAnimating, setIsAnimating] = useState(false);
+  
   const slug = window.location.pathname.substring(1);
+  const wheelTimeout = useRef<number | null>(null);
 
+  // Fetch Data
   useEffect(() => {
     const fetchProposalData = async () => {
       if (!slug) { 
         setLoading(false); 
         return; 
       }
-
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
@@ -67,15 +74,11 @@ const App: React.FC = () => {
           }
         }`;
         const data = await sanityClient.fetch(query, { slug });
-        
-        if (!data) {
-          setError("No se ha encontrado la propuesta solicitada.");
-        } else {
-          setProposalData(data);
-        }
+        if (!data) setError("No se ha encontrado la propuesta solicitada.");
+        else setProposalData(data);
       } catch (err) {
-        console.error("Error fetching from Sanity:", err);
-        setError("Error de conexión al cargar la propuesta.");
+        console.error(err);
+        setError("Error de conexión.");
       } finally {
         setLoading(false);
       }
@@ -83,126 +86,162 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-        if (!containerRef.current) return;
-        const h = window.innerHeight;
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            containerRef.current.scrollBy({ top: h, behavior: 'smooth' });
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            containerRef.current.scrollBy({ top: -h, behavior: 'smooth' });
-        }
+  // Construct Sections Array dynamically
+  const sections = useMemo(() => {
+    if (!proposalData) return [];
+    const d = proposalData;
+    
+    // Helper para mapear IDs a índices
+    const mapIdToSection = (id: string) => {
+        // Esta lógica debe coincidir con el orden de abajo
+        // Simplemente definimos el orden y luego podemos buscar
     };
+
+    const list = [
+        // 0: Hero
+        { id: 'hero', comp: <Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /> },
+        // 1: Index
+        { id: 'index', comp: <IndexSection data={d.index} onNavigate={(id) => navigateToId(id)} /> },
+        // 2: Situation
+        { id: 'situation', comp: <Situation data={d.situation} />, headerPage: 3 },
+        // 3: Mission
+        { id: 'mission', comp: <Mission data={d.mission} />, headerPage: 4 },
+        // 4: Process
+        { id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} />, headerPage: 5 },
+        // 5: Team
+        { id: 'team', comp: <Team data={d.team} />, headerPage: 6 },
+        // 6: Testimonials
+        { id: 'testimonials', comp: <Testimonials data={d.testimonials} />, headerPage: 7 },
+        // 7: Scope Intro
+        { id: 'scope', comp: <Scope data={d.scopeIntro} />, headerPage: 8 },
+    ];
+
+    // Phases
+    (d.scopePhases || []).forEach((phase: any, i: number) => {
+        const numPhases1 = d.scopePhases1?.phases?.length || 0;
+        const currentSectionTitle = i < numPhases1 ? d.scopePhases1?.title : d.scopePhases2?.title;
+        list.push({
+            id: `phase-${i+1}`,
+            comp: <ScopePhases data={phase} mainTitle={currentSectionTitle} guaranteeItem={d.guarantees?.items?.[i + 1]} />,
+            headerPage: 9 + i
+        });
+    });
+
+    list.push(
+        { id: 'investment', comp: <Investment data={d.investment} />, headerPage: 14 },
+        { id: 'special-offers', comp: <SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} premiumService={d.premiumServicesList?.[1]} />, headerPage: 15 },
+        { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 16 },
+        { id: 'team-photo', comp: <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /> },
+        { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 18 }
+    );
+
+    (d.premiumServicesList || []).forEach((service: any, i: number) => {
+        list.push({
+            id: `premium-${i+1}`,
+            comp: <PremiumServices data={service} image={service.image} index={i} />,
+            headerPage: 19 + i
+        });
+    });
+
+    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} /> });
+
+    return list;
+  }, [proposalData]);
+
+  // Navigation Logic
+  const navigate = (newIndex: number) => {
+    if (newIndex < 0 || newIndex >= sections.length) return;
+    if (newIndex === currentIndex) return;
+    if (isAnimating) return; // Debounce animations
+
+    setDirection(newIndex > currentIndex ? 1 : -1);
+    setCurrentIndex(newIndex);
+    setIsAnimating(true);
+    
+    // Allow new navigation after animation completes
+    setTimeout(() => setIsAnimating(false), 1200);
+  };
+
+  const navigateToId = (id: string) => {
+      const index = sections.findIndex(s => s.id === id);
+      if (index !== -1) navigate(index);
+  };
+
+  // Event Listeners
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+        if (isAnimating) return;
+        
+        // Threshold to ignore small trackpad movements
+        if (Math.abs(e.deltaY) < 30) return;
+
+        if (wheelTimeout.current) clearTimeout(wheelTimeout.current);
+        
+        wheelTimeout.current = window.setTimeout(() => {
+             if (e.deltaY > 0) {
+                 navigate(currentIndex + 1);
+             } else {
+                 navigate(currentIndex - 1);
+             }
+        }, 50);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (isAnimating) return;
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigate(currentIndex - 1);
+    };
+
+    window.addEventListener('wheel', handleWheel);
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
+    return () => {
+        window.removeEventListener('wheel', handleWheel);
+        window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [currentIndex, isAnimating, sections]);
+
+
+  // Renders
   if (!slug) return <StudioLanding />;
+  if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center text-vlanc-primary font-bold tracking-widest uppercase">Cargando...</div>;
+  if (error) return <div className="h-screen bg-vlanc-bg flex items-center justify-center">{error}</div>;
 
-  if (loading) {
-    return (
-      <div className="h-screen bg-vlanc-bg flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-vlanc-primary border-t-transparent rounded-full animate-spin"></div>
-          <span className="font-sans text-[10px] font-bold tracking-[0.3em] text-vlanc-primary uppercase">Cargando propuesta...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !proposalData) {
-    return (
-      <div className="h-screen bg-vlanc-bg flex items-center justify-center p-10 text-center">
-        <div className="max-w-md">
-          <h1 className="subtitulo2 mb-4">Lo sentimos</h1>
-          <p className="cuerpo mb-8">{error || "No hemos podido cargar los datos."}</p>
-          <a href="/" className="boton1 bg-vlanc-primary text-white px-8 py-3 rounded-sm">Volver al inicio</a>
-        </div>
-      </div>
-    );
-  }
-  
-  const d = proposalData;
+  const activeSection = sections[currentIndex];
 
   return (
-    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-vlanc-bg focus:outline-none relative" tabIndex={0}>
+    <div id="app-container" className="fixed inset-0 w-full h-full bg-vlanc-bg overflow-hidden">
         <CustomCursor />
         
-        <SectionSlide id="hero" scrollContainer={containerRef}><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
+        {/* Renderizado Condicional del Header: Solo si no es Hero */}
+        {currentIndex > 0 && (
+             <Header 
+                logo={proposalData.logos?.smallLogo} 
+                pageNumber={activeSection.headerPage} 
+                onNavigate={navigate}
+             />
+        )}
 
-        <SectionSlide id="index" scrollContainer={containerRef}>
-            <Header logo={d.logos?.smallLogo} pageNumber={2} />
-            <IndexSection data={d.index} />
-        </SectionSlide>
-
-        <SectionSlide id="situation" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={3} /><Situation data={d.situation} /></SectionSlide>
-
-        <SectionSlide id="mission" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={4} /><Mission data={d.mission} /></SectionSlide>
-
-        <SectionSlide id="process" scrollContainer={containerRef}>
-            <Header logo={d.logos?.smallLogo} pageNumber={5} />
-            <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} />
-        </SectionSlide>
-
-        <SectionSlide id="team" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={6} /><Team data={d.team} /></SectionSlide>
-
-        <SectionSlide id="testimonials" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={7} /><Testimonials data={d.testimonials} /></SectionSlide>
-
-        <SectionSlide id="scope" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={8} /><Scope data={d.scopeIntro} /></SectionSlide>
-
-        {(d.scopePhases || []).map((phase: any, i: number) => {
-            const numPhases1 = d.scopePhases1?.phases?.length || 0;
-            const currentSectionTitle = i < numPhases1 ? d.scopePhases1?.title : d.scopePhases2?.title;
-
-            return (
-                <SectionSlide key={i} id={`phase-${i+1}`} scrollContainer={containerRef}>
-                    <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
-                    <ScopePhases 
-                        data={phase} 
-                        mainTitle={currentSectionTitle} 
-                        guaranteeItem={d.guarantees?.items?.[i + 1]} 
-                    />
+        {/* 3D STAGE */}
+        <div className="relative w-full h-full perspective-[1000px]">
+             <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                <SectionSlide 
+                    key={currentIndex} 
+                    id={activeSection.id}
+                    isActive={true}
+                    direction={direction}
+                >
+                    {activeSection.comp}
                 </SectionSlide>
-            );
-        })}
+             </AnimatePresence>
+        </div>
 
-        <SectionSlide id="investment" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
-        
-        <SectionSlide id="special-offers" scrollContainer={containerRef}>
-            <Header logo={d.logos?.smallLogo} pageNumber={15} />
-            <SpecialOffers 
-                data={d.specialOffers} 
-                investmentTitle={d.investment?.title}
-                locationDate={d.investment?.locationDate} 
-                premiumService={d.premiumServicesList?.[1]}
-            />
-        </SectionSlide>
-        
-        <SectionSlide id="payment" scrollContainer={containerRef}>
-            <Header logo={d.logos?.smallLogo} pageNumber={16} />
-            <Payment 
-                data={d.payment} 
-                investmentTitle={d.investment?.title} 
-                locationDate={d.investment?.locationDate}
-            />
-        </SectionSlide>
-
-        <SectionSlide id="team-photo" scrollContainer={containerRef}>
-            <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" />
-        </SectionSlide>
-
-        <SectionSlide id="guarantees" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={18} /><Guarantees data={d.guarantees} /></SectionSlide>
-
-        {(d.premiumServicesList || []).map((service: any, i: number) => (
-            <SectionSlide key={i} id={`premium-${i+1}`} scrollContainer={containerRef}>
-                <Header logo={d.logos?.smallLogo} pageNumber={19 + i} />
-                <PremiumServices data={service} image={service.image} index={i} />
-            </SectionSlide>
-        ))}
-
-        <SectionSlide id="contact" scrollContainer={containerRef}><Contact data={d.contact} finalLogo={d.logos?.finalLogo} /></SectionSlide>
+        {/* Navigation Dots (Opcional, visual feedback) */}
+        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20">
+            {sections.map((_, i) => (
+                <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
+            ))}
+        </div>
     </div>
   );
 };
