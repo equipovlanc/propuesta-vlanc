@@ -32,7 +32,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                     {data?.title || 'trabajos contemplados.'}
                 </h2>
                 {/* Barra decorativa actualizada (#8f4933) */}
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
             </div>
         </AnimatedSection>
         

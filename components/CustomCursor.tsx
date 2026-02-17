@@ -9,7 +9,8 @@ const CustomCursor: React.FC = () => {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   
-  const springConfig = { damping: 25, stiffness: 150 };
+  // Físicas ajustadas para ser más "snappy" (rápido) y menos "floaty" (lento)
+  const springConfig = { damping: 28, stiffness: 600, mass: 0.5 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
@@ -22,10 +23,12 @@ const CustomCursor: React.FC = () => {
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const isInteractable = target.closest('button, a, input, select, .cursor-pointer');
-      const isImage = target.closest('img, video');
+      
+      // Solo activamos el modo "VER" si es un video, ignorando imágenes estáticas
+      const isVideo = target.closest('video');
       
       setIsClickable(!!isInteractable);
-      setIsHovering(!!isImage);
+      setIsHovering(!!isVideo);
     };
 
     window.addEventListener('mousemove', moveCursor);
@@ -54,7 +57,7 @@ const CustomCursor: React.FC = () => {
           height: isHovering ? 80 : isClickable ? 40 : 16,
           backgroundColor: isHovering ? 'rgba(143, 73, 51, 0.15)' : 'rgba(143, 73, 51, 0.05)',
         }}
-        transition={{ type: 'spring', damping: 20, stiffness: 200 }}
+        transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.5 }}
       >
         {isHovering && (
           <motion.span

@@ -91,7 +91,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 leading-none">
                             {data?.mission?.title || "la misión."}
                         </h2>
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px] mb-12"></div>
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>
@@ -110,7 +110,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 leading-none">
                             {data?.achievements?.title || "qué vas a conseguir."}
                         </h2>
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px] mb-12"></div>
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>

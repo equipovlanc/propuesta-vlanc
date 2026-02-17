@@ -130,34 +130,34 @@ const App: React.FC = () => {
     <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-vlanc-bg focus:outline-none relative" tabIndex={0}>
         <CustomCursor />
         
-        <SectionSlide id="hero"><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
+        <SectionSlide id="hero" scrollContainer={containerRef}><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
 
-        <SectionSlide id="index">
+        <SectionSlide id="index" scrollContainer={containerRef}>
             <Header logo={d.logos?.smallLogo} pageNumber={2} />
             <IndexSection data={d.index} />
         </SectionSlide>
 
-        <SectionSlide id="situation"><Header logo={d.logos?.smallLogo} pageNumber={3} /><Situation data={d.situation} /></SectionSlide>
+        <SectionSlide id="situation" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={3} /><Situation data={d.situation} /></SectionSlide>
 
-        <SectionSlide id="mission"><Header logo={d.logos?.smallLogo} pageNumber={4} /><Mission data={d.mission} /></SectionSlide>
+        <SectionSlide id="mission" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={4} /><Mission data={d.mission} /></SectionSlide>
 
-        <SectionSlide id="process">
+        <SectionSlide id="process" scrollContainer={containerRef}>
             <Header logo={d.logos?.smallLogo} pageNumber={5} />
             <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} />
         </SectionSlide>
 
-        <SectionSlide id="team"><Header logo={d.logos?.smallLogo} pageNumber={6} /><Team data={d.team} /></SectionSlide>
+        <SectionSlide id="team" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={6} /><Team data={d.team} /></SectionSlide>
 
-        <SectionSlide id="testimonials"><Header logo={d.logos?.smallLogo} pageNumber={7} /><Testimonials data={d.testimonials} /></SectionSlide>
+        <SectionSlide id="testimonials" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={7} /><Testimonials data={d.testimonials} /></SectionSlide>
 
-        <SectionSlide id="scope"><Header logo={d.logos?.smallLogo} pageNumber={8} /><Scope data={d.scopeIntro} /></SectionSlide>
+        <SectionSlide id="scope" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={8} /><Scope data={d.scopeIntro} /></SectionSlide>
 
         {(d.scopePhases || []).map((phase: any, i: number) => {
             const numPhases1 = d.scopePhases1?.phases?.length || 0;
             const currentSectionTitle = i < numPhases1 ? d.scopePhases1?.title : d.scopePhases2?.title;
 
             return (
-                <SectionSlide key={i} id={`phase-${i+1}`}>
+                <SectionSlide key={i} id={`phase-${i+1}`} scrollContainer={containerRef}>
                     <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
                     <ScopePhases 
                         data={phase} 
@@ -168,9 +168,9 @@ const App: React.FC = () => {
             );
         })}
 
-        <SectionSlide id="investment"><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
+        <SectionSlide id="investment" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
         
-        <SectionSlide id="special-offers">
+        <SectionSlide id="special-offers" scrollContainer={containerRef}>
             <Header logo={d.logos?.smallLogo} pageNumber={15} />
             <SpecialOffers 
                 data={d.specialOffers} 
@@ -180,7 +180,7 @@ const App: React.FC = () => {
             />
         </SectionSlide>
         
-        <SectionSlide id="payment">
+        <SectionSlide id="payment" scrollContainer={containerRef}>
             <Header logo={d.logos?.smallLogo} pageNumber={16} />
             <Payment 
                 data={d.payment} 
@@ -189,20 +189,20 @@ const App: React.FC = () => {
             />
         </SectionSlide>
 
-        <SectionSlide id="team-photo">
+        <SectionSlide id="team-photo" scrollContainer={containerRef}>
             <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" />
         </SectionSlide>
 
-        <SectionSlide id="guarantees"><Header logo={d.logos?.smallLogo} pageNumber={18} /><Guarantees data={d.guarantees} /></SectionSlide>
+        <SectionSlide id="guarantees" scrollContainer={containerRef}><Header logo={d.logos?.smallLogo} pageNumber={18} /><Guarantees data={d.guarantees} /></SectionSlide>
 
         {(d.premiumServicesList || []).map((service: any, i: number) => (
-            <SectionSlide key={i} id={`premium-${i+1}`}>
+            <SectionSlide key={i} id={`premium-${i+1}`} scrollContainer={containerRef}>
                 <Header logo={d.logos?.smallLogo} pageNumber={19 + i} />
                 <PremiumServices data={service} image={service.image} index={i} />
             </SectionSlide>
         ))}
 
-        <SectionSlide id="contact"><Contact data={d.contact} finalLogo={d.logos?.finalLogo} /></SectionSlide>
+        <SectionSlide id="contact" scrollContainer={containerRef}><Contact data={d.contact} finalLogo={d.logos?.finalLogo} /></SectionSlide>
     </div>
   );
 };

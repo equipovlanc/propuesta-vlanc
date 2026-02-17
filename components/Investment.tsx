@@ -52,7 +52,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                    {data?.title || "la inversión."}
                 </h2>
                 {/* Barra decorativa (Color actualizado #8f4933) */}
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
             </AnimatedSection>
 
             {/* Contenedor Principal */}

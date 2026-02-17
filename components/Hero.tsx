@@ -41,18 +41,18 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
       {/* Centro: Títulos con Stagger sutil */}
       <div className="text-center relative z-10">
         <AnimatedSection direction="up" delay={0.4} className="flex flex-col items-center">
-          <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight italic">
+          <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight">
             {data?.clientName || headerData?.clientName}
           </p>
           
-          <h1 className="titulo leading-[1.05] overflow-hidden">
+          <h1 className="titulo leading-[1.05]">
             {data?.line1}
           </h1>
-          <h1 className="titulo leading-[1.05] overflow-hidden">
+          <h1 className="titulo leading-[1.05]">
             {data?.line2}
           </h1>
           
-          <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[74px]"></div>
+          <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[54px]"></div>
         </AnimatedSection>
       </div>
 

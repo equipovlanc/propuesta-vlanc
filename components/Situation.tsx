@@ -24,7 +24,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                         {data?.title || "la situación."}
                     </h2>
                     {/* Barra decorativa actualizada (#8f4933) */}
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                 </AnimatedSection>
             </div>
             

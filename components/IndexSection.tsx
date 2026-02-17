@@ -56,7 +56,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
                 {data?.title || "contenido."}
             </h2>
             
-            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px] mb-12"></div>
+            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
         </AnimatedSection>
         
         {/* Bloque Inferior: Staggered links */}

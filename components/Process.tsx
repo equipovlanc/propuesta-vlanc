@@ -37,7 +37,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                     <h2 className="subtitulo1">
                         {data?.title || "el proceso Vlanc."}
                     </h2>
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                 </AnimatedSection>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">

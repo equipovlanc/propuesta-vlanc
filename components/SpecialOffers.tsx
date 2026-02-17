@@ -87,7 +87,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
       <div className="w-1/2 h-full flex flex-col pr-[69.5px] relative">
           <AnimatedSection className="shrink-0 mb-6">
                 <h2 className="subtitulo1">{investmentTitle || "la inversión."}</h2>
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
           </AnimatedSection>
           <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar">
                 {data?.conditionalOffer && (

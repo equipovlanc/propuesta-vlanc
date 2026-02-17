@@ -29,7 +29,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                 {data?.title || "qué dicen de nosotros."}
                             </h2>
                             {/* Barra decorativa actualizada (#8f4933) */}
-                            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
+                            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                         </AnimatedSection>
                     </div>
                 </div>
