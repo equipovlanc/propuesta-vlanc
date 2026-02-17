@@ -26,8 +26,8 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                     <h2 className="subtitulo1">
                         {data?.title || "la situación."}
                     </h2>
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                 </AnimatedSection>
+                <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
             </div>
             
             {/* CUERPO DE TEXTO (J2) */}

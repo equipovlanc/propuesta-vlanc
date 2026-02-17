@@ -133,7 +133,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                              </div>
                         </AnimatedSection>
                         
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] ml-6"></div>
+                        <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] ml-6" />
                     </div>
                 </div>
             </div>

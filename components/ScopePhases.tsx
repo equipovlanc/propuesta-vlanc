@@ -74,8 +74,8 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                 <h2 className="subtitulo1 leading-none text-left text-vlanc-black">
                     {formattedTitle}
                 </h2>
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
             </AnimatedSection>
+            <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
         </div>
 
         {/* IMAGEN (J0) */}

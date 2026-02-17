@@ -28,8 +28,8 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                             <h2 className="subtitulo1 leading-none">
                                 {data?.title || "qué dicen de nosotros."}
                             </h2>
-                            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                         </AnimatedSection>
+                        <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                     </div>
                 </div>
                 

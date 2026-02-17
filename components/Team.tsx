@@ -35,8 +35,8 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 <h2 className="subtitulo1 text-vlanc-black">
                     {data?.title || "conoce a VLANC"}
                 </h2>
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
             </AnimatedSection>
+            <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
         </div>
 
         {/* Contenedor Principal */}

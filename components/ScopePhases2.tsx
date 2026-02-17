@@ -26,15 +26,14 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
   return (
     <section className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
       <div className="max-w-7xl mx-auto w-full">
-         <AnimatedSection>
-            <div className="relative mb-12">
+         <div className="relative mb-12">
+            <AnimatedSection>
                 <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter">
                     {data?.title || 'trabajos contemplados.'}
                 </h2>
-                {/* Barra decorativa actualizada (#8f4933) */}
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
-            </div>
-        </AnimatedSection>
+            </AnimatedSection>
+            <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
              {/* Columna Izq: Fases 3 y 4 (Parte 1) */}

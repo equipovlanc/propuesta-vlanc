@@ -55,14 +55,16 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
       {/* Columna Derecha: Contenido */}
       <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative">
         
-        {/* Bloque Superior: Título (J1) */}
-        <AnimatedSection direction="up" hierarchy={1}>
-            <h2 className="subtitulo1">
-                {data?.title || "contenido."}
-            </h2>
+        {/* Bloque Superior: Título (J1) y Barra */}
+        <div>
+            <AnimatedSection direction="up" hierarchy={1}>
+                <h2 className="subtitulo1">
+                    {data?.title || "contenido."}
+                </h2>
+            </AnimatedSection>
             
-            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
-        </AnimatedSection>
+            <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12" />
+        </div>
         
         {/* Bloque Inferior: Links (J2) */}
         <div className="space-y-5">

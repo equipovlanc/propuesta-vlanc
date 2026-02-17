@@ -99,8 +99,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 leading-none">
                             {data?.mission?.title || "la misión."}
                         </h2>
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
                     </AnimatedSection>
+                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12" />
                     
                     <AnimatedSection hierarchy={2}>
                         <h3 className="subtitulo2 mb-6 leading-tight max-w-sm">
@@ -118,8 +118,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 leading-none">
                             {data?.achievements?.title || "qué vas a conseguir."}
                         </h2>
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12"></div>
                     </AnimatedSection>
+                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12" />
                     
                     <AnimatedSection hierarchy={2}>
                         <ul className="space-y-4 w-full">

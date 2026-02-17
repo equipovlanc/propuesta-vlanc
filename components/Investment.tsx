@@ -47,17 +47,20 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
     return (
         <section className="h-full w-full flex flex-col justify-start pt-[150px] pb-[140px] px-[120px] relative">
             {/* Cabecera Sección (J1) */}
-            <AnimatedSection className="mb-8 shrink-0" hierarchy={1}>
-                <h2 className="subtitulo1">
-                   {data?.title || "la inversión."}
-                </h2>
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
-            </AnimatedSection>
+            <div className="mb-8 shrink-0">
+                <AnimatedSection hierarchy={1}>
+                    <h2 className="subtitulo1">
+                       {data?.title || "la inversión."}
+                    </h2>
+                </AnimatedSection>
+                <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+            </div>
 
             {/* Contenedor Principal */}
             <div className="w-full flex flex-row gap-[160px] items-start h-full relative">
                 
                 {/* COLUMNA IZQUIERDA (J2) */}
+                {/* Added 'no-scrollbar' class to hide scrollbar and fix black line issue */}
                 <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection className="space-y-6" hierarchy={2}>
                         {/* Introducción Parte 1 */}

@@ -101,12 +101,14 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
 
                 {/* COLUMNA 3 */}
                 <div className="flex flex-col h-full justify-between">
-                    <AnimatedSection className="shrink-0" hierarchy={1}>
-                         <h2 className="subtitulo1 text-left">
-                            {formattedTitle}
-                        </h2>
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
-                    </AnimatedSection>
+                    <div className="shrink-0">
+                        <AnimatedSection hierarchy={1}>
+                             <h2 className="subtitulo1 text-left">
+                                {formattedTitle}
+                            </h2>
+                        </AnimatedSection>
+                        <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                    </div>
 
                     <div className="mt-auto">
                         {item3 && <GuaranteeItem item={item3} />}

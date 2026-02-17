@@ -36,8 +36,8 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     <h2 className="subtitulo1 text-vlanc-black">
                         {data?.title || "qué vamos a hacer por ti."}
                     </h2>
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                 </AnimatedSection>
+                <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
             </div>
 
             {/* 2. MEDIA (J0) */}

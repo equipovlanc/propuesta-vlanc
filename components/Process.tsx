@@ -33,12 +33,14 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start overflow-hidden relative">
             <div className="w-full flex flex-col h-full">
-                <AnimatedSection className="mb-12 shrink-0" hierarchy={1}>
-                    <h2 className="subtitulo1">
-                        {data?.title || "el proceso Vlanc."}
-                    </h2>
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
-                </AnimatedSection>
+                <div className="mb-12 shrink-0">
+                    <AnimatedSection hierarchy={1}>
+                        <h2 className="subtitulo1">
+                            {data?.title || "el proceso Vlanc."}
+                        </h2>
+                    </AnimatedSection>
+                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
                     {(data?.steps ?? []).map((step, index) => (

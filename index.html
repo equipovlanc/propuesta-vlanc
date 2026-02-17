@@ -56,9 +56,18 @@
         font-style: italic;
       }
 
-      /* HIDE CURSOR GLOBALLY AND AGGRESSIVELY */
+      /* HIDE CURSOR GLOBALLY */
       * {
         cursor: none !important;
+      }
+
+      /* HIDE SCROLLBARS GLOBALLY (Fix Black Line Issue) */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
       }
 
       body, html {
@@ -66,16 +75,15 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        overflow: hidden; /* CRUCIAL: No native scroll */
+        overflow: hidden; 
         font-family: 'Montserrat', sans-serif;
         background-color: #efe8e1;
         color: #000000;
         -webkit-font-smoothing: antialiased; 
         -moz-osx-font-smoothing: grayscale;
-        /* Grid texture removed as requested */
       }
 
-      /* Subtle Vignette to focus center */
+      /* Subtle Vignette */
       body::after {
         content: "";
         position: fixed;
@@ -91,7 +99,7 @@
         overflow: hidden;
       }
 
-      /* Grain Filter Overlay */
+      /* Grain Filter */
       .bg-grain::before {
         content: "";
         position: fixed;
@@ -133,51 +141,32 @@
         animation: kenburns 40s ease-in-out infinite;
       }
 
-      /* --- SISTEMA DE IMPRESIÓN MEJORADO --- */
+      /* --- PRINT --- */
       @media print {
         @page { size: A3 landscape; margin: 0; }
-        
         html, body {
           height: auto !important;
           overflow: visible !important;
           background-color: white !important;
           cursor: auto !important;
-          background-image: none !important; /* Remove grid on print */
         }
-
-        /* Restaurar punteros en impresión */
         * { cursor: auto !important; }
-        a, button, input, select, textarea, [role="button"], label {
-            cursor: pointer !important;
-        }
-
         .bg-grain::before { display: none !important; }
-
         #app-container {
           overflow: visible !important;
           height: auto !important;
           display: block !important;
         }
-
-        /* Reset para impresión: mostrar todo en flujo vertical */
         .z-slide-container {
           position: relative !important;
           opacity: 1 !important;
           transform: none !important;
-          pointer-events: auto !important;
           height: 100vh !important;
           width: 100% !important;
           page-break-after: always !important;
           display: flex !important;
         }
-
-        header { 
-          position: absolute !important;
-          top: 0 !important;
-          left: 0 !important;
-          width: 100% !important;
-        }
-        
+        header { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; }
         .no-print { display: none !important; }
         .custom-cursor { display: none !important; }
       }
@@ -199,7 +188,6 @@
 <link rel="stylesheet" href="/index.css">
 </head>
   <body class="bg-grain">
-    <!-- SVG Filter for procedural grain -->
     <svg style="display:none">
       <filter id="grainy">
         <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />

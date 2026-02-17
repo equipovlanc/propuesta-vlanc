@@ -33,13 +33,15 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative">
             <div className="w-full h-full flex flex-col">
-                 <AnimatedSection className="shrink-0" hierarchy={1}>
-                    <h2 className="subtitulo1">
-                       {investmentTitle || "la inversión."}
-                    </h2>
-                    {/* Barra decorativa actualizada (#8f4933) */}
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-20"></div>
-                </AnimatedSection>
+                 <div className="shrink-0 mb-20">
+                    <AnimatedSection hierarchy={1}>
+                        <h2 className="subtitulo1">
+                           {investmentTitle || "la inversión."}
+                        </h2>
+                    </AnimatedSection>
+                    {/* Barra decorativa animada */}
+                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                </div>
                 
                 {/* Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 -mt-[50px] flex-grow">

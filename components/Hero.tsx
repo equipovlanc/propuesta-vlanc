@@ -39,7 +39,7 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
       </AnimatedSection>
 
       {/* Centro: Títulos (J1) */}
-      <div className="text-center relative z-10">
+      <div className="text-center relative z-10 flex flex-col items-center">
         <AnimatedSection direction="up" hierarchy={1} className="flex flex-col items-center">
           <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight">
             {data?.clientName || headerData?.clientName}
@@ -51,9 +51,10 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
           <h1 className="titulo leading-[1.05]">
             {data?.line2}
           </h1>
-          
-          <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[54px]"></div>
         </AnimatedSection>
+        
+        {/* Barra Viajera */}
+        <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[54px]" />
       </div>
 
       {/* Esquina Inferior Derecha: Logo (J3) */}

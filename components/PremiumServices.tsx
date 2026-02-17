@@ -74,8 +74,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                                 "servicios premium."
                             )}
                         </h2>
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]"></div>
                     </AnimatedSection>
+                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
                 
                 {/* 2. Contenido del Servicio (J2) */}
