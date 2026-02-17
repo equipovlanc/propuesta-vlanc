@@ -30,7 +30,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
     };
 
     return (
-        <footer className="h-screen w-full bg-vlanc-bg flex flex-col pt-[150px] pb-[140px] px-[120px] relative">
+        <footer className="h-screen w-full flex flex-col pt-[150px] pb-[140px] px-[120px] relative">
             {/* GRID DE 2 COLUMNAS */}
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
                 

@@ -86,7 +86,7 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
     const item3 = items[2];
 
     return (
-        <section className="h-full w-full bg-vlanc-bg pt-[150px] pb-[140px] px-[120px] overflow-hidden">
+        <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-16 h-full">
                 
                 {/* COLUMNA 1 */}

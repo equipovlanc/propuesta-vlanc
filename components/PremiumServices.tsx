@@ -62,7 +62,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
     return (
         <section className="h-full w-full flex flex-row">
             {/* Left Column (J1 & J2) */}
-            <div className="w-[888px] h-full bg-vlanc-bg flex flex-col justify-between pl-[120px] pr-10 pt-[150px] pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
+            <div className="w-[888px] h-full flex flex-col justify-between pl-[120px] pr-10 pt-[150px] pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
                 
                 {/* 1. Cabecera Principal (J1) */}
                 <div className="shrink-0">

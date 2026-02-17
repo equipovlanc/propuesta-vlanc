@@ -12,7 +12,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ image, text }) => {
     const imageOpacity = image?.opacity ?? 15;
 
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col items-center pt-[150px] px-[120px] relative">
+        <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative">
              <div className="w-full max-w-[1320px] flex flex-col">
                  {/* Imagen (J3) */}
                  <div className="w-full aspect-[1320/670] shrink-0 relative">
