@@ -13,43 +13,42 @@ interface SectionSlideProps {
 const SectionSlide: React.FC<SectionSlideProps> = ({ children, id, className = "", isPrintOnly = false, scrollContainer }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Detecta el progreso de scroll de ESTE contenedor en particular
+  // Track scroll relativo: "start start" (tope sección toca tope pantalla) -> "end start" (fondo sección toca tope pantalla)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     container: scrollContainer,
     offset: ["start start", "end start"]
   });
 
-  // Efecto "Rear Window" (Ventana Trasera) / Profundidad Z Negativa
-  // Cuando el usuario hace scroll hacia abajo (scrollYProgress va de 0 a 1):
+  // FÍSICA DEL EFECTO "VENTANA TRASERA" (REAR WINDOW)
   
-  // 1. Scale: Se reduce para simular que se aleja hacia el fondo.
-  //    Rango [1, 0.9]: No muy exagerado para evitar espacios blancos excesivos, pero suficiente para el efecto 3D.
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]); 
+  // 1. ANCLAJE VERTICAL (La clave):
+  // Al mover y: "100%", compensamos exactamente la subida del scroll.
+  // Resultado visual: El elemento NO sube, se queda fijo en el centro de la pantalla
+  // esperando a ser cubierto por la siguiente diapositiva.
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  // 2. PROFUNDIDAD (Escala):
+  // Reducimos agresivamente a 0.5 para que parezca que se va lejos en el horizonte.
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.5]); 
   
-  // 2. Opacity: Se oscurece ligeramente al alejarse.
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
-  
-  // 3. Y Axis Counter-Movement (La clave):
-  //    Normalmente, al hacer scroll, el elemento sube (se va por arriba).
-  //    Para que parezca que se queda "quieto" y solo se aleja en Z, lo movemos hacia abajo (Y positivo).
-  //    "85%" compensa casi todo el movimiento de subida del scroll. La siguiente diapositiva, que no tiene
-  //    esta transformación (porque su scrollYProgress es < 0 aun), subirá y lo cubrirá.
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "85%"]);
+  // 3. ATMÓSFERA (Opacidad y Blur):
+  // Se oscurece y se desenfoca al alejarse, simulando distancia física.
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const blur = useTransform(scrollYProgress, [0, 1], ["0px", "20px"]);
 
   return (
     <div 
       id={id}
       ref={containerRef}
-      className={`section-slide w-full h-screen relative snap-start snap-always overflow-hidden flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
-      style={{ zIndex: 1 }} // Asegura contexto de apilamiento base
+      className={`section-slide w-full h-screen relative snap-start snap-always flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
+      style={{ zIndex: 0 }} // Z-Index bajo para que la siguiente slide (z-index natural mayor) pase POR ENCIMA
     >
       <motion.div 
-        style={{ scale, opacity, y }}
-        className="print-strict-container w-full h-full flex flex-col box-border origin-center"
-        // Optimizaciones para evitar tembleque (jitter) en textos
+        style={{ scale, opacity, y, filter: blur }}
+        className="print-strict-container w-full h-full flex flex-col box-border origin-center will-change-transform"
+        // Configuraciones para evitar flickering en monitores de alta tasa de refresco
         initial={{ transformPerspective: 1000 }}
-        transition={{ type: "tween", ease: "linear" }} 
       >
           {children}
       </motion.div>
