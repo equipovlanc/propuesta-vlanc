@@ -56,20 +56,27 @@
         font-style: italic;
       }
 
+      /* HIDE CURSOR GLOBALLY AND AGGRESSIVELY */
+      * {
+        cursor: none !important;
+      }
+
       body {
         font-family: 'Montserrat', sans-serif;
         background-color: #efe8e1;
         color: #000000;
         overflow-x: hidden;
         font-size: 14px;
-        -webkit-font-smoothing: antialiased;
+        -webkit-font-smoothing: antialiased; /* Critical for text jitter on transform */
         -moz-osx-font-smoothing: grayscale;
-        cursor: none !important; /* Force hide default cursor globally */
       }
 
-      /* Ocultar cursor en elementos interactivos para que no se superponga al custom */
-      a, button, input, select, textarea, [role="button"], label {
-        cursor: none !important;
+      /* Fix for text jitter during transforms */
+      .section-slide, .print-strict-container {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
       }
 
       /* Grain Filter Overlay */
@@ -128,7 +135,8 @@
           cursor: auto !important;
         }
 
-        /* Restaurar cursores en impresión */
+        /* Restaurar punteros en impresión */
+        * { cursor: auto !important; }
         a, button, input, select, textarea, [role="button"], label {
             cursor: pointer !important;
         }
@@ -169,6 +177,7 @@
           overflow: hidden !important;
           flex-shrink: 0 !important;
           display: block !important;
+          transform: none !important; /* Anula transformaciones de Framer Motion en print */
         }
 
         header { 

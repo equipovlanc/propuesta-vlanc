@@ -13,37 +13,43 @@ interface SectionSlideProps {
 const SectionSlide: React.FC<SectionSlideProps> = ({ children, id, className = "", isPrintOnly = false, scrollContainer }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Track scroll relative to this specific section's position in the parent container
+  // Detecta el progreso de scroll de ESTE contenedor en particular
   const { scrollYProgress } = useScroll({
     target: containerRef,
     container: scrollContainer,
     offset: ["start start", "end start"]
   });
 
-  // Negative Z-axis effects (receding "Rear Window" effect)
+  // Efecto "Rear Window" (Ventana Trasera) / Profundidad Z Negativa
+  // Cuando el usuario hace scroll hacia abajo (scrollYProgress va de 0 a 1):
   
-  // 1. Scale: Drastic reduction to simulate object moving far away quickly.
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.6]); 
+  // 1. Scale: Se reduce para simular que se aleja hacia el fondo.
+  //    Rango [1, 0.9]: No muy exagerado para evitar espacios blancos excesivos, pero suficiente para el efecto 3D.
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]); 
   
-  // 2. Opacity: Fade out as it moves away.
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  // 2. Opacity: Se oscurece ligeramente al alejarse.
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
   
-  // 3. Y Axis Counter-Movement:
-  // When user scrolls down, the content naturally moves UP.
-  // To simulate "staying behind" or moving deep into Z space without moving up, 
-  // we translate Y downwards (positive value). 
-  // "50%" means it moves up at half the speed of the scroll, creating a parallax lag.
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  // 3. Y Axis Counter-Movement (La clave):
+  //    Normalmente, al hacer scroll, el elemento sube (se va por arriba).
+  //    Para que parezca que se queda "quieto" y solo se aleja en Z, lo movemos hacia abajo (Y positivo).
+  //    "85%" compensa casi todo el movimiento de subida del scroll. La siguiente diapositiva, que no tiene
+  //    esta transformación (porque su scrollYProgress es < 0 aun), subirá y lo cubrirá.
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "85%"]);
 
   return (
     <div 
       id={id}
       ref={containerRef}
       className={`section-slide w-full h-screen relative snap-start snap-always overflow-hidden flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
+      style={{ zIndex: 1 }} // Asegura contexto de apilamiento base
     >
       <motion.div 
         style={{ scale, opacity, y }}
-        className="print-strict-container w-full h-full flex flex-col box-border origin-center will-change-transform"
+        className="print-strict-container w-full h-full flex flex-col box-border origin-center"
+        // Optimizaciones para evitar tembleque (jitter) en textos
+        initial={{ transformPerspective: 1000 }}
+        transition={{ type: "tween", ease: "linear" }} 
       >
           {children}
       </motion.div>
