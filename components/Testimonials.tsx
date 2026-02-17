@@ -18,7 +18,7 @@ interface TestimonialsProps {
 
 const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
     return (
-        <section className="h-screen w-full bg-vlanc-bg flex items-center px-[120px] overflow-hidden">
+        <section className="h-screen w-full flex items-center px-[120px] overflow-hidden">
             <div className="w-full h-full flex flex-col lg:flex-row gap-16">
                 
                 {/* COLUMNA TÍTULO (J1) */}

@@ -27,7 +27,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
   const members = data?.members || [];
 
   return (
-    <section className="h-screen w-full bg-vlanc-bg flex flex-col relative overflow-hidden">
+    <section className="h-screen w-full flex flex-col relative overflow-hidden">
         
         {/* Título de Sección (J1) */}
         <div className="absolute top-[150px] left-[120px] z-20">

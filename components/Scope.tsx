@@ -25,7 +25,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
   const imageOpacity = data?.image?.opacity ?? 15;
 
   return (
-    <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden flex flex-col">
+    <section className="h-screen w-full relative overflow-hidden flex flex-col">
       
         {/* --- BLOQUE SUPERIOR (Altura fija 512px) --- */}
         <div className="w-full h-[512px] relative shrink-0">
@@ -41,7 +41,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </div>
 
             {/* 2. MEDIA (J3) */}
-            <div className="absolute top-0 right-[120px] w-[735px] h-full z-10 overflow-hidden bg-vlanc-bg">
+            <div className="absolute top-0 right-[120px] w-[735px] h-full z-10 overflow-hidden">
                 <AnimatedSection className="h-full w-full relative" hierarchy={3}>
                     {/* VIDEO */}
                     {data?.video && (

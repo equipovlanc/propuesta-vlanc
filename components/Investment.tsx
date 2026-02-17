@@ -45,7 +45,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
     };
 
     return (
-        <section className="h-full w-full bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px] relative">
+        <section className="h-full w-full flex flex-col justify-start pt-[150px] pb-[140px] px-[120px] relative">
             {/* Cabecera Sección (J1) */}
             <AnimatedSection className="mb-8 shrink-0" hierarchy={1}>
                 <h2 className="subtitulo1">

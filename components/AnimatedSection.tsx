@@ -6,7 +6,6 @@ interface AnimatedSectionProps {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
-  // Nueva prop para controlar el orden de aparición (1, 2, 3...)
   hierarchy?: number; 
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -17,39 +16,42 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   className, 
   style, 
   onClick,
-  hierarchy = 2, // Por defecto J2 (cuerpo)
+  hierarchy = 2, 
   direction = 'up'
 }) => {
   
-  // CÁLCULO DE TIEMPOS "ELEGANTES"
-  // La diapositiva tarda 2.0s en llegar.
-  // J1 (Títulos): Empieza a los 0.5s (cuando la diapositiva ya es visible).
-  // J2 (Textos): Empieza a los 1.5s (1 segundo después de J1).
-  // J3 (Imágenes): Empieza a los 2.5s (1 segundo después de J2).
+  // LOGICA DE JERARQUÍA "DISTINCTIVA"
+  // J1: Títulos. Llegan rápido (0.3s delay) para anclar la vista.
+  // J2: Cuerpo. Llegan a medio camino (0.7s delay).
+  // J3: Imágenes/Media. Llegan al final (1.1s delay) para cerrar.
   
-  const baseDelay = 0.5;
-  const stepDelay = 1.0; // 1 segundo exacto entre jerarquías
+  const baseDelay = 0.3;
+  const stepDelay = 0.4; 
   const calculatedDelay = baseDelay + ((hierarchy - 1) * stepDelay);
 
   const variants = {
     hidden: { 
       opacity: 0, 
-      y: direction === 'up' ? 80 : direction === 'down' ? -80 : 0, // Movimiento más largo
-      x: direction === 'left' ? 80 : direction === 'right' ? -80 : 0,
+      // Movimiento más pronunciado para que se note el viaje
+      y: direction === 'up' ? 100 : direction === 'down' ? -100 : 0, 
+      x: direction === 'left' ? 100 : direction === 'right' ? -100 : 0,
+      scale: 0.9, // Ligera escala para efecto "pop"
     },
     visible: { 
       opacity: 1, 
       y: 0, 
       x: 0,
+      scale: 1,
       transition: {
-        duration: 1.5, // Aparición interna muy lenta y suave
-        ease: [0.215, 0.61, 0.355, 1],
+        duration: 1.2, 
+        ease: [0.16, 1, 0.3, 1], // OutExpo para frenada suave
         delay: calculatedDelay
       }
     },
     exit: {
         opacity: 0,
-        transition: { duration: 0.5 }
+        scale: 0.9,
+        transition: { duration: 0.4 }
     }
   };
 

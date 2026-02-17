@@ -31,7 +31,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
     const closeModal = () => setIsModalOpen(false);
 
     return (
-        <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex flex-col justify-start overflow-hidden relative">
+        <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start overflow-hidden relative">
             <div className="w-full flex flex-col h-full">
                 <AnimatedSection className="mb-12 shrink-0" hierarchy={1}>
                     <h2 className="subtitulo1">

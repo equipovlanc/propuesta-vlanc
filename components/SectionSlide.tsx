@@ -10,35 +10,34 @@ interface ZSlideProps {
   direction: number; // 1 (forward) or -1 (backward)
 }
 
-// Variantes para el efecto de profundidad Z "Gran Recorrido"
+// Variantes para el efecto de "Viaje Espacial"
 const slideVariants = {
   enter: (direction: number) => ({
-    // Aumentamos la escala inicial para que parezca que viene de MUY lejos o MUY cerca
-    scale: direction > 0 ? 2.5 : 0.6, 
+    // ESCALA EXTREMA: 3.5 hace que parezca que la página atraviesa la cámara
+    scale: direction > 0 ? 3.5 : 0.2, 
     opacity: 0,
-    zIndex: direction > 0 ? 10 : 0, 
-    filter: 'blur(20px)', // Más desenfoque inicial para suavizar la llegada
+    zIndex: direction > 0 ? 50 : 0, 
+    filter: 'blur(20px)',
   }),
   center: {
     scale: 1,
     opacity: 1,
-    zIndex: 1,
+    zIndex: 10,
     filter: 'blur(0px)',
     transition: {
-      // Duración aumentada para elegancia extrema
-      duration: 2.0, 
-      // Curva Bezier personalizada para un "aterrizaje" muy suave
-      ease: [0.25, 1, 0.5, 1], 
+      // Velocidad ajustada: Más rápido que antes (2.0s -> 1.6s)
+      duration: 1.6, 
+      ease: [0.25, 1, 0.5, 1], // Curva "Logística" suave
     }
   },
   exit: (direction: number) => ({
-    // La página que se va se aleja mucho más (0.6) o se acerca mucho más (2.5)
-    scale: direction > 0 ? 0.6 : 2.5, 
+    // ESCALA EXTREMA: Se aleja hasta ser un punto en el horizonte
+    scale: direction > 0 ? 0.2 : 3.5, 
     opacity: 0,
-    zIndex: direction > 0 ? 0 : 10,
-    filter: 'blur(20px)',
+    zIndex: direction > 0 ? 0 : 50,
+    filter: 'blur(10px)',
     transition: {
-      duration: 2.0,
+      duration: 1.6,
       ease: [0.25, 1, 0.5, 1],
     }
   })
@@ -48,7 +47,8 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
   return (
     <motion.div 
       id={id}
-      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden ${className}`}
+      // ELIMINADO: bg-vlanc-bg u otros fondos. Ahora es transparente.
+      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden pointer-events-none ${className}`}
       custom={direction}
       variants={slideVariants}
       initial="enter"
@@ -56,11 +56,11 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
       exit="exit"
       style={{
         backfaceVisibility: 'hidden',
-        perspective: 1500, // Aumentamos perspectiva para exagerar la profundidad 3D
+        perspective: 2000, // Perspectiva profunda
       }}
     >
-        {/* Capa de contenido */}
-        <div className="w-full h-full relative">
+        {/* Capa de contenido: Restauramos pointer-events para interactividad */}
+        <div className="w-full h-full relative pointer-events-auto">
             {children}
         </div>
     </motion.div>

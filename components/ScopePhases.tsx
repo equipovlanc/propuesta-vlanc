@@ -67,7 +67,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
   const hasButtons = hasGuarantee || (data?.videoButtonText && data?.videoButtonText.trim() !== "");
 
   return (
-    <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden">
+    <section className="h-screen w-full relative overflow-hidden">
         {/* TÍTULO (J1) */}
         <div className="absolute top-[150px] left-[120px] z-20">
              <AnimatedSection hierarchy={1}>

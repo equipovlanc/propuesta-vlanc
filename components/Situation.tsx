@@ -15,7 +15,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
   const imageOpacity = data?.image?.opacity ?? 15;
 
   return (
-    <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden items-stretch">
+    <section className="h-full w-full flex flex-col lg:flex-row overflow-hidden items-stretch">
         
         {/* COLUMNA TEXTO */}
         <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-[140px]">

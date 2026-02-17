@@ -27,7 +27,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
   const imageOpacity = data?.image?.opacity ?? 15;
 
   return (
-    <section id="index-section" className="h-full w-full flex bg-vlanc-bg overflow-hidden absolute inset-0">
+    <section id="index-section" className="h-full w-full flex overflow-hidden absolute inset-0">
       
       {/* Columna Izquierda: Imagen (J3) */}
       <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">
@@ -53,7 +53,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
       </div>
 
       {/* Columna Derecha: Contenido */}
-      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative bg-vlanc-bg">
+      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative">
         
         {/* Bloque Superior: Título (J1) */}
         <AnimatedSection direction="up" hierarchy={1}>

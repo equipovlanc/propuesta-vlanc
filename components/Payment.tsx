@@ -31,7 +31,7 @@ interface PaymentProps {
 
 const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }) => {
     return (
-        <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] bg-vlanc-bg flex flex-col justify-start relative">
+        <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative">
             <div className="w-full h-full flex flex-col">
                  <AnimatedSection className="shrink-0" hierarchy={1}>
                     <h2 className="subtitulo1">
@@ -89,24 +89,4 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                             ))}
                          </div>
 
-                         <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mt-[50px]">
-                            <div className="flex justify-between items-start">
-                                <span className="tabla1">VIVE VLANC SL</span>
-                                <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
-                            </div>
-                        </div>
-                    </AnimatedSection>
-                </div>
-            </div>
-
-            {/* FECHA (J2) */}
-            <div className="absolute bottom-[70px] right-[120px] z-20">
-                <p className="cuerpo font-bold text-right">
-                    {locationDate || "En Alcoi a XX de mes de 2025"}
-                </p>
-            </div>
-        </section>
-    );
-};
-
-export default Payment;
+                         <div className="w-full flex flex-col border-t border-[#8f4

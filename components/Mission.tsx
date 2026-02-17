@@ -36,10 +36,10 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
     };
 
     return (
-        <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
+        <section className="h-full w-full flex flex-col lg:flex-row overflow-hidden">
             
             {/* Columna Izquierda: Media (J3) */}
-            <div className="w-full lg:w-[55.7%] h-full flex items-center justify-center relative bg-vlanc-bg">
+            <div className="w-full lg:w-[55.7%] h-full flex items-center justify-center relative">
                 <AnimatedSection className="flex items-center justify-center w-full h-full px-10" hierarchy={3}>
                     <div 
                         className="relative group cursor-pointer shadow-2xl overflow-hidden rounded-sm bg-vlanc-bg"
