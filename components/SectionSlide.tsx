@@ -20,31 +20,34 @@ const SectionSlide: React.FC<SectionSlideProps> = ({ children, id, className = "
     offset: ["start start", "end start"]
   });
 
-  // EFECTO "VENTANA TRASERA" (EJE Z)
-  // Estrategia: Position Sticky + Scale Down
-  // 1. El 'sticky' (en el CSS abajo) mantiene la sección pegada arriba. NO sube.
-  // 2. La siguiente sección sube y la tapa (z-index natural del DOM).
-  // 3. Mientras es tapada, esta sección se hace pequeña y oscura.
+  // EFECTO DE PROFUNDIDAD MEJORADO
+  // 1. Escala: Se reduce al 90% (suficiente para ver que está atrás, pero no minúsculo).
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]); 
+  
+  // 2. Opacidad: No desaparece del todo (0.5), para mantener la referencia visual de "pila".
+  // Esto ayuda a la navegación hacia atrás, ya que el usuario sigue viendo "algo" ahí.
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.75]); 
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.2]);
-  const blur = useTransform(scrollYProgress, [0, 1], ["0px", "10px"]);
-  // Nota: Ya no usamos 'y' transform. Sticky se encarga de la posición.
+  // 3. Oscuridad (Brightness): Lo que se aleja se ve más oscuro.
+  // Usamos filter brightness en lugar de solo opacity para dar volumen.
+  const filter = useTransform(scrollYProgress, (v) => `brightness(${1 - v * 0.5}) blur(${v * 5}px)`);
 
   return (
     <div 
       id={id}
       ref={containerRef}
-      // CAMBIOS CLAVE EN CSS:
-      // 1. sticky top-0: Fija el elemento arriba. El navegador garantiza que no se mueva.
-      // 2. h-screen: Ocupa toda la pantalla.
-      // 3. z-0: Nivel base. La siguiente slide tendrá un z-index superior por orden natural y la cubrirá.
-      className={`section-slide w-full h-screen sticky top-0 snap-start flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
+      // sticky top-0: Mantiene la sección fijada mientras la siguiente sube.
+      // z-0: Nivel base. La siguiente tendrá un z-index superior por orden natural del DOM.
+      className={`section-slide w-full h-screen sticky top-0 flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
     >
       <motion.div 
-        style={{ scale, opacity, filter: blur }}
-        className="print-strict-container w-full h-full flex flex-col box-border origin-center bg-vlanc-bg will-change-transform"
-        // bg-vlanc-bg es CRUCIAL: asegura que el fondo sea sólido para tapar a la diapositiva anterior si hay transparencias
+        style={{ scale, opacity, filter }}
+        // shadow-[0_-50px...]: SOMBRA SUPERIOR GIGANTE.
+        // Esto es clave: la diapositiva proyecta sombra hacia arriba, pero como esta diapositiva
+        // será cubierta por la SIGUIENTE, necesitamos que la SIGUIENTE tenga sombra.
+        // Al poner la sombra en el contenedor "print-strict", cada diapositiva tiene una sombra física
+        // que "tapa" a la anterior al pasar por encima.
+        className="print-strict-container w-full h-full flex flex-col box-border origin-center bg-vlanc-bg shadow-[0_-60px_100px_-20px_rgba(0,0,0,0.3)] will-change-transform"
       >
           {children}
       </motion.div>

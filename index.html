@@ -73,14 +73,13 @@
 
       /* OPTIMIZACIONES 3D Y RENDIMIENTO */
       .section-slide {
-        will-change: transform; /* Hint browser */
+        will-change: transform;
       }
       
       .print-strict-container {
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
-        transform-style: preserve-3d;
-        -webkit-transform-style: preserve-3d;
+        transform-style: flat; /* Cambiado a flat para evitar errores de renderizado en sticky */
       }
 
       /* Grain Filter Overlay */
@@ -170,6 +169,7 @@
           transform: none !important;
           opacity: 1 !important;
           scale: 1 !important;
+          box-shadow: none !important; /* Quitar sombras en impresión */
         }
 
         .print-strict-container {
@@ -182,6 +182,7 @@
           flex-shrink: 0 !important;
           display: block !important;
           transform: none !important; 
+          box-shadow: none !important;
         }
 
         header { 
