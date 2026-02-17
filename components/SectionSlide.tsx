@@ -1,5 +1,6 @@
 
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface SectionSlideProps {
   children: ReactNode;
@@ -9,16 +10,32 @@ interface SectionSlideProps {
 }
 
 const SectionSlide: React.FC<SectionSlideProps> = ({ children, id, className = "", isPrintOnly = false }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Track scroll relative to this specific section's position in the parent container
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  // Negative Z-axis effects (receding)
+  // As we scroll through the section, it scales down and fades out
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
+
   return (
     <div 
       id={id}
-      // CAMBIO: h-screen estricto, overflow-hidden para evitar scroll interno que rompa el snap.
+      ref={containerRef}
       className={`section-slide w-full h-screen relative snap-start snap-always overflow-hidden flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
     >
-      {/* Contenedor interno para asegurar layout */}
-      <div className="w-full h-full flex flex-col box-border">
+      <motion.div 
+        style={{ scale, opacity, y }}
+        className="print-strict-container w-full h-full flex flex-col box-border origin-center"
+      >
           {children}
-      </div>
+      </motion.div>
     </div>
   );
 };

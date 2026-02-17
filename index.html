@@ -9,7 +9,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Importamos Montserrat de Google Fonts con soporte para Italic -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
@@ -19,7 +18,7 @@
               vlanc: {
                 bg: '#efe8e1',
                 primary: '#8f4933',
-                secondary: '#702622',
+                secondary: '#703622',
                 black: '#000000',
               }
             },
@@ -32,28 +31,24 @@
       }
     </script>
     <style>
-      /* --- FUENTES LOCALES --- */
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/BaskervilleDisplayPT-Regular.otf') format('opentype');
         font-weight: 400;
         font-style: normal;
       }
-      
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/BaskervilleDisplayPT-Italic.otf') format('opentype');
         font-weight: 400;
         font-style: italic;
       }
-      
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/BaskervilleDisplayPT-Bold.otf') format('opentype');
         font-weight: 700;
         font-style: normal;
       }
-      
       @font-face {
         font-family: 'Baskerville Display PT';
         src: url('/fonts/BaskervilleDisplayPT-BoldItalic.otf') format('opentype');
@@ -61,213 +56,126 @@
         font-style: italic;
       }
 
-      /* --- ESTILOS GLOBALES --- */
-
       body {
         font-family: 'Montserrat', sans-serif;
         background-color: #efe8e1;
         color: #000000;
         overflow-x: hidden;
-        font-size: 14px; /* Aumentado base */
+        font-size: 14px;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        cursor: none; /* Hide default cursor for the custom one */
       }
 
-      /* Scrollbar Oculta */
+      /* Grain Filter Overlay */
+      .bg-grain::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.045;
+        filter: url(#grainy);
+      }
+
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-      /* --- JERARQUÍA TIPOGRÁFICA (Baskerville Display PT) --- */
+      .titulo { font-family: 'Baskerville Display PT', serif; font-size: 96px; line-height: 1.05; font-weight: 700; letter-spacing: 0.01em; color: #703622; }
+      .subtitulo1 { font-family: 'Baskerville Display PT', serif; font-size: 72px; line-height: 1.05; font-weight: 400; color: #000000; }
+      .subtitulo2 { font-family: 'Baskerville Display PT', serif; font-size: 24px; line-height: 1.2; font-weight: 400; font-style: italic; color: #000000; }
+      .subtitulo3 { font-family: 'Baskerville Display PT', serif; font-size: 24px; line-height: 1.2; font-weight: 400; font-style: normal; color: #000000; }
+      .subtitulo4 { font-family: 'Montserrat', sans-serif; font-size: 15px; line-height: 1.2; font-weight: 700; text-transform: uppercase; color: #000000; }
+      .cuerpo { font-family: 'Montserrat', sans-serif; font-size: 14px; line-height: 1.4; font-weight: 400; color: #703622; text-align: start; white-space: pre-line; }
+      .cuerpo strong { font-weight: 700; color: inherit; }
+      .cuerpo2 { font-family: 'Montserrat', sans-serif; font-size: 16px; line-height: 1.4; font-weight: 400; color: #703622; text-align: start; white-space: pre-line; }
+      .cuerpo2 strong { font-weight: 700; color: inherit; }
+      .piedefoto1 { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #000000; }
+      .piedefoto2 { font-family: 'Baskerville Display PT', serif; font-size: 14px; font-weight: 400; font-style: normal; color: #000000; }
+      .especial1 { font-family: 'Montserrat', sans-serif; font-size: 50px; line-height: 1.05; font-weight: 700; color: #ffffff; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+      .especial2 { font-family: 'Baskerville Display PT', serif; font-size: 72px; line-height: 1.05; font-weight: 700; color: #703622; text-align: right; }
+      .fase-titulo { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; color: #000000; line-height: 1.2; }
+      .fase-subtitulo { font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 500; color: #000000; line-height: 1.4; }
+      .boton1 { font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; line-height: 1; }
+      .boton2 { font-family: 'Baskerville Display PT', serif; font-size: 14px; font-weight: 400; line-height: 1; }
+      .tabla1 { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #703622; }
+      .tabla2 { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 400; text-transform: uppercase; color: #703622; }
+      .tabla3 { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700; color: #ffffff; letter-spacing: normal; }
 
-      /* 1. TÍTULO PRINCIPAL (Hero) */
-      .titulo {
-        font-family: 'Baskerville Display PT', serif;
-        font-size: 96px;
-        line-height: 1.05;
-        font-weight: 700; /* CAMBIO: 400 -> 700 (Bold) */
-        letter-spacing: 0.01em;
-        color: #702622;
-      }
-
-      /* 2. SUBTÍTULO 1 - Regular 400 */
-      .subtitulo1 {
-        font-family: 'Baskerville Display PT', serif;
-        font-size: 72px;
-        line-height: 1.05;
-        font-weight: 400;
-        color: #000000;
-      }
-
-      /* 3. SUBTÍTULO 2 (Italic) */
-      .subtitulo2 {
-        font-family: 'Baskerville Display PT', serif;
-        font-size: 24px;
-        line-height: 1.2;
-        font-weight: 400;
-        font-style: italic;
-        color: #000000;
+      @keyframes kenburns {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
       }
 
-      /* 4. SUBTÍTULO 3 (Regular pequeño) */
-      .subtitulo3 {
-        font-family: 'Baskerville Display PT', serif;
-        font-size: 24px;
-        line-height: 1.2;
-        font-weight: 400;
-        font-style: normal;
-        color: #000000;
+      .ken-burns {
+        animation: kenburns 40s ease-in-out infinite;
       }
 
-      /* 4.5. SUBTÍTULO 4 (Montserrat Bold Uppercase - Estilo Planes) */
-      .subtitulo4 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 15px;
-        line-height: 1.2;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: #000000;
-      }
-
-      /* 5. CUERPO DE TEXTO ESTÁNDAR */
-      .cuerpo {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 14px;
-        line-height: 1.4; /* CAMBIO: 1.7 -> 1.4 */
-        font-weight: 400;
-        color: #702622;
-        text-align: start;
-        white-space: pre-line; /* Respetar saltos de línea */
-      }
-      
-      .cuerpo strong {
-        font-weight: 700;
-        color: inherit;
-      }
-
-      /* 6. CUERPO DE TEXTO GRANDE */
-      .cuerpo2 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 16px;
-        line-height: 1.4; /* CAMBIO: 1.7 -> 1.4 */
-        font-weight: 400;
-        color: #702622;
-        text-align: start;
-        white-space: pre-line; /* Respetar saltos de línea */
-      }
-      
-      .cuerpo2 strong {
-        font-weight: 700;
-        color: inherit;
-      }
-
-      /* 7. PIE DE FOTO 1 (Montserrat Bold Uppercase) */
-      .piedefoto1 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: #000000;
-      }
-
-      /* 8. PIE DE FOTO 2 (Baskerville Display PT Normal) */
-      .piedefoto2 {
-        font-family: 'Baskerville Display PT', serif;
-        font-size: 14px;
-        font-weight: 400;
-        font-style: normal;
-        color: #000000;
-      }
-
-      /* 9. TEXTO ESPECIAL IMAGEN (Montserrat Bold Italic) */
-      .especial1 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 50px;
-        line-height: 1.05;
-        font-weight: 700;
-        color: #ffffff;
-        text-align: center;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-      }
-      
-      /* 10. TEXTO ESPECIAL 2 (Baskerville Bold 72px) */
-      .especial2 {
-        font-family: 'Baskerville Display PT', serif;
-        font-size: 72px;
-        line-height: 1.05;
-        font-weight: 700;
-        color: #702622;
-        text-align: right; /* Alineación derecha */
-      }
-      
-      /* --- ESTILOS FASES TRABAJO --- */
-      
-      /* Título Fase (e.g., 1. FASE ANTEPROYECTO) */
-      .fase-titulo {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 18px;
-        font-weight: 700;
-        color: #000000;
-        line-height: 1.2;
-      }
-      
-      /* Subtítulo Fase (e.g., 1.1 ENTREVISTA) */
-      .fase-subtitulo {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 15px;
-        font-weight: 500;
-        color: #000000;
-        line-height: 1.4;
-      }
-
-      /* --- ESTILOS BOTONES --- */
-      .boton1 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 14px;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        line-height: 1;
-      }
-
-      .boton2 {
-        font-family: 'Baskerville Display PT', serif;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 1;
-      }
-      
-      /* --- ESTILOS TABLA INVERSIÓN --- */
-      
-      /* Cabecera Tabla + Firma (Montserrat Bold Uppercase) */
-      .tabla1 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: #702622; /* vlanc-secondary */
-      }
-
-      /* Filas Tabla (Igual a tabla1 pero conceptualmente separado) */
-      .tabla2 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 11px;
-        font-weight: 400;
-        text-transform: uppercase;
-        color: #702622;
-      }
-      
-      /* Precios Pie Tabla (Baskerville Bold) */
-      .tabla3 {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 11px;
-        font-weight: 700;
-        color: #ffffff;
-        letter-spacing: normal;
-      }
-
+      /* --- SISTEMA DE IMPRESIÓN MEJORADO --- */
       @media print {
-        @page { size: A4 landscape; margin: 0; }
-        body { zoom: 0.585 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        @page { size: A3 landscape; margin: 0; }
+        
+        html, body {
+          height: auto !important;
+          overflow: visible !important;
+          background-color: white !important;
+          cursor: auto !important;
+        }
+
+        .bg-grain::before { display: none !important; }
+
+        #app-container {
+          overflow: visible !important;
+          height: auto !important;
+          snap-type: none !important;
+          scroll-snap-type: none !important;
+        }
+
+        .section-slide {
+          width: 420mm !important;
+          height: 297mm !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: center !important; 
+          align-items: center !important;
+          page-break-after: always !important;
+          break-after: page !important;
+          background-color: #efe8e1 !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          position: relative !important;
+          transform: none !important;
+          opacity: 1 !important;
+          scale: 1 !important;
+        }
+
+        .print-strict-container {
+          width: 1920px !important;
+          height: 1080px !important;
+          zoom: 0.8267 !important; 
+          transform-origin: center center !important;
+          position: relative !important;
+          overflow: hidden !important;
+          flex-shrink: 0 !important;
+          display: block !important;
+        }
+
+        header { 
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+        }
+        
+        .w-\[1px\] { width: 2px !important; }
+        .h-\[5px\] { height: 6px !important; }
+
+        .transition-all { transition: none !important; opacity: 1 !important; transform: none !important; }
+        .opacity-0 { opacity: 1 !important; }
+        .translate-y-10 { transform: translateY(0) !important; }
+        .no-print { display: none !important; }
+        .custom-cursor { display: none !important; }
       }
     </style>
   <script type="importmap">
@@ -279,13 +187,21 @@
     "@sanity/client": "https://aistudiocdn.com/@sanity/client@^6.21.1/dist/index.browser.js",
     "@sanity/vision": "https://aistudiocdn.com/@sanity/vision@^4.20.0",
     "sanity": "https://aistudiocdn.com/sanity@^4.20.0",
-    "sanity/": "https://aistudiocdn.com/sanity@^4.20.0/"
+    "sanity/": "https://aistudiocdn.com/sanity@^4.20.0/",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.11.11/dist/framer-motion.js"
   }
 }
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
+  <body class="bg-grain">
+    <!-- SVG Filter for procedural grain -->
+    <svg style="display:none">
+      <filter id="grainy">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+    </svg>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

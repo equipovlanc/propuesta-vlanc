@@ -19,17 +19,16 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
   return (
-    <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-[120px] py-32">
+    <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative bg-vlanc-bg px-[120px] py-32 overflow-hidden">
       
       {/* Esquina Superior Izquierda: Info Técnica */}
-      <div className="absolute top-20 left-20 text-left pointer-events-none">
+      <AnimatedSection direction="right" delay={0.2} className="absolute top-20 left-20 text-left pointer-events-none">
         <div className="flex flex-col gap-6">
             <div className="text-[14px] font-serif text-vlanc-black leading-tight">
                 <p className="font-normal">{headerData?.projectCode}</p>
                 <p className="font-normal">{headerData?.title}</p>
             </div>
             
-            {/* Barra decorativa actualizada (#8f4933) */}
             <div className="w-[52px] h-[2.4px] bg-[#8f4933]"></div>
 
             <div className="text-[14px] font-sans text-vlanc-secondary leading-tight tracking-wider">
@@ -37,29 +36,28 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
                 <p className="opacity-80 font-normal">{headerData?.location}</p>
             </div>
         </div>
-      </div>
+      </AnimatedSection>
 
-      {/* Centro: Títulos */}
-      <AnimatedSection className="text-center">
-        <div className="flex flex-col items-center">
-          <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight">
+      {/* Centro: Títulos con Stagger sutil */}
+      <div className="text-center relative z-10">
+        <AnimatedSection direction="up" delay={0.4} className="flex flex-col items-center">
+          <p className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight italic">
             {data?.clientName || headerData?.clientName}
           </p>
           
-          <h1 className="titulo leading-[1.05]">
+          <h1 className="titulo leading-[1.05] overflow-hidden">
             {data?.line1}
           </h1>
-          <h1 className="titulo leading-[1.05]">
+          <h1 className="titulo leading-[1.05] overflow-hidden">
             {data?.line2}
           </h1>
           
-          {/* Barra inferior actualizada (#8f4933) */}
-          <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
-        </div>
-      </AnimatedSection>
+          <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[74px]"></div>
+        </AnimatedSection>
+      </div>
 
       {/* Esquina Inferior Derecha: Logo */}
-      <div className="absolute bottom-16 right-16 text-right flex flex-col items-end">
+      <AnimatedSection direction="left" delay={0.6} className="absolute bottom-16 right-16 text-right flex flex-col items-end">
         <div className="w-[500px] md:w-[600px] h-[200px] flex items-center justify-end">
             {logo ? (
                 <img src={logo} alt="Studio Logo" className="max-h-full w-auto object-contain" />
@@ -69,7 +67,7 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
                 </div>
             )}
         </div>
-      </div>
+      </AnimatedSection>
     </section>
   );
 };

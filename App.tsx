@@ -19,18 +19,23 @@ import DividerSlide from './components/DividerSlide';
 import Contact from './components/Contact';
 import SectionSlide from './components/SectionSlide';
 import StudioLanding from './components/StudioLanding'; 
-import { proposalData as localProposalData } from './data/proposal.data';
+import CustomCursor from './components/CustomCursor';
 import sanityClient from './sanity/client';
 
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const slug = window.location.pathname.substring(1);
 
   useEffect(() => {
     const fetchProposalData = async () => {
-      if (!slug) { setLoading(false); return; }
+      if (!slug) { 
+        setLoading(false); 
+        return; 
+      }
+
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
@@ -62,10 +67,15 @@ const App: React.FC = () => {
           }
         }`;
         const data = await sanityClient.fetch(query, { slug });
-        setProposalData(data || localProposalData);
+        
+        if (!data) {
+          setError("No se ha encontrado la propuesta solicitada.");
+        } else {
+          setProposalData(data);
+        }
       } catch (err) {
-        console.error(err);
-        setProposalData(localProposalData);
+        console.error("Error fetching from Sanity:", err);
+        setError("Error de conexión al cargar la propuesta.");
       } finally {
         setLoading(false);
       }
@@ -73,7 +83,6 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
         if (!containerRef.current) return;
@@ -91,13 +100,35 @@ const App: React.FC = () => {
   }, []);
 
   if (!slug) return <StudioLanding />;
-  if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center font-bold tracking-widest text-vlanc-primary uppercase">Cargando...</div>;
+
+  if (loading) {
+    return (
+      <div className="h-screen bg-vlanc-bg flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-vlanc-primary border-t-transparent rounded-full animate-spin"></div>
+          <span className="font-sans text-[10px] font-bold tracking-[0.3em] text-vlanc-primary uppercase">Cargando propuesta...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !proposalData) {
+    return (
+      <div className="h-screen bg-vlanc-bg flex items-center justify-center p-10 text-center">
+        <div className="max-w-md">
+          <h1 className="subtitulo2 mb-4">Lo sentimos</h1>
+          <p className="cuerpo mb-8">{error || "No hemos podido cargar los datos."}</p>
+          <a href="/" className="boton1 bg-vlanc-primary text-white px-8 py-3 rounded-sm">Volver al inicio</a>
+        </div>
+      </div>
+    );
+  }
   
   const d = proposalData;
 
   return (
-    // CAMBIO: snap-mandatory para forzar que siempre pare en una sección exacta.
-    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-vlanc-bg focus:outline-none" tabIndex={0}>
+    <div id="app-container" ref={containerRef} className="h-screen w-full overflow-y-scroll snap-y snap-mandatory scroll-smooth no-scrollbar bg-vlanc-bg focus:outline-none relative" tabIndex={0}>
+        <CustomCursor />
         
         <SectionSlide id="hero"><Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /></SectionSlide>
 
@@ -110,7 +141,10 @@ const App: React.FC = () => {
 
         <SectionSlide id="mission"><Header logo={d.logos?.smallLogo} pageNumber={4} /><Mission data={d.mission} /></SectionSlide>
 
-        <SectionSlide id="process"><Header logo={d.logos?.smallLogo} pageNumber={5} /><Process data={d.process} /></SectionSlide>
+        <SectionSlide id="process">
+            <Header logo={d.logos?.smallLogo} pageNumber={5} />
+            <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} />
+        </SectionSlide>
 
         <SectionSlide id="team"><Header logo={d.logos?.smallLogo} pageNumber={6} /><Team data={d.team} /></SectionSlide>
 
@@ -118,12 +152,21 @@ const App: React.FC = () => {
 
         <SectionSlide id="scope"><Header logo={d.logos?.smallLogo} pageNumber={8} /><Scope data={d.scopeIntro} /></SectionSlide>
 
-        {(d.scopePhases || []).map((phase: any, i: number) => (
-            <SectionSlide key={i} id={`phase-${i+1}`}>
-                <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
-                <ScopePhases data={phase} mainTitle={d.scopePhases1?.title} />
-            </SectionSlide>
-        ))}
+        {(d.scopePhases || []).map((phase: any, i: number) => {
+            const numPhases1 = d.scopePhases1?.phases?.length || 0;
+            const currentSectionTitle = i < numPhases1 ? d.scopePhases1?.title : d.scopePhases2?.title;
+
+            return (
+                <SectionSlide key={i} id={`phase-${i+1}`}>
+                    <Header logo={d.logos?.smallLogo} pageNumber={9 + i} />
+                    <ScopePhases 
+                        data={phase} 
+                        mainTitle={currentSectionTitle} 
+                        guaranteeItem={d.guarantees?.items?.[i + 1]} 
+                    />
+                </SectionSlide>
+            );
+        })}
 
         <SectionSlide id="investment"><Header logo={d.logos?.smallLogo} pageNumber={14} /><Investment data={d.investment} /></SectionSlide>
         
@@ -133,6 +176,7 @@ const App: React.FC = () => {
                 data={d.specialOffers} 
                 investmentTitle={d.investment?.title}
                 locationDate={d.investment?.locationDate} 
+                premiumService={d.premiumServicesList?.[1]}
             />
         </SectionSlide>
         
@@ -146,7 +190,6 @@ const App: React.FC = () => {
         </SectionSlide>
 
         <SectionSlide id="team-photo">
-            {/* Header eliminado */}
             <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" />
         </SectionSlide>
 

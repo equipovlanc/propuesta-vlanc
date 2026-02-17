@@ -96,7 +96,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                             )}
                         </h2>
                         {/* Barra decorativa (#8f4933) */}
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
                     </AnimatedSection>
                 </div>
                 

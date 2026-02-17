@@ -52,7 +52,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                    {data?.title || "la inversión."}
                 </h2>
                 {/* Barra decorativa (Color actualizado #8f4933) */}
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
             </AnimatedSection>
 
             {/* Contenedor Principal */}
@@ -155,7 +155,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                     </AnimatedSection>
 
                     {/* FIRMA */}
-                    <div className="w-[720px] flex flex-col border-t border-[#702622] mt-[25px] pt-1">
+                    <div className="w-[720px] flex flex-col border-t border-[#703622] mt-[25px] pt-1">
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>

@@ -36,7 +36,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
     return (
         <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden">
             
-            {/* Columna Izquierda: Video */}
+            {/* Columna Izquierda: Media */}
             <div className="w-full lg:w-[55.7%] h-full flex items-center justify-center relative bg-vlanc-bg">
                 <AnimatedSection className="flex items-center justify-center w-full h-full px-10">
                     <div 
@@ -44,7 +44,8 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         style={{ width: 'min(852px, 100%)', aspectRatio: '852/469' }}
                         onClick={toggleFullScreen}
                     >
-                        {data?.video ? (
+                        {/* VIDEO: Oculto en impresión */}
+                        {data?.video && (
                             <video 
                                 ref={videoRef}
                                 src={data.video} 
@@ -52,18 +53,25 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                                 loop 
                                 muted 
                                 playsInline 
-                                className="w-full h-full object-cover grayscale brightness-90 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" 
+                                className="w-full h-full object-cover grayscale brightness-90 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105 print:hidden" 
                             />
-                        ) : data?.image ? (
-                            <img src={data.image} alt="Mission" className="w-full h-full object-cover grayscale" />
-                        ) : (
+                        )}
+
+                        {/* IMAGEN: Visible siempre en impresión como fallback, o si no hay vídeo en web */}
+                        {data?.image ? (
+                            <img 
+                                src={data.image} 
+                                alt="Mission" 
+                                className={`w-full h-full object-cover grayscale ${data?.video ? 'hidden print:block' : 'block'}`} 
+                            />
+                        ) : !data?.video && (
                             <div className="w-full h-full bg-vlanc-primary/5 flex items-center justify-center">
-                                 <span className="text-vlanc-primary/30 font-bold uppercase tracking-widest text-[10px]">Esperando Video (852x469)</span>
+                                 <span className="text-vlanc-primary/30 font-bold uppercase tracking-widest text-[10px]">Esperando Media (852x469)</span>
                             </div>
                         )}
                         
-                        {/* Overlay decorativo */}
-                        <div className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        {/* Overlay decorativo (Solo Web) */}
+                        <div className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center print:hidden">
                             <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center">
                                 <svg className="w-6 h-6 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M8 5v14l11-7z" />
@@ -83,8 +91,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 leading-none">
                             {data?.mission?.title || "la misión."}
                         </h2>
-                        {/* Barra decorativa actualizada (#8f4933) */}
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] mb-12"></div>
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>
@@ -103,8 +110,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                         <h2 className="subtitulo1 leading-none">
                             {data?.achievements?.title || "qué vas a conseguir."}
                         </h2>
-                         {/* Barra decorativa actualizada (#8f4933) */}
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] mb-12"></div>
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px] mb-12"></div>
                     </AnimatedSection>
                     
                     <AnimatedSection>

@@ -38,7 +38,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                        {investmentTitle || "la inversión."}
                     </h2>
                     {/* Barra decorativa actualizada (#8f4933) */}
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] mb-20"></div>
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px] mb-20"></div>
                 </AnimatedSection>
                 
                 {/* Grid con margen negativo para subir 50px */}
@@ -52,7 +52,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                            {(data?.paymentMethods?.plans ?? []).map((plan, i) => (
                                 <div key={i}>
                                     {/* Nombre del plan */}
-                                    <h4 className="fase-titulo text-[#702622] mb-4">
+                                    <h4 className="fase-titulo text-[#703622] mb-4">
                                         {plan.title}
                                     </h4>
                                     

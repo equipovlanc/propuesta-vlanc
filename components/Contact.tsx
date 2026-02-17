@@ -25,14 +25,17 @@ interface ContactProps {
 }
 
 const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
+    const handlePrint = () => {
+        window.print();
+    };
+
     return (
-        <footer className="h-screen w-full bg-vlanc-bg flex flex-col pt-[150px] pb-[140px] px-[120px]">
+        <footer className="h-screen w-full bg-vlanc-bg flex flex-col pt-[150px] pb-[140px] px-[120px] relative">
             {/* GRID DE 2 COLUMNAS: Ajustado a 60% / 40% */}
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
                 
                 {/* COLUMNA IZQUIERDA: Logo Final (60%) */}
                 <AnimatedSection className="flex items-center justify-center h-full w-full">
-                    {/* MOVIDO 100px A LA IZQUIERDA (-translate-x-[100px]) */}
                     <div className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px]">
                          {finalLogo ? (
                             <img src={finalLogo} alt="VLANC Final Logo" className="w-full h-full object-contain" />
@@ -46,8 +49,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
 
                 {/* COLUMNA DERECHA: Datos (40%) */}
                 <div className="flex items-center justify-center h-full w-full pl-10">
-                    {/* Bloque de texto con ancho controlado, alineado a la izquierda internamente */}
-                    {/* MOVIDO 100px A LA DERECHA (translate-x-[100px]) */}
                     <div className="flex flex-col space-y-12 text-left w-full max-w-md translate-x-[100px]">
                         
                         {/* 1. DÓNDE ESTAMOS */}
@@ -55,21 +56,18 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.location?.title}
                             </h4>
-                            {/* INDENTADO pl-6 para alinear con el texto del título (saltando la barra) */}
                             <div className="cuerpo space-y-1 text-vlanc-secondary pl-6">
                                 <p>{data?.location?.address}</p>
                                 <p className="font-bold">{data?.location?.email}</p>
                             </div>
                         </AnimatedSection>
 
-                        {/* 2. CONTÁCTANOS (Con Iconos) */}
+                        {/* 2. CONTÁCTANOS */}
                         <AnimatedSection>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.phone?.title}
                             </h4>
-                            {/* INDENTADO pl-6 */}
                             <div className="cuerpo space-y-4 text-vlanc-secondary pl-6">
-                                {/* Teléfono Fijo */}
                                 {data?.phone?.landline?.number && (
                                     <div className="flex items-center gap-4">
                                         <div className="shrink-0 w-5 h-5 flex items-center justify-center">
@@ -82,8 +80,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                                         <p className="text-[15px]">{data.phone.landline.number}</p>
                                     </div>
                                 )}
-                                
-                                {/* Móvil / WhatsApp */}
                                 {data?.phone?.mobile?.number && (
                                     <div className="flex items-center gap-4">
                                         <div className="shrink-0 w-5 h-5 flex items-center justify-center">
@@ -104,7 +100,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / {data?.web?.title}
                             </h4>
-                            {/* INDENTADO pl-6 */}
                             <div className="pl-6">
                                 <a href={data?.web?.url} target="_blank" className="cuerpo border-b border-vlanc-primary text-vlanc-secondary hover:text-vlanc-primary transition-colors">
                                     {data?.web?.displayText}
@@ -117,7 +112,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                              <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">
                                 / RRSS
                              </h4>
-                             {/* INDENTADO pl-6 */}
                              <div className="flex gap-6 items-center pl-6">
                                 {(data?.rrss ?? []).map((social, i) => (
                                     <a 
@@ -139,10 +133,19 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo }) => {
                              </div>
                         </AnimatedSection>
                         
-                        {/* Barra decorativa - Indentada también para mantener consistencia visual */}
-                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-4 ml-6"></div>
+                        <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[60px] ml-6"></div>
                     </div>
                 </div>
+            </div>
+
+            {/* BOTÓN DE IMPRESIÓN - Minimalista y sutil */}
+            <div className="absolute bottom-8 left-12 no-print">
+                <button 
+                    onClick={handlePrint}
+                    className="text-[10px] font-bold tracking-[0.3em] text-vlanc-black/30 hover:text-vlanc-primary transition-all duration-300 uppercase outline-none"
+                >
+                    [ IMPRIMIR PROPUESTA / PDF ]
+                </button>
             </div>
         </footer>
     );

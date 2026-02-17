@@ -36,7 +36,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                     {data?.title || "conoce a VLANC"}
                 </h2>
                 {/* Barra decorativa actualizada (#8f4933) */}
-                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
+                <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
             </AnimatedSection>
         </div>
 

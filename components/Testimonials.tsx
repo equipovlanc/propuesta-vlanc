@@ -6,6 +6,7 @@ interface Testimonial {
     name?: string;
     quote?: string;
     img?: string;
+    url?: string;
 }
 
 interface TestimonialsProps {
@@ -28,7 +29,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                 {data?.title || "qué dicen de nosotros."}
                             </h2>
                             {/* Barra decorativa actualizada (#8f4933) */}
-                            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px]"></div>
+                            <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[47px]"></div>
                         </AnimatedSection>
                     </div>
                 </div>
@@ -36,27 +37,55 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                 {/* COLUMNA TESTIMONIOS */}
                 <div className="w-full lg:w-3/4 flex flex-col justify-center">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-                        {(data?.items ?? []).map((testimonial, index) => (
-                            <AnimatedSection key={index} className="flex flex-col h-full">
-                                {/* Contenedor Imagen */}
-                                <div className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm grayscale hover:grayscale-0 transition-all duration-700 shadow-sm">
-                                    {testimonial.img ? (
-                                        <img src={testimonial.img} alt={testimonial.name} className="w-full h-full object-cover" />
+                        {(data?.items ?? []).map((testimonial, index) => {
+                            const testimonialContent = (
+                                <div className="flex flex-col h-full">
+                                    {/* Contenedor Imagen */}
+                                    <div className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm grayscale group-hover:grayscale-0 transition-all duration-700 shadow-sm relative">
+                                        {testimonial.img ? (
+                                            <img src={testimonial.img} alt={testimonial.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full bg-vlanc-secondary/5 flex items-center justify-center">
+                                                <span className="text-[10px] uppercase tracking-widest text-vlanc-secondary/20">Foto Testimonio</span>
+                                            </div>
+                                        )}
+                                        
+                                        {/* Overlay para URL (Opcional visual) */}
+                                        {testimonial.url && (
+                                            <div className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase bg-vlanc-primary/80 px-4 py-2">Ver Proyecto</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Subtitulo 2 (Italic) para nombres */}
+                                    <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors">{testimonial.name}</h4>
+                                    
+                                    <p className="cuerpo">
+                                        "{testimonial.quote}"
+                                    </p>
+                                </div>
+                            );
+
+                            return (
+                                <AnimatedSection key={index} className="h-full group">
+                                    {testimonial.url ? (
+                                        <a 
+                                            href={testimonial.url} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="block h-full cursor-pointer no-underline"
+                                        >
+                                            {testimonialContent}
+                                        </a>
                                     ) : (
-                                        <div className="w-full h-full bg-vlanc-secondary/5 flex items-center justify-center">
-                                            <span className="text-[10px] uppercase tracking-widest text-vlanc-secondary/20">Foto Testimonio</span>
+                                        <div className="h-full">
+                                            {testimonialContent}
                                         </div>
                                     )}
-                                </div>
-
-                                {/* Subtitulo 2 (Italic) para nombres */}
-                                <h4 className="subtitulo2 mb-4">{testimonial.name}</h4>
-                                
-                                <p className="cuerpo">
-                                    "{testimonial.quote}"
-                                </p>
-                            </AnimatedSection>
-                        ))}
+                                </AnimatedSection>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

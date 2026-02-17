@@ -1,60 +1,61 @@
-import React, { useRef, useState, useEffect, ReactNode, CSSProperties } from 'react';
+
+import React, { useRef, ReactNode, CSSProperties } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 interface AnimatedSectionProps {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
+  delay?: number;
+  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
-/**
- * AnimatedSection Component
- * 
- * This is a wrapper component that makes its children fade in and slide up
- * when they scroll into the user's view. It's a great way to make the page
- * feel more dynamic and guide the user's attention.
- * 
- * It will re-trigger the animation every time the component enters the viewport.
- */
-const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, className, style }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+const AnimatedSection: React.FC<AnimatedSectionProps> = ({ 
+  children, 
+  className, 
+  style, 
+  onClick,
+  delay = 0,
+  direction = 'up'
+}) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.1 });
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // Set visibility based on whether the component is intersecting with the viewport.
-        // This allows the animation to re-trigger on scroll.
-        setIsVisible(entry.isIntersecting);
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1, // Trigger when 10% of the element is visible
+  // Definición de las variantes de animación
+  const variants = {
+    hidden: { 
+      opacity: 0, 
+      y: direction === 'up' ? 30 : direction === 'down' ? -30 : 0,
+      x: direction === 'left' ? 30 : direction === 'right' ? -30 : 0,
+      scale: direction === 'none' ? 0.95 : 1
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      x: 0,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        // Fix: Se añade 'as any' para resolver el conflicto de tipos con el array de cubic-bezier en Framer Motion
+        ease: [0.215, 0.61, 0.355, 1] as any,
+        delay: delay
       }
-    );
-
-    const currentRef = sectionRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
     }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
+  };
 
   return (
-    <div
-      ref={sectionRef}
-      className={`${className} transition-all duration-1000 ease-out transform ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-      }`}
+    <motion.div
+      ref={ref}
+      onClick={onClick}
+      className={className}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={variants}
       style={style}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 
