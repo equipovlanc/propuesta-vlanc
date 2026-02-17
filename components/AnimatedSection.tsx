@@ -24,19 +24,28 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
 }) => {
   const scrollDir = useScrollDirection(); 
   
-  // LOGICA DE TIEMPOS
+  // LOGICA DE TIEMPOS ZEN
   const isMedia = hierarchy === 0;
-  const baseDelay = isMedia ? 0 : 0.4; 
-  const stepDelay = 0.6; // Reducido ligeramente el step ya que la duración es muy larga
+  
+  // Base: H1 empieza un poco más tarde para dejar asentar la transición de página (0.6s)
+  const baseDelay = isMedia ? 0 : 0.6; 
+  
+  // Step: Gran separación entre Título y Contenido (1.3s)
+  // H1 aparece en 0.6s
+  // H2 aparece en 1.9s (Casi 2 segundos después de cargar la página)
+  // Esto evita la ansiedad y fuerza una lectura pausada.
+  const stepDelay = 1.3; 
+  
   const calculatedDelay = isMedia ? 0 : baseDelay + ((hierarchy - 1) * stepDelay);
 
   // Variantes por defecto (Contenido normal)
   const defaultVariants: Variants = {
     hidden: { 
       opacity: isMedia ? 1 : 0, 
-      y: isMedia ? 0 : (direction === 'up' ? 25 : direction === 'down' ? -25 : 0), 
-      x: isMedia ? 0 : (direction === 'left' ? 25 : direction === 'right' ? -25 : 0),
-      scale: 1, // ELIMINADO ESCALADO (0.98 -> 1) para evitar temblor en textos
+      // Movimiento reducido a 20px para ser más sutil y elegante
+      y: isMedia ? 0 : (direction === 'up' ? 20 : direction === 'down' ? -20 : 0), 
+      x: isMedia ? 0 : (direction === 'left' ? 20 : direction === 'right' ? -20 : 0),
+      scale: 1, 
     },
     visible: { 
       opacity: 1, 
@@ -44,14 +53,14 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       x: 0,
       scale: 1,
       transition: {
-        duration: isMedia ? 0 : 1.8, // AUMENTADO a 1.8s para aparición muy suave
-        ease: [0.22, 1, 0.36, 1], // Curva Bezier suave (cubic-bezier)
+        duration: isMedia ? 0 : 2.5, // Duración muy larga (2.5s) para suavidad extrema
+        ease: [0.22, 1, 0.36, 1], // Cubic bezier suave
         delay: calculatedDelay
       }
     },
     exit: {
         opacity: isMedia ? 1 : 0,
-        transition: { duration: 0.3 }
+        transition: { duration: 0.5, ease: "easeInOut" } // Salida un poco más relajada también
     }
   };
 
@@ -69,9 +78,9 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
           scaleX: 1,
           filter: 'blur(0px)',
           transition: {
-              duration: 1.4, 
+              duration: 1.6, // Un poco más lento también el viaje de la barra
               ease: [0.16, 1, 0.3, 1], 
-              delay: 0.1 
+              delay: 0.2 // Empieza antes que los textos
           }
       },
       exit: {
