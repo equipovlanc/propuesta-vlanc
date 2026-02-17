@@ -1,6 +1,15 @@
 
 import { defineType, defineField } from 'sanity'
 
+const overlayField = defineField({
+    name: 'overlayOpacity',
+    title: 'Opacidad Filtro (%)',
+    type: 'number',
+    description: 'Opacidad del filtro color #8f4933. 0 para transparente, 100 para sólido. Por defecto 15.',
+    initialValue: 15,
+    validation: (Rule) => Rule.min(0).max(100)
+});
+
 export default defineType({
     name: 'proposal',
     title: 'Propuesta',
@@ -56,7 +65,12 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'image', title: 'Imagen Decorativa', type: 'image' }),
+                defineField({ 
+                    name: 'image', 
+                    title: 'Imagen Decorativa', 
+                    type: 'image',
+                    fields: [overlayField]
+                }),
                 defineField({
                     name: 'items', type: 'array', of: [{
                         type: 'object',
@@ -75,7 +89,11 @@ export default defineType({
             fields: [
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'paragraphs', type: 'array', of: [{ type: 'text' }] }),
-                defineField({ name: 'image', type: 'image' }),
+                defineField({ 
+                    name: 'image', 
+                    type: 'image',
+                    fields: [overlayField]
+                }),
             ]
         }),
         defineField({
@@ -84,7 +102,12 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'video', title: 'Video Misión (Opcional)', type: 'file' }),
-                defineField({ name: 'image', title: 'Imagen Misión (Fallback)', type: 'image' }),
+                defineField({ 
+                    name: 'image', 
+                    title: 'Imagen Misión (Fallback)', 
+                    type: 'image',
+                    fields: [overlayField]
+                }),
                 defineField({
                     name: 'mission', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
@@ -129,7 +152,11 @@ export default defineType({
                     fields: [
                         defineField({ name: 'name', type: 'string' }),
                         defineField({ name: 'role', type: 'string' }),
-                        defineField({ name: 'image', type: 'image' })
+                        defineField({ 
+                            name: 'image', 
+                            type: 'image',
+                            fields: [overlayField]
+                        })
                     ]
                 }]})
             ]
@@ -145,7 +172,12 @@ export default defineType({
                     fields: [
                         defineField({ name: 'name', type: 'string' }),
                         defineField({ name: 'quote', type: 'text' }),
-                        defineField({ name: 'img', title: 'Imagen', type: 'image' }),
+                        defineField({ 
+                            name: 'img', 
+                            title: 'Imagen', 
+                            type: 'image',
+                            fields: [overlayField]
+                        }),
                         defineField({ name: 'url', title: 'URL del Proyecto', type: 'url' })
                     ]
                 }]})
@@ -158,7 +190,12 @@ export default defineType({
             fields: [
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'video', title: 'Video Ámbito (Opcional)', type: 'file' }),
-                defineField({ name: 'image', title: 'Imagen Ámbito (Fallback)', type: 'image' }),
+                defineField({ 
+                    name: 'image', 
+                    title: 'Imagen Ámbito (Fallback)', 
+                    type: 'image',
+                    fields: [overlayField]
+                }),
                 defineField({
                     name: 'intervention', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
@@ -181,7 +218,11 @@ export default defineType({
                     type: 'object',
                     fields: [
                         defineField({ name: 'title', type: 'string' }),
-                        defineField({ name: 'image', type: 'image' }),
+                        defineField({ 
+                            name: 'image', 
+                            type: 'image',
+                            fields: [overlayField]
+                        }),
                         defineField({ name: 'video', title: 'Archivo Video (Si aplica)', type: 'file' }),
                         defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
                         defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía (Si aplica)', type: 'string' }),
@@ -206,7 +247,11 @@ export default defineType({
                     type: 'object',
                     fields: [
                          defineField({ name: 'title', type: 'string' }),
-                         defineField({ name: 'image', type: 'image' }),
+                         defineField({ 
+                            name: 'image', 
+                            type: 'image',
+                            fields: [overlayField]
+                         }),
                          defineField({ name: 'video', title: 'Archivo Video', type: 'file' }),
                          defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
                          defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía', type: 'string' }),
@@ -266,7 +311,14 @@ export default defineType({
                     { name: 'premiumServiceName', type: 'string' },
                     { name: 'premiumServiceValue', type: 'string' }
                 ]}),
-                defineField({ name: 'callToAction', type: 'object', fields: [{name: 'text', type: 'string'}, {name: 'image', type: 'image'}] })
+                defineField({ name: 'callToAction', type: 'object', fields: [
+                    {name: 'text', type: 'string'}, 
+                    defineField({ 
+                        name: 'image', 
+                        type: 'image',
+                        fields: [overlayField]
+                    })
+                ]})
             ]
         }),
         defineField({
@@ -386,7 +438,11 @@ export default defineType({
                         }),
                         defineField({ name: 'note', title: 'Nota (Texto con saltos de línea)', type: 'text' }),
                         defineField({ name: 'price', type: 'string' }),
-                        defineField({ name: 'image', type: 'image' })
+                        defineField({ 
+                            name: 'image', 
+                            type: 'image',
+                            fields: [overlayField]
+                        })
                     ]
                 }]})
             ]
@@ -396,11 +452,15 @@ export default defineType({
             title: 'Contacto',
             type: 'object',
             fields: [
-                defineField({ name: 'image', title: 'Imagen Izquierda (785x691)', type: 'image' }),
+                defineField({ 
+                    name: 'image', 
+                    title: 'Imagen Izquierda (785x691)', 
+                    type: 'image',
+                    fields: [overlayField]
+                }),
                 defineField({ name: 'location', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'address', type: 'string' }, { name: 'email', type: 'string' }
                 ]}),
-                // CAMBIO: Estructura de teléfono actualizada a Objetos (Número + Icono)
                 defineField({ name: 'phone', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), 
                     defineField({ 

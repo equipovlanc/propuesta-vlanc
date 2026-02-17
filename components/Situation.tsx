@@ -6,11 +6,14 @@ interface SituationProps {
   data?: {
     title?: string;
     paragraphs?: string[];
-    image?: string;
+    image?: { src: string; opacity?: number };
   }
 }
 
 const Situation: React.FC<SituationProps> = ({ data }) => {
+  const imageSrc = data?.image?.src;
+  const imageOpacity = data?.image?.opacity ?? 15;
+
   return (
     <section className="h-full w-full flex flex-col lg:flex-row bg-vlanc-bg overflow-hidden items-stretch">
         
@@ -51,12 +54,18 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
         {/* COLUMNA IMAGEN */}
         <div className="hidden lg:block w-[720px] h-full mr-[120px] shrink-0 relative">
             <AnimatedSection className="h-full w-full">
-                {data?.image ? (
-                  <img 
-                    src={data.image} 
-                    alt="Atmosphere" 
-                    className="w-full h-full object-cover grayscale brightness-90" 
-                  />
+                {imageSrc ? (
+                  <div className="relative w-full h-full">
+                    <img 
+                        src={imageSrc} 
+                        alt="Atmosphere" 
+                        className="w-full h-full object-cover" 
+                    />
+                    <div 
+                        className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                        style={{ opacity: imageOpacity / 100 }}
+                    />
+                  </div>
                 ) : (
                   <div className="w-full h-full bg-vlanc-black/5 flex items-center justify-center">
                       <span className="text-[10px] uppercase tracking-widest text-vlanc-black/20">Imagen Situación (720px)</span>

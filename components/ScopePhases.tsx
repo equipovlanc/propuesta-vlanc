@@ -19,7 +19,7 @@ interface GuaranteeItem {
 
 interface Phase {
     title?: string;
-    image?: string;
+    image?: { src: string; opacity?: number };
     video?: string;
     guaranteeText?: string;
     videoButtonText?: string;
@@ -35,6 +35,8 @@ interface ScopePhasesProps {
 const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados.", guaranteeItem }) => {
   const [showVideo, setShowVideo] = useState(false);
   const [isGuaranteeModalOpen, setIsGuaranteeModalOpen] = useState(false);
+  const imageSrc = data?.image?.src;
+  const imageOpacity = data?.image?.opacity ?? 15;
 
   const formattedTitle = (mainTitle || "trabajos contemplados.").split(' ').map((word, i, arr) => (
       <React.Fragment key={i}>
@@ -76,9 +78,15 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
         </div>
 
         <div className="absolute top-0 bottom-0 left-[575px] w-[409px] z-10 overflow-hidden pointer-events-none">
-             <AnimatedSection className="w-full h-full">
-                {data?.image ? (
-                    <img src={data.image} alt="Phase" className="w-full h-full object-cover grayscale opacity-90 brightness-110" />
+             <AnimatedSection className="w-full h-full relative">
+                {imageSrc ? (
+                    <div className="w-full h-full relative">
+                         <img src={imageSrc} alt="Phase" className="w-full h-full object-cover" />
+                         <div 
+                            className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                            style={{ opacity: imageOpacity / 100 }}
+                        />
+                    </div>
                 ) : (
                     <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center border border-vlanc-secondary/5">
                         <span className="text-xs tracking-widest text-vlanc-secondary/40">Imagen 409px</span>

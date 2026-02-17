@@ -5,7 +5,7 @@ import AnimatedSection from './AnimatedSection';
 interface ScopeProps {
     data?: {
         title?: string;
-        image?: string;
+        image?: { src: string; opacity?: number };
         video?: string;
         intervention?: {
             title?: string;
@@ -21,6 +21,8 @@ interface ScopeProps {
 
 const Scope: React.FC<ScopeProps> = ({ data }) => {
   const breakdown = data?.intervention?.breakdown ?? [];
+  const imageSrc = data?.image?.src;
+  const imageOpacity = data?.image?.opacity ?? 15;
 
   return (
     <section className="h-screen w-full bg-vlanc-bg relative overflow-hidden flex flex-col">
@@ -40,16 +42,30 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </div>
 
             {/* 2. MEDIA */}
-            <div className="absolute top-0 right-[120px] w-[735px] h-full z-10 overflow-hidden">
-                <AnimatedSection className="h-full w-full">
-                    {data?.video ? (
-                            <video src={data.video} autoPlay loop muted playsInline className="w-full h-full object-cover grayscale brightness-90" />
-                    ) : data?.image ? (
-                        <img src={data.image} alt="Scope" className="w-full h-full object-cover grayscale brightness-95" />
-                    ) : (
-                            <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center text-[10px] uppercase tracking-widest text-vlanc-secondary/30 font-bold border border-vlanc-secondary/5">
-                                Media 735x512
-                            </div>
+            <div className="absolute top-0 right-[120px] w-[735px] h-full z-10 overflow-hidden bg-vlanc-bg">
+                <AnimatedSection className="h-full w-full relative">
+                    {/* VIDEO */}
+                    {data?.video && (
+                         <video 
+                            src={data.video} 
+                            autoPlay loop muted playsInline 
+                            className="w-full h-full object-cover relative z-10 print:hidden" 
+                        />
+                    )}
+                    
+                    {/* IMAGEN: Si hay video, es fallback (hidden en web, block en print). Si no, block siempre. */}
+                    {imageSrc ? (
+                        <div className={`absolute inset-0 w-full h-full z-0 ${data?.video ? 'hidden print:block' : 'block'}`}>
+                            <img src={imageSrc} alt="Scope" className="w-full h-full object-cover" />
+                            <div 
+                                className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                                style={{ opacity: imageOpacity / 100 }}
+                            />
+                        </div>
+                    ) : !data?.video && (
+                        <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center text-[10px] uppercase tracking-widest text-vlanc-secondary/30 font-bold border border-vlanc-secondary/5">
+                            Media 735x512
+                        </div>
                     )}
                 </AnimatedSection>
             </div>

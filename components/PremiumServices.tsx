@@ -20,12 +20,14 @@ interface Service {
 
 interface PremiumServicesProps {
     data?: Service;
-    image?: string;
+    image?: { src: string; opacity?: number };
     index?: number;
 }
 
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 0 }) => {
-    
+    const imageSrc = image?.src;
+    const imageOpacity = image?.opacity ?? 15;
+
     // Helper para renderizar cada bloque de descripción según sus flags
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
@@ -147,8 +149,14 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             <div className="flex-grow h-full bg-white flex flex-col justify-end items-center pb-[140px] relative overflow-hidden z-0">
                 <AnimatedSection>
                     <div className="w-[827px] h-[709px] relative shrink-0">
-                        {image ? (
-                            <img src={image} alt={data?.title} className="w-full h-full object-cover grayscale brightness-95 opacity-90 hover:grayscale-0 transition-all duration-1000" />
+                        {imageSrc ? (
+                            <div className="w-full h-full relative">
+                                <img src={imageSrc} alt={data?.title} className="w-full h-full object-cover" />
+                                <div 
+                                    className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                                    style={{ opacity: imageOpacity / 100 }}
+                                />
+                            </div>
                         ) : (
                             <div className="w-full h-full bg-vlanc-black/5 flex items-center justify-center">
                                 <span className="text-[10px] uppercase tracking-widest text-vlanc-black/20">Imagen 827x709</span>

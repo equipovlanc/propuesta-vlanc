@@ -5,7 +5,7 @@ import AnimatedSection from './AnimatedSection';
 interface TeamMember {
     name?: string;
     role?: string;
-    image?: string;
+    image?: { src: string; opacity?: number };
 }
 
 interface TeamProps {
@@ -48,15 +48,25 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 <div className="grid grid-cols-2 gap-x-[50px] h-full items-stretch content-between">
                     {members.map((member, index) => {
                         const isBottomRow = index >= 2;
+                        const imgSrc = member.image?.src;
+                        const imgOpacity = member.image?.opacity ?? 15;
+
                         return (
                             <AnimatedSection 
                                 key={index} 
                                 className={`flex flex-col w-full ${isBottomRow ? 'justify-end' : 'justify-start'}`}
                             >
                                 {/* Imagen */}
-                                <div className="w-full aspect-[428/264] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 rounded-[1px]">
-                                    {member.image ? (
-                                        <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                                <div className="w-full aspect-[428/264] overflow-hidden rounded-[1px] relative">
+                                    {imgSrc ? (
+                                        <div className="w-full h-full relative group">
+                                            <img src={imgSrc} alt={member.name} className="w-full h-full object-cover" />
+                                            {/* Overlay estático (controlado por sanity) */}
+                                            <div 
+                                                className="absolute inset-0 bg-[#8f4933] pointer-events-none transition-opacity duration-300 group-hover:opacity-0"
+                                                style={{ opacity: imgOpacity / 100 }}
+                                            />
+                                        </div>
                                     ) : (
                                         <div className="w-full h-full bg-vlanc-secondary/10 flex items-center justify-center border border-vlanc-bg">
                                             <span className="text-[10px] text-vlanc-secondary/40 uppercase tracking-widest">Foto {member.name}</span>

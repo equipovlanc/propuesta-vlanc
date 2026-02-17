@@ -10,7 +10,7 @@ interface IndexItem {
 interface IndexSectionProps {
     data?: {
         title?: string;
-        image?: string;
+        image?: { src: string; opacity?: number };
         items?: IndexItem[];
     }
 }
@@ -26,6 +26,8 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
   };
 
   const items = data?.items || [];
+  const imageSrc = data?.image?.src;
+  const imageOpacity = data?.image?.opacity ?? 15;
 
   return (
     <section id="index-section" className="h-screen w-full flex bg-vlanc-bg overflow-hidden">
@@ -33,12 +35,18 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data }) => {
       {/* Columna Izquierda: Imagen (Ken Burns) */}
       <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">
         <AnimatedSection direction="none" className="w-full h-full">
-            {data?.image ? (
-                <img 
-                src={data.image}
-                alt="Indice" 
-                className="w-full h-full object-cover grayscale brightness-105 ken-burns"
-                />
+            {imageSrc ? (
+                <div className="relative w-full h-full ken-burns">
+                    <img 
+                        src={imageSrc}
+                        alt="Indice" 
+                        className="w-full h-full object-cover"
+                    />
+                    <div 
+                        className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                        style={{ opacity: imageOpacity / 100 }}
+                    />
+                </div>
             ) : (
                 <div className="w-full h-full bg-vlanc-primary/10 flex items-center justify-center">
                     <span className="text-xs uppercase tracking-widest text-vlanc-primary/40">Imagen Contenido</span>

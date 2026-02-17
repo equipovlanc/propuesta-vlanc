@@ -40,24 +40,24 @@ const App: React.FC = () => {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
           "logos": logos{"smallLogo": smallLogo.asset->url, "mainLogo": mainLogo.asset->url, "finalLogo": finalLogo.asset->url},
-          "index": index{..., "image": image.asset->url},
-          "situation": situation{..., "image": image.asset->url},
-          "mission": mission{..., "image": image.asset->url, "video": video.asset->url},
-          "team": team{..., "members": members[]{..., "image": image.asset->url}},
-          "testimonials": testimonials{..., "items": items[]{..., "img": img.asset->url}},
-          "scopeIntro": scopeIntro{..., "image": image.asset->url, "video": video.asset->url},
-          "scopePhases": scopePhases1.phases[] {..., "image": image.asset->url, "video": video.asset->url} + scopePhases2.phases[] {..., "image": image.asset->url, "video": video.asset->url},
+          "index": index{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
+          "situation": situation{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
+          "mission": mission{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
+          "team": team{..., "members": members[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}}},
+          "testimonials": testimonials{..., "items": items[]{..., "img": {"src": img.asset->url, "opacity": img.overlayOpacity}}},
+          "scopeIntro": scopeIntro{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
+          "scopePhases": scopePhases1.phases[] {..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url} + scopePhases2.phases[] {..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
           "specialOffers": specialOffers{
             ..., 
             conditionalOffer,
             launchOffer,
-            "callToAction": callToAction{..., "image": image.asset->url}
+            "callToAction": callToAction{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}}
           },
           "guarantees": guarantees{..., "items": items[]{..., "icon": icon.asset->url}},
-          "premiumServicesList": premiumServices.services[]{..., "image": image.asset->url},
+          "premiumServicesList": premiumServices.services[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "contact": contact{
             ..., 
-            "image": image.asset->url, 
+            "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, 
             "phone": phone{
                 ...,
                 "landline": landline{..., "icon": icon.asset->url},

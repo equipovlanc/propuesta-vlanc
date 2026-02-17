@@ -39,7 +39,7 @@ interface SpecialOffersProps {
         };
         callToAction?: {
             text?: string;
-            image?: string;
+            image?: { src: string; opacity?: number };
         };
     };
     investmentTitle?: string;
@@ -50,6 +50,8 @@ interface SpecialOffersProps {
 const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, locationDate, premiumService }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const plans = data?.conditionalOffer?.discountedPlans || [];
+  const imageSrc = data?.callToAction?.image?.src;
+  const imageOpacity = data?.callToAction?.image?.opacity ?? 15;
 
   const openModal = () => { if (premiumService) setIsModalOpen(true); };
   const closeModal = () => setIsModalOpen(false);
@@ -130,13 +132,17 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
 
       <div className="w-1/2 h-full pl-[69.5px]">
           <AnimatedSection className="w-full h-full relative overflow-hidden">
-                {data?.callToAction?.image && (
-                    <>
-                        <img src={data.callToAction.image} alt="Special Offer" className="w-full h-full object-cover grayscale brightness-95" />
+                {imageSrc && (
+                    <div className="w-full h-full relative">
+                        <img src={imageSrc} alt="Special Offer" className="w-full h-full object-cover" />
+                         <div 
+                            className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                            style={{ opacity: imageOpacity / 100 }}
+                        />
                         <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 px-8">
-                            <h2 className="especial1">{data.callToAction.text}</h2>
+                            <h2 className="especial1">{data?.callToAction?.text}</h2>
                         </div>
-                    </>
+                    </div>
                 )}
           </AnimatedSection>
       </div>

@@ -5,7 +5,7 @@ import AnimatedSection from './AnimatedSection';
 interface Testimonial {
     name?: string;
     quote?: string;
-    img?: string;
+    img?: { src: string; opacity?: number };
     url?: string;
 }
 
@@ -38,12 +38,21 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                 <div className="w-full lg:w-3/4 flex flex-col justify-center">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                         {(data?.items ?? []).map((testimonial, index) => {
+                            const imgSrc = testimonial.img?.src;
+                            const imgOpacity = testimonial.img?.opacity ?? 15;
+
                             const testimonialContent = (
                                 <div className="flex flex-col h-full">
                                     {/* Contenedor Imagen */}
-                                    <div className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm grayscale group-hover:grayscale-0 transition-all duration-700 shadow-sm relative">
-                                        {testimonial.img ? (
-                                            <img src={testimonial.img} alt={testimonial.name} className="w-full h-full object-cover" />
+                                    <div className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm shadow-sm relative group">
+                                        {imgSrc ? (
+                                            <>
+                                                <img src={imgSrc} alt={testimonial.name} className="w-full h-full object-cover" />
+                                                <div 
+                                                    className="absolute inset-0 bg-[#8f4933] pointer-events-none transition-opacity duration-700 group-hover:opacity-0" 
+                                                    style={{ opacity: imgOpacity / 100 }}
+                                                />
+                                            </>
                                         ) : (
                                             <div className="w-full h-full bg-vlanc-secondary/5 flex items-center justify-center">
                                                 <span className="text-[10px] uppercase tracking-widest text-vlanc-secondary/20">Foto Testimonio</span>
@@ -52,7 +61,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                         
                                         {/* Overlay para URL (Opcional visual) */}
                                         {testimonial.url && (
-                                            <div className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <div className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-20">
                                                 <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase bg-vlanc-primary/80 px-4 py-2">Ver Proyecto</span>
                                             </div>
                                         )}
