@@ -59,8 +59,8 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
         <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[54px]" />
       </div>
 
-      {/* Esquina Inferior Derecha: Logo (J3) - Ajuste estricto 260x260, posición exacta */}
-      <AnimatedSection direction="left" hierarchy={3} className="absolute bottom-[11px] right-[58px] text-right flex flex-col items-end">
+      {/* Esquina Inferior Derecha: Logo (J3) - Ajuste a 108px del borde derecho */}
+      <AnimatedSection direction="left" hierarchy={3} className="absolute bottom-[11px] right-[108px] text-right flex flex-col items-end">
         <div className="w-[260px] h-[260px] flex items-center justify-center">
             {logo ? (
                 <img src={logo} alt="Studio Logo" className="max-w-full max-h-full w-auto h-auto object-contain" />
