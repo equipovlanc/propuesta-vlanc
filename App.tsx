@@ -210,7 +210,8 @@ const App: React.FC = () => {
   const activeSection = sections[currentIndex];
 
   return (
-    <div id="app-container" className="fixed inset-0 w-full h-full bg-vlanc-bg overflow-hidden">
+    // CAMBIO IMPORTANTE: Se elimina bg-vlanc-bg para ver el grid del body
+    <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
         <CustomCursor />
         
         {/* Renderizado Condicional del Header: Solo si no es Hero */}

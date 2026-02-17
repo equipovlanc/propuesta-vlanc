@@ -1,6 +1,6 @@
 
 import React, { ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 interface ZSlideProps {
   children: ReactNode;
@@ -11,13 +11,14 @@ interface ZSlideProps {
 }
 
 // Variantes para el efecto de "Viaje Espacial"
-const slideVariants = {
+const slideVariants: Variants = {
   enter: (direction: number) => ({
-    // ESCALA EXTREMA: 3.5 hace que parezca que la página atraviesa la cámara
-    scale: direction > 0 ? 3.5 : 0.2, 
+    // Escala grande para que venga "detrás de la cabeza" o muy del fondo
+    scale: direction > 0 ? 3.0 : 0.4, 
     opacity: 0,
     zIndex: direction > 0 ? 50 : 0, 
-    filter: 'blur(20px)',
+    // Blur reducido a 3px: Suficiente para dar velocidad, poco para marear
+    filter: 'blur(3px)', 
   }),
   center: {
     scale: 1,
@@ -25,20 +26,18 @@ const slideVariants = {
     zIndex: 10,
     filter: 'blur(0px)',
     transition: {
-      // Velocidad ajustada: Más rápido que antes (2.0s -> 1.6s)
       duration: 1.6, 
-      ease: [0.25, 1, 0.5, 1], // Curva "Logística" suave
+      ease: [0.25, 1, 0.5, 1] as const, // Curva suave
     }
   },
   exit: (direction: number) => ({
-    // ESCALA EXTREMA: Se aleja hasta ser un punto en el horizonte
-    scale: direction > 0 ? 0.2 : 3.5, 
+    scale: direction > 0 ? 0.4 : 3.0, 
     opacity: 0,
     zIndex: direction > 0 ? 0 : 50,
-    filter: 'blur(10px)',
+    filter: 'blur(3px)', 
     transition: {
       duration: 1.6,
-      ease: [0.25, 1, 0.5, 1],
+      ease: [0.25, 1, 0.5, 1] as const,
     }
   })
 };
@@ -47,7 +46,6 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
   return (
     <motion.div 
       id={id}
-      // ELIMINADO: bg-vlanc-bg u otros fondos. Ahora es transparente.
       className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden pointer-events-none ${className}`}
       custom={direction}
       variants={slideVariants}
@@ -56,10 +54,10 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
       exit="exit"
       style={{
         backfaceVisibility: 'hidden',
-        perspective: 2000, // Perspectiva profunda
+        perspective: 2000, 
       }}
     >
-        {/* Capa de contenido: Restauramos pointer-events para interactividad */}
+        {/* Contenido con pointer-events restaurados */}
         <div className="w-full h-full relative pointer-events-auto">
             {children}
         </div>

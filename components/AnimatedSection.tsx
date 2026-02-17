@@ -20,22 +20,27 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   direction = 'up'
 }) => {
   
-  // LOGICA DE JERARQUÍA "DISTINCTIVA"
-  // J1: Títulos. Llegan rápido (0.3s delay) para anclar la vista.
-  // J2: Cuerpo. Llegan a medio camino (0.7s delay).
-  // J3: Imágenes/Media. Llegan al final (1.1s delay) para cerrar.
+  // LOGICA DE TIEMPOS AJUSTADA
+  // El slide tarda 1.6s.
+  // Delay 1.4s: Empezamos cuando el slide está al 90% de su posición final.
+  // Esto evita que el texto se mueva con el slide y se vea borroso.
   
-  const baseDelay = 0.3;
-  const stepDelay = 0.4; 
+  const baseDelay = 1.4; 
+  
+  // Step: 0.2s. Cascada rápida.
+  // J1: 1.4s
+  // J2: 1.6s
+  // J3: 1.8s
+  const stepDelay = 0.2; 
+  
   const calculatedDelay = baseDelay + ((hierarchy - 1) * stepDelay);
 
   const variants = {
     hidden: { 
       opacity: 0, 
-      // Movimiento más pronunciado para que se note el viaje
-      y: direction === 'up' ? 100 : direction === 'down' ? -100 : 0, 
-      x: direction === 'left' ? 100 : direction === 'right' ? -100 : 0,
-      scale: 0.9, // Ligera escala para efecto "pop"
+      y: direction === 'up' ? 30 : direction === 'down' ? -30 : 0, 
+      x: direction === 'left' ? 30 : direction === 'right' ? -30 : 0,
+      scale: 0.98, 
     },
     visible: { 
       opacity: 1, 
@@ -43,15 +48,14 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       x: 0,
       scale: 1,
       transition: {
-        duration: 1.2, 
-        ease: [0.16, 1, 0.3, 1], // OutExpo para frenada suave
+        duration: 0.8, // Aparición suave pero no eterna
+        ease: "easeOut" as const,
         delay: calculatedDelay
       }
     },
     exit: {
         opacity: 0,
-        scale: 0.9,
-        transition: { duration: 0.4 }
+        transition: { duration: 0.2 }
     }
   };
 
@@ -61,6 +65,9 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       className={className}
       variants={variants}
       style={style}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
     >
       {children}
     </motion.div>
