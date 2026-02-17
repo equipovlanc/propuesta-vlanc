@@ -113,9 +113,9 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 </div>
             </div>
 
-            {/* Right Column: Imagen (J3) */}
+            {/* Right Column: Imagen (J0) */}
             <div className="flex-grow h-full bg-white flex flex-col justify-end items-center pb-[140px] relative overflow-hidden z-0">
-                <AnimatedSection hierarchy={3}>
+                <AnimatedSection hierarchy={0}>
                     <div className="w-[827px] h-[709px] relative shrink-0">
                         {imageSrc ? (
                             <div className="w-full h-full relative">

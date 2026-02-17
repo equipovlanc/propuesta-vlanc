@@ -20,27 +20,27 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   direction = 'up'
 }) => {
   
-  // LOGICA DE TIEMPOS AJUSTADA
-  // El slide tarda 1.6s.
-  // Delay 1.4s: Empezamos cuando el slide está al 90% de su posición final.
-  // Esto evita que el texto se mueva con el slide y se vea borroso.
+  // LOGICA DE TIEMPOS ACTUALIZADA
+  // Hierarchy 0 (Media): Inmediato. Necesario para mantener la referencia visual durante el movimiento.
+  // Hierarchy 1 (Títulos): 0.5s. Aparecen mientras la página aún "vuela" para dar dinamismo.
+  // Hierarchy 2 (Textos): 0.8s+. Aparecen al aterrizar o justo antes.
   
-  const baseDelay = 1.4; 
+  const isMedia = hierarchy === 0;
   
-  // Step: 0.2s. Cascada rápida.
-  // J1: 1.4s
-  // J2: 1.6s
-  // J3: 1.8s
-  const stepDelay = 0.2; 
+  // Si es media, no hay delay. Si es texto, empezamos en 0.5s
+  const baseDelay = isMedia ? 0 : 0.5; 
+  const stepDelay = 0.3; // Separación entre niveles de texto
   
-  const calculatedDelay = baseDelay + ((hierarchy - 1) * stepDelay);
+  const calculatedDelay = isMedia ? 0 : baseDelay + ((hierarchy - 1) * stepDelay);
 
   const variants = {
     hidden: { 
-      opacity: 0, 
-      y: direction === 'up' ? 30 : direction === 'down' ? -30 : 0, 
-      x: direction === 'left' ? 30 : direction === 'right' ? -30 : 0,
-      scale: 0.98, 
+      // Si es media (H0), empieza visible y en su sitio (opacity 1, scale 1).
+      // Si es texto, empieza oculto.
+      opacity: isMedia ? 1 : 0, 
+      y: isMedia ? 0 : (direction === 'up' ? 30 : direction === 'down' ? -30 : 0), 
+      x: isMedia ? 0 : (direction === 'left' ? 30 : direction === 'right' ? -30 : 0),
+      scale: isMedia ? 1 : 0.98, 
     },
     visible: { 
       opacity: 1, 
@@ -48,13 +48,13 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       x: 0,
       scale: 1,
       transition: {
-        duration: 0.8, // Aparición suave pero no eterna
+        duration: isMedia ? 0 : 1.2, // Texto aparece suavemente (1.2s)
         ease: "easeOut" as const,
         delay: calculatedDelay
       }
     },
     exit: {
-        opacity: 0,
+        opacity: isMedia ? 1 : 0, // Media no hace fade out al salir, se va con el slide
         transition: { duration: 0.2 }
     }
   };

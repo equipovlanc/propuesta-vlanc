@@ -42,7 +42,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
         {/* Contenedor Principal */}
         <div className="flex w-full mt-[297px] h-[calc(100vh-297px)] pb-[140px]">
             
-            {/* MITAD IZQUIERDA (50%): IMÁGENES (J3) */}
+            {/* MITAD IZQUIERDA (50%): IMÁGENES (J0) */}
             <div className="w-1/2 h-full pr-[30px] pl-0">
                 <div className="grid grid-cols-2 gap-x-[50px] h-full items-stretch content-between">
                     {members.map((member, index) => {
@@ -53,7 +53,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                         return (
                             <AnimatedSection 
                                 key={index} 
-                                hierarchy={3}
+                                hierarchy={0}
                                 className={`flex flex-col w-full ${isBottomRow ? 'justify-end' : 'justify-start'}`}
                             >
                                 {/* Imagen */}

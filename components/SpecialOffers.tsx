@@ -131,7 +131,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
       </div>
 
       <div className="w-1/2 h-full pl-[69.5px]">
-          <AnimatedSection className="w-full h-full relative overflow-hidden" hierarchy={3}>
+          <AnimatedSection className="w-full h-full relative overflow-hidden" hierarchy={0}>
                 {imageSrc && (
                     <div className="w-full h-full relative">
                         <img src={imageSrc} alt="Special Offer" className="w-full h-full object-cover" />

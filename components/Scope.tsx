@@ -40,9 +40,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </AnimatedSection>
             </div>
 
-            {/* 2. MEDIA (J3) */}
+            {/* 2. MEDIA (J0) */}
             <div className="absolute top-0 right-[120px] w-[735px] h-full z-10 overflow-hidden">
-                <AnimatedSection className="h-full w-full relative" hierarchy={3}>
+                <AnimatedSection className="h-full w-full relative" hierarchy={0}>
                     {/* VIDEO */}
                     {data?.video && (
                          <video 

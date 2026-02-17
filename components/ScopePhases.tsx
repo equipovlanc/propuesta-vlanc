@@ -78,9 +78,9 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             </AnimatedSection>
         </div>
 
-        {/* IMAGEN (J3) */}
+        {/* IMAGEN (J0) */}
         <div className="absolute top-0 bottom-0 left-[575px] w-[409px] z-10 overflow-hidden pointer-events-none">
-             <AnimatedSection className="w-full h-full relative" hierarchy={3}>
+             <AnimatedSection className="w-full h-full relative" hierarchy={0}>
                 {imageSrc ? (
                     <div className="w-full h-full relative">
                          <img src={imageSrc} alt="Phase" className="w-full h-full object-cover" />

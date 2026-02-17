@@ -14,9 +14,9 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ image, text }) => {
     return (
         <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative">
              <div className="w-full max-w-[1320px] flex flex-col">
-                 {/* Imagen (J3) */}
+                 {/* Imagen (J0) */}
                  <div className="w-full aspect-[1320/670] shrink-0 relative">
-                     <AnimatedSection className="w-full h-full" hierarchy={3}>
+                     <AnimatedSection className="w-full h-full" hierarchy={0}>
                         {imageSrc ? (
                             <div className="w-full h-full relative">
                                 <img 

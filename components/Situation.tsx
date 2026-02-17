@@ -50,9 +50,9 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
             </div>
         </div>
         
-        {/* COLUMNA IMAGEN (J3) */}
+        {/* COLUMNA IMAGEN (J0) */}
         <div className="hidden lg:block w-[720px] h-full mr-[120px] shrink-0 relative">
-            <AnimatedSection className="h-full w-full" hierarchy={3}>
+            <AnimatedSection className="h-full w-full" hierarchy={0}>
                 {imageSrc ? (
                   <div className="relative w-full h-full">
                     <img 

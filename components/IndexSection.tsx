@@ -29,9 +29,9 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
   return (
     <section id="index-section" className="h-full w-full flex overflow-hidden absolute inset-0">
       
-      {/* Columna Izquierda: Imagen (J3) */}
+      {/* Columna Izquierda: Imagen (J0) */}
       <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">
-        <AnimatedSection direction="none" hierarchy={3} className="w-full h-full">
+        <AnimatedSection direction="none" hierarchy={0} className="w-full h-full">
             {imageSrc ? (
                 <div className="relative w-full h-full ken-burns">
                     <img 

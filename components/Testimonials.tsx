@@ -33,20 +33,17 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                     </div>
                 </div>
                 
-                {/* COLUMNA TESTIMONIOS (J2 y J3) */}
+                {/* COLUMNA TESTIMONIOS (J0 y J2) */}
                 <div className="w-full lg:w-3/4 flex flex-col justify-center">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                         {(data?.items ?? []).map((testimonial, index) => {
                             const imgSrc = testimonial.img?.src;
                             const imgOpacity = testimonial.img?.opacity ?? 15;
 
-                            const testimonialContent = (
-                                <div className="flex flex-col h-full">
-                                    {/* Contenedor Imagen (J3) */}
-                                    {/* Nota: En testimonios, la imagen va asociada. Para simplificar, pondremos todo el bloque en J3 o dividiremos. 
-                                        Para mantener el efecto "escalonado" solicitado, pondremos todo el bloque en J2, pero las imágenes en J3 
-                                        puede ser complicado si están en el mismo map. Vamos a poner el bloque en J2. */}
-                                    <div className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm shadow-sm relative group">
+                            return (
+                                <div key={index} className="flex flex-col h-full group">
+                                    {/* Imagen (J0) - Siempre visible */}
+                                    <AnimatedSection hierarchy={0} className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm shadow-sm relative">
                                         {imgSrc ? (
                                             <>
                                                 <img src={imgSrc} alt={testimonial.name} className="w-full h-full object-cover" />
@@ -66,31 +63,28 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                                 <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase bg-vlanc-primary/80 px-4 py-2">Ver Proyecto</span>
                                             </div>
                                         )}
-                                    </div>
+                                    </AnimatedSection>
 
-                                    {/* Textos */}
-                                    <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors">{testimonial.name}</h4>
-                                    <p className="cuerpo">"{testimonial.quote}"</p>
+                                    {/* Textos (J2) */}
+                                    <AnimatedSection hierarchy={2}>
+                                        {testimonial.url ? (
+                                             <a 
+                                                href={testimonial.url} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="block cursor-pointer no-underline"
+                                            >
+                                                <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors">{testimonial.name}</h4>
+                                                <p className="cuerpo">"{testimonial.quote}"</p>
+                                            </a>
+                                        ) : (
+                                            <div>
+                                                <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors">{testimonial.name}</h4>
+                                                <p className="cuerpo">"{testimonial.quote}"</p>
+                                            </div>
+                                        )}
+                                    </AnimatedSection>
                                 </div>
-                            );
-
-                            return (
-                                <AnimatedSection key={index} className="h-full group" hierarchy={2}>
-                                    {testimonial.url ? (
-                                        <a 
-                                            href={testimonial.url} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer"
-                                            className="block h-full cursor-pointer no-underline"
-                                        >
-                                            {testimonialContent}
-                                        </a>
-                                    ) : (
-                                        <div className="h-full">
-                                            {testimonialContent}
-                                        </div>
-                                    )}
-                                </AnimatedSection>
                             );
                         })}
                     </div>
