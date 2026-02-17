@@ -67,12 +67,16 @@
         color: #000000;
         overflow-x: hidden;
         font-size: 14px;
-        -webkit-font-smoothing: antialiased; /* Critical for text jitter on transform */
+        -webkit-font-smoothing: antialiased; 
         -moz-osx-font-smoothing: grayscale;
       }
 
-      /* Fix for text jitter during transforms */
-      .section-slide, .print-strict-container {
+      /* OPTIMIZACIONES 3D Y RENDIMIENTO */
+      .section-slide {
+        will-change: transform; /* Hint browser */
+      }
+      
+      .print-strict-container {
         backface-visibility: hidden;
         -webkit-backface-visibility: hidden;
         transform-style: preserve-3d;
@@ -151,6 +155,7 @@
         }
 
         .section-slide {
+          position: relative !important; /* Desactivar sticky en impresión */
           width: 420mm !important;
           height: 297mm !important;
           display: flex !important;
@@ -162,7 +167,6 @@
           background-color: #efe8e1 !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-          position: relative !important;
           transform: none !important;
           opacity: 1 !important;
           scale: 1 !important;
@@ -177,7 +181,7 @@
           overflow: hidden !important;
           flex-shrink: 0 !important;
           display: block !important;
-          transform: none !important; /* Anula transformaciones de Framer Motion en print */
+          transform: none !important; 
         }
 
         header { 

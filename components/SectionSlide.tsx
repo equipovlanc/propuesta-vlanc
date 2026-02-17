@@ -13,42 +13,38 @@ interface SectionSlideProps {
 const SectionSlide: React.FC<SectionSlideProps> = ({ children, id, className = "", isPrintOnly = false, scrollContainer }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Track scroll relativo: "start start" (tope sección toca tope pantalla) -> "end start" (fondo sección toca tope pantalla)
+  // Detectamos el scroll de ESTA sección.
   const { scrollYProgress } = useScroll({
     target: containerRef,
     container: scrollContainer,
     offset: ["start start", "end start"]
   });
 
-  // FÍSICA DEL EFECTO "VENTANA TRASERA" (REAR WINDOW)
-  
-  // 1. ANCLAJE VERTICAL (La clave):
-  // Al mover y: "100%", compensamos exactamente la subida del scroll.
-  // Resultado visual: El elemento NO sube, se queda fijo en el centro de la pantalla
-  // esperando a ser cubierto por la siguiente diapositiva.
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  // EFECTO "VENTANA TRASERA" (EJE Z)
+  // Estrategia: Position Sticky + Scale Down
+  // 1. El 'sticky' (en el CSS abajo) mantiene la sección pegada arriba. NO sube.
+  // 2. La siguiente sección sube y la tapa (z-index natural del DOM).
+  // 3. Mientras es tapada, esta sección se hace pequeña y oscura.
 
-  // 2. PROFUNDIDAD (Escala):
-  // Reducimos agresivamente a 0.5 para que parezca que se va lejos en el horizonte.
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.5]); 
-  
-  // 3. ATMÓSFERA (Opacidad y Blur):
-  // Se oscurece y se desenfoca al alejarse, simulando distancia física.
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const blur = useTransform(scrollYProgress, [0, 1], ["0px", "20px"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.75]); 
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.2]);
+  const blur = useTransform(scrollYProgress, [0, 1], ["0px", "10px"]);
+  // Nota: Ya no usamos 'y' transform. Sticky se encarga de la posición.
 
   return (
     <div 
       id={id}
       ref={containerRef}
-      className={`section-slide w-full h-screen relative snap-start snap-always flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
-      style={{ zIndex: 0 }} // Z-Index bajo para que la siguiente slide (z-index natural mayor) pase POR ENCIMA
+      // CAMBIOS CLAVE EN CSS:
+      // 1. sticky top-0: Fija el elemento arriba. El navegador garantiza que no se mueva.
+      // 2. h-screen: Ocupa toda la pantalla.
+      // 3. z-0: Nivel base. La siguiente slide tendrá un z-index superior por orden natural y la cubrirá.
+      className={`section-slide w-full h-screen sticky top-0 snap-start flex flex-col ${isPrintOnly ? 'hidden print:block' : ''} ${className}`}
     >
       <motion.div 
-        style={{ scale, opacity, y, filter: blur }}
-        className="print-strict-container w-full h-full flex flex-col box-border origin-center will-change-transform"
-        // Configuraciones para evitar flickering en monitores de alta tasa de refresco
-        initial={{ transformPerspective: 1000 }}
+        style={{ scale, opacity, filter: blur }}
+        className="print-strict-container w-full h-full flex flex-col box-border origin-center bg-vlanc-bg will-change-transform"
+        // bg-vlanc-bg es CRUCIAL: asegura que el fondo sea sólido para tapar a la diapositiva anterior si hay transparencias
       >
           {children}
       </motion.div>
