@@ -22,21 +22,21 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   direction = 'up',
   mode = 'default'
 }) => {
-  const scrollDir = useScrollDirection(); // 1 (Avance/Next) o -1 (Retroceso/Prev)
+  const scrollDir = useScrollDirection(); 
   
   // LOGICA DE TIEMPOS
   const isMedia = hierarchy === 0;
   const baseDelay = isMedia ? 0 : 0.4; 
-  const stepDelay = 0.8; 
+  const stepDelay = 0.6; // Reducido ligeramente el step ya que la duración es muy larga
   const calculatedDelay = isMedia ? 0 : baseDelay + ((hierarchy - 1) * stepDelay);
 
   // Variantes por defecto (Contenido normal)
   const defaultVariants: Variants = {
     hidden: { 
       opacity: isMedia ? 1 : 0, 
-      y: isMedia ? 0 : (direction === 'up' ? 30 : direction === 'down' ? -30 : 0), 
-      x: isMedia ? 0 : (direction === 'left' ? 30 : direction === 'right' ? -30 : 0),
-      scale: isMedia ? 1 : 0.98, 
+      y: isMedia ? 0 : (direction === 'up' ? 25 : direction === 'down' ? -25 : 0), 
+      x: isMedia ? 0 : (direction === 'left' ? 25 : direction === 'right' ? -25 : 0),
+      scale: 1, // ELIMINADO ESCALADO (0.98 -> 1) para evitar temblor en textos
     },
     visible: { 
       opacity: 1, 
@@ -44,26 +44,24 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       x: 0,
       scale: 1,
       transition: {
-        duration: isMedia ? 0 : 1.2,
-        ease: "easeOut",
+        duration: isMedia ? 0 : 1.8, // AUMENTADO a 1.8s para aparición muy suave
+        ease: [0.22, 1, 0.36, 1], // Curva Bezier suave (cubic-bezier)
         delay: calculatedDelay
       }
     },
     exit: {
         opacity: isMedia ? 1 : 0,
-        transition: { duration: 0.2 }
+        transition: { duration: 0.3 }
     }
   };
 
   // Variantes para la BARRA (Motion Blur + Dirección Dinámica)
-  // Si scrollDir > 0 (Vamos a la siguiente): Entra desde IZQ (-120vw), Sale por DER (120vw)
-  // Si scrollDir < 0 (Volvemos a la anterior): Entra desde DER (120vw), Sale por IZQ (-120vw)
   const barVariants: Variants = {
       hidden: {
           x: scrollDir > 0 ? '-120vw' : '120vw', 
           opacity: 1,
-          scaleX: 2.5, // Estiramiento para efecto velocidad
-          filter: 'blur(10px)', // Blur de movimiento
+          scaleX: 2.5, 
+          filter: 'blur(10px)', 
       },
       visible: {
           x: 0,
@@ -71,19 +69,19 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
           scaleX: 1,
           filter: 'blur(0px)',
           transition: {
-              duration: 1.2, 
-              ease: [0.16, 1, 0.3, 1], // Ease Out muy suave
-              delay: 0.1 // Pequeño delay respecto a la carga de página
+              duration: 1.4, 
+              ease: [0.16, 1, 0.3, 1], 
+              delay: 0.1 
           }
       },
       exit: {
           x: scrollDir > 0 ? '120vw' : '-120vw',
           opacity: 1,
-          scaleX: 3.0, // Más estiramiento al salir disparada
+          scaleX: 3.0, 
           filter: 'blur(15px)',
           transition: {
               duration: 0.8,
-              ease: "easeIn" // Aceleración al salir
+              ease: "easeIn" 
           }
       }
   };

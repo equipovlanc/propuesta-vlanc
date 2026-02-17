@@ -127,9 +127,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                     </div>
                 </div>
           </AnimatedSection>
-          <div className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20">
+          
+          {/* Fecha ahora animada con J2 */}
+          <AnimatedSection className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20" hierarchy={2}>
                 <p className="cuerpo font-bold text-right">{locationDate || "En Alcoi a XX de mes de 2025"}</p>
-          </div>
+          </AnimatedSection>
       </div>
 
       <div className="w-1/2 h-full pl-[69.5px]">

@@ -101,12 +101,12 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                 </div>
             </div>
 
-            {/* FECHA (J2) */}
-            <div className="absolute bottom-[70px] right-[120px] z-20">
+            {/* FECHA (J2) - AHORA ANIMADA */}
+            <AnimatedSection className="absolute bottom-[70px] right-[120px] z-20" hierarchy={2}>
                 <p className="cuerpo font-bold text-right">
                     {locationDate || "En Alcoi a XX de mes de 2025"}
                 </p>
-            </div>
+            </AnimatedSection>
         </section>
     );
 };

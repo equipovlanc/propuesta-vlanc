@@ -60,7 +60,6 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
             <div className="w-full flex flex-row gap-[160px] items-start h-full relative">
                 
                 {/* COLUMNA IZQUIERDA (J2) */}
-                {/* Added 'no-scrollbar' class to hide scrollbar and fix black line issue */}
                 <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
                     <AnimatedSection className="space-y-6" hierarchy={2}>
                         {/* Introducción Parte 1 */}
@@ -156,22 +155,22 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA */}
-                    <div className="w-[720px] flex flex-col border-t border-[#703622] mt-[25px] pt-1">
+                    {/* FIRMA - AHORA ANIMADA */}
+                    <AnimatedSection className="w-[720px] flex flex-col border-t border-[#703622] mt-[25px] pt-1" hierarchy={2}>
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
                         </div>
-                    </div>
+                    </AnimatedSection>
                 </div>
             </div>
 
-            {/* FECHA (J2) */}
-            <div className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20">
+            {/* FECHA (J2) - AHORA ANIMADA */}
+            <AnimatedSection className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20" hierarchy={2}>
                 <p className="cuerpo font-bold text-right">
                     {data?.locationDate || "En Alcoi a XX de mes de 2025"}
                 </p>
-            </div>
+            </AnimatedSection>
         </section>
     );
 };
