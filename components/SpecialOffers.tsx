@@ -116,19 +116,21 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                     </div>
                 </div>
 
-                {/* CAJA 2: OFERTA LANZAMIENTO */}
-                {data?.launchOffer && (
-                    <div className="border border-[#8f4933]/30 p-5 mb-6 shrink-0">
-                        <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.launchOffer.title}</h3>
-                        <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.launchOffer.description || '' }} />
-                    </div>
-                )}
+                {/* CAJA 2: OFERTA LANZAMIENTO + BOTON + TEXTO LEGAL */}
+                <div className="border border-[#8f4933]/30 p-5 mb-4 shrink-0">
+                    {data?.launchOffer && (
+                        <div className="mb-4">
+                            <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.launchOffer.title}</h3>
+                            <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.launchOffer.description || '' }} />
+                        </div>
+                    )}
 
-                <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0" onClick={openModal}>
-                    <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors">TU HOGAR COMO NUNCA LO IMAGINASTE</span>
-                </button>
+                    <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0" onClick={openModal}>
+                        <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors">TU HOGAR COMO NUNCA LO IMAGINASTE</span>
+                    </button>
 
-                {data?.offerFooterText && <div className="cuerpo text-sm mb-4" dangerouslySetInnerHTML={{ __html: data.offerFooterText }} />}
+                    {data?.offerFooterText && <div className="cuerpo text-sm" dangerouslySetInnerHTML={{ __html: data.offerFooterText }} />}
+                </div>
                 
                 <div className="w-full shrink-0">
                     <div className="w-full flex flex-col border-t border-[#8f4933] mt-[20px] pt-1">
