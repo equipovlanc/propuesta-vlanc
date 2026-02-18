@@ -38,7 +38,6 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
         return (
             <div key={key} className="w-full">
                 {isTitle ? (
-                    // CAMBIO: Se usa 'cuerpo uppercase' en lugar de 'subtitulo4' para reducir peso y tamaño
                     <h4 className="cuerpo uppercase mb-0 text-vlanc-black">
                         <span dangerouslySetInnerHTML={{ __html: block.text }} />
                     </h4>
@@ -86,7 +85,6 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                             / {data?.subtitle}
                         </h3>
 
-                        {/* CAMBIO: Se usa 'cuerpo uppercase' en lugar de 'subtitulo4' */}
                         <h4 className="cuerpo uppercase mb-5 text-vlanc-black">
                             {data?.title}
                         </h4>
@@ -116,8 +114,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             </div>
 
             {/* Right Column: Imagen (J0) */}
-            {/* CAMBIO: Alineación top-right (justify-start items-end pt-[150px] pr-[120px]) */}
-            <div className="flex-grow h-full bg-white flex flex-col justify-start items-end pt-[150px] pr-[120px] relative overflow-hidden z-0">
+            {/* CAMBIO: Se centra verticalmente (justify-center) y se mantiene a la derecha (items-end pr-[120px]). Se elimina pt-[150px]. */}
+            <div className="flex-grow h-full bg-white flex flex-col justify-center items-end pr-[120px] relative overflow-hidden z-0">
                 <AnimatedSection hierarchy={0}>
                     <div className="w-[827px] h-[709px] relative shrink-0">
                         {imageSrc ? (
