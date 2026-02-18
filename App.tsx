@@ -209,8 +209,8 @@ const App: React.FC = () => {
         <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
             <CustomCursor />
             
-            {/* Renderizado Condicional del Header: Solo si no es Hero */}
-            {currentIndex > 0 && (
+            {/* Renderizado Condicional del Header: Solo si NO es Hero (0) Y NO es Index (1) */}
+            {currentIndex > 1 && (
                 <Header 
                     logo={proposalData.logos?.smallLogo} 
                     pageNumber={activeSection.headerPage} 

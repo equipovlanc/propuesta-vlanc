@@ -13,13 +13,13 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate }) => {
       {/* Logo Small - Navegación al Índice (Sección 1, índice 1) */}
       <button 
         onClick={() => onNavigate && onNavigate(1)} 
-        className="absolute top-8 left-8 md:left-10 w-[100px] h-[25px] flex items-center justify-start pointer-events-auto cursor-pointer group bg-transparent border-none p-0 outline-none"
+        className="absolute top-[20px] left-[52px] w-[78px] h-[78px] flex items-center justify-center pointer-events-auto cursor-pointer group bg-transparent border-none p-0 outline-none"
       >
         {logo ? (
-          <img src={logo} alt="VLANC Studio" className="max-h-full w-auto object-contain transition-opacity group-hover:opacity-70" />
+          <img src={logo} alt="VLANC Studio" className="w-full h-full object-contain transition-opacity group-hover:opacity-70" />
         ) : (
           <div className="w-full h-full border border-vlanc-primary/30 bg-vlanc-primary/5 flex items-center justify-center rounded-[1px]">
-            <span className="text-[6px] uppercase tracking-[0.3em] text-vlanc-primary/50 font-bold">Logo Small</span>
+            <span className="text-[6px] uppercase tracking-[0.3em] text-vlanc-primary/50 font-bold">Logo</span>
           </div>
         )}
       </button>
