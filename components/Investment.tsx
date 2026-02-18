@@ -101,10 +101,10 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
 
                 {/* COLUMNA DERECHA: Tabla (J2) */}
                 <div className="shrink-0 flex flex-col items-end">
-                    {/* Contenedor Tabla - Ancho aumentado a 950px */}
-                    <AnimatedSection className="w-[950px] h-[532px] flex flex-col" hierarchy={2}>
+                    {/* Contenedor Tabla - Ancho ajustado a 820px */}
+                    <AnimatedSection className="w-[820px] h-[532px] flex flex-col" hierarchy={2}>
                         
-                        {/* Cabecera Tabla - Ajuste de grid a 2.5fr */}
+                        {/* Cabecera Tabla - Mantenemos el ajuste de grid a 2.5fr */}
                         <div className="grid grid-cols-[2.5fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0 h-[47px]">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
@@ -146,7 +146,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Pie Tabla: Precios - Ajuste de grid a 2.5fr */}
+                        {/* Pie Tabla: Precios - Mantenemos el ajuste de grid a 2.5fr */}
                         <div className="grid grid-cols-[2.5fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0 h-[35px]">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
@@ -157,8 +157,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA - AHORA ANIMADA - Ancho coincidente con tabla 950px */}
-                    <AnimatedSection className="w-[950px] flex flex-col border-t border-[#703622] mt-[25px] pt-1" hierarchy={2}>
+                    {/* FIRMA - AHORA ANIMADA - Ancho coincidente con tabla 820px */}
+                    <AnimatedSection className="w-[820px] flex flex-col border-t border-[#703622] mt-[25px] pt-1" hierarchy={2}>
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
