@@ -38,7 +38,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
         return (
             <div key={key} className="w-full">
                 {isTitle ? (
-                    <h4 className="subtitulo4 mb-0">
+                    // CAMBIO: Se usa 'cuerpo uppercase' en lugar de 'subtitulo4' para reducir peso y tamaño
+                    <h4 className="cuerpo uppercase mb-0 text-vlanc-black">
                         <span dangerouslySetInnerHTML={{ __html: block.text }} />
                     </h4>
                 ) : (
@@ -85,7 +86,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                             / {data?.subtitle}
                         </h3>
 
-                        <h4 className="subtitulo4 mb-5">
+                        {/* CAMBIO: Se usa 'cuerpo uppercase' en lugar de 'subtitulo4' */}
+                        <h4 className="cuerpo uppercase mb-5 text-vlanc-black">
                             {data?.title}
                         </h4>
 

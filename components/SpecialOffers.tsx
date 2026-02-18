@@ -65,7 +65,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
     return (
         <div key={key} className="w-full">
             {isTitle ? (
-                <h4 className="subtitulo4 mb-0 text-vlanc-black">
+                // Ajuste para coincidir con el cambio en PremiumServices (estilo cuerpo)
+                <h4 className="cuerpo uppercase mb-0 text-vlanc-black">
                     <span dangerouslySetInnerHTML={{ __html: block.text }} />
                 </h4>
             ) : (
@@ -100,7 +101,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                         <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.conditionalOffer.description || '' }} />
                     </div>
                 )}
-                <div className="flex flex-row justify-between gap-2 mb-8 w-full flex-wrap xl:flex-nowrap shrink-0">
+                
+                {/* Grid de precios: Margen reducido de mb-8 a mb-4 para compensar la línea */}
+                <div className="flex flex-row justify-between gap-2 mb-4 w-full flex-wrap xl:flex-nowrap shrink-0">
                     {plans.map((plan, i) => (
                         <div key={i} className="w-[250px] h-[108px] border border-[#8f4933] flex flex-col items-center justify-center gap-2 bg-transparent hover:bg-[#8f4933]/5 shrink-0">
                             <span className="tabla1 text-[#8f4933]">{plan.name}</span>
@@ -108,6 +111,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                         </div>
                     ))}
                 </div>
+
+                {/* Línea Separadora añadida */}
+                <div className="w-full h-[1px] bg-[#8f4933] opacity-30 mb-4 shrink-0" />
+
                 {data?.launchOffer && (
                     <div className="mb-6">
                         <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.launchOffer.title}</h3>
@@ -158,7 +165,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                 <button onClick={closeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                 <div className="flex flex-col items-start w-full relative">
                     <h3 className="subtitulo2 not-italic font-bold mb-8 text-vlanc-black">/ {premiumService.subtitle}</h3>
-                    <h4 className="subtitulo4 mb-5 text-vlanc-black">{premiumService.title}</h4>
+                    
+                    {/* Ajuste en Modal también para consistencia */}
+                    <h4 className="cuerpo uppercase mb-5 text-vlanc-black">{premiumService.title}</h4>
+                    
                     <div className="w-full">{(premiumService.description ?? []).map((block, i, arr) => renderDescriptionBlock(block, i, arr))}</div>
                     {premiumService.note && <div className="mt-4"><p className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full whitespace-pre-line" dangerouslySetInnerHTML={{ __html: premiumService.note }} /></div>}
                     {premiumService.price && <div className="mt-8 bg-[#8f4933] text-white px-8 py-3 rounded-[1px] flex items-center justify-center cursor-default"><span className="boton1 text-white tracking-[0.1em]">{premiumService.price}</span></div>}
