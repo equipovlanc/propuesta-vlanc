@@ -77,14 +77,24 @@ const FlipCard: React.FC<{ plan: DiscountedPlan }> = ({ plan }) => {
                      <span className="tabla2 text-[#8f4933] font-bold decoration-slice">{plan.originalPrice}</span>
                 </div>
 
-                {/* CARA TRASERA (Descuento) */}
+                {/* CARA TRASERA (Descuento - 3 LÍNEAS) */}
                 <div 
-                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-1 print:transform-none print:opacity-100 print:relative print:inset-auto print:block print:visible"
+                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-0.5 print:transform-none print:opacity-100 print:relative print:inset-auto print:block print:visible"
                     // translateZ(1px) evita el z-fighting en la cara trasera
                     style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)", WebkitFontSmoothing: "antialiased" }}
                 >
-                     <span className="tabla1 text-white text-[10px]">{plan.name}</span>
-                     <span className="tabla2 text-white font-bold">{plan.discountedPrice}</span>
+                     {/* Línea 1: Nombre del Plan */}
+                     <span className="tabla1 text-white text-[9px] mb-0.5 tracking-wider">{plan.name}</span>
+                     
+                     {/* Línea 2: Precio Original (Tachado y sin negrita) */}
+                     <span className="text-white/70 text-[10px] font-sans font-normal line-through decoration-white/60 leading-none">
+                        {plan.originalPrice}
+                     </span>
+
+                     {/* Línea 3: Precio Descuento (Negrita) */}
+                     <span className="tabla2 text-white font-bold text-[12px] leading-none mt-0.5">
+                        {plan.discountedPrice}
+                     </span>
                 </div>
             </motion.div>
         </div>
