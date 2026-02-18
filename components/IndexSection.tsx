@@ -19,6 +19,7 @@ interface IndexSectionProps {
 const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
   const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, id?: string) => {
     event.preventDefault();
+    event.stopPropagation(); // Prevenir propagación por si acaso
     if (id) onNavigate(id);
   };
 
@@ -27,10 +28,11 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
   const imageOpacity = data?.image?.opacity ?? 15;
 
   return (
-    <section id="index-section" className="h-full w-full flex overflow-hidden absolute inset-0 pointer-events-auto">
+    // Añadimos z-10 relativo al Slide para asegurar stacking
+    <section id="index-section" className="h-full w-full flex overflow-hidden absolute inset-0 pointer-events-auto z-10">
       
       {/* Columna Izquierda: Imagen (J0) */}
-      <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">
+      <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block pointer-events-none">
         <AnimatedSection direction="none" hierarchy={0} className="w-full h-full">
             {imageSrc ? (
                 <div className="relative w-full h-full ken-burns">
@@ -40,7 +42,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
                         className="w-full h-full object-cover"
                     />
                     <div 
-                        className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                        className="absolute inset-0 bg-[#8f4933]" 
                         style={{ opacity: imageOpacity / 100 }}
                     />
                 </div>
@@ -53,10 +55,10 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
       </div>
 
       {/* Columna Derecha: Contenido */}
-      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative z-10">
+      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative z-20 pointer-events-auto">
         
         {/* Bloque Superior: Título (J1) y Barra */}
-        <div>
+        <div className="pointer-events-none">
             <AnimatedSection direction="up" hierarchy={1}>
                 <h2 className="subtitulo1">
                     {data?.title || "contenido."}
@@ -67,16 +69,16 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
         </div>
         
         {/* Bloque Inferior: Links (J2) */}
-        <div className="space-y-5 relative z-20">
+        <div className="space-y-5 relative z-30 pointer-events-auto">
             {items.length > 0 ? items.map((item, i) => (
                 <AnimatedSection key={i} direction="up" hierarchy={2}>
                   <a 
                     href={`#${item.id}`} 
                     onClick={(e) => handleLinkClick(e, item.id)}
-                    className="flex items-baseline text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative"
+                    className="flex items-baseline text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 block"
                   >
                       <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px] group-hover:translate-x-1 duration-500">/</span>
-                      <span className="subtitulo3 tracking-tight font-normal"> 
+                      <span className="subtitulo3 tracking-tight font-normal pointer-events-none"> 
                           {item.title}
                       </span>
                   </a>

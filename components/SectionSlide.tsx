@@ -16,7 +16,6 @@ const slideVariants: Variants = {
     scale: direction > 0 ? 3.0 : 0.4, 
     opacity: 0,
     zIndex: direction > 0 ? 50 : 0, 
-    // Blur reducido a 3px
     filter: 'blur(3px)',
   }),
   center: {
@@ -45,28 +44,36 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
   const isPresent = useIsPresent();
 
   return (
-    <motion.div 
-      id={id}
-      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden ${className}`}
-      custom={direction}
-      variants={slideVariants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-      style={{
-        backfaceVisibility: 'hidden',
-        perspective: 2000, 
-        // CONTROL DE CLICS:
-        // Si está presente (es la diapositiva activa o entrante), permitimos clics (auto).
-        // Si NO está presente (está saliendo), bloqueamos clics (none) inmediatamente.
-        // Esto evita que la diapositiva saliente bloquee a la entrante, independientemente del z-index.
-        pointerEvents: isPresent ? 'auto' : 'none' 
-      }}
-    >
-        <div className="w-full h-full relative">
-            {children}
-        </div>
-    </motion.div>
+    <>
+      <style>
+        {`
+          .pe-none-recursive, .pe-none-recursive * {
+            pointer-events: none !important;
+          }
+        `}
+      </style>
+      <motion.div 
+        id={id}
+        // Aplicamos la clase recursiva si no está presente (saliendo) o si está entrando (preventivamente)
+        // Lo crucial es que al salir (!isPresent), todo sea click-through.
+        className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden ${className} ${!isPresent ? 'pe-none-recursive' : ''}`}
+        custom={direction}
+        variants={slideVariants}
+        initial="enter"
+        animate="center"
+        exit="exit"
+        style={{
+          backfaceVisibility: 'hidden',
+          perspective: 2000, 
+          // Mantenemos el estilo inline base para el contenedor
+          pointerEvents: isPresent ? 'auto' : 'none' 
+        }}
+      >
+          <div className="w-full h-full relative">
+              {children}
+          </div>
+      </motion.div>
+    </>
   );
 };
 
