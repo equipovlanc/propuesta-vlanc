@@ -89,10 +89,10 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* MITAD DERECHA (50%): TEXTO (J2) */}
+            {/* MITAD DERECHA (50%): TEXTO (Secuencial J2 -> J3) */}
             <div className="w-1/2 h-full pl-[50px] pr-[120px] flex flex-col justify-between text-left">
                 
-                {/* Bloque Superior: Nuestro propósito */}
+                {/* Bloque Superior: Nuestro propósito (J2 - Aparece primero) */}
                 <AnimatedSection className="flex flex-col items-start" hierarchy={2}>
                     <h3 className="subtitulo2 mb-6">
                         {data?.purpose?.title || "Nuestro propósito"}
@@ -103,8 +103,8 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                     />
                 </AnimatedSection>
 
-                {/* Bloque Inferior: Nuestra historia */}
-                <AnimatedSection className="flex flex-col items-start pb-0 shrink-0" hierarchy={2}>
+                {/* Bloque Inferior: Nuestra historia (J3 - Aparece después, respetando el tiempo Zen) */}
+                <AnimatedSection className="flex flex-col items-start pb-0 shrink-0" hierarchy={3}>
                     <h3 className="subtitulo2 mb-6">
                         {data?.history?.title || "Nuestra historia"}
                     </h3>

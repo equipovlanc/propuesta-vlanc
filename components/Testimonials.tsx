@@ -33,17 +33,23 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                     </div>
                 </div>
                 
-                {/* COLUMNA TESTIMONIOS (J0 y J2) */}
+                {/* COLUMNA TESTIMONIOS (Cascada J2 -> J3 -> J4...) */}
                 <div className="w-full lg:w-3/4 flex flex-col justify-center">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
                         {(data?.items ?? []).map((testimonial, index) => {
                             const imgSrc = testimonial.img?.src;
                             const imgOpacity = testimonial.img?.opacity ?? 15;
+                            
+                            // Calculamos jerarquía dinámica para efecto cascada: 
+                            // Cliente 1 (idx 0) = J2 (Normal)
+                            // Cliente 2 (idx 1) = J3 (Retraso 1.3s)
+                            // Cliente 3 (idx 2) = J4 (Retraso 2.6s)
+                            const cardHierarchy = 2 + index;
 
                             return (
                                 <div key={index} className="flex flex-col h-full group">
-                                    {/* Imagen (J0) - Siempre visible */}
-                                    <AnimatedSection hierarchy={0} className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm shadow-sm relative">
+                                    {/* Imagen - Ahora sigue la jerarquía de cascada para entrar junto al texto */}
+                                    <AnimatedSection hierarchy={cardHierarchy} className="w-full aspect-[3/4] overflow-hidden mb-10 rounded-sm shadow-sm relative">
                                         {imgSrc ? (
                                             <>
                                                 <img src={imgSrc} alt={testimonial.name} className="w-full h-full object-cover" />
@@ -65,8 +71,8 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                         )}
                                     </AnimatedSection>
 
-                                    {/* Textos (J2) */}
-                                    <AnimatedSection hierarchy={2}>
+                                    {/* Textos - Misma jerarquía que la imagen para entrar en bloque */}
+                                    <AnimatedSection hierarchy={cardHierarchy}>
                                         {testimonial.url ? (
                                              <a 
                                                 href={testimonial.url} 
