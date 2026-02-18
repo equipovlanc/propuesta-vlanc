@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
@@ -37,6 +38,8 @@ const App: React.FC = () => {
   const [internalStep, setInternalStep] = useState(0);
   // Estado para recordar qué secciones han sido completadas totalmente
   const [completedSections, setCompletedSections] = useState<Set<string>>(new Set());
+  // Estado para bloquear la navegación (ej: Modal abierto en paso 3 de special-offers)
+  const [isNavigationBlocked, setNavigationBlocked] = useState(false);
 
   const slug = window.location.pathname.substring(1);
   const wheelTimeout = useRef<number | null>(null);
@@ -63,7 +66,9 @@ const App: React.FC = () => {
             ..., 
             conditionalOffer,
             launchOffer,
-            "callToAction": callToAction{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}}
+            "callToAction": callToAction{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
+            "popupVideo": popupVideo.asset->url,
+            "overlayLogo": overlayLogo.asset->url
           },
           "guarantees": guarantees{..., "items": items[]{..., "icon": icon.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
@@ -96,6 +101,7 @@ const App: React.FC = () => {
     if (newIndex < 0) return; 
     if (newIndex === currentIndex) return;
     if (isAnimating) return; 
+    if (isNavigationBlocked) return; // Bloqueo si hay modal abierto
 
     const isMovingForward = newIndex > currentIndex;
     if (sectionsRef.current && newIndex >= sectionsRef.current.length) return;
@@ -103,19 +109,10 @@ const App: React.FC = () => {
     setDirection(isMovingForward ? 1 : -1);
     setCurrentIndex(newIndex);
     
-    // Detectar ID de la siguiente sección para resetear pasos
-    // Usamos indices conocidos o lógica dinámica si fuera posible
-    // 3: Mission, 4: Process. Buscamos 'investment' en la lista generada
-    // Como la lista es dinámica, hacemos una estimación basada en IDs conocidos
-    
-    // Para simplificar la lógica de reset en navigate, miramos el ID de la sección DESTINO
-    // Pero 'sections' se recalcula.
-    // Lo haremos post-render con useEffect o aquí con una suposición segura.
-    
     // Recuperamos el ID de la sección actual para marcar como completada
     const currentSection = sectionsRef.current[currentIndex];
     if (isMovingForward && currentSection) {
-        if (['mission', 'process', 'investment'].includes(currentSection.id)) {
+        if (['mission', 'process', 'investment', 'special-offers'].includes(currentSection.id)) {
             setCompletedSections(prev => new Set(prev).add(currentSection.id));
         }
     }
@@ -133,10 +130,13 @@ const App: React.FC = () => {
             else setInternalStep(isMovingForward ? 0 : processStepsCount);
         }
         else if (nextSection.id === 'investment') {
-            // Inversion tiene 3 pasos (1, 2, 3 correspondientes a los planes)
-            // Step 0 es estado inicial (Intro). Max Step es 3.
             if (completedSections.has('investment')) setInternalStep(3);
             else setInternalStep(isMovingForward ? 0 : 3);
+        }
+        else if (nextSection.id === 'special-offers') {
+            // Pasos: 0 (Init), 1 (Condiciones), 2 (Oferta), 3 (Video), 4 (Logo)
+            if (completedSections.has('special-offers')) setInternalStep(4);
+            else setInternalStep(isMovingForward ? 0 : 4);
         }
         else {
             setInternalStep(0);
@@ -190,7 +190,8 @@ const App: React.FC = () => {
     list.push(
         // Le pasamos el step a Investment
         { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: 14 },
-        { id: 'special-offers', comp: <SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} premiumService={d.premiumServicesList?.[1]} />, headerPage: 15 },
+        // Le pasamos step y setNavigationBlocked a SpecialOffers
+        { id: 'special-offers', comp: <SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} premiumService={d.premiumServicesList?.[1]} step={internalStep} setNavigationBlocked={setNavigationBlocked} />, headerPage: 15 },
         { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 16 },
         { id: 'team-photo', comp: <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /> },
         { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 18 }
@@ -218,6 +219,7 @@ const App: React.FC = () => {
     const handleWheel = (e: WheelEvent) => {
         if (isAnimating) return;
         if (Math.abs(e.deltaY) < 30) return;
+        if (isNavigationBlocked) return; // Bloquear scroll si modal abierto
 
         if (wheelTimeout.current) clearTimeout(wheelTimeout.current);
         
@@ -244,14 +246,23 @@ const App: React.FC = () => {
                  }
              }
 
-             // --- LÓGICA ESPECIAL INVERSIÓN (NUEVO) ---
-             // Pasos 0 (Intro), 1 (Plan 1), 2 (Plan 2), 3 (Plan 3)
+             // --- LÓGICA ESPECIAL INVERSIÓN ---
              if (activeSection.id === 'investment' && !isCompleted) {
-                if (e.deltaY > 0) { // Bajando
+                if (e.deltaY > 0) { 
                     if (internalStep < 3) { setInternalStep(prev => prev + 1); return; }
-                } else { // Subiendo
+                } else {
                     if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
                 }
+             }
+
+             // --- LÓGICA ESPECIAL OFERTAS (NUEVO) ---
+             // Pasos 0..4
+             if (activeSection.id === 'special-offers' && !isCompleted) {
+                 if (e.deltaY > 0) {
+                     if (internalStep < 4) { setInternalStep(prev => prev + 1); return; }
+                 } else {
+                     if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
+                 }
              }
 
              // Navegación Global Estándar
@@ -263,6 +274,8 @@ const App: React.FC = () => {
 
     const handleKeyDown = (e: KeyboardEvent) => {
         if (isAnimating) return;
+        if (isNavigationBlocked) return; // Bloquear teclado también
+
         const activeSection = sections[currentIndex];
         const isCompleted = completedSections.has(activeSection.id);
 
@@ -275,19 +288,10 @@ const App: React.FC = () => {
             return false;
         };
 
-        if (activeSection.id === 'mission' && !isCompleted) {
-            if (handleStep(2)) return;
-        }
-        
-        if (activeSection.id === 'process' && !isCompleted) {
-            const totalSteps = proposalData?.process?.steps?.length || 8;
-            if (handleStep(totalSteps)) return;
-        }
-
-        if (activeSection.id === 'investment' && !isCompleted) {
-             // Max step 3 para Inversion
-             if (handleStep(3)) return;
-        }
+        if (activeSection.id === 'mission' && !isCompleted) if (handleStep(2)) return;
+        if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
+        if (activeSection.id === 'investment' && !isCompleted) if (handleStep(3)) return;
+        if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(4)) return;
 
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
         if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigate(currentIndex - 1);
@@ -300,7 +304,7 @@ const App: React.FC = () => {
         window.removeEventListener('wheel', handleWheel);
         window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentIndex, isAnimating, sections, internalStep, proposalData, completedSections]);
+  }, [currentIndex, isAnimating, sections, internalStep, proposalData, completedSections, isNavigationBlocked]);
 
 
   // Renders

@@ -318,7 +318,9 @@ export default defineType({
                         type: 'image',
                         fields: [overlayField]
                     })
-                ]})
+                ]}),
+                defineField({ name: 'popupVideo', title: 'Video Pop-up (Paso 3)', type: 'file' }),
+                defineField({ name: 'overlayLogo', title: 'Logo sobre Imagen (Paso 4)', type: 'image' })
             ]
         }),
         defineField({
