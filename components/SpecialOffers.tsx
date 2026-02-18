@@ -83,8 +83,8 @@ const FlipCard: React.FC<{ plan: DiscountedPlan }> = ({ plan }) => {
                     // translateZ(1px) evita el z-fighting en la cara trasera
                     style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)", WebkitFontSmoothing: "antialiased" }}
                 >
-                     {/* Línea 1: Nombre del Plan */}
-                     <span className="tabla1 text-white text-[9px] mb-0.5 tracking-wider">{plan.name}</span>
+                     {/* Línea 1: Nombre del Plan - AUMENTADO A 12px */}
+                     <span className="tabla1 text-white text-[12px] mb-0.5 tracking-wider">{plan.name}</span>
                      
                      {/* Línea 2: Precio Original (Tachado y sin negrita) */}
                      <span className="text-white/70 text-[10px] font-sans font-normal line-through decoration-white/60 leading-none">
