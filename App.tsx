@@ -92,8 +92,92 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-  // Construct Sections Array dynamically
-  const sections = useMemo(() => {
+  // Navigation Logic defined BEFORE sections to be used in closure
+  const navigate = (newIndex: number) => {
+    if (newIndex < 0) return; // Removed length check here, handled by array access safety ideally or checked before call
+    if (newIndex === currentIndex) return;
+    if (isAnimating) return; 
+
+    const isMovingForward = newIndex > currentIndex;
+    // Safety check for array bounds
+    if (sectionsRef.current && newIndex >= sectionsRef.current.length) return;
+    
+    // Need to access IDs from a stable source or recalculate. 
+    // Since 'sections' is now derived on render, we can just use the logic below or access the current computed sections.
+    // For simplicity inside navigate, we assume the caller passed a valid index.
+    // However, to check ID specific logic we need the section objects.
+    // We will let the effect handle the ID logic or just proceed with index.
+    
+    // To properly handle the 'nextSectionId' logic without circular dependency (sections -> navigate -> sections),
+    // we can defer the ID check or assume the structure is stable enough.
+    // Better yet, we construct sections on every render, so 'navigate' has access to 'sections' variable if defined before? 
+    // No, 'sections' uses 'navigate'.
+    
+    // SOLUTION: Use a ref or simple logic since we know the IDs mapping.
+    // Or just construct sections first, THEN navigate function? No, sections needs navigate.
+    
+    // We will define 'navigate' first, BUT it needs to know about section IDs for the logic below.
+    // We can infer IDs based on index or just access the data directly.
+    
+    // Let's implement the logic with a helper to get ID from index
+    // OR simply accept that we might need to look up the ID from the computed list in the previous render?
+    // Actually, 'sections' is computed in render. We can access it if we define it as a variable, not state.
+    
+    setDirection(isMovingForward ? 1 : -1);
+    setCurrentIndex(newIndex);
+    
+    // ID Logic moved to effect or simplified:
+    // We can check the proposalData structure to know if we are going to mission/process.
+    // Index 3 is Mission. Index 4 is Process. (Based on list order)
+    
+    // Hardcoded check based on known structure is safer than circular dependency
+    // 0: Hero, 1: Index, 2: Situation, 3: Mission, 4: Process
+    let nextId = '';
+    if (newIndex === 3) nextId = 'mission';
+    if (newIndex === 4) nextId = 'process';
+    
+    const currentId = currentIndex === 3 ? 'mission' : (currentIndex === 4 ? 'process' : '');
+
+    // 1. MARCAR COMO COMPLETADA
+    if (isMovingForward) {
+        if (currentId === 'mission') setCompletedSections(prev => new Set(prev).add('mission'));
+        if (currentId === 'process') setCompletedSections(prev => new Set(prev).add('process'));
+    }
+
+    // 2. DETERMINAR ESTADO INICIAL
+    if (nextId === 'mission') {
+        if (completedSections.has('mission')) {
+            setInternalStep(2);
+        } else {
+            setInternalStep(isMovingForward ? 0 : 2);
+        }
+    } else if (nextId === 'process') {
+         const processStepsCount = proposalData?.process?.steps?.length || 8;
+         if (completedSections.has('process')) {
+            setInternalStep(processStepsCount);
+         } else {
+            setInternalStep(isMovingForward ? 0 : processStepsCount);
+         }
+    } else {
+         setInternalStep(0);
+    }
+
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 1000);
+  };
+
+  const navigateToId = (id: string) => {
+      // Find index in current sections list
+      const index = sections.findIndex(s => s.id === id);
+      if (index !== -1) navigate(index);
+  };
+
+  // Construct Sections Array dynamically - REMOVED useMemo to prevent stale closures on 'navigate'
+  // When 'internalStep' changes, 'navigate' sets it, triggering re-render.
+  // If useMemo was here, it would capture the 'navigate' from the render where internalStep changed.
+  // BUT that 'navigate' might have captured 'isAnimating = true' if not careful.
+  // By removing useMemo, we ensure 'IndexSection' always gets the 'navigate' from the CURRENT render cycle.
+  const sections = (() => {
     if (!proposalData) return [];
     const d = proposalData;
 
@@ -146,61 +230,13 @@ const App: React.FC = () => {
     list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} /> });
 
     return list;
-  }, [proposalData, internalStep]); 
+  })();
 
-  // Navigation Logic
-  const navigate = (newIndex: number) => {
-    if (newIndex < 0 || newIndex >= sections.length) return;
-    if (newIndex === currentIndex) return;
-    if (isAnimating) return; 
+  // Ref to keep track of sections for navigate function safety if needed, 
+  // though we rely on hardcoded indices for specific logic inside navigate to avoid loops.
+  const sectionsRef = useRef(sections);
+  sectionsRef.current = sections;
 
-    const isMovingForward = newIndex > currentIndex;
-    const currentSectionId = sections[currentIndex].id;
-    const nextSectionId = sections[newIndex].id;
-    
-    // 1. MARCAR COMO COMPLETADA SI SALIMOS HACIA DELANTE DESDE UNA SECCIÓN CON PASOS
-    if (isMovingForward) {
-        if (currentSectionId === 'mission') {
-            setCompletedSections(prev => new Set(prev).add('mission'));
-        } else if (currentSectionId === 'process') {
-            setCompletedSections(prev => new Set(prev).add('process'));
-        }
-    }
-
-    setDirection(isMovingForward ? 1 : -1);
-    setCurrentIndex(newIndex);
-    
-    // 2. DETERMINAR EL ESTADO INICIAL DE LA NUEVA SECCIÓN
-    if (nextSectionId === 'mission') {
-        // Si ya está completada, mostrar estado final (2)
-        if (completedSections.has('mission')) {
-            setInternalStep(2);
-        } else {
-            // Si venimos de atrás (avanzando), empieza en 0. Si venimos de delante (retrocediendo), mostramos el final (2).
-            setInternalStep(isMovingForward ? 0 : 2);
-        }
-    } else if (nextSectionId === 'process') {
-         const processStepsCount = proposalData?.process?.steps?.length || 8;
-         // Si ya está completada, mostrar estado final
-         if (completedSections.has('process')) {
-            setInternalStep(processStepsCount);
-         } else {
-            // Si venimos de atrás (avanzando), empieza en 0. Si venimos de delante (retrocediendo), mostramos el final.
-            setInternalStep(isMovingForward ? 0 : processStepsCount);
-         }
-    } else {
-         setInternalStep(0);
-    }
-
-    setIsAnimating(true);
-    // Reducido a 1000ms para permitir interacción más rápida
-    setTimeout(() => setIsAnimating(false), 1000);
-  };
-
-  const navigateToId = (id: string) => {
-      const index = sections.findIndex(s => s.id === id);
-      if (index !== -1) navigate(index);
-  };
 
   // Event Listeners
   useEffect(() => {
