@@ -47,7 +47,6 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
                     {(data?.steps ?? []).map((s, index) => {
                         // El item está visible (sin tachar) si el 'step' actual es mayor que el índice del item.
-                        // Ejemplo: Si step = 0, nadie está visible. Si step = 1, index 0 visible.
                         const isRevealed = step > index;
                         
                         return (
@@ -60,7 +59,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                             <span className="font-serif mr-2">{`0${index + 1}`} /</span>
                                             <span>{s.title}</span>
                                         </h3>
-                                        {/* MÁSCARA TACHADO */}
+                                        {/* MÁSCARA TACHADO TÍTULO (Bloque sólido) */}
                                         <motion.div 
                                             initial={{ scaleX: 1, originX: 0 }}
                                             animate={{ scaleX: isRevealed ? 0 : 1 }}
@@ -79,12 +78,18 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                                 </p>
                                             )}
                                         </div>
-                                         {/* MÁSCARA TACHADO */}
+                                         {/* MÁSCARA TACHADO DESCRIPCIÓN (Líneas independientes) */}
                                          <motion.div 
                                             initial={{ scaleX: 1, originX: 0 }}
                                             animate={{ scaleX: isRevealed ? 0 : 1 }}
                                             transition={{ duration: 0.5, ease: "easeInOut" }}
-                                            className="absolute -inset-2 bg-[#8f4933] z-20 pointer-events-none"
+                                            className="absolute inset-0 z-20 pointer-events-none"
+                                            style={{
+                                                // Pattern para simular tachado línea por línea basado en line-height: 1.4em
+                                                // 1.25em barra sólida (aprox altura texto) + resto transparente hasta 1.4em
+                                                background: 'repeating-linear-gradient(to bottom, #8f4933 0, #8f4933 1.25em, transparent 1.25em, transparent 1.4em)',
+                                                backgroundPosition: '0 0.075em' // Ajuste fino vertical para centrar con el texto
+                                            }}
                                         />
                                     </div>
                                     
