@@ -34,6 +34,9 @@ const App: React.FC = () => {
   const [direction, setDirection] = useState(0); // 1 = forward, -1 = backward
   const [isAnimating, setIsAnimating] = useState(false);
   
+  // Internal Step State (para scroll dentro de una misma página)
+  const [internalStep, setInternalStep] = useState(0);
+
   const slug = window.location.pathname.substring(1);
   const wheelTimeout = useRef<number | null>(null);
 
@@ -99,8 +102,8 @@ const App: React.FC = () => {
         { id: 'index', comp: <IndexSection data={d.index} onNavigate={(id) => navigateToId(id)} /> },
         // 2: Situation
         { id: 'situation', comp: <Situation data={d.situation} />, headerPage: 3 },
-        // 3: Mission
-        { id: 'mission', comp: <Mission data={d.mission} />, headerPage: 4 },
+        // 3: Mission (Le pasamos el internalStep)
+        { id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: 4 },
         // 4: Process
         { id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} />, headerPage: 5 },
         // 5: Team
@@ -141,7 +144,7 @@ const App: React.FC = () => {
     list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} /> });
 
     return list;
-  }, [proposalData]);
+  }, [proposalData, internalStep]); // Añadida dependencia de internalStep
 
   // Navigation Logic
   const navigate = (newIndex: number) => {
@@ -151,6 +154,7 @@ const App: React.FC = () => {
 
     setDirection(newIndex > currentIndex ? 1 : -1);
     setCurrentIndex(newIndex);
+    setInternalStep(0); // Reset del paso interno al cambiar de página
     setIsAnimating(true);
     
     // Allow new navigation after animation completes
@@ -173,6 +177,26 @@ const App: React.FC = () => {
         if (wheelTimeout.current) clearTimeout(wheelTimeout.current);
         
         wheelTimeout.current = window.setTimeout(() => {
+             const activeSection = sections[currentIndex];
+             
+             // LOGICA ESPECIAL PARA PAGINA 4 (MISION)
+             if (activeSection.id === 'mission') {
+                if (e.deltaY > 0) {
+                    // Bajando: Si estamos en paso 0, vamos a 1. Si estamos en 1, cambiamos de pagina.
+                    if (internalStep === 0) {
+                        setInternalStep(1);
+                        return; // Detener navegación global
+                    }
+                } else {
+                    // Subiendo: Si estamos en paso 1, volvemos a 0. Si estamos en 0, pagina anterior.
+                    if (internalStep === 1) {
+                        setInternalStep(0);
+                        return; // Detener navegación global
+                    }
+                }
+             }
+
+             // Navegación Global Estándar
              if (e.deltaY > 0) {
                  navigate(currentIndex + 1);
              } else {
@@ -183,6 +207,23 @@ const App: React.FC = () => {
 
     const handleKeyDown = (e: KeyboardEvent) => {
         if (isAnimating) return;
+        const activeSection = sections[currentIndex];
+
+        // LOGICA ESPECIAL PARA PAGINA 4 (MISION) TECLADO
+        if (activeSection.id === 'mission') {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (internalStep === 0) {
+                    setInternalStep(1);
+                    return;
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (internalStep === 1) {
+                    setInternalStep(0);
+                    return;
+                }
+            }
+        }
+
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
         if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigate(currentIndex - 1);
     };
@@ -194,7 +235,7 @@ const App: React.FC = () => {
         window.removeEventListener('wheel', handleWheel);
         window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentIndex, isAnimating, sections]);
+  }, [currentIndex, isAnimating, sections, internalStep]);
 
 
   // Renders

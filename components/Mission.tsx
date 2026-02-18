@@ -15,10 +15,11 @@ interface MissionProps {
         video?: string;
         mission?: SectionData;
         achievements?: SectionData;
-    }
+    };
+    step?: number; // Prop para controlar los pasos (0 = Solo Misión, 1 = Misión + Logros)
 }
 
-const Mission: React.FC<MissionProps> = ({ data }) => {
+const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
@@ -93,7 +94,7 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
             {/* Columna Derecha: Contenido */}
             <div className="w-full lg:w-[44.3%] h-full flex flex-col justify-between pl-10 lg:pl-[76px] pr-[120px] pt-[150px] pb-[140px]">
                 
-                {/* Bloque Superior: La Misión */}
+                {/* Bloque Superior: La Misión (Siempre visible) */}
                 <div className="flex flex-col">
                     <AnimatedSection hierarchy={1}>
                         <h2 className="subtitulo1 leading-none">
@@ -112,25 +113,27 @@ const Mission: React.FC<MissionProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* Bloque Inferior: Qué vas a conseguir */}
-                <div className="flex flex-col">
-                    <AnimatedSection hierarchy={1}>
-                        <h2 className="subtitulo1 leading-none">
-                            {data?.achievements?.title || "qué vas a conseguir."}
-                        </h2>
-                    </AnimatedSection>
-                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12" />
-                    
-                    <AnimatedSection hierarchy={2}>
-                        <ul className="space-y-4 w-full">
-                            {(data?.achievements?.listItems ?? []).map((item, i) => (
-                                <li key={i} className="cuerpo">
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                    </AnimatedSection>
-                </div>
+                {/* Bloque Inferior: Qué vas a conseguir (Solo visible si step >= 1) */}
+                {step >= 1 && (
+                    <div className="flex flex-col">
+                        <AnimatedSection hierarchy={1}>
+                            <h2 className="subtitulo1 leading-none">
+                                {data?.achievements?.title || "qué vas a conseguir."}
+                            </h2>
+                        </AnimatedSection>
+                        <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12" />
+                        
+                        <AnimatedSection hierarchy={2}>
+                            <ul className="space-y-4 w-full">
+                                {(data?.achievements?.listItems ?? []).map((item, i) => (
+                                    <li key={i} className="cuerpo">
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </AnimatedSection>
+                    </div>
+                )}
             </div>
         </section>
     );
