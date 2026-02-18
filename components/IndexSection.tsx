@@ -27,7 +27,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
   const imageOpacity = data?.image?.opacity ?? 15;
 
   return (
-    <section id="index-section" className="h-full w-full flex overflow-hidden absolute inset-0">
+    <section id="index-section" className="h-full w-full flex overflow-hidden absolute inset-0 pointer-events-auto">
       
       {/* Columna Izquierda: Imagen (J0) */}
       <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block">
@@ -53,7 +53,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
       </div>
 
       {/* Columna Derecha: Contenido */}
-      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative">
+      <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative z-10">
         
         {/* Bloque Superior: Título (J1) y Barra */}
         <div>
@@ -67,13 +67,13 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
         </div>
         
         {/* Bloque Inferior: Links (J2) */}
-        <div className="space-y-5">
+        <div className="space-y-5 relative z-20">
             {items.length > 0 ? items.map((item, i) => (
                 <AnimatedSection key={i} direction="up" hierarchy={2}>
                   <a 
                     href={`#${item.id}`} 
                     onClick={(e) => handleLinkClick(e, item.id)}
-                    className="flex items-baseline text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer"
+                    className="flex items-baseline text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative"
                   >
                       <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px] group-hover:translate-x-1 duration-500">/</span>
                       <span className="subtitulo3 tracking-tight font-normal"> 

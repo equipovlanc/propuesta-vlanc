@@ -18,14 +18,12 @@ const slideVariants: Variants = {
     zIndex: direction > 0 ? 50 : 0, 
     // Blur reducido a 3px
     filter: 'blur(3px)',
-    pointerEvents: 'none', 
   }),
   center: {
     scale: 1,
     opacity: 1,
     zIndex: 10,
     filter: 'blur(0px)',
-    pointerEvents: 'auto',
     transition: {
       duration: 1.6, 
       ease: [0.25, 1, 0.5, 1] as const,
@@ -36,7 +34,6 @@ const slideVariants: Variants = {
     opacity: 0,
     zIndex: direction > 0 ? 0 : 50,
     filter: 'blur(3px)', 
-    pointerEvents: 'none',
     transition: {
       duration: 1.6,
       ease: [0.25, 1, 0.5, 1] as const,
@@ -59,8 +56,10 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
       style={{
         backfaceVisibility: 'hidden',
         perspective: 2000, 
-        // Si el componente está saliendo (!isPresent), forzamos pointer-events: none.
-        // Si está presente, permitimos 'auto' (aunque la variante 'enter' iniciará en 'none' y transicionará a 'auto')
+        // CONTROL DE CLICS:
+        // Si está presente (es la diapositiva activa o entrante), permitimos clics (auto).
+        // Si NO está presente (está saliendo), bloqueamos clics (none) inmediatamente.
+        // Esto evita que la diapositiva saliente bloquee a la entrante, independientemente del z-index.
         pointerEvents: isPresent ? 'auto' : 'none' 
       }}
     >
