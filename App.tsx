@@ -190,8 +190,21 @@ const App: React.FC = () => {
     list.push(
         // Le pasamos el step a Investment
         { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: 14 },
-        // Le pasamos step y setNavigationBlocked a SpecialOffers
-        { id: 'special-offers', comp: <SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} premiumService={d.premiumServicesList?.[1]} step={internalStep} setNavigationBlocked={setNavigationBlocked} />, headerPage: 15 },
+        // Le pasamos step y setNavigationBlocked a SpecialOffers.
+        // AÑADIDO: isSectionCompleted para determinar si los botones deben estar ya girados al volver.
+        { 
+            id: 'special-offers', 
+            comp: <SpecialOffers 
+                data={d.specialOffers} 
+                investmentTitle={d.investment?.title} 
+                locationDate={d.investment?.locationDate} 
+                premiumService={d.premiumServicesList?.[1]} 
+                step={internalStep} 
+                setNavigationBlocked={setNavigationBlocked}
+                isSectionCompleted={completedSections.has('special-offers')}
+            />, 
+            headerPage: 15 
+        },
         { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 16 },
         { id: 'team-photo', comp: <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /> },
         { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 18 }

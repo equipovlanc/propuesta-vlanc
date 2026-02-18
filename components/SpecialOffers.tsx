@@ -50,11 +50,14 @@ interface SpecialOffersProps {
     premiumService?: PremiumService;
     step?: number;
     setNavigationBlocked?: (blocked: boolean) => void;
+    isSectionCompleted?: boolean;
 }
 
 // Sub-componente Flip Card
-const FlipCard: React.FC<{ plan: DiscountedPlan }> = ({ plan }) => {
-    const [isFlipped, setIsFlipped] = useState(false);
+const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean }> = ({ plan, initialFlipped = false }) => {
+    // Inicializamos el estado con initialFlipped.
+    // Al navegar y volver (desmontar/montar), tomará el valor actualizado de initialFlipped.
+    const [isFlipped, setIsFlipped] = useState(initialFlipped);
 
     return (
         <div 
@@ -101,7 +104,15 @@ const FlipCard: React.FC<{ plan: DiscountedPlan }> = ({ plan }) => {
     );
 };
 
-const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, locationDate, premiumService, step = 4, setNavigationBlocked }) => {
+const SpecialOffers: React.FC<SpecialOffersProps> = ({ 
+    data, 
+    investmentTitle, 
+    locationDate, 
+    premiumService, 
+    step = 4, 
+    setNavigationBlocked,
+    isSectionCompleted = false 
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal Premium
   const [showVideo, setShowVideo] = useState(false); // Modal Video (Paso 3)
   
@@ -194,7 +205,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                     {/* FLIP CARDS */}
                     <div className="flex flex-row justify-between gap-2 w-full flex-wrap xl:flex-nowrap">
                         {plans.map((plan, i) => (
-                            <FlipCard key={i} plan={plan} />
+                            <FlipCard key={i} plan={plan} initialFlipped={isSectionCompleted} />
                         ))}
                     </div>
                 </div>
