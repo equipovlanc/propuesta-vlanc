@@ -62,7 +62,8 @@ const FlipCard: React.FC<{ plan: DiscountedPlan }> = ({ plan }) => {
             onClick={() => setIsFlipped(!isFlipped)}
         >
             <motion.div 
-                className="relative w-full h-full transition-all duration-500 transform-gpu preserve-3d print:transform-none"
+                // CORRECCIÓN: Eliminado transform-gpu y transition-all para evitar conflictos de renderizado 3D y blur
+                className="relative w-full h-full preserve-3d print:transform-none"
                 style={{ transformStyle: "preserve-3d" }}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
@@ -148,9 +149,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
     );
   };
   
-  // Clases dinámicas para blur/revelado. Al imprimir, forzamos opacidad 100 y sin blur.
+  // CORRECCIÓN: Usar filter-none en lugar de blur-0 para evitar capas de composición que borronean el texto en 3D
   const getRevealClasses = (isVisible: boolean) => {
-      return `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 blur-0' : 'opacity-10 blur-[2px]'} print:opacity-100 print:blur-0 print:filter-none`;
+      return `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 filter-none' : 'opacity-10 blur-[2px]'} print:opacity-100 print:blur-0 print:filter-none`;
   };
 
   return (
@@ -236,9 +237,13 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                                 className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
                                 style={{ opacity: imageOpacity / 100 }}
                             />
-                            <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 px-8">
-                                <h2 className="especial1">{data?.callToAction?.text}</h2>
-                            </div>
+                            
+                            {/* CTA TEXT - SOLO SI HAY TEXTO */}
+                            {data?.callToAction?.text && (
+                                <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 px-8">
+                                    <h2 className="especial1">{data.callToAction.text}</h2>
+                                </div>
+                            )}
                             
                             {/* LOGO OVERLAY (Paso 4) - Transición más lenta (3s) */}
                             {data?.overlayLogo && (
