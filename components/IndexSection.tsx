@@ -17,9 +17,7 @@ interface IndexSectionProps {
 }
 
 const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
-  const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>, id?: string) => {
-    event.preventDefault();
-    event.stopPropagation(); // Prevenir propagación explícita
+  const handleLinkClick = (id?: string) => {
     if (id) onNavigate(id);
   };
 
@@ -69,20 +67,21 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
         </div>
         
         {/* Bloque Inferior: Links (J2) */}
-        <div className="space-y-5 relative z-50 pointer-events-auto">
+        <div className="space-y-5 relative z-30 pointer-events-auto">
             {items.length > 0 ? items.map((item, i) => (
                 <AnimatedSection key={i} direction="up" hierarchy={2}>
-                  <a 
-                    href={`#${item.id}`} 
-                    onClick={(e) => handleLinkClick(e, item.id)}
-                    className="flex items-baseline text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 block pointer-events-auto"
+                  {/* Se cambia 'a' por 'div' para garantizar que onClick capture el evento sin interferencias del navegador */}
+                  <div 
+                    onClick={() => handleLinkClick(item.id)}
+                    className="flex items-baseline text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 pointer-events-auto select-none"
+                    role="button"
+                    aria-label={`Ir a ${item.title}`}
                   >
-                      <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px] group-hover:translate-x-1 duration-500">/</span>
-                      {/* CRUCIAL: Eliminado pointer-events-none, añadido pointer-events-auto */}
-                      <span className="subtitulo3 tracking-tight font-normal pointer-events-auto"> 
+                      <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px] group-hover:translate-x-1 duration-500 pointer-events-none">/</span>
+                      <span className="subtitulo3 tracking-tight font-normal pointer-events-none"> 
                           {item.title}
                       </span>
-                  </a>
+                  </div>
                 </AnimatedSection>
             )) : (
               <p className="text-vlanc-black/30 italic font-sans text-xs">Añade secciones en el CMS...</p>

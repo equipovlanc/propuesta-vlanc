@@ -60,6 +60,12 @@
       * {
         cursor: none !important;
       }
+      
+      /* GLOBAL POINTER EVENTS UTILITY */
+      /* Esta clase asegura que durante las transiciones de salida, la capa superior sea totalmente transparente a los clics */
+      .pe-none-recursive, .pe-none-recursive * {
+        pointer-events: none !important;
+      }
 
       /* HIDE SCROLLBARS GLOBALLY (Fix Black Line Issue) */
       .no-scrollbar::-webkit-scrollbar {

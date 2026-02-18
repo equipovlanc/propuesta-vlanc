@@ -44,36 +44,27 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
   const isPresent = useIsPresent();
 
   return (
-    <>
-      <style>
-        {`
-          .pe-none-recursive, .pe-none-recursive * {
-            pointer-events: none !important;
-          }
-        `}
-      </style>
-      <motion.div 
-        id={id}
-        // Aplicamos la clase recursiva si no está presente (saliendo) o si está entrando (preventivamente)
-        // Lo crucial es que al salir (!isPresent), todo sea click-through.
-        className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden ${className} ${!isPresent ? 'pe-none-recursive' : ''}`}
-        custom={direction}
-        variants={slideVariants}
-        initial="enter"
-        animate="center"
-        exit="exit"
-        style={{
-          backfaceVisibility: 'hidden',
-          perspective: 2000, 
-          // Mantenemos el estilo inline base para el contenedor
-          pointerEvents: isPresent ? 'auto' : 'none' 
-        }}
-      >
-          <div className="w-full h-full relative">
-              {children}
-          </div>
-      </motion.div>
-    </>
+    <motion.div 
+      id={id}
+      // Aplicamos la clase recursiva global definida en index.html
+      // Esto fuerza pointer-events: none !important en todos los hijos si el slide está saliendo (!isPresent)
+      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden ${className} ${!isPresent ? 'pe-none-recursive' : ''}`}
+      custom={direction}
+      variants={slideVariants}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      style={{
+        backfaceVisibility: 'hidden',
+        perspective: 2000,
+        // Refuerzo inline por si acaso
+        pointerEvents: isPresent ? 'auto' : 'none' 
+      }}
+    >
+        <div className="w-full h-full relative">
+            {children}
+        </div>
+    </motion.div>
   );
 };
 
