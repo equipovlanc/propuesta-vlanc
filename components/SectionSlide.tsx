@@ -1,5 +1,5 @@
 
-import React, { ReactNode, useRef, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import { motion, Variants, useIsPresent } from 'framer-motion';
 
 interface ZSlideProps {
@@ -43,36 +43,14 @@ const slideVariants: Variants = {
 
 const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", direction }) => {
   const isPresent = useIsPresent();
-  const ref = useRef<HTMLDivElement>(null);
-
-  // Manipulación imperativa del DOM para garantizar que pointer-events funciona
-  // sin depender del ciclo de renderizado de React, que puede ser más lento durante animaciones pesadas.
-  useEffect(() => {
-    if (ref.current) {
-        if (isPresent) {
-            ref.current.style.pointerEvents = 'auto';
-            ref.current.classList.remove('pe-none-recursive');
-        } else {
-            // FORCE DISABLE POINTER EVENTS ON EXIT
-            ref.current.style.pointerEvents = 'none';
-            ref.current.classList.add('pe-none-recursive');
-            
-            // Fuerza bruta: desactivar en todos los hijos directos para evitar herencias 'auto'
-            // que puedan bloquear la capa inferior.
-            const allChildren = ref.current.querySelectorAll('*');
-            allChildren.forEach(child => {
-                (child as HTMLElement).style.pointerEvents = 'none';
-            });
-        }
-    }
-  }, [isPresent]);
 
   return (
     <motion.div 
-      ref={ref}
       id={id}
-      // Eliminamos isolation: isolate para evitar problemas de contexto de apilamiento
-      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden ${className}`}
+      // Volvemos a 'isolation-isolate' para mayor seguridad en el contexto de apilamiento
+      // Añadimos atributo data-exiting para que el CSS global lo capture y desactive eventos
+      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden isolation-isolate ${className}`}
+      data-exiting={!isPresent}
       custom={direction}
       variants={slideVariants}
       initial="enter"
@@ -80,7 +58,6 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
       exit="exit"
       style={{
         perspective: 2000,
-        // Refuerzo inicial por si el useEffect tarda un frame
         pointerEvents: isPresent ? 'auto' : 'none' 
       }}
       aria-hidden={!isPresent}

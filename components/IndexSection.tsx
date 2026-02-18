@@ -69,13 +69,13 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
         </div>
         
         {/* Bloque Inferior: Links (J2) */}
-        {/* Usamos un z-index alto localmente para asegurar prioridad dentro del slide */}
+        {/* z-50 para estar por encima de otros elementos locales, pero sin forzar pointer-events-auto */}
         <div className="space-y-5 relative z-50">
             {items.length > 0 ? items.map((item, i) => (
                 <AnimatedSection key={i} direction="up" hierarchy={2}>
                   <button 
                     onClick={(e) => handleLinkClick(e, item.id)}
-                    className="flex items-baseline text-left text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 select-none w-full outline-none bg-transparent border-none p-0 pointer-events-auto"
+                    className="flex items-baseline text-left text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 select-none w-full outline-none bg-transparent border-none p-0"
                     aria-label={`Ir a ${item.title}`}
                   >
                       <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px] group-hover:translate-x-1 duration-500 pointer-events-none">/</span>
