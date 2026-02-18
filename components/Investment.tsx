@@ -1,6 +1,7 @@
 
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
+import { motion } from 'framer-motion';
 
 interface TableRow {
     label: string;
@@ -20,7 +21,8 @@ interface InvestmentProps {
         tableHeaders?: string[];
         tableRows?: TableRow[];
         prices?: string[];
-    }
+    };
+    step?: number; // 0 = Intro, 1 = Plan 1, 2 = Plan 2, 3 = Plan 3
 }
 
 const CheckIcon = () => (
@@ -29,7 +31,7 @@ const CheckIcon = () => (
     </svg>
 );
 
-const Investment: React.FC<InvestmentProps> = ({ data }) => {
+const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
     
     const getRowBg = (color?: string) => {
         if (color === 'light') return 'bg-[#eae0d5]';
@@ -38,7 +40,6 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
         return 'border-b border-vlanc-primary/10';
     };
 
-    // Función auxiliar para procesar texto de Sanity
     const formatText = (text?: string) => {
         if (!text) return '';
         return text.replace(/\n/g, '<br />');
@@ -59,105 +60,157 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
             {/* Contenedor Principal */}
             <div className="w-full flex flex-row gap-[120px] items-start h-full relative">
                 
-                {/* COLUMNA IZQUIERDA (J2) */}
+                {/* COLUMNA IZQUIERDA (Textos) */}
                 <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
+                    {/* Intro siempre visible */}
                     <AnimatedSection className="space-y-6" hierarchy={2}>
-                        {/* Introducción Parte 1 */}
                         <div 
                             className="cuerpo [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
                         />
-                        
-                        {/* Frase Destacada */}
                         {data?.highlightPhrase && (
                              <p className="cuerpo2 font-bold text-vlanc-black">
                                 {data.highlightPhrase}
                              </p>
                         )}
-                        
-                        {/* Introducción Parte 2 */}
                         <div 
                             className="cuerpo [&>strong]:font-bold" 
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
                         />
-                        
-                        {/* Descripción de Planes */}
-                        <div className="space-y-6">
-                            {(data?.plansDescription ?? []).map((p, i) => (
-                                <div key={i} className="space-y-2">
-                                    {/* Nombre del plan */}
-                                    <h3 className="font-sans font-bold text-[15px] text-vlanc-black uppercase leading-tight">{p.name}_</h3>
-                                    
-                                    {/* Descripción */}
-                                    <div 
-                                        className="cuerpo [&>strong]:font-bold"
-                                        dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
                     </AnimatedSection>
+                        
+                    {/* Descripción de Planes (Revelación Secuencial) */}
+                    <div className="space-y-6 mt-8">
+                        {(data?.plansDescription ?? []).map((p, i) => (
+                            <motion.div 
+                                key={i} 
+                                className="space-y-2"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ 
+                                    opacity: step >= i + 1 ? 1 : 0.1, // Dim si no es el activo? Mejor hidden si aun no llega, visible si ya pasó.
+                                    x: step >= i + 1 ? 0 : -20,
+                                    filter: step >= i + 1 ? 'blur(0px)' : 'blur(2px)'
+                                }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                            >
+                                <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${step === i + 1 ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
+                                    {p.name}_
+                                </h3>
+                                <div 
+                                    className="cuerpo [&>strong]:font-bold"
+                                    dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
+                                />
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
 
-                {/* COLUMNA DERECHA: Tabla (J2) */}
+                {/* COLUMNA DERECHA: Tabla Interactiva */}
                 <div className="shrink-0 flex flex-col items-end">
-                    {/* Contenedor Tabla - Ancho ajustado a 820px */}
-                    <AnimatedSection className="w-[820px] h-[532px] flex flex-col" hierarchy={2}>
+                    <AnimatedSection className="w-[820px] h-[532px] flex flex-col relative rounded-sm overflow-hidden" hierarchy={2}>
                         
-                        {/* Cabecera Tabla - Mantenemos el ajuste de grid a 2.5fr */}
-                        <div className="grid grid-cols-[2.5fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0 h-[47px]">
-                            <div className="p-3"></div>
-                            {(data?.tableHeaders ?? []).map((h, i) => (
-                                <div key={i} className="px-3 text-center flex items-center justify-center h-full gap-3">
-                                    {/* Casilla para marcar (Print friendly) */}
-                                    <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
-                                    <span className="tabla1 whitespace-nowrap">{h}</span>
-                                </div>
-                            ))}
+                        {/* CAPAS DE RESALTADO (Highlight Columns) */}
+                        {/* Grid Layer absoluta detrás del contenido */}
+                        <div className="absolute inset-0 grid grid-cols-[2.5fr_1fr_1fr_1fr] h-full pointer-events-none z-0">
+                            {/* Columna Plan 1 */}
+                            <motion.div 
+                                className="col-start-2 row-span-full bg-vlanc-primary/5"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: step === 1 ? 1 : 0 }} // Solo resaltada cuando es el paso activo
+                                transition={{ duration: 0.5 }}
+                            />
+                             {/* Columna Plan 2 */}
+                             <motion.div 
+                                className="col-start-3 row-span-full bg-vlanc-primary/5"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: step === 2 ? 1 : 0 }} 
+                                transition={{ duration: 0.5 }}
+                            />
+                             {/* Columna Plan 3 */}
+                             <motion.div 
+                                className="col-start-4 row-span-full bg-vlanc-primary/5"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: step === 3 ? 1 : 0 }} 
+                                transition={{ duration: 0.5 }}
+                            />
                         </div>
-                        
-                        {/* Cuerpo Tabla */}
-                        <div className="flex-grow flex flex-col bg-transparent">
-                            {(data?.tableRows ?? []).map((row, i) => {
-                                const gridClass = "grid grid-cols-[2.5fr_repeat(3,1fr)] items-center";
 
-                                if (row.isPremiumSeparator) {
-                                    return (
-                                        <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10`}>
-                                            <div className="px-4 text-right pr-4 col-span-4 h-full flex items-center justify-end">
-                                                <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
+                        {/* CONTENIDO TABLA (z-10) */}
+                        <div className="relative z-10 w-full h-full flex flex-col">
+                            
+                            {/* Cabecera Tabla */}
+                            <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] bg-[#cbb6aa] shrink-0 h-[47px]">
+                                <div className="p-3"></div>
+                                {(data?.tableHeaders ?? []).map((h, i) => (
+                                    <motion.div 
+                                        key={i} 
+                                        className="px-3 text-center flex items-center justify-center h-full gap-3"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: step >= i + 1 ? 1 : 0 }}
+                                        transition={{ duration: 0.5, delay: 0.2 }}
+                                    >
+                                        <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
+                                        <span className={`tabla1 whitespace-nowrap ${step === i + 1 ? 'text-vlanc-secondary' : ''}`}>{h}</span>
+                                    </motion.div>
+                                ))}
+                            </div>
+                            
+                            {/* Cuerpo Tabla */}
+                            <div className="flex-grow flex flex-col bg-transparent">
+                                {(data?.tableRows ?? []).map((row, i) => {
+                                    const gridClass = "grid grid-cols-[2.5fr_1fr_1fr_1fr] items-center";
+
+                                    if (row.isPremiumSeparator) {
+                                        return (
+                                            <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10`}>
+                                                <div className="px-4 text-right pr-4 col-span-4 h-full flex items-center justify-end">
+                                                    <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
+                                                </div>
                                             </div>
+                                        );
+                                    }
+                                    
+                                    return (
+                                        <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`}>
+                                            <div className="px-4 leading-tight py-1">
+                                                <span className="tabla2">{row.label}</span>
+                                            </div>
+                                            {(row.checks ?? []).map((isChecked, idx) => (
+                                                <motion.div 
+                                                    key={idx} 
+                                                    className="flex justify-center items-center h-full"
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: step >= idx + 1 ? 1 : 0 }} // Revelar columna si el paso es suficiente
+                                                    transition={{ duration: 0.4 }}
+                                                >
+                                                    {isChecked && <CheckIcon />}
+                                                </motion.div>
+                                            ))}
                                         </div>
                                     );
-                                }
-                                
-                                return (
-                                    <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`}>
-                                        <div className="px-4 leading-tight py-1">
-                                            <span className="tabla2">{row.label}</span>
-                                        </div>
-                                        {(row.checks ?? []).map((isChecked, idx) => (
-                                            <div key={idx} className="flex justify-center items-center h-full">
-                                                {isChecked && <CheckIcon />}
-                                            </div>
-                                        ))}
-                                    </div>
-                                );
-                            })}
+                                })}
+                            </div>
+
+                            {/* Pie Tabla: Precios */}
+                            <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] bg-[#8f4933] text-white shrink-0 h-[35px]">
+                                <div className="p-4"></div>
+                                {(data?.prices ?? []).map((price, i) => (
+                                    <motion.div 
+                                        key={i} 
+                                        className="px-4 text-center flex flex-col justify-center h-full"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: step >= i + 1 ? 1 : 0 }}
+                                        transition={{ duration: 0.5, delay: 0.1 }}
+                                    >
+                                        <span className="tabla3 whitespace-nowrap">{price}</span>
+                                    </motion.div>
+                                ))}
+                            </div>
                         </div>
 
-                        {/* Pie Tabla: Precios - Mantenemos el ajuste de grid a 2.5fr */}
-                        <div className="grid grid-cols-[2.5fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0 h-[35px]">
-                            <div className="p-4"></div>
-                            {(data?.prices ?? []).map((price, i) => (
-                                <div key={i} className="px-4 text-center flex flex-col justify-center h-full">
-                                    <span className="tabla3 whitespace-nowrap">{price}</span>
-                                </div>
-                            ))}
-                        </div>
                     </AnimatedSection>
 
-                    {/* FIRMA - AHORA ANIMADA - Ancho coincidente con tabla 820px */}
+                    {/* FIRMA */}
                     <AnimatedSection className="w-[820px] flex flex-col border-t border-[#703622] mt-[25px] pt-1" hierarchy={2}>
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
@@ -167,7 +220,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* FECHA (J2) - AHORA ANIMADA */}
+            {/* FECHA */}
             <AnimatedSection className="absolute bottom-[70px] right-[120px] translate-y-1/2 z-20" hierarchy={2}>
                 <p className="cuerpo font-bold text-right">
                     {data?.locationDate || "En Alcoi a XX de mes de 2025"}

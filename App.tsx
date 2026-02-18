@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
@@ -94,72 +93,54 @@ const App: React.FC = () => {
 
   // Navigation Logic defined BEFORE sections to be used in closure
   const navigate = (newIndex: number) => {
-    if (newIndex < 0) return; // Removed length check here, handled by array access safety ideally or checked before call
+    if (newIndex < 0) return; 
     if (newIndex === currentIndex) return;
     if (isAnimating) return; 
 
     const isMovingForward = newIndex > currentIndex;
-    // Safety check for array bounds
     if (sectionsRef.current && newIndex >= sectionsRef.current.length) return;
-    
-    // Need to access IDs from a stable source or recalculate. 
-    // Since 'sections' is now derived on render, we can just use the logic below or access the current computed sections.
-    // For simplicity inside navigate, we assume the caller passed a valid index.
-    // However, to check ID specific logic we need the section objects.
-    // We will let the effect handle the ID logic or just proceed with index.
-    
-    // To properly handle the 'nextSectionId' logic without circular dependency (sections -> navigate -> sections),
-    // we can defer the ID check or assume the structure is stable enough.
-    // Better yet, we construct sections on every render, so 'navigate' has access to 'sections' variable if defined before? 
-    // No, 'sections' uses 'navigate'.
-    
-    // SOLUTION: Use a ref or simple logic since we know the IDs mapping.
-    // Or just construct sections first, THEN navigate function? No, sections needs navigate.
-    
-    // We will define 'navigate' first, BUT it needs to know about section IDs for the logic below.
-    // We can infer IDs based on index or just access the data directly.
-    
-    // Let's implement the logic with a helper to get ID from index
-    // OR simply accept that we might need to look up the ID from the computed list in the previous render?
-    // Actually, 'sections' is computed in render. We can access it if we define it as a variable, not state.
     
     setDirection(isMovingForward ? 1 : -1);
     setCurrentIndex(newIndex);
     
-    // ID Logic moved to effect or simplified:
-    // We can check the proposalData structure to know if we are going to mission/process.
-    // Index 3 is Mission. Index 4 is Process. (Based on list order)
+    // Detectar ID de la siguiente sección para resetear pasos
+    // Usamos indices conocidos o lógica dinámica si fuera posible
+    // 3: Mission, 4: Process. Buscamos 'investment' en la lista generada
+    // Como la lista es dinámica, hacemos una estimación basada en IDs conocidos
     
-    // Hardcoded check based on known structure is safer than circular dependency
-    // 0: Hero, 1: Index, 2: Situation, 3: Mission, 4: Process
-    let nextId = '';
-    if (newIndex === 3) nextId = 'mission';
-    if (newIndex === 4) nextId = 'process';
+    // Para simplificar la lógica de reset en navigate, miramos el ID de la sección DESTINO
+    // Pero 'sections' se recalcula.
+    // Lo haremos post-render con useEffect o aquí con una suposición segura.
     
-    const currentId = currentIndex === 3 ? 'mission' : (currentIndex === 4 ? 'process' : '');
-
-    // 1. MARCAR COMO COMPLETADA
-    if (isMovingForward) {
-        if (currentId === 'mission') setCompletedSections(prev => new Set(prev).add('mission'));
-        if (currentId === 'process') setCompletedSections(prev => new Set(prev).add('process'));
+    // Recuperamos el ID de la sección actual para marcar como completada
+    const currentSection = sectionsRef.current[currentIndex];
+    if (isMovingForward && currentSection) {
+        if (['mission', 'process', 'investment'].includes(currentSection.id)) {
+            setCompletedSections(prev => new Set(prev).add(currentSection.id));
+        }
     }
 
-    // 2. DETERMINAR ESTADO INICIAL
-    if (nextId === 'mission') {
-        if (completedSections.has('mission')) {
-            setInternalStep(2);
-        } else {
-            setInternalStep(isMovingForward ? 0 : 2);
+    // Determinamos el paso inicial de la NUEVA sección
+    const nextSection = sectionsRef.current[newIndex];
+    if (nextSection) {
+        if (nextSection.id === 'mission') {
+            if (completedSections.has('mission')) setInternalStep(2);
+            else setInternalStep(isMovingForward ? 0 : 2);
+        } 
+        else if (nextSection.id === 'process') {
+            const processStepsCount = proposalData?.process?.steps?.length || 8;
+            if (completedSections.has('process')) setInternalStep(processStepsCount);
+            else setInternalStep(isMovingForward ? 0 : processStepsCount);
         }
-    } else if (nextId === 'process') {
-         const processStepsCount = proposalData?.process?.steps?.length || 8;
-         if (completedSections.has('process')) {
-            setInternalStep(processStepsCount);
-         } else {
-            setInternalStep(isMovingForward ? 0 : processStepsCount);
-         }
-    } else {
-         setInternalStep(0);
+        else if (nextSection.id === 'investment') {
+            // Inversion tiene 3 pasos (1, 2, 3 correspondientes a los planes)
+            // Step 0 es estado inicial (Intro). Max Step es 3.
+            if (completedSections.has('investment')) setInternalStep(3);
+            else setInternalStep(isMovingForward ? 0 : 3);
+        }
+        else {
+            setInternalStep(0);
+        }
     }
 
     setIsAnimating(true);
@@ -167,16 +148,11 @@ const App: React.FC = () => {
   };
 
   const navigateToId = (id: string) => {
-      // Find index in current sections list
       const index = sections.findIndex(s => s.id === id);
       if (index !== -1) navigate(index);
   };
 
-  // Construct Sections Array dynamically - REMOVED useMemo to prevent stale closures on 'navigate'
-  // When 'internalStep' changes, 'navigate' sets it, triggering re-render.
-  // If useMemo was here, it would capture the 'navigate' from the render where internalStep changed.
-  // BUT that 'navigate' might have captured 'isAnimating = true' if not careful.
-  // By removing useMemo, we ensure 'IndexSection' always gets the 'navigate' from the CURRENT render cycle.
+  // Construct Sections Array dynamically
   const sections = (() => {
     if (!proposalData) return [];
     const d = proposalData;
@@ -190,7 +166,7 @@ const App: React.FC = () => {
         { id: 'situation', comp: <Situation data={d.situation} />, headerPage: 3 },
         // 3: Mission
         { id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: 4 },
-        // 4: Process (Le pasamos el internalStep)
+        // 4: Process
         { id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} step={internalStep} />, headerPage: 5 },
         // 5: Team
         { id: 'team', comp: <Team data={d.team} />, headerPage: 6 },
@@ -212,7 +188,8 @@ const App: React.FC = () => {
     });
 
     list.push(
-        { id: 'investment', comp: <Investment data={d.investment} />, headerPage: 14 },
+        // Le pasamos el step a Investment
+        { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: 14 },
         { id: 'special-offers', comp: <SpecialOffers data={d.specialOffers} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} premiumService={d.premiumServicesList?.[1]} />, headerPage: 15 },
         { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 16 },
         { id: 'team-photo', comp: <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /> },
@@ -232,8 +209,6 @@ const App: React.FC = () => {
     return list;
   })();
 
-  // Ref to keep track of sections for navigate function safety if needed, 
-  // though we rely on hardcoded indices for specific logic inside navigate to avoid loops.
   const sectionsRef = useRef(sections);
   sectionsRef.current = sections;
 
@@ -250,48 +225,39 @@ const App: React.FC = () => {
              const activeSection = sections[currentIndex];
              const isCompleted = completedSections.has(activeSection.id);
              
-             // --- LÓGICA ESPECIAL MISION (Página 4) ---
-             if (activeSection.id === 'mission') {
-                 if (!isCompleted) {
-                    if (e.deltaY > 0) { // Bajando
-                        if (internalStep < 2) {
-                            setInternalStep(prev => prev + 1);
-                            return;
-                        }
-                    } else { // Subiendo
-                        if (internalStep > 0) {
-                            setInternalStep(prev => prev - 1);
-                            return;
-                        }
-                    }
+             // --- LÓGICA ESPECIAL MISION ---
+             if (activeSection.id === 'mission' && !isCompleted) {
+                if (e.deltaY > 0) { // Bajando
+                    if (internalStep < 2) { setInternalStep(prev => prev + 1); return; }
+                } else { // Subiendo
+                    if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
+                }
+             }
+
+             // --- LÓGICA ESPECIAL PROCESO ---
+             if (activeSection.id === 'process' && !isCompleted) {
+                 const totalSteps = proposalData?.process?.steps?.length || 8;
+                 if (e.deltaY > 0) {
+                     if (internalStep < totalSteps) { setInternalStep(prev => prev + 1); return; }
+                 } else {
+                     if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
                  }
              }
 
-             // --- LÓGICA ESPECIAL PROCESO (Página 5) ---
-             if (activeSection.id === 'process') {
-                 const totalSteps = proposalData?.process?.steps?.length || 8;
-                 
-                 if (!isCompleted) {
-                     if (e.deltaY > 0) { // Bajando
-                         if (internalStep < totalSteps) {
-                             setInternalStep(prev => prev + 1);
-                             return;
-                         }
-                     } else { // Subiendo
-                         if (internalStep > 0) {
-                             setInternalStep(prev => prev - 1);
-                             return;
-                         }
-                     }
-                 }
+             // --- LÓGICA ESPECIAL INVERSIÓN (NUEVO) ---
+             // Pasos 0 (Intro), 1 (Plan 1), 2 (Plan 2), 3 (Plan 3)
+             if (activeSection.id === 'investment' && !isCompleted) {
+                if (e.deltaY > 0) { // Bajando
+                    if (internalStep < 3) { setInternalStep(prev => prev + 1); return; }
+                } else { // Subiendo
+                    if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
+                }
              }
 
              // Navegación Global Estándar
-             if (e.deltaY > 0) {
-                 navigate(currentIndex + 1);
-             } else {
-                 navigate(currentIndex - 1);
-             }
+             if (e.deltaY > 0) navigate(currentIndex + 1);
+             else navigate(currentIndex - 1);
+
         }, 50);
     };
 
@@ -300,35 +266,27 @@ const App: React.FC = () => {
         const activeSection = sections[currentIndex];
         const isCompleted = completedSections.has(activeSection.id);
 
-        // LOGICA ESPECIAL PARA PAGINA 4 (MISION) TECLADO
-        if (activeSection.id === 'mission' && !isCompleted) {
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                if (internalStep < 2) {
-                    setInternalStep(prev => prev + 1);
-                    return;
-                }
+        const handleStep = (maxSteps: number) => {
+             if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (internalStep < maxSteps) { setInternalStep(prev => prev + 1); return true; }
             } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                if (internalStep > 0) {
-                    setInternalStep(prev => prev - 1);
-                    return;
-                }
+                if (internalStep > 0) { setInternalStep(prev => prev - 1); return true; }
             }
+            return false;
+        };
+
+        if (activeSection.id === 'mission' && !isCompleted) {
+            if (handleStep(2)) return;
         }
         
-        // LOGICA ESPECIAL PARA PAGINA 5 (PROCESO) TECLADO
         if (activeSection.id === 'process' && !isCompleted) {
             const totalSteps = proposalData?.process?.steps?.length || 8;
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                if (internalStep < totalSteps) {
-                    setInternalStep(prev => prev + 1);
-                    return;
-                }
-            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                if (internalStep > 0) {
-                    setInternalStep(prev => prev - 1);
-                    return;
-                }
-            }
+            if (handleStep(totalSteps)) return;
+        }
+
+        if (activeSection.id === 'investment' && !isCompleted) {
+             // Max step 3 para Inversion
+             if (handleStep(3)) return;
         }
 
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
@@ -356,8 +314,6 @@ const App: React.FC = () => {
     <ScrollContext.Provider value={direction}>
         <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
             <CustomCursor />
-            
-            {/* Renderizado Condicional del Header: Solo si NO es Hero (0) Y NO es Index (1) */}
             {currentIndex > 1 && (
                 <Header 
                     logo={proposalData.logos?.smallLogo} 
@@ -365,21 +321,13 @@ const App: React.FC = () => {
                     onNavigate={navigate}
                 />
             )}
-
-            {/* 3D STAGE */}
             <div className="relative w-full h-full perspective-[1000px]">
                 <AnimatePresence initial={false} custom={direction} mode="popLayout">
-                    <SectionSlide 
-                        key={currentIndex} 
-                        id={activeSection.id}
-                        direction={direction}
-                    >
+                    <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
                         {activeSection.comp}
                     </SectionSlide>
                 </AnimatePresence>
             </div>
-
-            {/* Navigation Dots */}
             <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20">
                 {sections.map((_, i) => (
                     <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
