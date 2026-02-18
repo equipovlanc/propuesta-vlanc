@@ -65,7 +65,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
     return (
         <div key={key} className="w-full">
             {isTitle ? (
-                // Ajuste para coincidir con el cambio en PremiumServices (estilo cuerpo)
                 <h4 className="cuerpo uppercase mb-0 text-vlanc-black">
                     <span dangerouslySetInnerHTML={{ __html: block.text }} />
                 </h4>
@@ -94,39 +93,45 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                 </AnimatedSection>
                 <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
           </div>
+          
           <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar" hierarchy={2}>
-                {data?.conditionalOffer && (
-                    <div className="mb-6">
-                        <h3 className="subtitulo2 mb-3 text-vlanc-black">{data.conditionalOffer.title}</h3>
-                        <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.conditionalOffer.description || '' }} />
-                    </div>
-                )}
                 
-                {/* Grid de precios: Margen reducido de mb-8 a mb-4 para compensar la línea */}
-                <div className="flex flex-row justify-between gap-2 mb-4 w-full flex-wrap xl:flex-nowrap shrink-0">
-                    {plans.map((plan, i) => (
-                        <div key={i} className="w-[250px] h-[108px] border border-[#8f4933] flex flex-col items-center justify-center gap-2 bg-transparent hover:bg-[#8f4933]/5 shrink-0">
-                            <span className="tabla1 text-[#8f4933]">{plan.name}</span>
-                            <span className="tabla2 text-[#8f4933]">{plan.discountedPrice}</span>
+                {/* CAJA 1: CONDICIONES ESPECIALES (Incluye Grid de Precios) */}
+                <div className="border border-[#8f4933]/30 p-5 mb-4 shrink-0">
+                    {data?.conditionalOffer && (
+                        <div className="mb-4">
+                            <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.conditionalOffer.title}</h3>
+                            <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.conditionalOffer.description || '' }} />
                         </div>
-                    ))}
+                    )}
+                    
+                    {/* Grid de precios movido DENTRO de la caja de condiciones especiales */}
+                    <div className="flex flex-row justify-between gap-2 w-full flex-wrap xl:flex-nowrap">
+                        {plans.map((plan, i) => (
+                            <div key={i} className="flex-1 min-w-[140px] h-[80px] border border-[#8f4933]/20 flex flex-col items-center justify-center gap-1 bg-vlanc-bg/50 hover:bg-[#8f4933]/5 transition-colors">
+                                <span className="tabla1 text-[#8f4933] text-[10px]">{plan.name}</span>
+                                <span className="tabla2 text-[#8f4933] font-bold">{plan.discountedPrice}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Línea Separadora añadida */}
-                <div className="w-full h-[1px] bg-[#8f4933] opacity-30 mb-4 shrink-0" />
-
+                {/* CAJA 2: OFERTA LANZAMIENTO */}
                 {data?.launchOffer && (
-                    <div className="mb-6">
+                    <div className="border border-[#8f4933]/30 p-5 mb-6 shrink-0">
                         <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.launchOffer.title}</h3>
                         <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.launchOffer.description || '' }} />
                     </div>
                 )}
-                <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-6 shrink-0" onClick={openModal}>
+
+                <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0" onClick={openModal}>
                     <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors">TU HOGAR COMO NUNCA LO IMAGINASTE</span>
                 </button>
-                {data?.offerFooterText && <div className="cuerpo text-sm" dangerouslySetInnerHTML={{ __html: data.offerFooterText }} />}
+
+                {data?.offerFooterText && <div className="cuerpo text-sm mb-4" dangerouslySetInnerHTML={{ __html: data.offerFooterText }} />}
+                
                 <div className="w-full shrink-0">
-                    <div className="w-full flex flex-col border-t border-[#8f4933] mt-[50px] pt-1">
+                    <div className="w-full flex flex-col border-t border-[#8f4933] mt-[20px] pt-1">
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
@@ -135,7 +140,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                 </div>
           </AnimatedSection>
           
-          {/* Fecha ahora animada con J2 */}
+          {/* Fecha */}
           <AnimatedSection className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20" hierarchy={2}>
                 <p className="cuerpo font-bold text-right">{locationDate || "En Alcoi a XX de mes de 2025"}</p>
           </AnimatedSection>

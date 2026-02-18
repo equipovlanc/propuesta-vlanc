@@ -48,11 +48,13 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                     
                     {/* COLUMNA IZQUIERDA (J2) */}
                     <AnimatedSection hierarchy={2}>
-                        <h3 className="subtitulo2 text-[32px] mb-10">{data?.paymentMethods?.title}</h3>
+                        {/* CAMBIO: Se elimina text-[32px] para usar el tamaño por defecto de subtitulo2 */}
+                        <h3 className="subtitulo2 mb-10">{data?.paymentMethods?.title}</h3>
                         <div className="space-y-8">
                            {(data?.paymentMethods?.plans ?? []).map((plan, i) => (
                                 <div key={i}>
-                                    <h4 className="fase-titulo text-[#703622] mb-4">
+                                    {/* CAMBIO: Se fuerza text-[16px] para reducir los 2px solicitados (antes era 18px por fase-titulo) */}
+                                    <h4 className="fase-titulo text-[#703622] mb-4 !text-[16px]">
                                         {plan.title}
                                     </h4>
                                     
@@ -81,7 +83,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate }
                     
                     {/* COLUMNA DERECHA (J2) */}
                     <AnimatedSection className="flex flex-col relative" hierarchy={2}>
-                         <h3 className="subtitulo2 text-[32px] mb-10">{data?.finePrint?.title}</h3>
+                         {/* CAMBIO: Se elimina text-[32px] para usar el tamaño por defecto de subtitulo2 */}
+                         <h3 className="subtitulo2 mb-10">{data?.finePrint?.title}</h3>
                          
                          <div className="flex flex-col gap-[2px]">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
