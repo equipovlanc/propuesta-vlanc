@@ -31,7 +31,8 @@ const slideVariants: Variants = {
   exit: (direction: number) => ({
     scale: direction > 0 ? 0.4 : 3.0, 
     opacity: 0,
-    zIndex: direction > 0 ? 0 : 50,
+    // Reducimos zIndex de salida a 45 para que no entre en conflicto con Header (z-60)
+    zIndex: direction > 0 ? 0 : 45,
     filter: 'blur(3px)', 
     transition: {
       duration: 1.6,
@@ -46,9 +47,8 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
   return (
     <motion.div 
       id={id}
-      // Aplicamos la clase recursiva global definida en index.html
-      // Esto fuerza pointer-events: none !important en todos los hijos si el slide está saliendo (!isPresent)
-      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden ${className} ${!isPresent ? 'pe-none-recursive' : ''}`}
+      // 'isolation-isolate' crea un nuevo contexto de apilamiento, evitando fugas de z-index
+      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden isolation-isolate ${className} ${!isPresent ? 'pe-none-recursive' : ''}`}
       custom={direction}
       variants={slideVariants}
       initial="enter"
@@ -56,7 +56,7 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
       exit="exit"
       style={{
         perspective: 2000,
-        // Eliminado backfaceVisibility: 'hidden' ya que puede causar problemas de clicks en elementos 3D estáticos
+        // Forzamos none explícito si no está presente
         pointerEvents: isPresent ? 'auto' : 'none' 
       }}
     >

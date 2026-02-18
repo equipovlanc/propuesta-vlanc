@@ -9,7 +9,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate }) => {
   return (
-    <header className="absolute top-0 left-0 w-full pointer-events-none z-50 mix-blend-multiply">
+    <header className="absolute top-0 left-0 w-full pointer-events-none z-[60] mix-blend-multiply">
       {/* Logo Small - Navegación al Índice (Sección 1, índice 1) */}
       <button 
         onClick={() => onNavigate && onNavigate(1)} 
