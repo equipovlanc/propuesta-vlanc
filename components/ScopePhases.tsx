@@ -165,6 +165,33 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                 </AnimatedSection>
             </div>
         )}
+
+        {/* MODAL VIDEO */}
+        {showVideo && data?.video && (
+            <div 
+                className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-black/95 backdrop-blur-md p-4 md:p-10 pointer-events-auto"
+                onClick={() => setShowVideo(false)}
+            >
+                <AnimatedSection 
+                    className="relative w-full max-w-7xl aspect-video bg-black shadow-2xl flex items-center justify-center"
+                    hierarchy={0}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                     <button 
+                        onClick={() => setShowVideo(false)}
+                        className="absolute -top-10 right-0 text-white/60 hover:text-white transition-colors text-[10px] tracking-[0.2em] font-bold uppercase flex items-center gap-2"
+                    >
+                        [ Cerrar Video ]
+                    </button>
+                    <video 
+                        src={data.video} 
+                        controls 
+                        autoPlay 
+                        className="w-full h-full object-contain"
+                    />
+                </AnimatedSection>
+            </div>
+        )}
     </section>
   );
 };
