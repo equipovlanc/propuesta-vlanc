@@ -61,9 +61,9 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                         </h3>
                                         {/* MÁSCARA TACHADO TÍTULO (Bloque sólido) */}
                                         <motion.div 
-                                            initial={{ scaleX: isRevealed ? 0 : 1, originX: 0 }}
-                                            animate={{ scaleX: isRevealed ? 0 : 1 }}
-                                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                                            initial={{ opacity: isRevealed ? 0 : 1 }}
+                                            animate={{ opacity: isRevealed ? 0 : 1 }}
+                                            transition={{ duration: 0.9, ease: "easeInOut" }}
                                             className="absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none"
                                         />
                                     </div>
@@ -80,9 +80,9 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                         </div>
                                          {/* MÁSCARA TACHADO DESCRIPCIÓN (Líneas independientes) */}
                                          <motion.div 
-                                            initial={{ scaleX: isRevealed ? 0 : 1, originX: 0 }}
-                                            animate={{ scaleX: isRevealed ? 0 : 1 }}
-                                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                                            initial={{ opacity: isRevealed ? 0 : 1 }}
+                                            animate={{ opacity: isRevealed ? 0 : 1 }}
+                                            transition={{ duration: 0.9, ease: "easeInOut" }}
                                             className="absolute inset-0 z-20 pointer-events-none"
                                             style={{
                                                 // Pattern para simular tachado línea por línea basado en line-height: 1.4em
@@ -110,9 +110,9 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                             </button>
                                             {/* MÁSCARA TACHADO BOTÓN */}
                                             <motion.div 
-                                                initial={{ scaleX: isRevealed ? 0 : 1, originX: 0 }}
-                                                animate={{ scaleX: isRevealed ? 0 : 1 }}
-                                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                                                initial={{ opacity: isRevealed ? 0 : 1 }}
+                                                animate={{ opacity: isRevealed ? 0 : 1 }}
+                                                transition={{ duration: 0.9, ease: "easeInOut" }}
                                                 className="absolute -inset-1 bg-[#8f4933] z-30 pointer-events-none"
                                             />
                                         </div>
