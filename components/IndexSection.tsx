@@ -31,7 +31,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
     // z-10 relativo al Slide
     <section id="index-section" className="h-full w-full flex overflow-hidden absolute inset-0 z-10">
       
-      {/* Columna Izquierda: Imagen (J0) - Pointer events none SOLO aquí porque es decorativo */}
+      {/* Columna Izquierda: Imagen (J0) - Pointer events none para evitar bloqueos */}
       <div className="w-[55.7%] h-full relative overflow-hidden hidden md:block pointer-events-none">
         <AnimatedSection direction="none" hierarchy={0} className="w-full h-full">
             {imageSrc ? (
@@ -54,11 +54,10 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
         </AnimatedSection>
       </div>
 
-      {/* Columna Derecha: Contenido - SIN pointer-events-none en el contenedor padre */}
+      {/* Columna Derecha: Contenido */}
       <div className="w-full md:w-[44.3%] h-full flex flex-col justify-between px-10 md:px-0 md:pl-[76px] md:pr-[120px] pt-[150px] pb-[140px] relative z-20">
         
         {/* Bloque Superior: Título (J1) y Barra */}
-        {/* Aquí sí aplicamos none para que el título no bloquee nada si se solapa */}
         <div className="pointer-events-none">
             <AnimatedSection direction="up" hierarchy={1}>
                 <h2 className="subtitulo1">
@@ -70,13 +69,13 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
         </div>
         
         {/* Bloque Inferior: Links (J2) */}
-        {/* Z-Index y pointer-events-auto explícitos */}
-        <div className="space-y-5 relative z-30 pointer-events-auto">
+        {/* Usamos un z-index alto localmente para asegurar prioridad dentro del slide */}
+        <div className="space-y-5 relative z-50">
             {items.length > 0 ? items.map((item, i) => (
                 <AnimatedSection key={i} direction="up" hierarchy={2}>
                   <button 
                     onClick={(e) => handleLinkClick(e, item.id)}
-                    className="flex items-baseline text-left text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 select-none w-full outline-none bg-transparent border-none p-0"
+                    className="flex items-baseline text-left text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 select-none w-full outline-none bg-transparent border-none p-0 pointer-events-auto"
                     aria-label={`Ir a ${item.title}`}
                   >
                       <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px] group-hover:translate-x-1 duration-500 pointer-events-none">/</span>

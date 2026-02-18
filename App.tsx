@@ -193,8 +193,8 @@ const App: React.FC = () => {
     }
 
     setIsAnimating(true);
-    // AUMENTADO A 1600ms para coincidir con la duración de la animación en SectionSlide
-    setTimeout(() => setIsAnimating(false), 1600);
+    // Reducido a 1000ms para permitir interacción más rápida
+    setTimeout(() => setIsAnimating(false), 1000);
   };
 
   const navigateToId = (id: string) => {
