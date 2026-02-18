@@ -102,10 +102,10 @@ const App: React.FC = () => {
         { id: 'index', comp: <IndexSection data={d.index} onNavigate={(id) => navigateToId(id)} /> },
         // 2: Situation
         { id: 'situation', comp: <Situation data={d.situation} />, headerPage: 3 },
-        // 3: Mission (Le pasamos el internalStep)
+        // 3: Mission
         { id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: 4 },
-        // 4: Process
-        { id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} />, headerPage: 5 },
+        // 4: Process (Le pasamos el internalStep)
+        { id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} step={internalStep} />, headerPage: 5 },
         // 5: Team
         { id: 'team', comp: <Team data={d.team} />, headerPage: 6 },
         // 6: Testimonials
@@ -153,13 +153,22 @@ const App: React.FC = () => {
     if (isAnimating) return; // Debounce animations
 
     const isMovingForward = newIndex > currentIndex;
+    const nextSection = sections[newIndex];
     
     setDirection(isMovingForward ? 1 : -1);
     setCurrentIndex(newIndex);
     
-    // Si vamos hacia adelante, empezamos en paso 0.
-    // Si vamos hacia atrás, empezamos en paso 2 (estado final de Misión).
-    setInternalStep(isMovingForward ? 0 : 2); 
+    // GESTIÓN DE ESTADOS INICIALES/FINALES AL CAMBIAR DE PÁGINA
+    if (nextSection.id === 'mission') {
+         // Si vamos a Mission hacia adelante: paso 0. Hacia atrás: paso 2 (final).
+         setInternalStep(isMovingForward ? 0 : 2);
+    } else if (nextSection.id === 'process') {
+         // Si vamos a Process hacia adelante: paso 0. Hacia atrás: paso 8 (final, asumiendo 8 pasos).
+         const processStepsCount = proposalData?.process?.steps?.length || 8;
+         setInternalStep(isMovingForward ? 0 : processStepsCount);
+    } else {
+         setInternalStep(0);
+    }
 
     setIsAnimating(true);
     
@@ -185,21 +194,36 @@ const App: React.FC = () => {
         wheelTimeout.current = window.setTimeout(() => {
              const activeSection = sections[currentIndex];
              
-             // LOGICA ESPECIAL PARA PAGINA 4 (MISION) - 3 PASOS (0, 1, 2)
+             // --- LÓGICA ESPECIAL MISION (Página 4) ---
              if (activeSection.id === 'mission') {
-                if (e.deltaY > 0) {
-                    // Bajando
+                if (e.deltaY > 0) { // Bajando
                     if (internalStep < 2) {
                         setInternalStep(prev => prev + 1);
-                        return; // Detener navegación global
+                        return;
                     }
-                } else {
-                    // Subiendo
+                } else { // Subiendo
                     if (internalStep > 0) {
                         setInternalStep(prev => prev - 1);
-                        return; // Detener navegación global
+                        return;
                     }
                 }
+             }
+
+             // --- LÓGICA ESPECIAL PROCESO (Página 5) ---
+             if (activeSection.id === 'process') {
+                 const totalSteps = proposalData?.process?.steps?.length || 8;
+                 
+                 if (e.deltaY > 0) { // Bajando
+                     if (internalStep < totalSteps) {
+                         setInternalStep(prev => prev + 1);
+                         return;
+                     }
+                 } else { // Subiendo
+                     if (internalStep > 0) {
+                         setInternalStep(prev => prev - 1);
+                         return;
+                     }
+                 }
              }
 
              // Navegación Global Estándar
@@ -229,6 +253,22 @@ const App: React.FC = () => {
                 }
             }
         }
+        
+        // LOGICA ESPECIAL PARA PAGINA 5 (PROCESO) TECLADO
+        if (activeSection.id === 'process') {
+            const totalSteps = proposalData?.process?.steps?.length || 8;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (internalStep < totalSteps) {
+                    setInternalStep(prev => prev + 1);
+                    return;
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (internalStep > 0) {
+                    setInternalStep(prev => prev - 1);
+                    return;
+                }
+            }
+        }
 
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
         if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigate(currentIndex - 1);
@@ -241,7 +281,7 @@ const App: React.FC = () => {
         window.removeEventListener('wheel', handleWheel);
         window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentIndex, isAnimating, sections, internalStep]);
+  }, [currentIndex, isAnimating, sections, internalStep, proposalData]);
 
 
   // Renders

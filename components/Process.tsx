@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
+import { motion } from 'framer-motion';
 
 interface ProcessStep {
     title?: string;
@@ -22,9 +23,10 @@ interface ProcessProps {
         badge?: string;
     };
     guaranteeItem?: GuaranteeItem;
+    step?: number; // Prop para controlar qué items están revelados
 }
 
-const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
+const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
@@ -43,40 +45,77 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem }) => {
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
-                    {(data?.steps ?? []).map((step, index) => (
-                        <AnimatedSection key={index} hierarchy={2}>
-                            <div className="space-y-6 flex flex-col items-start">
-                                <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
-                                    <span className="font-serif mr-2">{`0${index + 1}`} /</span>
-                                    <span>{step.title}</span>
-                                </h3>
-                                
-                                <div className="cuerpo2 text-left">
-                                    <p>{step.description}</p>
-                                    {index === 4 && (
-                                        <p className="mt-4 font-bold text-vlanc-secondary">
-                                            · Tu interés es el nuestro ·
-                                        </p>
+                    {(data?.steps ?? []).map((s, index) => {
+                        // El item está visible (sin tachar) si el 'step' actual es mayor que el índice del item.
+                        // Ejemplo: Si step = 0, nadie está visible. Si step = 1, index 0 visible.
+                        const isRevealed = step > index;
+                        
+                        return (
+                            <AnimatedSection key={index} hierarchy={2}>
+                                <div className="space-y-6 flex flex-col items-start relative">
+                                    
+                                    {/* Título + Número */}
+                                    <div className="relative inline-block">
+                                        <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
+                                            <span className="font-serif mr-2">{`0${index + 1}`} /</span>
+                                            <span>{s.title}</span>
+                                        </h3>
+                                        {/* MÁSCARA TACHADO */}
+                                        <motion.div 
+                                            initial={{ scaleX: 1, originX: 0 }}
+                                            animate={{ scaleX: isRevealed ? 0 : 1 }}
+                                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                                            className="absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none"
+                                        />
+                                    </div>
+                                    
+                                    {/* Descripción */}
+                                    <div className="relative block w-full">
+                                        <div className="cuerpo2 text-left">
+                                            <p>{s.description}</p>
+                                            {index === 4 && (
+                                                <p className="mt-4 font-bold text-vlanc-secondary">
+                                                    · Tu interés es el nuestro ·
+                                                </p>
+                                            )}
+                                        </div>
+                                         {/* MÁSCARA TACHADO */}
+                                         <motion.div 
+                                            initial={{ scaleX: 1, originX: 0 }}
+                                            animate={{ scaleX: isRevealed ? 0 : 1 }}
+                                            transition={{ duration: 0.5, ease: "easeInOut" }}
+                                            className="absolute -inset-2 bg-[#8f4933] z-20 pointer-events-none"
+                                        />
+                                    </div>
+                                    
+                                    {/* Botón Garantía (Solo index 2 / Paso 3) */}
+                                    {index === 2 && (
+                                        <div className="relative inline-block mt-6">
+                                            <button 
+                                                onClick={openModal}
+                                                className="inline-flex items-center border border-vlanc-primary text-vlanc-primary px-5 py-3 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group"
+                                            >
+                                                <span className="boton1">
+                                                    {data?.badge || "GARANTÍA"}
+                                                </span>
+                                                <span className="mx-2 text-[14px] font-serif leading-none opacity-60">/</span>
+                                                <span className="boton2">
+                                                    Somos tu equipo
+                                                </span>
+                                            </button>
+                                            {/* MÁSCARA TACHADO BOTÓN */}
+                                            <motion.div 
+                                                initial={{ scaleX: 1, originX: 0 }}
+                                                animate={{ scaleX: isRevealed ? 0 : 1 }}
+                                                transition={{ duration: 0.5, ease: "easeInOut" }}
+                                                className="absolute -inset-1 bg-[#8f4933] z-30 pointer-events-none"
+                                            />
+                                        </div>
                                     )}
                                 </div>
-                                
-                                {index === 2 && (
-                                    <button 
-                                        onClick={openModal}
-                                        className="mt-6 inline-flex items-center border border-vlanc-primary text-vlanc-primary px-5 py-3 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group"
-                                    >
-                                        <span className="boton1">
-                                            {data?.badge || "GARANTÍA"}
-                                        </span>
-                                        <span className="mx-2 text-[14px] font-serif leading-none opacity-60">/</span>
-                                        <span className="boton2">
-                                            Somos tu equipo
-                                        </span>
-                                    </button>
-                                )}
-                            </div>
-                        </AnimatedSection>
-                    ))}
+                            </AnimatedSection>
+                        );
+                    })}
                 </div>
             </div>
 
