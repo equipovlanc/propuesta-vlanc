@@ -17,19 +17,19 @@ const slideVariants: Variants = {
     scale: direction > 0 ? 3.0 : 0.4, 
     opacity: 0,
     zIndex: direction > 0 ? 50 : 0, 
-    // Blur reducido a 3px: Suficiente para dar velocidad, poco para marear
+    // Blur reducido a 3px
     filter: 'blur(3px)',
-    pointerEvents: 'none', // Bloquear clics mientras entra
+    pointerEvents: 'none', 
   }),
   center: {
     scale: 1,
     opacity: 1,
     zIndex: 10,
     filter: 'blur(0px)',
-    pointerEvents: 'auto', // Permitir clics SOLO cuando está centrada
+    pointerEvents: 'auto',
     transition: {
       duration: 1.6, 
-      ease: [0.25, 1, 0.5, 1] as const, // Curva suave
+      ease: [0.25, 1, 0.5, 1] as const,
     }
   },
   exit: (direction: number) => ({
@@ -37,7 +37,7 @@ const slideVariants: Variants = {
     opacity: 0,
     zIndex: direction > 0 ? 0 : 50,
     filter: 'blur(3px)', 
-    pointerEvents: 'none', // Bloquear clics mientras sale (CRÍTICO para navegación hacia atrás)
+    pointerEvents: 'none',
     transition: {
       duration: 1.6,
       ease: [0.25, 1, 0.5, 1] as const,
@@ -49,7 +49,7 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
   return (
     <motion.div 
       id={id}
-      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden pointer-events-none ${className}`}
+      className={`z-slide-container absolute inset-0 w-full h-full flex flex-col justify-center items-center overflow-hidden ${className}`}
       custom={direction}
       variants={slideVariants}
       initial="enter"
@@ -58,9 +58,11 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
       style={{
         backfaceVisibility: 'hidden',
         perspective: 2000, 
+        // FIX CRÍTICO: Forzamos pointer-events none si no es la activa, 
+        // independientemente de lo que diga la animación mientras sale.
+        pointerEvents: isActive ? 'auto' : 'none' 
       }}
     >
-        {/* Contenido: Eliminamos pointer-events-auto forzado para que herede del padre motion.div */}
         <div className="w-full h-full relative">
             {children}
         </div>

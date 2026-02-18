@@ -34,8 +34,10 @@ const App: React.FC = () => {
   const [direction, setDirection] = useState(0); // 1 = forward, -1 = backward
   const [isAnimating, setIsAnimating] = useState(false);
   
-  // Internal Step State (para scroll dentro de una misma página)
+  // Internal Step State
   const [internalStep, setInternalStep] = useState(0);
+  // Estado para recordar qué secciones han sido completadas totalmente
+  const [completedSections, setCompletedSections] = useState<Set<string>>(new Set());
 
   const slug = window.location.pathname.substring(1);
   const wheelTimeout = useRef<number | null>(null);
@@ -150,29 +152,47 @@ const App: React.FC = () => {
   const navigate = (newIndex: number) => {
     if (newIndex < 0 || newIndex >= sections.length) return;
     if (newIndex === currentIndex) return;
-    if (isAnimating) return; // Debounce animations
+    if (isAnimating) return; 
 
     const isMovingForward = newIndex > currentIndex;
-    const nextSection = sections[newIndex];
+    const currentSectionId = sections[currentIndex].id;
+    const nextSectionId = sections[newIndex].id;
     
+    // 1. MARCAR COMO COMPLETADA SI SALIMOS HACIA DELANTE DESDE UNA SECCIÓN CON PASOS
+    if (isMovingForward) {
+        if (currentSectionId === 'mission') {
+            setCompletedSections(prev => new Set(prev).add('mission'));
+        } else if (currentSectionId === 'process') {
+            setCompletedSections(prev => new Set(prev).add('process'));
+        }
+    }
+
     setDirection(isMovingForward ? 1 : -1);
     setCurrentIndex(newIndex);
     
-    // GESTIÓN DE ESTADOS INICIALES/FINALES AL CAMBIAR DE PÁGINA
-    if (nextSection.id === 'mission') {
-         // Si vamos a Mission hacia adelante: paso 0. Hacia atrás: paso 2 (final).
-         setInternalStep(isMovingForward ? 0 : 2);
-    } else if (nextSection.id === 'process') {
-         // Si vamos a Process hacia adelante: paso 0. Hacia atrás: paso 8 (final, asumiendo 8 pasos).
+    // 2. DETERMINAR EL ESTADO INICIAL DE LA NUEVA SECCIÓN
+    if (nextSectionId === 'mission') {
+        // Si ya está completada, mostrar estado final (2)
+        if (completedSections.has('mission')) {
+            setInternalStep(2);
+        } else {
+            // Si venimos de atrás (avanzando), empieza en 0. Si venimos de delante (retrocediendo), mostramos el final (2).
+            setInternalStep(isMovingForward ? 0 : 2);
+        }
+    } else if (nextSectionId === 'process') {
          const processStepsCount = proposalData?.process?.steps?.length || 8;
-         setInternalStep(isMovingForward ? 0 : processStepsCount);
+         // Si ya está completada, mostrar estado final
+         if (completedSections.has('process')) {
+            setInternalStep(processStepsCount);
+         } else {
+            // Si venimos de atrás (avanzando), empieza en 0. Si venimos de delante (retrocediendo), mostramos el final.
+            setInternalStep(isMovingForward ? 0 : processStepsCount);
+         }
     } else {
          setInternalStep(0);
     }
 
     setIsAnimating(true);
-    
-    // Allow new navigation after animation completes
     setTimeout(() => setIsAnimating(false), 1200);
   };
 
@@ -185,43 +205,53 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
         if (isAnimating) return;
-        
-        // Threshold to ignore small trackpad movements
         if (Math.abs(e.deltaY) < 30) return;
 
         if (wheelTimeout.current) clearTimeout(wheelTimeout.current);
         
         wheelTimeout.current = window.setTimeout(() => {
              const activeSection = sections[currentIndex];
+             const isCompleted = completedSections.has(activeSection.id);
              
              // --- LÓGICA ESPECIAL MISION (Página 4) ---
              if (activeSection.id === 'mission') {
-                if (e.deltaY > 0) { // Bajando
-                    if (internalStep < 2) {
-                        setInternalStep(prev => prev + 1);
-                        return;
+                 // Si la sección ya está completada, permitimos navegar libremente entre páginas
+                 // PERO si el usuario quiere ver los pasos de nuevo, podría usar teclas. 
+                 // Aquí asumimos que scroll en completada = cambio de página, 
+                 // SALVO que estemos arriba del todo y queramos bajar "visualmente" de nuevo.
+                 // Según requerimiento: "aparecerá siempre en su estado final". 
+                 // Esto implica que el scroll vertical ya NO controla los pasos internos, sino que pasa de página.
+                 
+                 if (!isCompleted) {
+                    if (e.deltaY > 0) { // Bajando
+                        if (internalStep < 2) {
+                            setInternalStep(prev => prev + 1);
+                            return;
+                        }
+                    } else { // Subiendo
+                        if (internalStep > 0) {
+                            setInternalStep(prev => prev - 1);
+                            return;
+                        }
                     }
-                } else { // Subiendo
-                    if (internalStep > 0) {
-                        setInternalStep(prev => prev - 1);
-                        return;
-                    }
-                }
+                 }
              }
 
              // --- LÓGICA ESPECIAL PROCESO (Página 5) ---
              if (activeSection.id === 'process') {
                  const totalSteps = proposalData?.process?.steps?.length || 8;
                  
-                 if (e.deltaY > 0) { // Bajando
-                     if (internalStep < totalSteps) {
-                         setInternalStep(prev => prev + 1);
-                         return;
-                     }
-                 } else { // Subiendo
-                     if (internalStep > 0) {
-                         setInternalStep(prev => prev - 1);
-                         return;
+                 if (!isCompleted) {
+                     if (e.deltaY > 0) { // Bajando
+                         if (internalStep < totalSteps) {
+                             setInternalStep(prev => prev + 1);
+                             return;
+                         }
+                     } else { // Subiendo
+                         if (internalStep > 0) {
+                             setInternalStep(prev => prev - 1);
+                             return;
+                         }
                      }
                  }
              }
@@ -238,9 +268,10 @@ const App: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
         if (isAnimating) return;
         const activeSection = sections[currentIndex];
+        const isCompleted = completedSections.has(activeSection.id);
 
         // LOGICA ESPECIAL PARA PAGINA 4 (MISION) TECLADO
-        if (activeSection.id === 'mission') {
+        if (activeSection.id === 'mission' && !isCompleted) {
             if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
                 if (internalStep < 2) {
                     setInternalStep(prev => prev + 1);
@@ -255,7 +286,7 @@ const App: React.FC = () => {
         }
         
         // LOGICA ESPECIAL PARA PAGINA 5 (PROCESO) TECLADO
-        if (activeSection.id === 'process') {
+        if (activeSection.id === 'process' && !isCompleted) {
             const totalSteps = proposalData?.process?.steps?.length || 8;
             if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
                 if (internalStep < totalSteps) {
@@ -281,7 +312,7 @@ const App: React.FC = () => {
         window.removeEventListener('wheel', handleWheel);
         window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentIndex, isAnimating, sections, internalStep, proposalData]);
+  }, [currentIndex, isAnimating, sections, internalStep, proposalData, completedSections]);
 
 
   // Renders
