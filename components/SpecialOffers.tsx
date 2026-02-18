@@ -62,25 +62,26 @@ const FlipCard: React.FC<{ plan: DiscountedPlan }> = ({ plan }) => {
             onClick={() => setIsFlipped(!isFlipped)}
         >
             <motion.div 
-                // CORRECCIÓN: Eliminado transform-gpu y transition-all para evitar conflictos de renderizado 3D y blur
                 className="relative w-full h-full preserve-3d print:transform-none"
                 style={{ transformStyle: "preserve-3d" }}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
             >
-                {/* CARA FRONTAL (Original) - Oculta al imprimir */}
+                {/* CARA FRONTAL (Original) */}
                 <div 
-                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933]/20 bg-vlanc-bg hover:bg-[#8f4933]/5 flex flex-col items-center justify-center gap-1 z-20 print:hidden"
-                    style={{ backfaceVisibility: "hidden", WebkitFontSmoothing: "antialiased" }}
+                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933]/20 bg-vlanc-bg hover:bg-[#8f4933]/5 flex flex-col items-center justify-center gap-1 print:hidden"
+                    // translateZ(1px) evita el z-fighting (solapamiento visual) separando la capa del plano cero
+                    style={{ backfaceVisibility: "hidden", transform: "rotateY(0deg) translateZ(1px)", WebkitFontSmoothing: "antialiased" }}
                 >
                      <span className="tabla1 text-[#8f4933] text-[10px]">{plan.name}</span>
                      <span className="tabla2 text-[#8f4933] font-bold decoration-slice">{plan.originalPrice}</span>
                 </div>
 
-                {/* CARA TRASERA (Descuento) - Visible y estática al imprimir */}
+                {/* CARA TRASERA (Descuento) */}
                 <div 
-                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-1 z-10 print:transform-none print:opacity-100 print:relative print:inset-auto print:block print:visible"
-                    style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", WebkitFontSmoothing: "antialiased" }}
+                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-1 print:transform-none print:opacity-100 print:relative print:inset-auto print:block print:visible"
+                    // translateZ(1px) evita el z-fighting en la cara trasera
+                    style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)", WebkitFontSmoothing: "antialiased" }}
                 >
                      <span className="tabla1 text-white text-[10px]">{plan.name}</span>
                      <span className="tabla2 text-white font-bold">{plan.discountedPrice}</span>
@@ -97,6 +98,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
   const plans = data?.conditionalOffer?.discountedPlans || [];
   const imageSrc = data?.callToAction?.image?.src;
   const imageOpacity = data?.callToAction?.image?.opacity ?? 15;
+  
+  // Verificación estricta de texto
+  const hasCtaText = data?.callToAction?.text && data.callToAction.text.trim().length > 0;
 
   const openModal = () => { if (premiumService) setIsModalOpen(true); };
   const closeModal = () => setIsModalOpen(false);
@@ -149,7 +153,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
     );
   };
   
-  // CORRECCIÓN: Usar filter-none en lugar de blur-0 para evitar capas de composición que borronean el texto en 3D
+  // Usar filter-none para evitar capas de composición que borronean el texto en 3D
   const getRevealClasses = (isVisible: boolean) => {
       return `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 filter-none' : 'opacity-10 blur-[2px]'} print:opacity-100 print:blur-0 print:filter-none`;
   };
@@ -238,8 +242,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                                 style={{ opacity: imageOpacity / 100 }}
                             />
                             
-                            {/* CTA TEXT - SOLO SI HAY TEXTO */}
-                            {data?.callToAction?.text && (
+                            {/* CTA TEXT - SOLO SI HAY TEXTO (VERIFICADO) */}
+                            {hasCtaText && (
                                 <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 px-8">
                                     <h2 className="especial1">{data.callToAction.text}</h2>
                                 </div>
