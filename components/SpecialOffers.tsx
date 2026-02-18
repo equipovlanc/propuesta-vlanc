@@ -58,28 +58,28 @@ const FlipCard: React.FC<{ plan: DiscountedPlan }> = ({ plan }) => {
 
     return (
         <div 
-            className="flex-1 min-w-[140px] h-[80px] perspective-[1000px] cursor-pointer group"
+            className="flex-1 min-w-[140px] h-[80px] perspective-[1000px] cursor-pointer group print:perspective-none"
             onClick={() => setIsFlipped(!isFlipped)}
         >
             <motion.div 
-                className="relative w-full h-full transition-colors duration-300"
+                className="relative w-full h-full transition-all duration-500 transform-gpu preserve-3d print:transform-none"
                 style={{ transformStyle: "preserve-3d" }}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
             >
-                {/* CARA FRONTAL (Original) */}
+                {/* CARA FRONTAL (Original) - Oculta al imprimir */}
                 <div 
-                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933]/20 bg-vlanc-bg/50 hover:bg-[#8f4933]/5 flex flex-col items-center justify-center gap-1 z-20"
-                    style={{ backfaceVisibility: "hidden" }}
+                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933]/20 bg-vlanc-bg hover:bg-[#8f4933]/5 flex flex-col items-center justify-center gap-1 z-20 print:hidden"
+                    style={{ backfaceVisibility: "hidden", WebkitFontSmoothing: "antialiased" }}
                 >
                      <span className="tabla1 text-[#8f4933] text-[10px]">{plan.name}</span>
                      <span className="tabla2 text-[#8f4933] font-bold decoration-slice">{plan.originalPrice}</span>
                 </div>
 
-                {/* CARA TRASERA (Descuento - Rotada 180) */}
+                {/* CARA TRASERA (Descuento) - Visible y estática al imprimir */}
                 <div 
-                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-1 z-10"
-                    style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-1 z-10 print:transform-none print:opacity-100 print:relative print:inset-auto print:block print:visible"
+                    style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)", WebkitFontSmoothing: "antialiased" }}
                 >
                      <span className="tabla1 text-white text-[10px]">{plan.name}</span>
                      <span className="tabla2 text-white font-bold">{plan.discountedPrice}</span>
@@ -108,13 +108,19 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
     }
   }, [step, data?.popupVideo, setNavigationBlocked]);
 
+  const openVideo = () => {
+      if (data?.popupVideo) {
+        setShowVideo(true);
+        if (setNavigationBlocked) setNavigationBlocked(true);
+      }
+  };
+
   const closeVideo = () => {
       setShowVideo(false);
       if (setNavigationBlocked) setNavigationBlocked(false);
   };
 
   const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
-    // ... (Lógica de bloques de texto igual que antes) ...
     const isTitle = block.style === 'title';
     const nextBlock = allBlocks[key + 1];
     const isConsecutiveNumbered = block.isNumbered && nextBlock?.isNumbered;
@@ -142,12 +148,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
     );
   };
   
-  // Estilos de blur dinámicos
-  const blurStyle = (isVisible: boolean) => ({
-      opacity: isVisible ? 1 : 0.1,
-      filter: isVisible ? 'blur(0px)' : 'blur(2px)',
-      transition: 'all 0.8s ease-out'
-  });
+  // Clases dinámicas para blur/revelado. Al imprimir, forzamos opacidad 100 y sin blur.
+  const getRevealClasses = (isVisible: boolean) => {
+      return `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 blur-0' : 'opacity-10 blur-[2px]'} print:opacity-100 print:blur-0 print:filter-none`;
+  };
 
   return (
     <section id="special-offers" className="h-full w-full flex flex-row pt-[150px] pb-[140px] px-[120px] overflow-hidden">
@@ -163,8 +167,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                 
                 {/* CAJA 1: CONDICIONES ESPECIALES (Visible Step >= 1) */}
                 <div 
-                    className="border border-[#8f4933]/30 p-5 mb-4 shrink-0"
-                    style={blurStyle(step >= 1)}
+                    className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 ${getRevealClasses(step >= 1)}`}
                 >
                     {data?.conditionalOffer && (
                         <div className="mb-4">
@@ -183,8 +186,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
 
                 {/* CAJA 2: OFERTA LANZAMIENTO (Visible Step >= 2) */}
                 <div 
-                    className="border border-[#8f4933]/30 p-5 mb-4 shrink-0"
-                    style={blurStyle(step >= 2)}
+                    className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 ${getRevealClasses(step >= 2)}`}
                 >
                     {data?.launchOffer && (
                         <div className="mb-4">
@@ -201,7 +203,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                 </div>
                 
                 {/* FIRMA (Visible Step >= 2) */}
-                <div className="w-full shrink-0" style={blurStyle(step >= 2)}>
+                <div className={`w-full shrink-0 ${getRevealClasses(step >= 2)}`}>
                     <div className="w-full flex flex-col border-t border-[#8f4933] mt-[20px] pt-1">
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
@@ -213,7 +215,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
           
           {/* Fecha (Visible Step >= 2) */}
           <AnimatedSection className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20" hierarchy={2}>
-                <div style={blurStyle(step >= 2)}>
+                <div className={getRevealClasses(step >= 2)}>
                     <p className="cuerpo font-bold text-right">{locationDate || "En Alcoi a XX de mes de 2025"}</p>
                 </div>
           </AnimatedSection>
@@ -221,38 +223,52 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
 
       <div className="w-1/2 h-full pl-[69.5px]">
           <AnimatedSection className="w-full h-full relative overflow-hidden" hierarchy={0}>
-                {imageSrc && (
-                    <div className="w-full h-full relative">
-                        <img src={imageSrc} alt="Special Offer" className="w-full h-full object-cover" />
-                         <div 
-                            className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
-                            style={{ opacity: imageOpacity / 100 }}
-                        />
-                        <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 px-8">
-                            <h2 className="especial1">{data?.callToAction?.text}</h2>
-                        </div>
-                        
-                        {/* LOGO OVERLAY (Paso 4) */}
-                        {data?.overlayLogo && (
-                            <motion.div 
-                                className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px]"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: step >= 4 ? 1 : 0 }}
-                                transition={{ duration: 1.5 }}
-                            >
-                                <div className="w-full max-w-[400px] p-10">
-                                    <img src={data.overlayLogo} alt="Logo Overlay" className="w-full h-auto drop-shadow-xl" />
+                {/* Contenedor Clickable para re-abrir video */}
+                <div 
+                    className="w-full h-full relative cursor-pointer group"
+                    onClick={openVideo}
+                    title="Ver Video"
+                >
+                    {imageSrc && (
+                        <>
+                            <img src={imageSrc} alt="Special Offer" className="w-full h-full object-cover" />
+                            <div 
+                                className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                                style={{ opacity: imageOpacity / 100 }}
+                            />
+                            <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 px-8">
+                                <h2 className="especial1">{data?.callToAction?.text}</h2>
+                            </div>
+                            
+                            {/* LOGO OVERLAY (Paso 4) - Transición más lenta (3s) */}
+                            {data?.overlayLogo && (
+                                <motion.div 
+                                    className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px]"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: step >= 4 ? 1 : 0 }}
+                                    transition={{ duration: 3.0, ease: "easeInOut" }}
+                                >
+                                    <div className="w-full max-w-[400px] p-10">
+                                        <img src={data.overlayLogo} alt="Logo Overlay" className="w-full h-auto drop-shadow-xl" />
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {/* Icono Play Hover Hint */}
+                             <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                                <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                                 </div>
-                            </motion.div>
-                        )}
-                    </div>
-                )}
+                            </div>
+                        </>
+                    )}
+                </div>
           </AnimatedSection>
       </div>
 
       {/* MODAL SERVICIO PREMIUM */}
       {isModalOpen && premiumService && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10" onClick={closeModal}>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10 print:hidden" onClick={closeModal}>
             <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[672px] w-full relative max-h-[90vh] overflow-y-auto no-scrollbar" onClick={(e) => e.stopPropagation()} hierarchy={2}>
                 <button onClick={closeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                 <div className="flex flex-col items-start w-full relative">
@@ -266,11 +282,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
         </div>
       )}
 
-      {/* MODAL VIDEO (Paso 3) */}
+      {/* MODAL VIDEO (Paso 3) - print:hidden */}
       <AnimatePresence>
           {showVideo && data?.popupVideo && (
             <motion.div 
-                className="fixed inset-0 z-[200] flex items-center justify-center bg-vlanc-black/95 backdrop-blur-md p-4 md:p-10 pointer-events-auto"
+                className="fixed inset-0 z-[200] flex items-center justify-center bg-vlanc-black/95 backdrop-blur-md p-4 md:p-10 pointer-events-auto print:hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -287,10 +303,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({ data, investmentTitle, lo
                     >
                         [ Cerrar y Continuar ]
                     </button>
+                    {/* VIDEO PAUSADO POR DEFECTO (sin autoPlay) */}
                     <video 
                         src={data.popupVideo} 
                         controls 
-                        autoPlay 
                         className="w-full h-full object-contain"
                     />
                 </AnimatedSection>
