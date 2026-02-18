@@ -55,9 +55,8 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
       animate="center"
       exit="exit"
       style={{
-        backfaceVisibility: 'hidden',
         perspective: 2000,
-        // Refuerzo inline por si acaso
+        // Eliminado backfaceVisibility: 'hidden' ya que puede causar problemas de clicks en elementos 3D estáticos
         pointerEvents: isPresent ? 'auto' : 'none' 
       }}
     >

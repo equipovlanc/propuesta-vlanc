@@ -17,7 +17,9 @@ interface IndexSectionProps {
 }
 
 const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
-  const handleLinkClick = (id?: string) => {
+  const handleLinkClick = (e: React.MouseEvent, id?: string) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (id) onNavigate(id);
   };
 
@@ -67,21 +69,20 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
         </div>
         
         {/* Bloque Inferior: Links (J2) */}
-        <div className="space-y-5 relative z-30 pointer-events-auto">
+        <div className="space-y-5 relative z-[60] pointer-events-auto">
             {items.length > 0 ? items.map((item, i) => (
                 <AnimatedSection key={i} direction="up" hierarchy={2}>
-                  {/* Se cambia 'a' por 'div' para garantizar que onClick capture el evento sin interferencias del navegador */}
-                  <div 
-                    onClick={() => handleLinkClick(item.id)}
-                    className="flex items-baseline text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 pointer-events-auto select-none"
-                    role="button"
+                  {/* Usamos button para evitar conflictos de anclas y asegurar el click */}
+                  <button 
+                    onClick={(e) => handleLinkClick(e, item.id)}
+                    className="flex items-baseline text-left text-vlanc-black hover:text-vlanc-primary transition-all duration-300 group cursor-pointer relative py-1 pointer-events-auto select-none w-full outline-none bg-transparent border-none p-0"
                     aria-label={`Ir a ${item.title}`}
                   >
                       <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px] group-hover:translate-x-1 duration-500 pointer-events-none">/</span>
                       <span className="subtitulo3 tracking-tight font-normal pointer-events-none"> 
                           {item.title}
                       </span>
-                  </div>
+                  </button>
                 </AnimatedSection>
             )) : (
               <p className="text-vlanc-black/30 italic font-sans text-xs">Añade secciones en el CMS...</p>

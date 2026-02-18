@@ -193,7 +193,8 @@ const App: React.FC = () => {
     }
 
     setIsAnimating(true);
-    setTimeout(() => setIsAnimating(false), 1200);
+    // AUMENTADO A 1600ms para coincidir con la duración de la animación en SectionSlide
+    setTimeout(() => setIsAnimating(false), 1600);
   };
 
   const navigateToId = (id: string) => {
@@ -215,13 +216,6 @@ const App: React.FC = () => {
              
              // --- LÓGICA ESPECIAL MISION (Página 4) ---
              if (activeSection.id === 'mission') {
-                 // Si la sección ya está completada, permitimos navegar libremente entre páginas
-                 // PERO si el usuario quiere ver los pasos de nuevo, podría usar teclas. 
-                 // Aquí asumimos que scroll en completada = cambio de página, 
-                 // SALVO que estemos arriba del todo y queramos bajar "visualmente" de nuevo.
-                 // Según requerimiento: "aparecerá siempre en su estado final". 
-                 // Esto implica que el scroll vertical ya NO controla los pasos internos, sino que pasa de página.
-                 
                  if (!isCompleted) {
                     if (e.deltaY > 0) { // Bajando
                         if (internalStep < 2) {
