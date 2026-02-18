@@ -101,17 +101,17 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
 
                 {/* COLUMNA DERECHA: Tabla (J2) */}
                 <div className="shrink-0 flex flex-col items-end">
-                    {/* Contenedor Tabla - Ancho aumentado a 820px */}
-                    <AnimatedSection className="w-[820px] h-[532px] flex flex-col" hierarchy={2}>
+                    {/* Contenedor Tabla - Ancho aumentado a 950px */}
+                    <AnimatedSection className="w-[950px] h-[532px] flex flex-col" hierarchy={2}>
                         
-                        {/* Cabecera Tabla */}
-                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0 h-[47px]">
+                        {/* Cabecera Tabla - Ajuste de grid a 2.5fr */}
+                        <div className="grid grid-cols-[2.5fr_repeat(3,1fr)] bg-[#cbb6aa] rounded-t-sm shrink-0 h-[47px]">
                             <div className="p-3"></div>
                             {(data?.tableHeaders ?? []).map((h, i) => (
                                 <div key={i} className="px-3 text-center flex items-center justify-center h-full gap-3">
                                     {/* Casilla para marcar (Print friendly) */}
                                     <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
-                                    <span className="tabla1">{h}</span>
+                                    <span className="tabla1 whitespace-nowrap">{h}</span>
                                 </div>
                             ))}
                         </div>
@@ -119,7 +119,7 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         {/* Cuerpo Tabla */}
                         <div className="flex-grow flex flex-col bg-transparent">
                             {(data?.tableRows ?? []).map((row, i) => {
-                                const gridClass = "grid grid-cols-[3fr_repeat(3,1fr)] items-center";
+                                const gridClass = "grid grid-cols-[2.5fr_repeat(3,1fr)] items-center";
 
                                 if (row.isPremiumSeparator) {
                                     return (
@@ -146,8 +146,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                             })}
                         </div>
 
-                        {/* Pie Tabla: Precios */}
-                        <div className="grid grid-cols-[3fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0 h-[35px]">
+                        {/* Pie Tabla: Precios - Ajuste de grid a 2.5fr */}
+                        <div className="grid grid-cols-[2.5fr_repeat(3,1fr)] bg-[#8f4933] text-white shrink-0 h-[35px]">
                             <div className="p-4"></div>
                             {(data?.prices ?? []).map((price, i) => (
                                 <div key={i} className="px-4 text-center flex flex-col justify-center h-full">
@@ -157,8 +157,8 @@ const Investment: React.FC<InvestmentProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
 
-                    {/* FIRMA - AHORA ANIMADA - Ancho coincidente con tabla */}
-                    <AnimatedSection className="w-[820px] flex flex-col border-t border-[#703622] mt-[25px] pt-1" hierarchy={2}>
+                    {/* FIRMA - AHORA ANIMADA - Ancho coincidente con tabla 950px */}
+                    <AnimatedSection className="w-[950px] flex flex-col border-t border-[#703622] mt-[25px] pt-1" hierarchy={2}>
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
