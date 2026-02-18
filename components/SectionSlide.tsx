@@ -1,12 +1,11 @@
 
 import React, { ReactNode } from 'react';
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants, useIsPresent } from 'framer-motion';
 
 interface ZSlideProps {
   children: ReactNode;
   id?: string;
   className?: string;
-  isActive: boolean;
   direction: number; // 1 (forward) or -1 (backward)
 }
 
@@ -45,7 +44,9 @@ const slideVariants: Variants = {
   })
 };
 
-const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isActive, direction }) => {
+const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", direction }) => {
+  const isPresent = useIsPresent();
+
   return (
     <motion.div 
       id={id}
@@ -58,9 +59,9 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
       style={{
         backfaceVisibility: 'hidden',
         perspective: 2000, 
-        // FIX CRÍTICO: Forzamos pointer-events none si no es la activa, 
-        // independientemente de lo que diga la animación mientras sale.
-        pointerEvents: isActive ? 'auto' : 'none' 
+        // Si el componente está saliendo (!isPresent), forzamos pointer-events: none.
+        // Si está presente, permitimos 'auto' (aunque la variante 'enter' iniciará en 'none' y transicionará a 'auto')
+        pointerEvents: isPresent ? 'auto' : 'none' 
       }}
     >
         <div className="w-full h-full relative">

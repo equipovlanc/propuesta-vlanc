@@ -342,7 +342,6 @@ const App: React.FC = () => {
                     <SectionSlide 
                         key={currentIndex} 
                         id={activeSection.id}
-                        isActive={true}
                         direction={direction}
                     >
                         {activeSection.comp}
