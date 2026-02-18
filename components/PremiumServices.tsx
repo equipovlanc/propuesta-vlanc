@@ -116,7 +116,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             </div>
 
             {/* Right Column: Imagen (J0) */}
-            <div className="flex-grow h-full bg-white flex flex-col justify-end items-center pb-[140px] relative overflow-hidden z-0">
+            {/* CAMBIO: Alineación top-right (justify-start items-end pt-[150px] pr-[120px]) */}
+            <div className="flex-grow h-full bg-white flex flex-col justify-start items-end pt-[150px] pr-[120px] relative overflow-hidden z-0">
                 <AnimatedSection hierarchy={0}>
                     <div className="w-[827px] h-[709px] relative shrink-0">
                         {imageSrc ? (
