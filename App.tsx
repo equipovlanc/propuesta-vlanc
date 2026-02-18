@@ -144,7 +144,7 @@ const App: React.FC = () => {
     list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} /> });
 
     return list;
-  }, [proposalData, internalStep]); // Añadida dependencia de internalStep
+  }, [proposalData, internalStep]); 
 
   // Navigation Logic
   const navigate = (newIndex: number) => {
@@ -152,9 +152,15 @@ const App: React.FC = () => {
     if (newIndex === currentIndex) return;
     if (isAnimating) return; // Debounce animations
 
-    setDirection(newIndex > currentIndex ? 1 : -1);
+    const isMovingForward = newIndex > currentIndex;
+    
+    setDirection(isMovingForward ? 1 : -1);
     setCurrentIndex(newIndex);
-    setInternalStep(0); // Reset del paso interno al cambiar de página
+    
+    // Si vamos hacia adelante, empezamos en paso 0.
+    // Si vamos hacia atrás, empezamos en paso 2 (estado final de Misión).
+    setInternalStep(isMovingForward ? 0 : 2); 
+
     setIsAnimating(true);
     
     // Allow new navigation after animation completes
@@ -179,18 +185,18 @@ const App: React.FC = () => {
         wheelTimeout.current = window.setTimeout(() => {
              const activeSection = sections[currentIndex];
              
-             // LOGICA ESPECIAL PARA PAGINA 4 (MISION)
+             // LOGICA ESPECIAL PARA PAGINA 4 (MISION) - 3 PASOS (0, 1, 2)
              if (activeSection.id === 'mission') {
                 if (e.deltaY > 0) {
-                    // Bajando: Si estamos en paso 0, vamos a 1. Si estamos en 1, cambiamos de pagina.
-                    if (internalStep === 0) {
-                        setInternalStep(1);
+                    // Bajando
+                    if (internalStep < 2) {
+                        setInternalStep(prev => prev + 1);
                         return; // Detener navegación global
                     }
                 } else {
-                    // Subiendo: Si estamos en paso 1, volvemos a 0. Si estamos en 0, pagina anterior.
-                    if (internalStep === 1) {
-                        setInternalStep(0);
+                    // Subiendo
+                    if (internalStep > 0) {
+                        setInternalStep(prev => prev - 1);
                         return; // Detener navegación global
                     }
                 }
@@ -212,13 +218,13 @@ const App: React.FC = () => {
         // LOGICA ESPECIAL PARA PAGINA 4 (MISION) TECLADO
         if (activeSection.id === 'mission') {
             if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                if (internalStep === 0) {
-                    setInternalStep(1);
+                if (internalStep < 2) {
+                    setInternalStep(prev => prev + 1);
                     return;
                 }
             } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                if (internalStep === 1) {
-                    setInternalStep(0);
+                if (internalStep > 0) {
+                    setInternalStep(prev => prev - 1);
                     return;
                 }
             }
