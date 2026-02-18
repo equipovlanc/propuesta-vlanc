@@ -18,13 +18,15 @@ const slideVariants: Variants = {
     opacity: 0,
     zIndex: direction > 0 ? 50 : 0, 
     // Blur reducido a 3px: Suficiente para dar velocidad, poco para marear
-    filter: 'blur(3px)', 
+    filter: 'blur(3px)',
+    pointerEvents: 'none', // Bloquear clics mientras entra
   }),
   center: {
     scale: 1,
     opacity: 1,
     zIndex: 10,
     filter: 'blur(0px)',
+    pointerEvents: 'auto', // Permitir clics SOLO cuando está centrada
     transition: {
       duration: 1.6, 
       ease: [0.25, 1, 0.5, 1] as const, // Curva suave
@@ -35,6 +37,7 @@ const slideVariants: Variants = {
     opacity: 0,
     zIndex: direction > 0 ? 0 : 50,
     filter: 'blur(3px)', 
+    pointerEvents: 'none', // Bloquear clics mientras sale (CRÍTICO para navegación hacia atrás)
     transition: {
       duration: 1.6,
       ease: [0.25, 1, 0.5, 1] as const,
@@ -57,8 +60,8 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", isA
         perspective: 2000, 
       }}
     >
-        {/* Contenido con pointer-events restaurados */}
-        <div className="w-full h-full relative pointer-events-auto">
+        {/* Contenido: Eliminamos pointer-events-auto forzado para que herede del padre motion.div */}
+        <div className="w-full h-full relative">
             {children}
         </div>
     </motion.div>

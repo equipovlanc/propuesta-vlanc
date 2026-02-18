@@ -61,7 +61,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                         </h3>
                                         {/* MÁSCARA TACHADO TÍTULO (Bloque sólido) */}
                                         <motion.div 
-                                            initial={{ scaleX: 1, originX: 0 }}
+                                            initial={{ scaleX: isRevealed ? 0 : 1, originX: 0 }}
                                             animate={{ scaleX: isRevealed ? 0 : 1 }}
                                             transition={{ duration: 0.5, ease: "easeInOut" }}
                                             className="absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none"
@@ -80,7 +80,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                         </div>
                                          {/* MÁSCARA TACHADO DESCRIPCIÓN (Líneas independientes) */}
                                          <motion.div 
-                                            initial={{ scaleX: 1, originX: 0 }}
+                                            initial={{ scaleX: isRevealed ? 0 : 1, originX: 0 }}
                                             animate={{ scaleX: isRevealed ? 0 : 1 }}
                                             transition={{ duration: 0.5, ease: "easeInOut" }}
                                             className="absolute inset-0 z-20 pointer-events-none"
@@ -110,7 +110,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                             </button>
                                             {/* MÁSCARA TACHADO BOTÓN */}
                                             <motion.div 
-                                                initial={{ scaleX: 1, originX: 0 }}
+                                                initial={{ scaleX: isRevealed ? 0 : 1, originX: 0 }}
                                                 animate={{ scaleX: isRevealed ? 0 : 1 }}
                                                 transition={{ duration: 0.5, ease: "easeInOut" }}
                                                 className="absolute -inset-1 bg-[#8f4933] z-30 pointer-events-none"
