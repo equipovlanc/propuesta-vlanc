@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
@@ -24,15 +23,15 @@ const CustomCursor: React.FC = () => {
       setIsOverInteractive(isInteractable);
 
       const isVideoWithoutControls = !!target.closest('video:not([controls])');
+      const isIgnored = !!target.closest('[data-cursor-ignore]');
 
-      if (isVideoWithoutControls && !isInteractable) {
+      if (!isIgnored && isVideoWithoutControls && !isInteractable) {
           setCursorMode('play');
       } else {
           setCursorMode('default');
       }
     };
     
-    // Usamos mousemove para todo para mayor consistencia
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {

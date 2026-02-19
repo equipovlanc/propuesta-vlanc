@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SocialMedia {
@@ -26,11 +26,26 @@ interface ContactProps {
 
 type AnimationPhase = 'playing' | 'moving' | 'finished';
 
-const LogoContent = React.forwardRef<HTMLVideoElement, { finalLogoVideo?: string | null; finalLogo?: string | null }>(
-    ({ finalLogoVideo, finalLogo }, ref) => (
+// --- Sub-componente para el contenido del logo (Video o Imagen) ---
+interface LogoContentProps {
+    finalLogoVideo?: string | null;
+    finalLogo?: string | null;
+    onVideoError?: () => void;
+}
+
+const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
+    ({ finalLogoVideo, finalLogo, onVideoError }, ref) => (
         <>
             {finalLogoVideo ? (
-                <video ref={ref} src={finalLogoVideo} muted playsInline className="w-full h-full object-contain" />
+                <video
+                    ref={ref}
+                    src={finalLogoVideo}
+                    muted
+                    playsInline
+                    className="w-full h-full object-contain"
+                    onError={onVideoError}
+                    data-cursor-ignore // Atributo para que el cursor personalizado lo ignore
+                />
             ) : finalLogo ? (
                 <img src={finalLogo} alt="VLANC Final Logo" className="w-full h-full object-contain" />
             ) : (
@@ -43,36 +58,70 @@ const LogoContent = React.forwardRef<HTMLVideoElement, { finalLogoVideo?: string
 );
 
 const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) => {
-    const [phase, setPhase] = useState<AnimationPhase>(finalLogoVideo ? 'playing' : 'finished');
-    const videoRef = useRef<HTMLVideoElement>(null);
+    const [videoHasError, setVideoHasError] = React.useState(false);
+    const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo ? 'playing' : 'finished');
+    const videoRef = React.useRef<HTMLVideoElement>(null);
+
+    const handleVideoError = React.useCallback(() => {
+        console.warn("Animated logo failed to load, likely due to an unsupported format like .mov. Falling back to static image.");
+        if (!videoHasError) {
+            setVideoHasError(true);
+            if (phase === 'playing') {
+                setPhase('moving');
+            }
+        }
+    }, [phase, videoHasError]);
 
     const handlePrint = () => {
         window.print();
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         const video = videoRef.current;
-        if (video && phase === 'playing') {
-            const onTimeUpdate = () => {
-                if (video.currentTime >= 6.5) {
-                    video.removeEventListener('timeupdate', onTimeUpdate);
-                    video.pause();
-                    setPhase('moving');
-                }
-            };
-            video.addEventListener('timeupdate', onTimeUpdate);
-            video.play().catch(e => {
-                console.error("Autoplay failed. The browser may have blocked it.", e);
-                setPhase('moving'); // Fallback if autoplay fails
-            });
-            
-            return () => {
-                video.removeEventListener('timeupdate', onTimeUpdate);
-            };
+        if (!video || phase !== 'playing' || videoHasError) {
+            return;
         }
-    }, [phase, finalLogoVideo]);
+
+        let timeoutId: number;
+
+        const cleanup = () => {
+            video.removeEventListener('timeupdate', onTimeUpdate);
+            video.removeEventListener('canplay', onCanPlay);
+            clearTimeout(timeoutId);
+        };
+
+        const onTimeUpdate = () => {
+            if (video.currentTime >= 6.5) {
+                video.pause();
+                cleanup();
+                setPhase('moving');
+            }
+        };
+
+        const onCanPlay = () => {
+            timeoutId = window.setTimeout(() => {
+                console.warn("Video animation timeout. Forcing transition.");
+                cleanup();
+                setPhase('moving');
+            }, 10000); // 10s failsafe
+
+            video.play().catch(e => {
+                console.error("Autoplay was prevented for the animated logo.", e);
+                cleanup();
+                handleVideoError();
+            });
+        };
+
+        video.addEventListener('timeupdate', onTimeUpdate);
+        video.addEventListener('canplay', onCanPlay);
+        
+        video.load(); // Explicitly load to trigger 'canplay' or 'error'
+
+        return cleanup;
+    }, [phase, videoHasError, finalLogoVideo, handleVideoError]);
 
     const showContent = phase === 'finished';
+    const effectiveVideoSrc = videoHasError ? null : finalLogoVideo;
 
     return (
         <footer className="h-screen w-full flex flex-col pt-[150px] pb-[140px] px-[120px] relative overflow-hidden">
@@ -92,7 +141,12 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                                     }
                                 }}
                             >
-                                <LogoContent ref={videoRef} finalLogo={finalLogo} finalLogoVideo={finalLogoVideo} />
+                                <LogoContent
+                                    ref={videoRef}
+                                    finalLogo={finalLogo}
+                                    finalLogoVideo={effectiveVideoSrc}
+                                    onVideoError={handleVideoError}
+                                />
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -160,13 +214,18 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
             </div>
 
             <AnimatePresence>
-                {phase === 'playing' && (
+                {phase === 'playing' && effectiveVideoSrc && (
                     <motion.div
                         layoutId="final-logo"
                         className="fixed inset-0 flex items-center justify-center z-[100]"
                         style={{ width: 'clamp(300px, 60vw, 900px)' }}
                     >
-                        <LogoContent ref={videoRef} finalLogo={finalLogo} finalLogoVideo={finalLogoVideo} />
+                        <LogoContent
+                            ref={videoRef}
+                            finalLogo={finalLogo}
+                            finalLogoVideo={effectiveVideoSrc}
+                            onVideoError={handleVideoError}
+                        />
                     </motion.div>
                 )}
             </AnimatePresence>
