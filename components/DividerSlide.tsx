@@ -153,6 +153,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                             >
                                 <div
                                     className="relative w-full h-full"
+                                    style={{ transform: 'translateZ(0px)' }}
                                     onClick={() => handlePlayPause()}
                                     onMouseEnter={() => setControlsVisible(true)}
                                     onMouseLeave={() => setControlsVisible(false)}
@@ -171,7 +172,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: controlsVisible ? 1 : 0 }}
                                         transition={{ duration: 0.3 }}
-                                        className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-3 z-[20000]" 
+                                        className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-3 z-10" 
                                         style={{ pointerEvents: controlsVisible ? 'auto' : 'none' }}
                                         onClick={e => e.stopPropagation()}
                                     >
