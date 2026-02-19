@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
-  const [cursorMode, setCursorMode] = useState<'default' | 'clickable' | 'play'>('default');
-  
+  const [cursorMode, setCursorMode] = useState<'default' | 'play'>('default');
+  const [isOverInteractive, setIsOverInteractive] = useState(false);
+
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   
@@ -21,30 +22,43 @@ const CustomCursor: React.FC = () => {
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       
-      const isInteractable = !!target.closest('button, a, input, select, .cursor-pointer');
-      const isVideoElement = !!target.closest('video');
-      const hasControls = target.hasAttribute('controls');
+      const isInteractable = !!target.closest('button, a, input, select, .cursor-pointer, video[controls]');
+      setIsOverInteractive(isInteractable);
 
-      if (isVideoElement && !hasControls) {
+      const isVideoWithoutControls = !!target.closest('video:not([controls])');
+
+      if (isVideoWithoutControls) {
           setCursorMode('play');
-      } else if (isInteractable) {
-          setCursorMode('clickable');
       } else {
           setCursorMode('default');
       }
     };
-
+    
+    // Usamos mousemove en lugar de mouseover para una detección más consistente al mover el ratón
     window.addEventListener('mousemove', moveCursor);
-    window.addEventListener('mouseover', handleMouseOver);
+    document.documentElement.addEventListener('mousemove', handleMouseOver);
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
-      window.removeEventListener('mouseover', handleMouseOver);
+      document.documentElement.removeEventListener('mousemove', handleMouseOver);
     };
   }, [cursorX, cursorY]);
+
+  // Efecto para gestionar el cursor del sistema
+  useEffect(() => {
+    document.body.style.cursor = isOverInteractive ? 'auto' : 'none';
+    // Función de limpieza para restaurar el cursor si el componente se desmonta
+    return () => {
+      document.body.style.cursor = 'auto';
+    };
+  }, [isOverInteractive]);
   
-  const size = cursorMode === 'play' ? 80 : cursorMode === 'clickable' ? 40 : 16;
+  const size = isOverInteractive ? 0 : cursorMode === 'play' ? 80 : 16;
   const bgColor = cursorMode === 'play' ? 'rgba(143, 73, 51, 0.15)' : 'rgba(143, 73, 51, 0.05)';
+
+  if (isOverInteractive) {
+    return null;
+  }
 
   return (
     <motion.div
