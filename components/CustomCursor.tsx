@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
-  const [cursorMode, setCursorMode] = useState<'default' | 'clickable' | 'play'>('default');
-  
+  const [cursorMode, setCursorMode] = useState<'default' | 'play'>('default');
+  const [isOverInteractive, setIsOverInteractive] = useState(false);
+
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   
@@ -13,37 +14,33 @@ const CustomCursor: React.FC = () => {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    const moveCursor = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-    };
 
-    const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       
-      const isInteractable = !!target.closest('button, a, input, select, .cursor-pointer');
-      const isVideoElement = !!target.closest('video');
-      const hasControls = target.hasAttribute('controls');
+      const isInteractable = !!target.closest('button, a, input, select, .cursor-pointer, video[controls]');
+      setIsOverInteractive(isInteractable);
 
-      if (isVideoElement && !hasControls) {
+      const isVideoWithoutControls = !!target.closest('video:not([controls])');
+
+      if (isVideoWithoutControls && !isInteractable) {
           setCursorMode('play');
-      } else if (isInteractable) {
-          setCursorMode('clickable');
       } else {
           setCursorMode('default');
       }
     };
-
-    window.addEventListener('mousemove', moveCursor);
-    window.addEventListener('mouseover', handleMouseOver);
+    
+    // Usamos mousemove para todo para mayor consistencia
+    window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
-      window.removeEventListener('mousemove', moveCursor);
-      window.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, [cursorX, cursorY]);
   
-  const size = cursorMode === 'play' ? 80 : cursorMode === 'clickable' ? 40 : 16;
+  const size = isOverInteractive ? 40 : cursorMode === 'play' ? 80 : 16;
   const bgColor = cursorMode === 'play' ? 'rgba(143, 73, 51, 0.15)' : 'rgba(143, 73, 51, 0.05)';
 
   return (
@@ -55,13 +52,15 @@ const CustomCursor: React.FC = () => {
         translateX: '-50%',
         translateY: '-50%',
       }}
+      animate={{ opacity: isOverInteractive ? 0 : 1 }}
+      transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.5 }}
     >
       <motion.div
         className="rounded-full border border-vlanc-primary bg-vlanc-primary/5 flex items-center justify-center overflow-hidden"
         animate={{ width: size, height: size, backgroundColor: bgColor }}
         transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.5 }}
       >
-        {cursorMode === 'play' && (
+        {cursorMode === 'play' && !isOverInteractive && (
           <motion.span
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
