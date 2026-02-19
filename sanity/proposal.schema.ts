@@ -1,4 +1,3 @@
-
 import { defineType, defineField } from 'sanity'
 
 const overlayField = defineField({
@@ -35,7 +34,8 @@ export default defineType({
             fields: [
                 defineField({ name: 'smallLogo', title: 'Logo Pequeño (Esquina Superior Izq)', type: 'image' }),
                 defineField({ name: 'mainLogo', title: 'Logo Portada (Esquina Inferior Der)', type: 'image' }),
-                defineField({ name: 'finalLogo', title: 'Logo Cierre (Final de Propuesta)', type: 'image' }),
+                defineField({ name: 'finalLogo', title: 'Logo Cierre (Estático)', type: 'image' }),
+                defineField({ name: 'finalLogoVideo', title: 'Logo Cierre Animado (Opcional)', type: 'file', options: { accept: 'video/*' } }),
             ]
         }),
         defineField({

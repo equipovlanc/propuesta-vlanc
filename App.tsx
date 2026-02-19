@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
@@ -54,7 +53,12 @@ const App: React.FC = () => {
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
-          "logos": logos{"smallLogo": smallLogo.asset->url, "mainLogo": mainLogo.asset->url, "finalLogo": finalLogo.asset->url},
+          "logos": logos{
+            "smallLogo": smallLogo.asset->url, 
+            "mainLogo": mainLogo.asset->url, 
+            "finalLogo": finalLogo.asset->url,
+            "finalLogoVideo": finalLogoVideo.asset->url
+          },
           "index": index{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "situation": situation{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "mission": mission{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
@@ -230,7 +234,7 @@ const App: React.FC = () => {
         });
     });
 
-    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} /> });
+    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} /> });
 
     return list;
   })();
