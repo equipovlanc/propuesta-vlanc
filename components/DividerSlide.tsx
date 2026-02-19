@@ -56,6 +56,8 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
 
   const handleImageClick = () => {
       if (video) {
+      // Solo permite reproducir el video si no se está reproduciendo ya y la imagen/texto son visibles
+      if (video && showFinalState && !isPlaying) {
           setShowFinalState(false);
           setIsPlaying(true);
           setTimeout(() => {
@@ -70,6 +72,11 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
   return (
     <section className="h-screen w-full relative overflow-hidden bg-vlanc-bg">
       {/* Video Overlay - Se superpone sin afectar al layout base */}
+    <section 
+        className="h-screen w-full relative flex items-center justify-center overflow-hidden bg-vlanc-bg cursor-pointer"
+        onClick={handleImageClick}
+    >
+      {/* Video Overlay: Se superpone sin afectar a la maquetación base. */}
       <AnimatePresence>
         
         {isPlaying && video && (
@@ -113,6 +120,35 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
                          </AnimatedSection>
                     </div>
       </motion.div>
+      {/* Maquetación Base: Imagen de fondo */}
+      {imageSrc && (
+        <motion.div
+            className="absolute inset-0 z-0"
+            initial={{ opacity: isCompleted ? 1 : 0 }}
+            animate={{ opacity: showFinalState ? 1 : 0 }}
+            transition={{ duration: 1.0, delay: 0.2 }} // Aparece después de que el video se oculte
+        >
+            <img src={imageSrc} alt="Team" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-[#8f4933] pointer-events-none" style={{ opacity: imageOpacity / 100 }} />
+        </motion.div>
+      )}
+
+      {/* Maquetación Base: Texto centrado */}
+      <div className="relative z-10 pointer-events-none">
+        <AnimatePresence>
+            {showFinalState && (
+                <motion.h2
+                    className="especial1 text-center px-4"
+                    initial={isCompleted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, transition: { duration: 0.4 } }}
+                    transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.5 }} // Aparece después de la imagen
+                >
+                    {text}
+                </motion.h2>
+            )}
+        </AnimatePresence>
+      </div>
     </section>
   );
 };
