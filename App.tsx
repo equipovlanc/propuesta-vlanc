@@ -234,7 +234,16 @@ const App: React.FC = () => {
         });
     });
 
-    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} /> });
+    list.push({ 
+        id: 'contact', 
+        comp: <Contact 
+            data={d.contact} 
+            finalLogo={d.logos?.finalLogo} 
+            finalLogoVideo={d.logos?.finalLogoVideo}
+            isSectionCompleted={completedSections.has('contact')}
+            onAnimationComplete={() => setCompletedSections(prev => new Set(prev).add('contact'))}
+        /> 
+    });
 
     return list;
   })();

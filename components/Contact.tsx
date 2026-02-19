@@ -22,6 +22,8 @@ interface ContactProps {
     };
     finalLogo?: string | null;
     finalLogoVideo?: string | null;
+    isSectionCompleted?: boolean;
+    onAnimationComplete?: () => void;
 }
 
 type AnimationPhase = 'playing' | 'moving' | 'finished';
@@ -58,9 +60,20 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
     )
 );
 
-const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) => {
+const Contact: React.FC<ContactProps> = ({ 
+    data, 
+    finalLogo, 
+    finalLogoVideo,
+    isSectionCompleted = false,
+    onAnimationComplete = () => {}
+}) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
-    const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo && !videoHasError ? 'playing' : 'finished');
+    const [phase, setPhase] = React.useState<AnimationPhase>(() => {
+        if (isSectionCompleted) {
+            return 'finished';
+        }
+        return (finalLogoVideo && !videoHasError) ? 'playing' : 'finished';
+    });
     const videoRef = React.useRef<HTMLVideoElement>(null);
 
     const handleVideoError = React.useCallback(() => {
@@ -127,8 +140,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
                 
                 <div className="flex items-center justify-center h-full w-full">
-                    {/* El logo en su posición final ya no necesita AnimatePresence, 
-                        permitiendo que la animación de layout sea la única responsable de la transición */}
                     {phase !== 'playing' && (
                         <motion.div
                             layoutId="final-logo-container"
@@ -137,13 +148,14 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                             onLayoutAnimationComplete={() => {
                                 if (phase === 'moving') {
                                     setPhase('finished');
+                                    onAnimationComplete();
                                 }
                             }}
                         >
                             <LogoContent
                                 ref={videoRef}
                                 finalLogo={finalLogo}
-                                finalLogoVideo={effectiveVideoSrc}
+                                finalLogoVideo={isSectionCompleted ? null : effectiveVideoSrc}
                                 onVideoError={handleVideoError}
                             />
                         </motion.div>
