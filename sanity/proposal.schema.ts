@@ -341,6 +341,31 @@ export default defineType({
             ]
         }),
         defineField({
+            name: 'dividerSlide',
+            title: 'Diapositiva Divisoria (Equipo)',
+            type: 'object',
+            fields: [
+                defineField({
+                    name: 'text',
+                    title: 'Texto Principal',
+                    type: 'string',
+                    initialValue: '¿Nos dejas acompañarte?'
+                }),
+                defineField({
+                    name: 'video',
+                    title: 'Video (Opcional, se reproduce al scrollear)',
+                    type: 'file',
+                    options: { accept: 'video/*' }
+                }),
+                defineField({
+                    name: 'image',
+                    title: 'Imagen (Fallback y estado final)',
+                    type: 'image',
+                    fields: [overlayField]
+                }),
+            ]
+        }),
+        defineField({
             name: 'guarantees',
             title: 'Garantías',
             type: 'object',

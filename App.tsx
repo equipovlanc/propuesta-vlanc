@@ -70,12 +70,12 @@ const App: React.FC = () => {
             "popupVideo": popupVideo.asset->url,
             "overlayLogo": overlayLogo.asset->url
           },
+          "dividerSlide": dividerSlide{..., "image": image.asset->url, "video": video.asset->url},
           "guarantees": guarantees{..., "items": items[]{..., "icon": icon.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "contact": contact{
             ..., 
             "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, 
-            "teamVideo": teamVideo.asset->url,
             "phone": phone{
                 ...,
                 "landline": landline{..., "icon": icon.asset->url},
@@ -113,7 +113,7 @@ const App: React.FC = () => {
     // Recuperamos el ID de la sección actual para marcar como completada
     const currentSection = sectionsRef.current[currentIndex];
     if (isMovingForward && currentSection) {
-        if (['mission', 'process', 'investment', 'special-offers', 'team-photo'].includes(currentSection.id)) {
+        if (['mission', 'process', 'investment', 'special-offers', 'divider-slide'].includes(currentSection.id)) {
             setCompletedSections(prev => new Set(prev).add(currentSection.id));
         }
     }
@@ -139,9 +139,10 @@ const App: React.FC = () => {
             if (completedSections.has('special-offers')) setInternalStep(4);
             else setInternalStep(isMovingForward ? 0 : 4);
         }
-        else if (nextSection.id === 'team-photo') {
-            if (completedSections.has('team-photo')) setInternalStep(1);
-            else setInternalStep(isMovingForward ? 0 : 1);
+        else if (nextSection.id === 'divider-slide') {
+            const dividerStepsCount = 3; // 0: init, 1: video, 2: image, 3: text
+            if (completedSections.has('divider-slide')) setInternalStep(dividerStepsCount);
+            else setInternalStep(isMovingForward ? 0 : dividerStepsCount);
         }
         else {
             setInternalStep(0);
@@ -193,10 +194,7 @@ const App: React.FC = () => {
     });
 
     list.push(
-        // Le pasamos el step a Investment
         { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: 14 },
-        // Le pasamos step y setNavigationBlocked a SpecialOffers.
-        // AÑADIDO: isSectionCompleted para determinar si los botones deben estar ya girados al volver.
         { 
             id: 'special-offers', 
             comp: <SpecialOffers 
@@ -212,14 +210,14 @@ const App: React.FC = () => {
         },
         { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 16 },
         { 
-            id: 'team-photo', 
+            id: 'divider-slide', 
             comp: <DividerSlide 
-                image={d.contact?.image} 
-                text="¿Nos dejas acompañarte?" 
-                video={d.contact?.teamVideo}
+                data={d.dividerSlide} 
                 step={internalStep}
-                isCompleted={completedSections.has('team-photo')}
-            /> 
+                isSectionCompleted={completedSections.has('divider-slide')}
+                setNavigationBlocked={setNavigationBlocked}
+            />, 
+            headerPage: 17
         },
         { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 18 }
     );
@@ -254,16 +252,14 @@ const App: React.FC = () => {
              const activeSection = sections[currentIndex];
              const isCompleted = completedSections.has(activeSection.id);
              
-             // --- LÓGICA ESPECIAL MISION ---
              if (activeSection.id === 'mission' && !isCompleted) {
-                if (e.deltaY > 0) { // Bajando
+                if (e.deltaY > 0) {
                     if (internalStep < 2) { setInternalStep(prev => prev + 1); return; }
-                } else { // Subiendo
+                } else {
                     if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
                 }
              }
 
-             // --- LÓGICA ESPECIAL PROCESO ---
              if (activeSection.id === 'process' && !isCompleted) {
                  const totalSteps = proposalData?.process?.steps?.length || 8;
                  if (e.deltaY > 0) {
@@ -273,7 +269,6 @@ const App: React.FC = () => {
                  }
              }
 
-             // --- LÓGICA ESPECIAL INVERSIÓN ---
              if (activeSection.id === 'investment' && !isCompleted) {
                 if (e.deltaY > 0) { 
                     if (internalStep < 3) { setInternalStep(prev => prev + 1); return; }
@@ -282,8 +277,6 @@ const App: React.FC = () => {
                 }
              }
 
-             // --- LÓGICA ESPECIAL OFERTAS (NUEVO) ---
-             // Pasos 0..4
              if (activeSection.id === 'special-offers' && !isCompleted) {
                  if (e.deltaY > 0) {
                      if (internalStep < 4) { setInternalStep(prev => prev + 1); return; }
@@ -291,15 +284,15 @@ const App: React.FC = () => {
                      if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
                  }
              }
-
-             // --- LÓGICA ESPECIAL TEAM PHOTO (VIDEO) ---
-             if (activeSection.id === 'team-photo' && !isCompleted) {
-                 if (e.deltaY > 0) {
-                     if (internalStep < 1) { setInternalStep(prev => prev + 1); return; }
-                 } else {
-                     if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
-                 }
-             }
+             
+             if (activeSection.id === 'divider-slide' && !isCompleted) {
+                const totalSteps = 3; // 0: init, 1: video, 2: image, 3: text
+                if (e.deltaY > 0) {
+                    if (internalStep < totalSteps) { setInternalStep(prev => prev + 1); return; }
+                } else {
+                    if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
+                }
+            }
 
              // Navegación Global Estándar
              if (e.deltaY > 0) navigate(currentIndex + 1);
@@ -328,7 +321,8 @@ const App: React.FC = () => {
         if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
         if (activeSection.id === 'investment' && !isCompleted) if (handleStep(3)) return;
         if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(4)) return;
-        if (activeSection.id === 'team-photo' && !isCompleted) if (handleStep(1)) return;
+        if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(3)) return;
+
 
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
         if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigate(currentIndex - 1);
