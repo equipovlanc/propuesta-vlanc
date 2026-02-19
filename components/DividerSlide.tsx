@@ -66,7 +66,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                         {/* Video Player */}
                         {videoSrc && (
                             <motion.div
-                                className="absolute inset-0"
+                                className="absolute inset-0 bg-black"
                                 initial={{ opacity: 0 }}
                                 // El video es visible desde el paso 0
                                 animate={{ opacity: isVideoVisible ? 1 : 0 }}
@@ -82,7 +82,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                     controls={isHovered} // Los controles solo aparecen si el cursor está encima
                                     onMouseEnter={() => setIsHovered(true)}
                                     onMouseLeave={() => setIsHovered(false)}
-                                    className="w-full h-full object-cover shadow-xl rounded-[1px]"
+                                    className="w-full h-full object-contain shadow-xl rounded-[1px]"
                                 />
                             </motion.div>
                         )}
