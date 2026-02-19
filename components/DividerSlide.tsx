@@ -20,16 +20,16 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
     const [isHovered, setIsHovered] = useState(false);
 
     const isFinalState = isSectionCompleted || step >= 2;
-
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
     const videoSrc = data?.video;
 
+    // Efecto para REPRODUCIR el video cuando el primer scroll cambia el paso a 1
     useEffect(() => {
         if (step === 1 && !isSectionCompleted && videoRef.current) {
-            loopCount.current = 0; // Reseteamos el contador al empezar a reproducir
+            loopCount.current = 0; // Reseteamos el contador para la secuencia de doble reproducción
             videoRef.current.play().catch(error => {
-                console.error("La auto-reproducción del video fue prevenida:", error);
+                console.error("La reproducción del video fue prevenida por el navegador:", error);
             });
         }
     }, [step, isSectionCompleted]);
@@ -54,29 +54,34 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
         setNavigationBlocked?.(false);
     };
 
+    // El video es visible en el paso 0 (pausado) y el paso 1 (reproduciendo)
+    const isVideoVisible = (step === 0 || step === 1) && !isSectionCompleted;
+
     return (
         <>
             <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative print:pt-0 print:px-0">
                 <div className="w-full max-w-[1320px] flex flex-col">
                     {/* Contenedor de Media */}
                     <div className="w-full aspect-[1320/670] shrink-0 relative">
-                        {/* Video Player - Siempre en DOM si src existe, visibilidad por 'animate' */}
+                        {/* Video Player */}
                         {videoSrc && (
                             <motion.div
                                 className="absolute inset-0"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 1 && !isSectionCompleted ? 1 : 0 }}
+                                // El video es visible desde el paso 0
+                                animate={{ opacity: isVideoVisible ? 1 : 0 }}
                                 transition={{ duration: 1.5, ease: "easeInOut" }}
-                                style={{ pointerEvents: (step === 1 && !isSectionCompleted) ? 'auto' : 'none' }}
+                                style={{ pointerEvents: isVideoVisible ? 'auto' : 'none' }}
                                 onMouseEnter={() => setIsHovered(true)}
                                 onMouseLeave={() => setIsHovered(false)}
                             >
                                 <video
                                     ref={videoRef}
                                     src={videoSrc}
-                                    muted
                                     playsInline
+                                    muted // Esencial para permitir la reproducción programática por scroll
                                     onEnded={handleVideoEnd}
+                                    // Los controles solo aparecen si el cursor está encima
                                     controls={isHovered}
                                     className="w-full h-full object-cover shadow-xl rounded-[1px]"
                                 />
