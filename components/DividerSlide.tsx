@@ -15,6 +15,7 @@ interface DividerSlideProps {
 
 const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCompleted = false, setNavigationBlocked }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
+    const videoContainerRef = useRef<HTMLDivElement>(null);
     const loopCount = useRef(0);
     const [showVideoModal, setShowVideoModal] = useState(false);
     const [controlsVisible, setControlsVisible] = useState(false);
@@ -30,6 +31,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
     const videoSrc = data?.video;
+    const isVideoVisible = (step === 0 || step === 1) && !isSectionCompleted;
 
     // --- Effects for Video State Sync ---
     useEffect(() => {
@@ -69,6 +71,33 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
             });
         }
     }, [step, isSectionCompleted]);
+    
+    // --- Global Mouse Tracking for Controls Visibility ---
+    useEffect(() => {
+        if (!isVideoVisible) {
+            if (controlsVisible) setControlsVisible(false);
+            return;
+        }
+
+        const handleMouseMove = (e: MouseEvent) => {
+            const node = videoContainerRef.current;
+            if (!node) return;
+
+            const { left, top, right, bottom } = node.getBoundingClientRect();
+            const { clientX, clientY } = e;
+
+            if (clientX >= left && clientX <= right && clientY >= top && clientY <= bottom) {
+                if (!controlsVisible) setControlsVisible(true);
+            } else {
+                if (controlsVisible) setControlsVisible(false);
+            }
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, [isVideoVisible, controlsVisible]);
 
     const handleVideoEnd = () => {
         loopCount.current += 1;
@@ -136,8 +165,6 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
         return `${minutes}:${seconds.toString().padStart(2, '0')}`;
     };
 
-    const isVideoVisible = (step === 0 || step === 1) && !isSectionCompleted;
-
     return (
         <>
             <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative print:pt-0 print:px-0">
@@ -152,11 +179,9 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                 style={{ pointerEvents: isVideoVisible ? 'auto' : 'none' }}
                             >
                                 <div
+                                    ref={videoContainerRef}
                                     className="relative w-full h-full"
-                                    style={{ transform: 'translateZ(0px)' }}
                                     onClick={() => handlePlayPause()}
-                                    onMouseEnter={() => setControlsVisible(true)}
-                                    onMouseLeave={() => setControlsVisible(false)}
                                 >
                                     <video
                                         ref={videoRef}
@@ -167,7 +192,6 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                         className="w-full h-full object-contain shadow-xl rounded-[1px]"
                                     />
 
-                                    {/* CUSTOM CONTROLS OVERLAY - UNCONDITIONAL RENDER */}
                                     <motion.div 
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: controlsVisible ? 1 : 0 }}
