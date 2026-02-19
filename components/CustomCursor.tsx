@@ -3,13 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
-  const [isHovering, setIsHovering] = useState(false);
-  const [isClickable, setIsClickable] = useState(false);
+  const [cursorMode, setCursorMode] = useState<'default' | 'clickable' | 'play'>('default');
   
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   
-  // Físicas ajustadas para ser más "snappy" (rápido) y menos "floaty" (lento)
   const springConfig = { damping: 28, stiffness: 600, mass: 0.5 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
@@ -22,13 +20,18 @@ const CustomCursor: React.FC = () => {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const isInteractable = target.closest('button, a, input, select, .cursor-pointer');
       
-      // Solo activamos el modo "VER" si es un video, ignorando imágenes estáticas
-      const isVideo = target.closest('video');
-      
-      setIsClickable(!!isInteractable);
-      setIsHovering(!!isVideo);
+      const isInteractable = !!target.closest('button, a, input, select, .cursor-pointer');
+      const isVideoElement = !!target.closest('video');
+      const hasControls = target.hasAttribute('controls');
+
+      if (isVideoElement && !hasControls) {
+          setCursorMode('play');
+      } else if (isInteractable) {
+          setCursorMode('clickable');
+      } else {
+          setCursorMode('default');
+      }
     };
 
     window.addEventListener('mousemove', moveCursor);
@@ -39,6 +42,9 @@ const CustomCursor: React.FC = () => {
       window.removeEventListener('mouseover', handleMouseOver);
     };
   }, [cursorX, cursorY]);
+  
+  const size = cursorMode === 'play' ? 80 : cursorMode === 'clickable' ? 40 : 16;
+  const bgColor = cursorMode === 'play' ? 'rgba(143, 73, 51, 0.15)' : 'rgba(143, 73, 51, 0.05)';
 
   return (
     <motion.div
@@ -52,20 +58,16 @@ const CustomCursor: React.FC = () => {
     >
       <motion.div
         className="rounded-full border border-vlanc-primary bg-vlanc-primary/5 flex items-center justify-center overflow-hidden"
-        animate={{
-          width: isHovering ? 80 : isClickable ? 40 : 16,
-          height: isHovering ? 80 : isClickable ? 40 : 16,
-          backgroundColor: isHovering ? 'rgba(143, 73, 51, 0.15)' : 'rgba(143, 73, 51, 0.05)',
-        }}
+        animate={{ width: size, height: size, backgroundColor: bgColor }}
         transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.5 }}
       >
-        {isHovering && (
+        {cursorMode === 'play' && (
           <motion.span
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             className="text-[10px] font-bold tracking-[0.2em] text-vlanc-primary uppercase"
           >
-            VER
+            PLAY
           </motion.span>
         )}
       </motion.div>

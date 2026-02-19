@@ -17,6 +17,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
     const videoRef = useRef<HTMLVideoElement>(null);
     const loopCount = useRef(0);
     const [showVideoModal, setShowVideoModal] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const isFinalState = isSectionCompleted || step >= 2;
 
@@ -67,6 +68,8 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                 animate={{ opacity: step === 1 && !isSectionCompleted ? 1 : 0 }}
                                 transition={{ duration: 1.5, ease: "easeInOut" }}
                                 style={{ pointerEvents: (step === 1 && !isSectionCompleted) ? 'auto' : 'none' }}
+                                onMouseEnter={() => setIsHovered(true)}
+                                onMouseLeave={() => setIsHovered(false)}
                             >
                                 <video
                                     ref={videoRef}
@@ -74,6 +77,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                     muted
                                     playsInline
                                     onEnded={handleVideoEnd}
+                                    controls={isHovered}
                                     className="w-full h-full object-cover shadow-xl rounded-[1px]"
                                 />
                             </motion.div>

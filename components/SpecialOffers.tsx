@@ -253,7 +253,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 <div 
                     className="w-full h-full relative cursor-pointer group"
                     onClick={openVideo}
-                    title="Ver Video"
                 >
                     {imageSrc && (
                         <>
@@ -284,12 +283,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                 </motion.div>
                             )}
 
-                            {/* Icono Play Hover Hint */}
-                             <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                                <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                                    <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                                </div>
-                            </div>
+                             {/* Overlay de color en hover */}
+                             <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-vlanc-primary/10" />
                         </>
                     )}
                 </div>

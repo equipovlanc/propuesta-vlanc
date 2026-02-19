@@ -43,18 +43,6 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
             {/* Columna Izquierda: Media (J0) */}
             <div className="w-full lg:w-[55.7%] h-full flex items-center justify-center relative z-10">
                 
-                {/* 
-                   Contenedor del video con Motion.
-                   Cálculo de centrado horizontal:
-                   - Ancho pantalla: 100vw
-                   - Centro pantalla: 50vw
-                   - Ancho columna izq: 55.7vw
-                   - Centro columna izq: 27.85vw
-                   - Desplazamiento necesario para centrar en pantalla: 50 - 27.85 = 22.15vw
-                   
-                   Si step == 0, desplazamos x: 22.15vw.
-                   Si step >= 1, x: 0.
-                */}
                 <motion.div 
                     className="flex items-center justify-center w-full h-full px-10"
                     initial={{ 
@@ -106,14 +94,8 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
                                 </div>
                             )}
                             
-                            {/* Overlay */}
-                            <div className="absolute inset-0 z-20 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center print:hidden pointer-events-none">
-                                <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M8 5v14l11-7z" />
-                                    </svg>
-                                </div>
-                            </div>
+                            {/* Overlay de color al hacer hover */}
+                            <div className="absolute inset-0 z-20 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity print:hidden pointer-events-none" />
                         </div>
                     </AnimatedSection>
                 </motion.div>
