@@ -55,7 +55,6 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
   };
 
   const handleImageClick = () => {
-      if (video) {
       // Solo permite reproducir el video si no se está reproduciendo ya y la imagen/texto son visibles
       if (video && showFinalState && !isPlaying) {
           setShowFinalState(false);
@@ -70,15 +69,12 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
   const imageOpacity = image?.opacity ?? 15;
 
   return (
-    <section className="h-screen w-full relative overflow-hidden bg-vlanc-bg">
-      {/* Video Overlay - Se superpone sin afectar al layout base */}
     <section 
         className="h-screen w-full relative flex items-center justify-center overflow-hidden bg-vlanc-bg cursor-pointer"
         onClick={handleImageClick}
     >
       {/* Video Overlay: Se superpone sin afectar a la maquetación base. */}
       <AnimatePresence>
-        
         {isPlaying && video && (
             <motion.div 
                 key="video"
@@ -100,26 +96,6 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Estructura Base (Imagen + Texto) - Siempre presente en el DOM para mantener maquetación */}
-      <motion.div 
-        className="w-full h-full relative cursor-pointer"
-        onClick={handleImageClick}
-        initial={{ opacity: isCompleted ? 1 : 0 }}
-        animate={{ opacity: showFinalState ? 1 : 0 }}
-        transition={{ duration: 1.0 }}
-      >
-                    {imageSrc && (
-                        <>
-                            <img src={imageSrc} alt="Team" className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-[#8f4933] pointer-events-none" style={{ opacity: imageOpacity / 100 }} />
-                        </>
-                    )}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                         <AnimatedSection>
-                            <h2 className="especial1 text-center px-4">{text}</h2>
-                         </AnimatedSection>
-                    </div>
-      </motion.div>
       {/* Maquetación Base: Imagen de fondo */}
       {imageSrc && (
         <motion.div
