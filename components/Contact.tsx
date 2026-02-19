@@ -139,6 +139,7 @@ const Contact: React.FC<ContactProps> = ({
                 <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
                     <div className="flex items-center justify-center h-full w-full">
                         <div className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px]">
+                            {/* En visitas posteriores, solo se usa la imagen estática. */}
                             <LogoContent finalLogo={finalLogo} finalLogoVideo={null} />
                         </div>
                     </div>
@@ -219,6 +220,8 @@ const Contact: React.FC<ContactProps> = ({
                                 }
                             }}
                         >
+                            {/* Durante la primera visita, siempre se usa el video para evitar el "cambiazo". */}
+                            {/* Al pausarse en el último frame, la transición es perfecta. */}
                             <LogoContent
                                 ref={videoRef}
                                 finalLogo={finalLogo}
