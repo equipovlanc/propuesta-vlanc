@@ -69,10 +69,10 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
 
   return (
     <section className="h-screen w-full relative overflow-hidden bg-vlanc-bg">
-      <AnimatePresence mode='wait'>
+      {/* Video Overlay - Se superpone sin afectar al layout base */}
+      <AnimatePresence>
         
-        {/* VIDEO PLAYER */}
-        {isPlaying && video && !showFinalState && (
+        {isPlaying && video && (
             <motion.div 
                 key="video"
                 className="absolute inset-0 z-20 bg-black print:hidden"
@@ -91,17 +91,16 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
                 />
             </motion.div>
         )}
+      </AnimatePresence>
 
-        {/* FINAL STATE (IMAGE + TEXT) */}
-        {showFinalState && (
-            <motion.div 
-                key="image"
-                className="absolute inset-0 z-10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1.0 }}
-            >
-                 <div className="w-full h-full relative cursor-pointer" onClick={handleImageClick}>
+      {/* Estructura Base (Imagen + Texto) - Siempre presente en el DOM para mantener maquetación */}
+      <motion.div 
+        className="w-full h-full relative cursor-pointer"
+        onClick={handleImageClick}
+        initial={{ opacity: isCompleted ? 1 : 0 }}
+        animate={{ opacity: showFinalState ? 1 : 0 }}
+        transition={{ duration: 1.0 }}
+      >
                     {imageSrc && (
                         <>
                             <img src={imageSrc} alt="Team" className="w-full h-full object-cover" />
@@ -113,10 +112,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
                             <h2 className="especial1 text-center px-4">{text}</h2>
                          </AnimatedSection>
                     </div>
-                 </div>
-            </motion.div>
-        )}
-      </AnimatePresence>
+      </motion.div>
     </section>
   );
 };

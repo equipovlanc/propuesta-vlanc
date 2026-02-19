@@ -460,7 +460,6 @@ export default defineType({
                     type: 'image',
                     fields: [overlayField]
                 }),
-                defineField({ name: 'teamVideo', title: 'Video Equipo (Scroll)', type: 'file' }),
                 defineField({ name: 'location', type: 'object', fields: [
                     defineField({ name: 'title', type: 'string' }), { name: 'address', type: 'string' }, { name: 'email', type: 'string' }
                 ]}),
