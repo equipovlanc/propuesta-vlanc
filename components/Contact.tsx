@@ -90,12 +90,9 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
         };
 
         const setupAndPlay = () => {
-            // 1. Ocultar el video para que el salto de frame no sea visible
             video.style.opacity = '0';
-            // 2. Saltar el primer fotograma (0.033s para un video de 30fps)
             video.currentTime = 0.1;
 
-            // 3. Después del retraso, hacerlo visible y reproducir
             playbackTimeout = window.setTimeout(() => {
                 if (videoRef.current) {
                     videoRef.current.style.opacity = '1';
@@ -104,24 +101,20 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                         handleVideoError();
                     });
                 }
-            }, 800); // 800ms de retraso
+            }, 800);
         };
 
-        // Escuchar cuando el video ha cargado sus metadatos para poder manipularlo
         video.addEventListener('loadedmetadata', setupAndPlay);
-        // Escuchar cuando el video termina de forma natural
         video.addEventListener('ended', handleVideoEnd);
         
-        // Disparar la carga del video
         video.load();
 
-        // Función de limpieza para evitar fugas de memoria
         return () => {
             clearTimeout(playbackTimeout);
             if (video) {
                 video.removeEventListener('loadedmetadata', setupAndPlay);
                 video.removeEventListener('ended', handleVideoEnd);
-                video.style.opacity = '1'; // Resetear opacidad
+                video.style.opacity = '1';
             }
         };
     }, [phase, videoHasError, handleVideoError]);
@@ -134,27 +127,27 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
                 
                 <div className="flex items-center justify-center h-full w-full">
-                    <AnimatePresence>
-                        {phase !== 'playing' && (
-                            <motion.div
-                                layoutId="final-logo-container"
-                                className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px]"
-                                transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
-                                onLayoutAnimationComplete={() => {
-                                    if (phase === 'moving') {
-                                        setPhase('finished');
-                                    }
-                                }}
-                            >
-                                <LogoContent
-                                    ref={videoRef}
-                                    finalLogo={finalLogo}
-                                    finalLogoVideo={effectiveVideoSrc}
-                                    onVideoError={handleVideoError}
-                                />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    {/* El logo en su posición final ya no necesita AnimatePresence, 
+                        permitiendo que la animación de layout sea la única responsable de la transición */}
+                    {phase !== 'playing' && (
+                        <motion.div
+                            layoutId="final-logo-container"
+                            className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px]"
+                            transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
+                            onLayoutAnimationComplete={() => {
+                                if (phase === 'moving') {
+                                    setPhase('finished');
+                                }
+                            }}
+                        >
+                            <LogoContent
+                                ref={videoRef}
+                                finalLogo={finalLogo}
+                                finalLogoVideo={effectiveVideoSrc}
+                                onVideoError={handleVideoError}
+                            />
+                        </motion.div>
+                    )}
                 </div>
 
                 <motion.div
