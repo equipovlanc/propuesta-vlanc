@@ -75,6 +75,7 @@ const App: React.FC = () => {
           "contact": contact{
             ..., 
             "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, 
+            "teamVideo": teamVideo.asset->url,
             "phone": phone{
                 ...,
                 "landline": landline{..., "icon": icon.asset->url},
@@ -112,7 +113,7 @@ const App: React.FC = () => {
     // Recuperamos el ID de la sección actual para marcar como completada
     const currentSection = sectionsRef.current[currentIndex];
     if (isMovingForward && currentSection) {
-        if (['mission', 'process', 'investment', 'special-offers'].includes(currentSection.id)) {
+        if (['mission', 'process', 'investment', 'special-offers', 'team-photo'].includes(currentSection.id)) {
             setCompletedSections(prev => new Set(prev).add(currentSection.id));
         }
     }
@@ -137,6 +138,10 @@ const App: React.FC = () => {
             // Pasos: 0 (Init), 1 (Condiciones), 2 (Oferta), 3 (Video), 4 (Logo)
             if (completedSections.has('special-offers')) setInternalStep(4);
             else setInternalStep(isMovingForward ? 0 : 4);
+        }
+        else if (nextSection.id === 'team-photo') {
+            if (completedSections.has('team-photo')) setInternalStep(1);
+            else setInternalStep(isMovingForward ? 0 : 1);
         }
         else {
             setInternalStep(0);
@@ -206,7 +211,16 @@ const App: React.FC = () => {
             headerPage: 15 
         },
         { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 16 },
-        { id: 'team-photo', comp: <DividerSlide image={d.contact?.image} text="¿Nos dejas acompañarte?" /> },
+        { 
+            id: 'team-photo', 
+            comp: <DividerSlide 
+                image={d.contact?.image} 
+                text="¿Nos dejas acompañarte?" 
+                video={d.contact?.teamVideo}
+                step={internalStep}
+                isCompleted={completedSections.has('team-photo')}
+            /> 
+        },
         { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 18 }
     );
 
@@ -278,6 +292,15 @@ const App: React.FC = () => {
                  }
              }
 
+             // --- LÓGICA ESPECIAL TEAM PHOTO (VIDEO) ---
+             if (activeSection.id === 'team-photo' && !isCompleted) {
+                 if (e.deltaY > 0) {
+                     if (internalStep < 1) { setInternalStep(prev => prev + 1); return; }
+                 } else {
+                     if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
+                 }
+             }
+
              // Navegación Global Estándar
              if (e.deltaY > 0) navigate(currentIndex + 1);
              else navigate(currentIndex - 1);
@@ -305,6 +328,7 @@ const App: React.FC = () => {
         if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
         if (activeSection.id === 'investment' && !isCompleted) if (handleStep(3)) return;
         if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(4)) return;
+        if (activeSection.id === 'team-photo' && !isCompleted) if (handleStep(1)) return;
 
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
         if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigate(currentIndex - 1);
