@@ -101,7 +101,6 @@ const Contact: React.FC<ContactProps> = ({
         };
     }, [phase, videoHasError, finalLogoVideo, handleVideoError]);
 
-    // --- VÍA RÁPIDA: Si ya se completó, renderiza solo la imagen estática. ---
     if (isSectionCompleted) {
         return (
             <footer className="h-screen w-full flex flex-col pt-[150px] pb-[140px] px-[120px] relative overflow-hidden">
@@ -148,22 +147,29 @@ const Contact: React.FC<ContactProps> = ({
                                 }
                             }}
                         >
-                            {/* EN LA PRIMERA VISITA, USAMOS EL VIDEO HASTA EL FINAL. */}
-                            {/* La imagen solo se usa si no hay video o da error. */}
-                            {(finalLogoVideo && !videoHasError) ? (
-                                <video
-                                    src={finalLogoVideo}
-                                    muted
-                                    playsInline
-                                    loop={false}
-                                    className="w-full h-full object-contain"
-                                    data-cursor-ignore
-                                />
-                            ) : finalLogo ? (
-                                <img src={finalLogo} alt="VLANC Final Logo" className="w-full h-full object-contain" />
-                            ) : (
-                                <div className="w-full h-full bg-vlanc-secondary/5 flex items-center justify-center border border-vlanc-secondary/10"><span className="text-[10px] uppercase tracking-widest text-vlanc-secondary/30 font-bold">Logo Final</span></div>
-                            )}
+                            <video
+                                key="final-video"
+                                src={finalLogoVideo ?? undefined}
+                                muted
+                                playsInline
+                                loop={false}
+                                className="w-full h-full object-contain"
+                                data-cursor-ignore
+                                ref={(node) => {
+                                    if (node) {
+                                        const jumpToEnd = () => {
+                                            if (node.duration) {
+                                                node.currentTime = node.duration;
+                                            }
+                                        };
+                                        if (node.readyState >= 2) {
+                                            jumpToEnd();
+                                        } else {
+                                            node.addEventListener('loadedmetadata', jumpToEnd, { once: true });
+                                        }
+                                    }
+                                }}
+                            />
                         </motion.div>
                     )}
                 </div>
@@ -185,7 +191,6 @@ const Contact: React.FC<ContactProps> = ({
                             className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4"
                             style={{ pointerEvents: 'auto' }}
                         >
-                            {/* LA ANIMACIÓN INICIAL ES SIEMPRE EL VIDEO. NO HAY OTRA OPCIÓN. */}
                             <video
                                 ref={videoRef}
                                 src={finalLogoVideo}
