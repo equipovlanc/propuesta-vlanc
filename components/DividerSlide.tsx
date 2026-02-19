@@ -72,17 +72,16 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                 animate={{ opacity: isVideoVisible ? 1 : 0 }}
                                 transition={{ duration: 1.5, ease: "easeInOut" }}
                                 style={{ pointerEvents: isVideoVisible ? 'auto' : 'none' }}
-                                onMouseEnter={() => setIsHovered(true)}
-                                onMouseLeave={() => setIsHovered(false)}
                             >
                                 <video
                                     ref={videoRef}
                                     src={videoSrc}
                                     playsInline
-                                    muted // Esencial para permitir la reproducción programática por scroll
+                                    muted // Esencial para permitir la reproducción programática por scroll. El usuario puede desmutear con los controles.
                                     onEnded={handleVideoEnd}
-                                    // Los controles solo aparecen si el cursor está encima
-                                    controls={isHovered}
+                                    controls={isHovered} // Los controles solo aparecen si el cursor está encima
+                                    onMouseEnter={() => setIsHovered(true)}
+                                    onMouseLeave={() => setIsHovered(false)}
                                     className="w-full h-full object-cover shadow-xl rounded-[1px]"
                                 />
                             </motion.div>
