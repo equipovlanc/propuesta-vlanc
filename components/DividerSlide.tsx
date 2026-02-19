@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import AnimatedSection from './AnimatedSection';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -95,6 +96,33 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
             </motion.div>
         )}
       </AnimatePresence>
+    <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative bg-vlanc-bg">
+         <div className="w-full max-w-[1320px] flex flex-col">
+             {/* Media Container (J0) */}
+             <div className="w-full aspect-[1320/670] shrink-0 relative">
+                 <AnimatedSection className="w-full h-full relative shadow-xl rounded-[1px] overflow-hidden bg-black" hierarchy={0}>
+                    
+                    {/* VIDEO LAYER */}
+                    <AnimatePresence>
+                        {!showFinalState && video && (
+                            <motion.div 
+                                key="video"
+                                className="absolute inset-0 z-20 bg-black"
+                                initial={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 1.0 }}
+                            >
+                                <video 
+                                    ref={videoRef}
+                                    src={video}
+                                    className="w-full h-full object-cover"
+                                    onEnded={handleVideoEnd}
+                                    playsInline
+                                    controls
+                                />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
       {/* Maquetación Base: Imagen de fondo */}
       {imageSrc && (
@@ -108,6 +136,31 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
             <div className="absolute inset-0 bg-[#8f4933] pointer-events-none" style={{ opacity: imageOpacity / 100 }} />
         </motion.div>
       )}
+                    {/* IMAGE LAYER */}
+                    <motion.div 
+                        className="absolute inset-0 z-10 w-full h-full"
+                        initial={{ opacity: isCompleted ? 1 : 0 }}
+                        animate={{ opacity: showFinalState ? 1 : 0 }}
+                        transition={{ duration: 1.0 }}
+                    >
+                        {imageSrc ? (
+                            <div className="w-full h-full relative">
+                                <img 
+                                    src={imageSrc} 
+                                    alt="Team" 
+                                    className="w-full h-full object-cover" 
+                                />
+                                <div 
+                                    className="absolute inset-0 bg-[#8f4933] pointer-events-none" 
+                                    style={{ opacity: imageOpacity / 100 }}
+                                />
+                            </div>
+                        ) : (
+                             <div className="w-full h-full bg-vlanc-primary/10 flex items-center justify-center border border-vlanc-primary/5">
+                                <span className="text-xs uppercase tracking-widest text-vlanc-primary/40 font-bold">Foto Equipo 1320x670</span>
+                            </div>
+                        )}
+                    </motion.div>
 
       {/* Maquetación Base: Texto centrado */}
       <div className="relative z-10 pointer-events-none">
@@ -125,6 +178,26 @@ const DividerSlide: React.FC<DividerSlideProps> = ({
             )}
         </AnimatePresence>
       </div>
+                 </AnimatedSection>
+             </div>
+             
+             {/* Text (J2) - Only visible in final state */}
+             <div className="mt-12 text-right overflow-hidden min-h-[100px]">
+                <AnimatePresence>
+                    {showFinalState && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.5 }}
+                        >
+                            <h2 className="especial2">
+                                {text || "¿Nos dejas acompañarte?"}
+                            </h2>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+             </div>
+         </div>
     </section>
   );
 };
