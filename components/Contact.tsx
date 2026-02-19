@@ -42,6 +42,7 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
                     src={finalLogoVideo}
                     muted
                     playsInline
+                    loop={false} // Aseguramos que el video no entre en bucle
                     className="w-full h-full object-contain"
                     onError={onVideoError}
                     data-cursor-ignore // Atributo para que el cursor personalizado lo ignore
@@ -59,11 +60,11 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
 
 const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
-    const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo ? 'playing' : 'finished');
+    const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo && !videoHasError ? 'playing' : 'finished');
     const videoRef = React.useRef<HTMLVideoElement>(null);
 
     const handleVideoError = React.useCallback(() => {
-        console.warn("Animated logo failed to load, likely due to an unsupported format like .mov. Falling back to static image.");
+        console.warn("Animated logo failed to load. Falling back to static image.");
         if (!videoHasError) {
             setVideoHasError(true);
             if (phase === 'playing') {
@@ -84,18 +85,29 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
 
         let timeoutId: number;
 
-        const cleanup = () => {
-            video.removeEventListener('timeupdate', onTimeUpdate);
-            video.removeEventListener('canplay', onCanPlay);
-            clearTimeout(timeoutId);
+        const transitionToNextPhase = () => {
+            video.pause();
+            cleanup();
+            setPhase('moving');
         };
 
         const onTimeUpdate = () => {
+            // Límite de tiempo por si la animación es más larga
             if (video.currentTime >= 6.5) {
-                video.pause();
-                cleanup();
-                setPhase('moving');
+                transitionToNextPhase();
             }
+        };
+
+        const onEnded = () => {
+            // Se dispara si el video termina antes de los 6.5s
+            transitionToNextPhase();
+        };
+
+        const cleanup = () => {
+            video.removeEventListener('timeupdate', onTimeUpdate);
+            video.removeEventListener('ended', onEnded);
+            video.removeEventListener('canplay', onCanPlay);
+            clearTimeout(timeoutId);
         };
 
         const onCanPlay = () => {
@@ -103,7 +115,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                 console.warn("Video animation timeout. Forcing transition.");
                 cleanup();
                 setPhase('moving');
-            }, 10000); // 10s failsafe
+            }, 10000); // Failsafe de 10s
 
             video.play().catch(e => {
                 console.error("Autoplay was prevented for the animated logo.", e);
@@ -113,9 +125,10 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
         };
 
         video.addEventListener('timeupdate', onTimeUpdate);
+        video.addEventListener('ended', onEnded);
         video.addEventListener('canplay', onCanPlay);
         
-        video.load(); // Explicitly load to trigger 'canplay' or 'error'
+        video.load(); // Carga explícita para disparar 'canplay' o 'error'
 
         return cleanup;
     }, [phase, videoHasError, finalLogoVideo, handleVideoError]);
@@ -127,12 +140,12 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
         <footer className="h-screen w-full flex flex-col pt-[150px] pb-[140px] px-[120px] relative overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
                 
-                {/* COLUMNA IZQUIERDA: Logo Final */}
+                {/* COLUMNA IZQUIERDA: Contenedor final del Logo */}
                 <div className="flex items-center justify-center h-full w-full">
                     <AnimatePresence>
                         {phase !== 'playing' && (
                             <motion.div
-                                layoutId="final-logo"
+                                layoutId="final-logo-container"
                                 className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px]"
                                 transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
                                 onLayoutAnimationComplete={() => {
@@ -152,7 +165,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                     </AnimatePresence>
                 </div>
 
-                {/* COLUMNA DERECHA: Datos */}
+                {/* COLUMNA DERECHA: Datos de Contacto */}
                 <motion.div
                     className="flex items-center justify-center h-full w-full pl-10"
                     initial={{ opacity: 0 }}
@@ -160,7 +173,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                     transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
                 >
                     <div className="flex flex-col space-y-12 text-left w-full max-w-md translate-x-[100px]">
-                        {/* 1. DÓNDE ESTAMOS */}
+                        {/* ... contenido de contacto ... */}
                         <div>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ {data?.location?.title}</h4>
                             <div className="cuerpo space-y-1 text-vlanc-secondary pl-6">
@@ -168,8 +181,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                                 <p className="font-bold">{data?.location?.email}</p>
                             </div>
                         </div>
-
-                        {/* 2. CONTÁCTANOS */}
                         <div>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ {data?.phone?.title}</h4>
                             <div className="cuerpo space-y-4 text-vlanc-secondary pl-6">
@@ -187,16 +198,12 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                                 )}
                             </div>
                         </div>
-
-                        {/* 3. WEB */}
                         <div>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ {data?.web?.title}</h4>
                             <div className="pl-6">
                                 <a href={data?.web?.url} target="_blank" rel="noopener noreferrer" className="cuerpo border-b border-vlanc-primary text-vlanc-secondary hover:text-vlanc-primary transition-colors">{data?.web?.displayText}</a>
                             </div>
                         </div>
-
-                        {/* 4. RRSS */}
                         <div>
                              <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ RRSS</h4>
                              <div className="flex gap-6 items-center pl-6">
@@ -207,26 +214,28 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                                 ))}
                              </div>
                         </div>
-                        
                         <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] ml-6" />
                     </div>
                 </motion.div>
             </div>
 
+            {/* Posicionador del Logo Animado Inicial */}
             <AnimatePresence>
                 {phase === 'playing' && effectiveVideoSrc && (
-                    <motion.div
-                        layoutId="final-logo"
-                        className="fixed inset-0 flex items-center justify-center z-[100]"
-                        style={{ width: 'clamp(300px, 60vw, 900px)' }}
-                    >
-                        <LogoContent
-                            ref={videoRef}
-                            finalLogo={finalLogo}
-                            finalLogoVideo={effectiveVideoSrc}
-                            onVideoError={handleVideoError}
-                        />
-                    </motion.div>
+                    <div className="fixed inset-0 flex items-center justify-center z-[100] pointer-events-none">
+                        <motion.div
+                            layoutId="final-logo-container"
+                            className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4"
+                            style={{ pointerEvents: 'auto' }}
+                        >
+                            <LogoContent
+                                ref={videoRef}
+                                finalLogo={finalLogo}
+                                finalLogoVideo={effectiveVideoSrc}
+                                onVideoError={handleVideoError}
+                            />
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
 
