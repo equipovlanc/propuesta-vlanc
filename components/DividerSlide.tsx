@@ -17,7 +17,6 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
     const videoRef = useRef<HTMLVideoElement>(null);
     const loopCount = useRef(0);
     const [showVideoModal, setShowVideoModal] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
 
     const isFinalState = isSectionCompleted || step >= 2;
     const imageSrc = data?.image?.src;
@@ -79,9 +78,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                     playsInline
                                     muted // Esencial para permitir la reproducción programática por scroll. El usuario puede desmutear con los controles.
                                     onEnded={handleVideoEnd}
-                                    controls={isHovered} // Los controles solo aparecen si el cursor está encima
-                                    onMouseEnter={() => setIsHovered(true)}
-                                    onMouseLeave={() => setIsHovered(false)}
+                                    controls // CONTROLES SIEMPRE VISIBLES para garantizar funcionalidad.
                                     className="w-full h-full object-contain shadow-xl rounded-[1px]"
                                 />
                             </motion.div>
