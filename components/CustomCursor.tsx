@@ -44,15 +44,6 @@ const CustomCursor: React.FC = () => {
     };
   }, [cursorX, cursorY]);
 
-  // Efecto para gestionar el cursor del sistema
-  useEffect(() => {
-    document.body.style.cursor = isOverInteractive ? 'auto' : 'none';
-    // Función de limpieza para restaurar el cursor si el componente se desmonta
-    return () => {
-      document.body.style.cursor = 'auto';
-    };
-  }, [isOverInteractive]);
-  
   const size = isOverInteractive ? 0 : cursorMode === 'play' ? 80 : 16;
   const bgColor = cursorMode === 'play' ? 'rgba(143, 73, 51, 0.15)' : 'rgba(143, 73, 51, 0.05)';
 
