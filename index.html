@@ -55,9 +55,11 @@
         font-style: italic;
       }
 
-      /* GLOBAL CURSOR HIDE */
-      * { cursor: none !important; }
-
+      /* HIDE CURSOR GLOBALLY */
+      * {
+        cursor: none !important;
+      }
+      
       /* GLOBAL POINTER EVENTS UTILITY */
       /* Regla maestra para aniquilar eventos en diapositivas salientes */
       [data-exiting="true"], [data-exiting="true"] * {
@@ -151,7 +153,9 @@
           height: auto !important;
           overflow: visible !important;
           background-color: white !important;
+          cursor: auto !important;
         }
+        * { cursor: auto !important; }
         .bg-grain::before { display: none !important; }
         #app-container {
           overflow: visible !important;

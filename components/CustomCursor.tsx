@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
-  const [cursorMode, setCursorMode] = useState<'default' | 'play'>('default');
-  const [isOverInteractive, setIsOverInteractive] = useState(false);
-
+  const [cursorMode, setCursorMode] = useState<'default' | 'clickable' | 'play'>('default');
+  
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   
@@ -22,34 +21,30 @@ const CustomCursor: React.FC = () => {
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       
-      const isInteractable = !!target.closest('button, a, input, select, .cursor-pointer, video[controls]');
-      setIsOverInteractive(isInteractable);
+      const isInteractable = !!target.closest('button, a, input, select, .cursor-pointer');
+      const isVideoElement = !!target.closest('video');
+      const hasControls = target.hasAttribute('controls');
 
-      const isVideoWithoutControls = !!target.closest('video:not([controls])');
-
-      if (isVideoWithoutControls) {
+      if (isVideoElement && !hasControls) {
           setCursorMode('play');
+      } else if (isInteractable) {
+          setCursorMode('clickable');
       } else {
           setCursorMode('default');
       }
     };
-    
-    // Usamos mousemove en lugar de mouseover para una detección más consistente al mover el ratón
+
     window.addEventListener('mousemove', moveCursor);
-    document.documentElement.addEventListener('mousemove', handleMouseOver);
+    window.addEventListener('mouseover', handleMouseOver);
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
-      document.documentElement.removeEventListener('mousemove', handleMouseOver);
+      window.removeEventListener('mouseover', handleMouseOver);
     };
   }, [cursorX, cursorY]);
-
-  const size = isOverInteractive ? 0 : cursorMode === 'play' ? 80 : 16;
+  
+  const size = cursorMode === 'play' ? 80 : cursorMode === 'clickable' ? 40 : 16;
   const bgColor = cursorMode === 'play' ? 'rgba(143, 73, 51, 0.15)' : 'rgba(143, 73, 51, 0.05)';
-
-  if (isOverInteractive) {
-    return null;
-  }
 
   return (
     <motion.div
