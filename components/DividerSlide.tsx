@@ -6,7 +6,7 @@ interface DividerSlideProps {
     data?: {
         image?: { src: string; opacity?: number };
         text?: string;
-        video?: { src: string };
+        video?: string;
     };
     step?: number;
     isSectionCompleted?: boolean;
@@ -18,21 +18,20 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
     const loopCount = useRef(0);
     const [showVideoModal, setShowVideoModal] = useState(false);
 
-    // El estado final es cuando la sección se ha completado O cuando hemos pasado el paso del video (step > 1)
-    const isFinalState = isSectionCompleted || step > 1;
+    const isFinalState = isSectionCompleted || step >= 2;
 
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
-    const videoSrc = data?.video?.src;
+    const videoSrc = data?.video;
 
     useEffect(() => {
-        if (step === 1 && !isFinalState && videoRef.current) {
+        if (step === 1 && !isSectionCompleted && videoRef.current) {
             loopCount.current = 0; // Reseteamos el contador al empezar a reproducir
             videoRef.current.play().catch(error => {
                 console.error("La auto-reproducción del video fue prevenida:", error);
             });
         }
-    }, [step, isFinalState]);
+    }, [step, isSectionCompleted]);
 
     const handleVideoEnd = () => {
         loopCount.current += 1;
@@ -40,7 +39,6 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
             videoRef.current.currentTime = 0;
             videoRef.current.play();
         }
-        // El video se detiene después de 2 reproducciones, esperando el siguiente scroll.
     };
 
     const openVideoModal = () => {
@@ -61,13 +59,14 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                 <div className="w-full max-w-[1320px] flex flex-col">
                     {/* Contenedor de Media */}
                     <div className="w-full aspect-[1320/670] shrink-0 relative">
-                        {/* Video Player (Solo en Paso 1) */}
-                        {videoSrc && !isFinalState && (
+                        {/* Video Player - Siempre en DOM si src existe, visibilidad por 'animate' */}
+                        {videoSrc && (
                             <motion.div
                                 className="absolute inset-0"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 1 ? 1 : 0 }}
+                                animate={{ opacity: step === 1 && !isSectionCompleted ? 1 : 0 }}
                                 transition={{ duration: 1.5, ease: "easeInOut" }}
+                                style={{ pointerEvents: (step === 1 && !isSectionCompleted) ? 'auto' : 'none' }}
                             >
                                 <video
                                     ref={videoRef}

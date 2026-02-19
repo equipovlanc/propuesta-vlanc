@@ -70,7 +70,7 @@ const App: React.FC = () => {
             "popupVideo": popupVideo.asset->url,
             "overlayLogo": overlayLogo.asset->url
           },
-          "dividerSlide": dividerSlide{..., "image": image.asset->url, "video": video.asset->url},
+          "dividerSlide": dividerSlide{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
           "guarantees": guarantees{..., "items": items[]{..., "icon": icon.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "contact": contact{
