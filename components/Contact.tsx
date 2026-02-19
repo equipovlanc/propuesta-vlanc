@@ -31,17 +31,15 @@ interface LogoContentProps {
     finalLogoVideo?: string | null;
     finalLogo?: string | null;
     onVideoError?: () => void;
-    poster?: string | null;
 }
 
 const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
-    ({ finalLogoVideo, finalLogo, onVideoError, poster }, ref) => (
+    ({ finalLogoVideo, finalLogo, onVideoError }, ref) => (
         <>
             {finalLogoVideo ? (
                 <video
                     ref={ref}
                     src={finalLogoVideo}
-                    poster={poster || undefined}
                     muted
                     playsInline
                     loop={false}
@@ -63,7 +61,6 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
 const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
     const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo && !videoHasError ? 'playing' : 'finished');
-    const [finalFramePoster, setFinalFramePoster] = React.useState<string | null>(null);
     const videoRef = React.useRef<HTMLVideoElement>(null);
 
     const handleVideoError = React.useCallback(() => {
@@ -82,80 +79,52 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
 
     React.useEffect(() => {
         const video = videoRef.current;
-        if (!video || phase !== 'playing' || videoHasError) {
+        if (phase !== 'playing' || !video || videoHasError) {
             return;
         }
 
-        let timeoutId: number;
-        let startPlaybackTimeoutId: number;
+        let playbackTimeout: number;
 
-        const transitionToNextPhase = () => {
-            if (video && video.videoWidth > 0) {
-                const canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                const ctx = canvas.getContext('2d');
-                if (ctx) {
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    try {
-                        setFinalFramePoster(canvas.toDataURL('image/webp'));
-                    } catch (e) {
-                        console.error("Error creating poster from video frame.", e);
-                    }
-                }
-            }
-            if (video) video.pause();
-            cleanup();
+        const handleVideoEnd = () => {
             setPhase('moving');
         };
-        
-        const onTimeUpdate = () => {
-            if (video.currentTime >= 6.5) {
-                transitionToNextPhase();
-            }
-        };
 
-        const onEnded = () => {
-            transitionToNextPhase();
-        };
+        const setupAndPlay = () => {
+            // 1. Ocultar el video para que el salto de frame no sea visible
+            video.style.opacity = '0';
+            // 2. Saltar el primer fotograma (0.033s para un video de 30fps)
+            video.currentTime = 0.1;
 
-        const cleanup = () => {
-            video.removeEventListener('timeupdate', onTimeUpdate);
-            video.removeEventListener('ended', onEnded);
-            video.removeEventListener('canplay', onCanPlay);
-            clearTimeout(timeoutId);
-            clearTimeout(startPlaybackTimeoutId);
-        };
-
-        const onCanPlay = () => {
-            timeoutId = window.setTimeout(() => {
-                console.warn("Video animation timeout. Forcing transition.");
-                cleanup();
-                setPhase('moving');
-            }, 10000);
-
-            // Añadimos el retraso antes de la reproducción
-            startPlaybackTimeoutId = window.setTimeout(() => {
+            // 3. Después del retraso, hacerlo visible y reproducir
+            playbackTimeout = window.setTimeout(() => {
                 if (videoRef.current) {
-                    // Ocultamos el primer frame saltando a un punto muy temprano del video
-                    videoRef.current.currentTime = 0.1;
+                    videoRef.current.style.opacity = '1';
                     videoRef.current.play().catch(e => {
                         console.error("Autoplay was prevented for the animated logo.", e);
-                        cleanup();
                         handleVideoError();
                     });
                 }
             }, 800); // 800ms de retraso
         };
 
-        video.addEventListener('timeupdate', onTimeUpdate);
-        video.addEventListener('ended', onEnded);
-        video.addEventListener('canplay', onCanPlay);
+        // Escuchar cuando el video ha cargado sus metadatos para poder manipularlo
+        video.addEventListener('loadedmetadata', setupAndPlay);
+        // Escuchar cuando el video termina de forma natural
+        video.addEventListener('ended', handleVideoEnd);
         
+        // Disparar la carga del video
         video.load();
 
-        return cleanup;
-    }, [phase, videoHasError, finalLogoVideo, handleVideoError]);
+        // Función de limpieza para evitar fugas de memoria
+        return () => {
+            clearTimeout(playbackTimeout);
+            if (video) {
+                video.removeEventListener('loadedmetadata', setupAndPlay);
+                video.removeEventListener('ended', handleVideoEnd);
+                video.style.opacity = '1'; // Resetear opacidad
+            }
+        };
+    }, [phase, videoHasError, handleVideoError]);
 
     const showContent = phase === 'finished';
     const effectiveVideoSrc = videoHasError ? null : finalLogoVideo;
@@ -182,7 +151,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                                     finalLogo={finalLogo}
                                     finalLogoVideo={effectiveVideoSrc}
                                     onVideoError={handleVideoError}
-                                    poster={finalFramePoster}
                                 />
                             </motion.div>
                         )}
@@ -254,7 +222,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                                 finalLogo={finalLogo}
                                 finalLogoVideo={effectiveVideoSrc}
                                 onVideoError={handleVideoError}
-                                poster={finalFramePoster}
                             />
                         </motion.div>
                     </div>
