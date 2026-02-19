@@ -162,7 +162,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
 
                                     {/* CUSTOM CONTROLS OVERLAY */}
                                     <div 
-                                        className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-3 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300" 
+                                        className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-3 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity duration-300 z-[20000]" 
                                         onClick={e => e.stopPropagation()}
                                     >
                                         <button onClick={handlePlayPause} className="text-white p-2 focus:outline-none cursor-pointer">

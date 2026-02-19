@@ -52,8 +52,6 @@ const CustomCursor: React.FC = () => {
         translateX: '-50%',
         translateY: '-50%',
       }}
-      animate={{ opacity: isOverInteractive ? 0 : 1 }}
-      transition={{ type: 'spring', damping: 20, stiffness: 300, mass: 0.5 }}
     >
       <motion.div
         className="rounded-full border border-vlanc-primary bg-vlanc-primary/5 flex items-center justify-center overflow-hidden"
