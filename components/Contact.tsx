@@ -87,6 +87,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
         }
 
         let timeoutId: number;
+        let startPlaybackTimeoutId: number;
 
         const transitionToNextPhase = () => {
             if (video && video.videoWidth > 0) {
@@ -123,6 +124,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
             video.removeEventListener('ended', onEnded);
             video.removeEventListener('canplay', onCanPlay);
             clearTimeout(timeoutId);
+            clearTimeout(startPlaybackTimeoutId);
         };
 
         const onCanPlay = () => {
@@ -132,11 +134,18 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                 setPhase('moving');
             }, 10000);
 
-            video.play().catch(e => {
-                console.error("Autoplay was prevented for the animated logo.", e);
-                cleanup();
-                handleVideoError();
-            });
+            // Añadimos el retraso antes de la reproducción
+            startPlaybackTimeoutId = window.setTimeout(() => {
+                if (videoRef.current) {
+                    // Ocultamos el primer frame saltando a un punto muy temprano del video
+                    videoRef.current.currentTime = 0.1;
+                    videoRef.current.play().catch(e => {
+                        console.error("Autoplay was prevented for the animated logo.", e);
+                        cleanup();
+                        handleVideoError();
+                    });
+                }
+            }, 800); // 800ms de retraso
         };
 
         video.addEventListener('timeupdate', onTimeUpdate);
