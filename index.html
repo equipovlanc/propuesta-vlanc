@@ -166,14 +166,19 @@
           position: relative !important;
           opacity: 1 !important;
           transform: none !important;
-          height: 100vh !important;
+          height: auto !important;
+          min-height: 100vh !important;
           width: 100% !important;
           page-break-after: always !important;
-          display: flex !important;
+          display: block !important;
         }
         header { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; }
         .no-print { display: none !important; }
         .custom-cursor { display: none !important; }
+        .no-scrollbar {
+          overflow: visible !important;
+          max-height: none !important;
+        }
       }
     </style>
   <script type="importmap">

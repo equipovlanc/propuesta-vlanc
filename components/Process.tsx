@@ -24,13 +24,17 @@ interface ProcessProps {
     };
     guaranteeItem?: GuaranteeItem;
     step?: number; // Prop para controlar qué items están revelados
+    isPrinting?: boolean;
 }
 
-const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
+const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8, isPrinting = false }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+    
+    const finalStep = data?.steps?.length || 8;
+    const effectiveStep = isPrinting ? finalStep : step;
 
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start overflow-hidden relative">
@@ -47,7 +51,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
                     {(data?.steps ?? []).map((s, index) => {
                         // El item está visible (sin tachar) si el 'step' actual es mayor que el índice del item.
-                        const isRevealed = step > index;
+                        const isRevealed = effectiveStep > index;
                         
                         return (
                             <AnimatedSection key={index} hierarchy={2}>

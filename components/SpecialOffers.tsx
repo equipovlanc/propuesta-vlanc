@@ -51,6 +51,7 @@ interface SpecialOffersProps {
     step?: number;
     setNavigationBlocked?: (blocked: boolean) => void;
     isSectionCompleted?: boolean;
+    isPrinting?: boolean;
 }
 
 // Sub-componente Flip Card
@@ -111,7 +112,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     premiumService, 
     step = 4, 
     setNavigationBlocked,
-    isSectionCompleted = false 
+    isSectionCompleted = false,
+    isPrinting = false
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal Premium
   const [showVideo, setShowVideo] = useState(false); // Modal Video (Paso 3)
@@ -128,11 +130,12 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 
   // Efecto para abrir el video automáticamente en el Paso 3 y bloquear navegación
   useEffect(() => {
+    if (isPrinting) return;
     if (step === 3 && data?.popupVideo) {
         setShowVideo(true);
         if (setNavigationBlocked) setNavigationBlocked(true);
     }
-  }, [step, data?.popupVideo, setNavigationBlocked]);
+  }, [step, data?.popupVideo, setNavigationBlocked, isPrinting]);
 
   const openVideo = () => {
       if (data?.popupVideo) {
@@ -179,6 +182,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
       return `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 filter-none' : 'opacity-10 blur-[2px]'} print:opacity-100 print:blur-0 print:filter-none`;
   };
 
+  const finalStep = 4;
+  const effectiveStep = isPrinting ? finalStep : step;
+
   return (
     <section id="special-offers" className="h-full w-full flex flex-row pt-[150px] pb-[140px] px-[120px] overflow-hidden">
       <div className="w-1/2 h-full flex flex-col pr-[69.5px] relative">
@@ -193,7 +199,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 
                 {/* CAJA 1: CONDICIONES ESPECIALES (Visible Step >= 1) */}
                 <div 
-                    className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 ${getRevealClasses(step >= 1)}`}
+                    className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 ${getRevealClasses(effectiveStep >= 1)}`}
                 >
                     {data?.conditionalOffer && (
                         <div className="mb-4">
@@ -212,7 +218,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 
                 {/* CAJA 2: OFERTA LANZAMIENTO (Visible Step >= 2) */}
                 <div 
-                    className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 ${getRevealClasses(step >= 2)}`}
+                    className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 ${getRevealClasses(effectiveStep >= 2)}`}
                 >
                     {data?.launchOffer && (
                         <div className="mb-4">
@@ -229,7 +235,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 </div>
                 
                 {/* FIRMA (Visible Step >= 2) */}
-                <div className={`w-full shrink-0 ${getRevealClasses(step >= 2)}`}>
+                <div className={`w-full shrink-0 ${getRevealClasses(effectiveStep >= 2)}`}>
                     <div className="w-full flex flex-col border-t border-[#8f4933] mt-[20px] pt-1">
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
@@ -241,7 +247,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
           
           {/* Fecha (Visible Step >= 2) */}
           <AnimatedSection className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20" hierarchy={2}>
-                <div className={getRevealClasses(step >= 2)}>
+                <div className={getRevealClasses(effectiveStep >= 2)}>
                     <p className="cuerpo font-bold text-right">{locationDate || "En Alcoi a XX de mes de 2025"}</p>
                 </div>
           </AnimatedSection>
@@ -274,7 +280,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                 <motion.div 
                                     className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px]"
                                     initial={{ opacity: 0 }}
-                                    animate={{ opacity: step >= 4 ? 1 : 0 }}
+                                    animate={{ opacity: effectiveStep >= 4 ? 1 : 0 }}
                                     transition={{ duration: 3.0, ease: "easeInOut" }}
                                 >
                                     <div className="w-full max-w-[400px] p-10">

@@ -18,12 +18,15 @@ interface MissionProps {
         achievements?: SectionData;
     };
     step?: number; // 0 = Video centrado, 1 = Video izquierda + Misión, 2 = Video izquierda + Logros
+    isPrinting?: boolean;
 }
 
-const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
+const Mission: React.FC<MissionProps> = ({ data, step = 0, isPrinting = false }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
+
+    const effectiveStep = isPrinting ? 2 : step;
 
     const toggleFullScreen = () => {
         if (videoRef.current) {
@@ -46,10 +49,10 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
                 <motion.div 
                     className="flex items-center justify-center w-full h-full px-10"
                     initial={{ 
-                        x: step === 0 ? '22.15vw' : 0 
+                        x: effectiveStep === 0 ? '22.15vw' : 0 
                     }}
                     animate={{ 
-                        x: step === 0 ? '22.15vw' : 0 
+                        x: effectiveStep === 0 ? '22.15vw' : 0 
                     }}
                     transition={{ 
                         duration: 1.2, 
@@ -105,7 +108,7 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
             <div className="w-full lg:w-[44.3%] h-full flex flex-col justify-between pl-10 lg:pl-[76px] pr-[120px] pt-[150px] pb-[140px] relative z-0">
                 
                 {/* Bloque Superior: La Misión (Visible si step >= 1) */}
-                {step >= 1 && (
+                {effectiveStep >= 1 && (
                     <div className="flex flex-col">
                         <AnimatedSection hierarchy={1}>
                             <h2 className="subtitulo1 leading-none">
@@ -126,7 +129,7 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
                 )}
 
                 {/* Bloque Inferior: Qué vas a conseguir (Visible si step >= 2) */}
-                {step >= 2 && (
+                {effectiveStep >= 2 && (
                     <div className="flex flex-col">
                         <AnimatedSection hierarchy={1}>
                             <h2 className="subtitulo1 leading-none">

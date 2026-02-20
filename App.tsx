@@ -197,7 +197,7 @@ const App: React.FC = () => {
     if (!proposalData) return [];
     const d = proposalData;
 
-    const list = [
+    const list: any[] = [
         // 0: Hero
         { id: 'hero', comp: <Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /> },
         // 1: Index
@@ -205,9 +205,9 @@ const App: React.FC = () => {
         // 2: Situation
         { id: 'situation', comp: <Situation data={d.situation} />, headerPage: 3 },
         // 3: Mission
-        { id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: 4 },
+        { id: 'mission', comp: <Mission isPrinting={isPrinting} data={d.mission} step={internalStep} />, headerPage: 4 },
         // 4: Process
-        { id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} step={internalStep} />, headerPage: 5 },
+        { id: 'process', comp: <Process isPrinting={isPrinting} data={d.process} guaranteeItem={d.guarantees?.items?.[0]} step={internalStep} />, headerPage: 5 },
         // 5: Team
         { id: 'team', comp: <Team data={d.team} />, headerPage: 6 },
         // 6: Testimonials
@@ -228,10 +228,11 @@ const App: React.FC = () => {
     });
 
     list.push(
-        { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: 14 },
+        { id: 'investment', comp: <Investment isPrinting={isPrinting} data={d.investment} step={internalStep} />, headerPage: 14 },
         { 
             id: 'special-offers', 
             comp: <SpecialOffers 
+                isPrinting={isPrinting}
                 data={d.specialOffers} 
                 investmentTitle={d.investment?.title} 
                 locationDate={d.investment?.locationDate} 
@@ -246,6 +247,7 @@ const App: React.FC = () => {
         { 
             id: 'divider-slide', 
             comp: <DividerSlide 
+                isPrinting={isPrinting}
                 data={d.dividerSlide} 
                 step={internalStep}
                 isSectionCompleted={completedSections.has('divider-slide')}
@@ -264,7 +266,7 @@ const App: React.FC = () => {
         });
     });
 
-    list.push({ id: 'contact', comp: <Contact onPrint={handlePrint} data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} /> });
+    list.push({ id: 'contact', comp: <Contact onPrint={handlePrint} isPrinting={isPrinting} data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} /> });
 
     return list;
   })();
@@ -398,27 +400,11 @@ const App: React.FC = () => {
       <div id="app-container" className={isPrinting ? 'is-printing' : ''}>
         <CustomCursor />
         {isPrinting ? (
-          sections.map(section => {
-            let finalComp = section.comp;
-            
-            const maxSteps: { [id: string]: number } = {
-                'mission': 2,
-                'process': (proposalData?.process?.steps?.length || 8) + 1, // +1 para asegurar el estado final
-                'investment': 3,
-                'special-offers': 4,
-                'divider-slide': 3,
-            };
-
-            if (maxSteps[section.id] !== undefined) {
-                finalComp = React.cloneElement(section.comp as React.ReactElement, { step: maxSteps[section.id] });
-            }
-
-            return (
-                <div key={section.id} className="z-slide-container">
-                    {finalComp}
-                </div>
-            );
-          })
+          sections.map(section => (
+            <div key={section.id} className="z-slide-container">
+              {section.comp}
+            </div>
+          ))
         ) : (
           activeSection && (
             <div className="fixed inset-0 w-full h-full overflow-hidden">

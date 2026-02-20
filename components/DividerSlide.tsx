@@ -11,9 +11,10 @@ interface DividerSlideProps {
     step?: number;
     isSectionCompleted?: boolean;
     setNavigationBlocked?: (blocked: boolean) => void;
+    isPrinting?: boolean;
 }
 
-const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCompleted = false, setNavigationBlocked }) => {
+const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCompleted = false, setNavigationBlocked, isPrinting = false }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const videoContainerRef = useRef<HTMLDivElement>(null);
     const loopCount = useRef(0);
@@ -27,11 +28,14 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
 
-    const isFinalState = isSectionCompleted || step >= 2;
+    const finalStep = 3;
+    const effectiveStep = isPrinting ? finalStep : step;
+
+    const isFinalState = isSectionCompleted || effectiveStep >= 2;
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
     const videoSrc = data?.video;
-    const isVideoVisible = (step === 0 || step === 1) && !isSectionCompleted;
+    const isVideoVisible = !isPrinting && (effectiveStep === 0 || effectiveStep === 1) && !isSectionCompleted;
 
     // --- Effects for Video State Sync ---
     useEffect(() => {
@@ -64,13 +68,14 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
 
     // Effect for programmatic playback on scroll
     useEffect(() => {
-        if (step === 1 && !isSectionCompleted && videoRef.current) {
+        if (isPrinting) return;
+        if (effectiveStep === 1 && !isSectionCompleted && videoRef.current) {
             loopCount.current = 0;
             videoRef.current.play().catch(error => {
                 console.error("Video playback was prevented by the browser:", error);
             });
         }
-    }, [step, isSectionCompleted]);
+    }, [effectiveStep, isSectionCompleted, isPrinting]);
     
     // --- Global Mouse Tracking for Controls Visibility ---
     useEffect(() => {
@@ -223,7 +228,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                             </motion.div>
                         )}
 
-                        <motion.div className="w-full h-full" initial={{ opacity: 0 }} animate={{ opacity: (isSectionCompleted || step >= 2) ? 1 : 0 }} transition={{ duration: 1.5, ease: "easeInOut" }}>
+                        <motion.div className="w-full h-full" initial={{ opacity: 0 }} animate={{ opacity: (isSectionCompleted || effectiveStep >= 2) ? 1 : 0 }} transition={{ duration: 1.5, ease: "easeInOut" }}>
                             {imageSrc && (
                                 <div className={`w-full h-full relative ${isFinalState && videoSrc ? 'cursor-pointer' : ''}`} onClick={isFinalState ? openVideoModal : undefined}>
                                     <img src={imageSrc} alt={data?.text || "Team"} className="w-full h-full object-cover shadow-xl rounded-[1px]"/>
@@ -233,7 +238,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                         </motion.div>
                     </div>
 
-                    <motion.div className="mt-12 text-right" initial={{ opacity: 0, y: 20 }} animate={{ opacity: (isSectionCompleted || step >= 3) ? 1 : 0, y: (isSectionCompleted || step >= 3) ? 0 : 20 }} transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || step >= 3) ? 0.5 : 0 }}>
+                    <motion.div className="mt-12 text-right" initial={{ opacity: 0, y: 20 }} animate={{ opacity: (isSectionCompleted || effectiveStep >= 3) ? 1 : 0, y: (isSectionCompleted || effectiveStep >= 3) ? 0 : 20 }} transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || effectiveStep >= 3) ? 0.5 : 0 }}>
                         <h2 className="especial2">{data?.text || "¿Nos dejas acompañarte?"}</h2>
                     </motion.div>
                 </div>

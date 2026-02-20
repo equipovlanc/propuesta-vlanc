@@ -23,6 +23,7 @@ interface InvestmentProps {
         prices?: string[];
     };
     step?: number; // 0 = Intro, 1 = Plan 1, 2 = Plan 2, 3 = Plan 3
+    isPrinting?: boolean;
 }
 
 const CheckIcon = () => (
@@ -31,8 +32,10 @@ const CheckIcon = () => (
     </svg>
 );
 
-const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
+const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = false }) => {
     
+    const effectiveStep = isPrinting ? 3 : step;
+
     const getRowBg = (color?: string) => {
         if (color === 'light') return 'bg-[#eae0d5]';
         if (color === 'medium') return 'bg-[#dccbc1]'; 
@@ -87,13 +90,13 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                 className="space-y-2"
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ 
-                                    opacity: step >= i + 1 ? 1 : 0.1, // Dim si no es el activo? Mejor hidden si aun no llega, visible si ya pasó.
-                                    x: step >= i + 1 ? 0 : -20,
-                                    filter: step >= i + 1 ? 'blur(0px)' : 'blur(2px)'
+                                    opacity: effectiveStep >= i + 1 ? 1 : 0.1, // Dim si no es el activo? Mejor hidden si aun no llega, visible si ya pasó.
+                                    x: effectiveStep >= i + 1 ? 0 : -20,
+                                    filter: effectiveStep >= i + 1 ? 'blur(0px)' : 'blur(2px)'
                                 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             >
-                                <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${step === i + 1 ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
+                                <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${effectiveStep === i + 1 ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
                                     {p.name}_
                                 </h3>
                                 <div 
@@ -116,21 +119,21 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                             <motion.div 
                                 className="col-start-2 row-span-full bg-vlanc-primary/5"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 1 ? 1 : 0 }} // Solo resaltada cuando es el paso activo
+                                animate={{ opacity: effectiveStep === 1 ? 1 : 0 }} // Solo resaltada cuando es el paso activo
                                 transition={{ duration: 0.5 }}
                             />
                              {/* Columna Plan 2 */}
                              <motion.div 
                                 className="col-start-3 row-span-full bg-vlanc-primary/5"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 2 ? 1 : 0 }} 
+                                animate={{ opacity: effectiveStep === 2 ? 1 : 0 }} 
                                 transition={{ duration: 0.5 }}
                             />
                              {/* Columna Plan 3 */}
                              <motion.div 
                                 className="col-start-4 row-span-full bg-vlanc-primary/5"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 3 ? 1 : 0 }} 
+                                animate={{ opacity: effectiveStep === 3 ? 1 : 0 }} 
                                 transition={{ duration: 0.5 }}
                             />
                         </div>
@@ -146,11 +149,11 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                         key={i} 
                                         className="px-3 text-center flex items-center justify-center h-full gap-3"
                                         initial={{ opacity: 0 }}
-                                        animate={{ opacity: step >= i + 1 ? 1 : 0 }}
+                                        animate={{ opacity: effectiveStep >= i + 1 ? 1 : 0 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                     >
                                         <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
-                                        <span className={`tabla1 whitespace-nowrap ${step === i + 1 ? 'text-vlanc-secondary' : ''}`}>{h}</span>
+                                        <span className={`tabla1 whitespace-nowrap ${effectiveStep === i + 1 ? 'text-vlanc-secondary' : ''}`}>{h}</span>
                                     </motion.div>
                                 ))}
                             </div>
@@ -180,7 +183,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                                     key={idx} 
                                                     className="flex justify-center items-center h-full"
                                                     initial={{ opacity: 0 }}
-                                                    animate={{ opacity: step >= idx + 1 ? 1 : 0 }} // Revelar columna si el paso es suficiente
+                                                    animate={{ opacity: effectiveStep >= idx + 1 ? 1 : 0 }} // Revelar columna si el paso es suficiente
                                                     transition={{ duration: 0.4 }}
                                                 >
                                                     {isChecked && <CheckIcon />}
@@ -199,7 +202,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                         key={i} 
                                         className="px-4 text-center flex flex-col justify-center h-full"
                                         initial={{ opacity: 0 }}
-                                        animate={{ opacity: step >= i + 1 ? 1 : 0 }}
+                                        animate={{ opacity: effectiveStep >= i + 1 ? 1 : 0 }}
                                         transition={{ duration: 0.5, delay: 0.1 }}
                                     >
                                         <span className="tabla3 whitespace-nowrap">{price}</span>
