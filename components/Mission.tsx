@@ -49,13 +49,13 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0, isPrinting = false })
                 <motion.div 
                     className="flex items-center justify-center w-full h-full px-10"
                     initial={{ 
-                        x: effectiveStep === 0 ? '22.15vw' : 0 
+                        x: isPrinting ? 0 : (effectiveStep === 0 ? '22.15vw' : 0)
                     }}
                     animate={{ 
-                        x: effectiveStep === 0 ? '22.15vw' : 0 
+                        x: isPrinting ? 0 : (effectiveStep === 0 ? '22.15vw' : 0)
                     }}
                     transition={{ 
-                        duration: 1.2, 
+                        duration: isPrinting ? 0 : 1.2, 
                         ease: [0.22, 1, 0.36, 1] 
                     }}
                 >

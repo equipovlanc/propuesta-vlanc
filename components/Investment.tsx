@@ -88,15 +88,15 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                             <motion.div 
                                 key={i} 
                                 className="space-y-2"
-                                initial={{ opacity: 0, x: -20 }}
+                                initial={{ opacity: isPrinting ? 1 : 0, x: isPrinting ? 0 : -20 }}
                                 animate={{ 
-                                    opacity: effectiveStep >= i + 1 ? 1 : 0.1, // Dim si no es el activo? Mejor hidden si aun no llega, visible si ya pasó.
-                                    x: effectiveStep >= i + 1 ? 0 : -20,
-                                    filter: effectiveStep >= i + 1 ? 'blur(0px)' : 'blur(2px)'
+                                    opacity: effectiveStep >= i + 1 ? 1 : (isPrinting ? 1 : 0.1),
+                                    x: effectiveStep >= i + 1 ? 0 : (isPrinting ? 0 : -20),
+                                    filter: effectiveStep >= i + 1 ? 'blur(0px)' : (isPrinting ? 'blur(0px)' : 'blur(2px)')
                                 }}
-                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                transition={{ duration: isPrinting ? 0 : 0.8, ease: "easeOut" }}
                             >
-                                <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${effectiveStep === i + 1 ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
+                                <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${effectiveStep === i + 1 || isPrinting ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
                                     {p.name}_
                                 </h3>
                                 <div 
@@ -118,23 +118,23 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                             {/* Columna Plan 1 */}
                             <motion.div 
                                 className="col-start-2 row-span-full bg-vlanc-primary/5"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: effectiveStep === 1 ? 1 : 0 }} // Solo resaltada cuando es el paso activo
-                                transition={{ duration: 0.5 }}
+                                initial={{ opacity: isPrinting ? 0 : 0 }}
+                                animate={{ opacity: effectiveStep === 1 ? 1 : 0 }}
+                                transition={{ duration: isPrinting ? 0 : 0.5 }}
                             />
                              {/* Columna Plan 2 */}
                              <motion.div 
                                 className="col-start-3 row-span-full bg-vlanc-primary/5"
-                                initial={{ opacity: 0 }}
+                                initial={{ opacity: isPrinting ? 0 : 0 }}
                                 animate={{ opacity: effectiveStep === 2 ? 1 : 0 }} 
-                                transition={{ duration: 0.5 }}
+                                transition={{ duration: isPrinting ? 0 : 0.5 }}
                             />
                              {/* Columna Plan 3 */}
                              <motion.div 
                                 className="col-start-4 row-span-full bg-vlanc-primary/5"
-                                initial={{ opacity: 0 }}
+                                initial={{ opacity: isPrinting ? 0 : 0 }}
                                 animate={{ opacity: effectiveStep === 3 ? 1 : 0 }} 
-                                transition={{ duration: 0.5 }}
+                                transition={{ duration: isPrinting ? 0 : 0.5 }}
                             />
                         </div>
 
@@ -148,12 +148,12 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                                     <motion.div 
                                         key={i} 
                                         className="px-3 text-center flex items-center justify-center h-full gap-3"
-                                        initial={{ opacity: 0 }}
+                                        initial={{ opacity: isPrinting ? 1 : 0 }}
                                         animate={{ opacity: effectiveStep >= i + 1 ? 1 : 0 }}
-                                        transition={{ duration: 0.5, delay: 0.2 }}
+                                        transition={{ duration: isPrinting ? 0 : 0.5, delay: isPrinting ? 0 : 0.2 }}
                                     >
                                         <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
-                                        <span className={`tabla1 whitespace-nowrap ${effectiveStep === i + 1 ? 'text-vlanc-secondary' : ''}`}>{h}</span>
+                                        <span className={`tabla1 whitespace-nowrap ${effectiveStep === i + 1 || isPrinting ? 'text-vlanc-secondary' : ''}`}>{h}</span>
                                     </motion.div>
                                 ))}
                             </div>
@@ -182,9 +182,9 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                                                 <motion.div 
                                                     key={idx} 
                                                     className="flex justify-center items-center h-full"
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: effectiveStep >= idx + 1 ? 1 : 0 }} // Revelar columna si el paso es suficiente
-                                                    transition={{ duration: 0.4 }}
+                                                    initial={{ opacity: isPrinting ? 1 : 0 }}
+                                                    animate={{ opacity: effectiveStep >= idx + 1 ? 1 : 0 }}
+                                                    transition={{ duration: isPrinting ? 0 : 0.4 }}
                                                 >
                                                     {isChecked && <CheckIcon />}
                                                 </motion.div>
@@ -201,9 +201,9 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                                     <motion.div 
                                         key={i} 
                                         className="px-4 text-center flex flex-col justify-center h-full"
-                                        initial={{ opacity: 0 }}
+                                        initial={{ opacity: isPrinting ? 1 : 0 }}
                                         animate={{ opacity: effectiveStep >= i + 1 ? 1 : 0 }}
-                                        transition={{ duration: 0.5, delay: 0.1 }}
+                                        transition={{ duration: isPrinting ? 0 : 0.5, delay: isPrinting ? 0 : 0.1 }}
                                     >
                                         <span className="tabla3 whitespace-nowrap">{price}</span>
                                     </motion.div>

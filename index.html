@@ -148,52 +148,108 @@
 
       /* --- PRINT --- */
       @media print {
-        @page { size: A3 landscape; margin: 0; }
+        @page { 
+          size: A3 landscape; 
+          margin: 0;
+          /* Desactivar encabezados y pies de página del navegador */
+          marks: none;
+        }
         html, body {
           height: auto !important;
           overflow: visible !important;
           background-color: white !important;
           cursor: auto !important;
+          /* Asegurar que los fondos se impriman */
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
         }
         * { 
           cursor: auto !important;
+          /* Asegurar que los colores de fondo se impriman */
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
         }
         *, *::before, *::after {
           animation: none !important;
           transition: none !important;
+        }
+        /* Solo resetear transform y filter en elementos que no sean overlays de opacidad */
+        section, div, p, h1, h2, h3, h4, span, img, video {
           transform: none !important;
           filter: none !important;
         }
-        body * {
+        /* Asegurar que elementos con opacity inicial 0 se muestren */
+        [style*="opacity: 0"], [style*="opacity:0"] {
           opacity: 1 !important;
+        }
+        /* Ocultar máscaras de tachado en Process */
+        .z-slide-container [class*="bg-\[#8f4933\]"][style*="background"] {
+          display: none !important;
         }
         .ken-burns {
           animation: none !important;
+          transform: none !important;
         }
         .bg-grain::before { display: none !important; }
+        body::after { display: none !important; }
         #app-container {
           overflow: visible !important;
           height: auto !important;
           display: block !important;
         }
+        /* Contenedor de slide: Aspecto 16:9 dentro de A3 */
         .z-slide-container {
           position: relative !important;
           opacity: 1 !important;
           transform: none !important;
           box-sizing: border-box !important;
-          height: 100vh !important;
+          /* A3 landscape: ~420mm x 297mm = ~1587px x 1123px (a 96dpi) */
+          /* Aspecto 16:9 = 1.777... */
+          /* Si el ancho es 100% del A3, altura debería ser 100% / 1.777 = 56.25% */
+          /* Pero queremos márgenes arriba/abajo, así que usamos 90% de altura y centramos */
           width: 100% !important;
+          height: 90vh !important;
+          min-height: 90vh !important;
+          max-height: 90vh !important;
+          margin: 5vh auto !important;
+          padding: 0 !important;
           page-break-after: always !important;
-          display: block !important;
-          padding-top: 10vh !important;
-          padding-bottom: 10vh !important;
+          display: flex !important;
+          flex-direction: column !important;
+          justify-content: flex-start !important;
+          align-items: flex-start !important;
         }
-        header { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; }
+        /* Asegurar que las secciones dentro respeten el contenedor */
+        .z-slide-container > section {
+          width: 100% !important;
+          height: 100% !important;
+          min-height: 100% !important;
+          max-height: 100% !important;
+          overflow: visible !important;
+        }
+        header { 
+          position: absolute !important; 
+          top: 0 !important; 
+          left: 0 !important; 
+          width: 100% !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
         .no-print { display: none !important; }
         .custom-cursor { display: none !important; }
         .no-scrollbar {
           overflow: visible !important;
           max-height: none !important;
+        }
+        /* Reducir opacidad de overlays de imágenes en impresión (de 15% a 5% para mejor visibilidad) */
+        [style*="opacity"][class*="bg-\[#8f4933\]"] {
+          opacity: 0.05 !important;
+        }
+        /* Asegurar que los videos ocultos no ocupen espacio */
+        video.print\:hidden {
+          display: none !important;
         }
       }
     </style>

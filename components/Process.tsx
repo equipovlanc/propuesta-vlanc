@@ -64,12 +64,14 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8, isPrin
                                             <span>{s.title}</span>
                                         </h3>
                                         {/* MÁSCARA TACHADO TÍTULO (Bloque sólido) */}
-                                        <motion.div 
-                                            initial={{ opacity: isRevealed ? 0 : 1 }}
-                                            animate={{ opacity: isRevealed ? 0 : 1 }}
-                                            transition={{ duration: 0.9, ease: "easeInOut" }}
-                                            className="absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none"
-                                        />
+                                        {!isPrinting && (
+                                            <motion.div 
+                                                initial={{ opacity: isRevealed ? 0 : 1 }}
+                                                animate={{ opacity: isRevealed ? 0 : 1 }}
+                                                transition={{ duration: 0.9, ease: "easeInOut" }}
+                                                className="absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none"
+                                            />
+                                        )}
                                     </div>
                                     
                                     {/* Descripción */}
@@ -83,18 +85,20 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8, isPrin
                                             )}
                                         </div>
                                          {/* MÁSCARA TACHADO DESCRIPCIÓN (Líneas independientes) */}
-                                         <motion.div 
-                                            initial={{ opacity: isRevealed ? 0 : 1 }}
-                                            animate={{ opacity: isRevealed ? 0 : 1 }}
-                                            transition={{ duration: 0.9, ease: "easeInOut" }}
-                                            className="absolute inset-0 z-20 pointer-events-none"
-                                            style={{
-                                                // Pattern para simular tachado línea por línea basado en line-height: 1.4em
-                                                // 1.25em barra sólida (aprox altura texto) + resto transparente hasta 1.4em
-                                                background: 'repeating-linear-gradient(to bottom, #8f4933 0, #8f4933 1.25em, transparent 1.25em, transparent 1.4em)',
-                                                backgroundPosition: '0 0.075em' // Ajuste fino vertical para centrar con el texto
-                                            }}
-                                        />
+                                         {!isPrinting && (
+                                             <motion.div 
+                                                initial={{ opacity: isRevealed ? 0 : 1 }}
+                                                animate={{ opacity: isRevealed ? 0 : 1 }}
+                                                transition={{ duration: 0.9, ease: "easeInOut" }}
+                                                className="absolute inset-0 z-20 pointer-events-none"
+                                                style={{
+                                                    // Pattern para simular tachado línea por línea basado en line-height: 1.4em
+                                                    // 1.25em barra sólida (aprox altura texto) + resto transparente hasta 1.4em
+                                                    background: 'repeating-linear-gradient(to bottom, #8f4933 0, #8f4933 1.25em, transparent 1.25em, transparent 1.4em)',
+                                                    backgroundPosition: '0 0.075em' // Ajuste fino vertical para centrar con el texto
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                     
                                     {/* Botón Garantía (Solo index 2 / Paso 3) */}
@@ -102,7 +106,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8, isPrin
                                         <div className="relative inline-block mt-6">
                                             <button 
                                                 onClick={openModal}
-                                                className="inline-flex items-center border border-vlanc-primary text-vlanc-primary px-5 py-3 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group"
+                                                className="inline-flex items-center border border-vlanc-primary text-vlanc-primary px-5 py-3 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group print:pointer-events-none"
                                             >
                                                 <span className="boton1">
                                                     {data?.badge || "GARANTÍA"}
@@ -113,12 +117,14 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8, isPrin
                                                 </span>
                                             </button>
                                             {/* MÁSCARA TACHADO BOTÓN */}
-                                            <motion.div 
-                                                initial={{ opacity: isRevealed ? 0 : 1 }}
-                                                animate={{ opacity: isRevealed ? 0 : 1 }}
-                                                transition={{ duration: 0.9, ease: "easeInOut" }}
-                                                className="absolute -inset-1 bg-[#8f4933] z-30 pointer-events-none"
-                                            />
+                                            {!isPrinting && (
+                                                <motion.div 
+                                                    initial={{ opacity: isRevealed ? 0 : 1 }}
+                                                    animate={{ opacity: isRevealed ? 0 : 1 }}
+                                                    transition={{ duration: 0.9, ease: "easeInOut" }}
+                                                    className="absolute -inset-1 bg-[#8f4933] z-30 pointer-events-none"
+                                                />
+                                            )}
                                         </div>
                                     )}
                                 </div>
