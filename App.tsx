@@ -398,11 +398,27 @@ const App: React.FC = () => {
       <div id="app-container" className={isPrinting ? 'is-printing' : ''}>
         <CustomCursor />
         {isPrinting ? (
-          sections.map(section => (
-            <div key={section.id} className="z-slide-container">
-              {section.comp}
-            </div>
-          ))
+          sections.map(section => {
+            let finalComp = section.comp;
+            
+            const maxSteps: { [id: string]: number } = {
+                'mission': 2,
+                'process': (proposalData?.process?.steps?.length || 8) + 1, // +1 para asegurar el estado final
+                'investment': 3,
+                'special-offers': 4,
+                'divider-slide': 3,
+            };
+
+            if (maxSteps[section.id] !== undefined) {
+                finalComp = React.cloneElement(section.comp as React.ReactElement, { step: maxSteps[section.id] });
+            }
+
+            return (
+                <div key={section.id} className="z-slide-container">
+                    {finalComp}
+                </div>
+            );
+          })
         ) : (
           activeSection && (
             <div className="fixed inset-0 w-full h-full overflow-hidden">
