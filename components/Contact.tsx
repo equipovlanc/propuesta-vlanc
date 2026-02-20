@@ -22,6 +22,7 @@ interface ContactProps {
     };
     finalLogo?: string | null;
     finalLogoVideo?: string | null;
+    onPrint?: () => void;
 }
 
 type AnimationPhase = 'playing' | 'moving' | 'finished';
@@ -58,7 +59,7 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
     )
 );
 
-const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) => {
+const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
     const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo && !videoHasError ? 'playing' : 'finished');
     const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -74,7 +75,12 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
     }, [phase, videoHasError]);
 
     const handlePrint = () => {
-        window.print();
+        if (onPrint) {
+            onPrint();
+        } else {
+            // Fallback for when the prop is not provided, though it should be.
+            window.print();
+        }
     };
 
     React.useEffect(() => {
