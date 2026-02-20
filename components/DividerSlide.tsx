@@ -232,25 +232,34 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
 
                         {isPrinting ? (
                             <div className="w-full h-full">
+                                {imageSrc && (
+                                    <div className={`w-full h-full relative ${isFinalState && videoSrc ? 'cursor-pointer' : ''}`} onClick={isFinalState ? openVideoModal : undefined}>
+                                        <img src={imageSrc} alt={data?.text || "Team"} className="w-full h-full object-cover shadow-xl rounded-[1px]"/>
+                                        <div className="absolute inset-0 bg-[#8f4933] pointer-events-none rounded-[1px]" style={{ opacity: imageOpacity / 100 }}/>
+                                    </div>
+                                )}
+                            </div>
                         ) : (
                             <motion.div className="w-full h-full" initial={{ opacity: 0 }} animate={{ opacity: (isSectionCompleted || effectiveStep >= 2) ? 1 : 0 }} transition={{ duration: 1.5, ease: "easeInOut" }}>
+                                {imageSrc && (
+                                    <div className={`w-full h-full relative ${isFinalState && videoSrc ? 'cursor-pointer' : ''}`} onClick={isFinalState ? openVideoModal : undefined}>
+                                        <img src={imageSrc} alt={data?.text || "Team"} className="w-full h-full object-cover shadow-xl rounded-[1px]"/>
+                                        <div className="absolute inset-0 bg-[#8f4933] pointer-events-none rounded-[1px]" style={{ opacity: imageOpacity / 100 }}/>
+                                    </div>
+                                )}
+                            </motion.div>
                         )}
-                            {imageSrc && (
-                                <div className={`w-full h-full relative ${isFinalState && videoSrc ? 'cursor-pointer' : ''}`} onClick={isFinalState ? openVideoModal : undefined}>
-                                    <img src={imageSrc} alt={data?.text || "Team"} className="w-full h-full object-cover shadow-xl rounded-[1px]"/>
-                                    <div className="absolute inset-0 bg-[#8f4933] pointer-events-none rounded-[1px]" style={{ opacity: imageOpacity / 100 }}/>
-                                </div>
-                            )}
-                        {isPrinting ? </div> : </motion.div>}
                     </div>
 
                     {isPrinting ? (
                         <div className="mt-12 text-right">
+                            <h2 className="especial2">{data?.text || "¿Nos dejas acompañarte?"}</h2>
+                        </div>
                     ) : (
                         <motion.div className="mt-12 text-right" initial={{ opacity: 0, y: 20 }} animate={{ opacity: (isSectionCompleted || effectiveStep >= 3) ? 1 : 0, y: (isSectionCompleted || effectiveStep >= 3) ? 0 : 20 }} transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || effectiveStep >= 3) ? 0.5 : 0 }}>
+                            <h2 className="especial2">{data?.text || "¿Nos dejas acompañarte?"}</h2>
+                        </motion.div>
                     )}
-                        <h2 className="especial2">{data?.text || "¿Nos dejas acompañarte?"}</h2>
-                    {isPrinting ? </div> : </motion.div>}
                 </div>
             </section>
             
