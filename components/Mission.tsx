@@ -46,19 +46,23 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0, isPrinting = false })
             {/* Columna Izquierda: Media (J0) */}
             <div className="w-full lg:w-[55.7%] h-full flex items-center justify-center relative z-10">
                 
-                <motion.div 
-                    className="flex items-center justify-center w-full h-full px-10"
-                    initial={{ 
-                        x: isPrinting ? 0 : (effectiveStep === 0 ? '22.15vw' : 0)
-                    }}
-                    animate={{ 
-                        x: isPrinting ? 0 : (effectiveStep === 0 ? '22.15vw' : 0)
-                    }}
-                    transition={{ 
-                        duration: isPrinting ? 0 : 1.2, 
-                        ease: [0.22, 1, 0.36, 1] 
-                    }}
-                >
+                {isPrinting ? (
+                    <div className="flex items-center justify-center w-full h-full px-10">
+                ) : (
+                    <motion.div 
+                        className="flex items-center justify-center w-full h-full px-10"
+                        initial={{ 
+                            x: effectiveStep === 0 ? '22.15vw' : 0
+                        }}
+                        animate={{ 
+                            x: effectiveStep === 0 ? '22.15vw' : 0
+                        }}
+                        transition={{ 
+                            duration: 1.2, 
+                            ease: [0.22, 1, 0.36, 1] 
+                        }}
+                    >
+                )}
                     <AnimatedSection hierarchy={0} className="w-full flex justify-center">
                         <div 
                             className="relative group cursor-pointer shadow-2xl overflow-hidden rounded-sm bg-vlanc-bg"
@@ -101,7 +105,7 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0, isPrinting = false })
                             <div className="absolute inset-0 z-20 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity print:hidden pointer-events-none" />
                         </div>
                     </AnimatedSection>
-                </motion.div>
+                {isPrinting ? </div> : </motion.div>}
             </div>
 
             {/* Columna Derecha: Contenido */}

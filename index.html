@@ -157,28 +157,46 @@
           overflow: visible !important;
           background-color: white !important;
           cursor: auto !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
         }
         * { 
           cursor: auto !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
         }
-        /* Desactivar animaciones globales para evitar estados intermedios,
-           pero sin tocar tamaños/posiciones ni hacer escalados extra */
+        /* CRÍTICO: Desactivar TODAS las animaciones y transforms */
         *, *::before, *::after {
           animation: none !important;
           transition: none !important;
         }
+        /* Forzar que TODOS los elementos con transforms se muestren sin transform */
+        [style*="transform"] {
+          transform: none !important;
+        }
+        /* Forzar visibilidad de elementos ocultos */
+        [style*="opacity: 0"], [style*="opacity:0"] {
+          opacity: 1 !important;
+        }
+        /* Framer Motion: desactivar todos los transforms inline */
+        [data-framer-component] {
+          transform: none !important;
+          opacity: 1 !important;
+        }
         .ken-burns {
           animation: none !important;
+          transform: none !important;
         }
-        /* Quitar capas de grano/viñeta que sólo son decorativas */
+        /* Quitar capas decorativas */
         .bg-grain::before { display: none !important; }
         body::after { display: none !important; }
+        /* Contenedor principal */
         #app-container {
           overflow: visible !important;
           height: auto !important;
           display: block !important;
         }
-        /* Cada slide ocupa una “pantalla” de altura y genera salto de página */
+        /* Cada slide: altura completa de viewport, salto de página */
         .z-slide-container {
           position: relative !important;
           opacity: 1 !important;
@@ -188,6 +206,13 @@
           width: 100% !important;
           page-break-after: always !important;
           display: block !important;
+        }
+        /* Asegurar que las secciones dentro mantengan su layout exacto */
+        .z-slide-container > section {
+          width: 100% !important;
+          height: 100% !important;
+          position: relative !important;
+          transform: none !important;
         }
         header { 
           position: absolute !important; 
