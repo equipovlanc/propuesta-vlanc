@@ -5,6 +5,7 @@ interface HeaderProps {
   logo?: string | null;
   pageNumber?: number;
   onNavigate?: (index: number) => void;
+  onPrint?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate }) => {
@@ -34,6 +35,14 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate }) => {
                 {pageNumber}
             </div>
         </div>
+
+      {/* Botón de Imprimir */}
+      <button 
+        onClick={onPrint} 
+        className="absolute top-[20px] right-[120px] w-auto h-[78px] flex items-center justify-center pointer-events-auto cursor-pointer group bg-transparent border-none p-0 outline-none no-print"
+      >
+        <span className="font-sans text-xs text-vlanc-secondary uppercase tracking-widest group-hover:opacity-70">Imprimir</span>
+      </button>
       )}
     </header>
   );

@@ -39,6 +39,7 @@ const App: React.FC = () => {
   const [completedSections, setCompletedSections] = useState<Set<string>>(new Set());
   // Estado para bloquear la navegación (ej: Modal abierto en paso 3 de special-offers)
   const [isNavigationBlocked, setNavigationBlocked] = useState(false);
+  const [isPrintMode, setIsPrintMode] = useState(false);
 
   const slug = window.location.pathname.substring(1);
   const wheelTimeout = useRef<number | null>(null);
@@ -341,6 +342,24 @@ const App: React.FC = () => {
     };
   }, [currentIndex, isAnimating, sections, internalStep, proposalData, completedSections, isNavigationBlocked]);
 
+  // Print Mode Handler
+  useEffect(() => {
+    const handleBeforePrint = () => {
+      setIsPrintMode(true);
+    };
+    const handleAfterPrint = () => {
+      setIsPrintMode(false);
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
+    };
+  }, []);
+
 
   // Renders
   if (!slug) return <StudioLanding />;
@@ -348,6 +367,25 @@ const App: React.FC = () => {
   if (error) return <div className="h-screen bg-vlanc-bg flex items-center justify-center">{error}</div>;
 
   const activeSection = sections[currentIndex];
+
+  if (isPrintMode) {
+    return (
+      <div id="app-container" className="print-container">
+        {sections.map((section, index) => (
+          <div key={index} className="z-slide-container">
+            {index > 1 && (
+              <Header 
+                logo={proposalData.logos?.smallLogo} 
+                pageNumber={section.headerPage} 
+                onNavigate={() => {}}
+              />
+            )}
+            {section.comp}
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <ScrollContext.Provider value={direction}>
@@ -367,7 +405,7 @@ const App: React.FC = () => {
                     </SectionSlide>
                 </AnimatePresence>
             </div>
-            <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20">
+            <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
                 {sections.map((_, i) => (
                     <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
                 ))}
