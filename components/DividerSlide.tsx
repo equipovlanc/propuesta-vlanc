@@ -172,10 +172,10 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
 
     return (
         <>
-            <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative print:pt-0 print:px-0">
+            <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative">
                 <div className="w-full max-w-[1320px] flex flex-col">
                     <div className="w-full aspect-[1320/670] shrink-0 relative">
-                        {videoSrc && (
+                        {videoSrc && !isPrinting && (
                             <motion.div
                                 className="absolute inset-0 bg-black"
                                 initial={{ opacity: 0 }}
@@ -197,14 +197,15 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                         className="w-full h-full object-contain shadow-xl rounded-[1px]"
                                     />
 
-                                    <motion.div 
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: controlsVisible ? 1 : 0 }}
-                                        transition={{ duration: 0.3 }}
-                                        className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-3 z-10" 
-                                        style={{ pointerEvents: controlsVisible ? 'auto' : 'none' }}
-                                        onClick={e => e.stopPropagation()}
-                                    >
+                                    {!isPrinting && (
+                                        <motion.div 
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: controlsVisible ? 1 : 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-3 z-10" 
+                                            style={{ pointerEvents: controlsVisible ? 'auto' : 'none' }}
+                                            onClick={e => e.stopPropagation()}
+                                        >
                                         <button onClick={handlePlayPause} className="text-white p-2 focus:outline-none cursor-pointer">
                                             {isPlaying ? <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> : <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>}
                                         </button>
@@ -224,23 +225,32 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                                         </button>
                                     </motion.div>
+                                    )}
                                 </div>
                             </motion.div>
                         )}
 
-                        <motion.div className="w-full h-full" initial={{ opacity: 0 }} animate={{ opacity: (isSectionCompleted || effectiveStep >= 2) ? 1 : 0 }} transition={{ duration: 1.5, ease: "easeInOut" }}>
+                        {isPrinting ? (
+                            <div className="w-full h-full">
+                        ) : (
+                            <motion.div className="w-full h-full" initial={{ opacity: 0 }} animate={{ opacity: (isSectionCompleted || effectiveStep >= 2) ? 1 : 0 }} transition={{ duration: 1.5, ease: "easeInOut" }}>
+                        )}
                             {imageSrc && (
                                 <div className={`w-full h-full relative ${isFinalState && videoSrc ? 'cursor-pointer' : ''}`} onClick={isFinalState ? openVideoModal : undefined}>
                                     <img src={imageSrc} alt={data?.text || "Team"} className="w-full h-full object-cover shadow-xl rounded-[1px]"/>
                                     <div className="absolute inset-0 bg-[#8f4933] pointer-events-none rounded-[1px]" style={{ opacity: imageOpacity / 100 }}/>
                                 </div>
                             )}
-                        </motion.div>
+                        {isPrinting ? </div> : </motion.div>}
                     </div>
 
-                    <motion.div className="mt-12 text-right" initial={{ opacity: 0, y: 20 }} animate={{ opacity: (isSectionCompleted || effectiveStep >= 3) ? 1 : 0, y: (isSectionCompleted || effectiveStep >= 3) ? 0 : 20 }} transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || effectiveStep >= 3) ? 0.5 : 0 }}>
+                    {isPrinting ? (
+                        <div className="mt-12 text-right">
+                    ) : (
+                        <motion.div className="mt-12 text-right" initial={{ opacity: 0, y: 20 }} animate={{ opacity: (isSectionCompleted || effectiveStep >= 3) ? 1 : 0, y: (isSectionCompleted || effectiveStep >= 3) ? 0 : 20 }} transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || effectiveStep >= 3) ? 0.5 : 0 }}>
+                    )}
                         <h2 className="especial2">{data?.text || "¿Nos dejas acompañarte?"}</h2>
-                    </motion.div>
+                    {isPrinting ? </div> : </motion.div>}
                 </div>
             </section>
             

@@ -165,22 +165,22 @@
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
         }
-        /* CRÍTICO: Desactivar TODAS las animaciones y transforms */
+        /* Desactivar animaciones y transiciones */
         *, *::before, *::after {
           animation: none !important;
           transition: none !important;
         }
-        /* Forzar que TODOS los elementos con transforms se muestren sin transform */
+        /* Eliminar blur y filters que puedan hacer borroso */
+        * {
+          filter: none !important;
+          backdrop-filter: none !important;
+        }
+        /* CRÍTICO: Eliminar TODOS los transforms de Framer Motion que puedan mover elementos */
         [style*="transform"] {
           transform: none !important;
         }
-        /* Forzar visibilidad de elementos ocultos */
+        /* Asegurar que elementos ocultos se muestren */
         [style*="opacity: 0"], [style*="opacity:0"] {
-          opacity: 1 !important;
-        }
-        /* Framer Motion: desactivar todos los transforms inline */
-        [data-framer-component] {
-          transform: none !important;
           opacity: 1 !important;
         }
         .ken-burns {
@@ -190,41 +190,33 @@
         /* Quitar capas decorativas */
         .bg-grain::before { display: none !important; }
         body::after { display: none !important; }
-        /* Contenedor principal */
+        /* Contenedor principal: permitir crecimiento */
         #app-container {
           overflow: visible !important;
           height: auto !important;
           display: block !important;
         }
-        /* Cada slide: altura completa de viewport, salto de página */
+        /* Cada slide: altura viewport, salto de página - SIN tocar nada más */
         .z-slide-container {
           position: relative !important;
-          opacity: 1 !important;
-          transform: none !important;
-          box-sizing: border-box !important;
           height: 100vh !important;
           width: 100% !important;
           page-break-after: always !important;
           display: block !important;
         }
-        /* Asegurar que las secciones dentro mantengan su layout exacto */
-        .z-slide-container > section {
-          width: 100% !important;
-          height: 100% !important;
-          position: relative !important;
-          transform: none !important;
-        }
+        /* NO tocar las secciones internas - mantener su layout exacto */
         header { 
           position: absolute !important; 
-          top: 0 !important; 
-          left: 0 !important; 
-          width: 100% !important;
         }
         .no-print { display: none !important; }
         .custom-cursor { display: none !important; }
         .no-scrollbar {
           overflow: visible !important;
           max-height: none !important;
+        }
+        /* Asegurar que videos ocultos no ocupen espacio */
+        video.print\:hidden {
+          display: none !important;
         }
       }
     </style>

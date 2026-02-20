@@ -277,16 +277,24 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                             
                             {/* LOGO OVERLAY (Paso 4) - Transición más lenta (3s) */}
                             {data?.overlayLogo && (
-                                <motion.div 
-                                    className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px]"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: effectiveStep >= 4 ? 1 : 0 }}
-                                    transition={{ duration: 3.0, ease: "easeInOut" }}
-                                >
-                                    <div className="w-full max-w-[400px] p-10">
-                                        <img src={data.overlayLogo} alt="Logo Overlay" className="w-full h-auto drop-shadow-xl" />
+                                isPrinting ? (
+                                    <div className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px]" style={{ opacity: effectiveStep >= 4 ? 1 : 0 }}>
+                                        <div className="w-full max-w-[400px] p-10">
+                                            <img src={data.overlayLogo} alt="Logo Overlay" className="w-full h-auto drop-shadow-xl" />
+                                        </div>
                                     </div>
-                                </motion.div>
+                                ) : (
+                                    <motion.div 
+                                        className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px]"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: effectiveStep >= 4 ? 1 : 0 }}
+                                        transition={{ duration: 3.0, ease: "easeInOut" }}
+                                    >
+                                        <div className="w-full max-w-[400px] p-10">
+                                            <img src={data.overlayLogo} alt="Logo Overlay" className="w-full h-auto drop-shadow-xl" />
+                                        </div>
+                                    </motion.div>
+                                )
                             )}
 
                              {/* Overlay de color en hover */}
