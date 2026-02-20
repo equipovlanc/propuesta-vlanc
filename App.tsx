@@ -402,9 +402,9 @@ const App: React.FC = () => {
         {isPrinting ? (
           sections.map((section, idx) => (
             <div key={section.id} className="z-slide-container">
-              {idx > 1 && section.headerPage && (
+              {idx > 1 && section.headerPage && proposalData && (
                 <Header 
-                  logo={proposalData?.logos?.smallLogo} 
+                  logo={proposalData.logos?.smallLogo} 
                   pageNumber={section.headerPage} 
                   onNavigate={() => {}}
                 />
