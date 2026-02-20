@@ -39,39 +39,9 @@ const App: React.FC = () => {
   const [completedSections, setCompletedSections] = useState<Set<string>>(new Set());
   // Estado para bloquear la navegación (ej: Modal abierto en paso 3 de special-offers)
   const [isNavigationBlocked, setNavigationBlocked] = useState(false);
-  const [isPrinting, setIsPrinting] = useState(false);
 
   const slug = window.location.pathname.substring(1);
   const wheelTimeout = useRef<number | null>(null);
-
-  const handlePrint = () => setIsPrinting(true);
-
-  useEffect(() => {
-    if (isPrinting) {
-      const afterPrint = () => {
-        setIsPrinting(false);
-        window.removeEventListener('afterprint', afterPrint);
-      };
-      window.addEventListener('afterprint', afterPrint);
-      
-      const printTimeout = setTimeout(() => {
-        window.print();
-        const fallbackTimeout = setTimeout(() => {
-          if (isPrinting) {
-            setIsPrinting(false);
-          }
-        }, 1500);
-        
-        const clearFallback = () => clearTimeout(fallbackTimeout);
-        window.addEventListener('afterprint', clearFallback, { once: true });
-
-      }, 500);
-
-      return () => {
-        clearTimeout(printTimeout);
-      };
-    }
-  }, [isPrinting]);
 
   // Fetch Data
   useEffect(() => {
@@ -197,7 +167,7 @@ const App: React.FC = () => {
     if (!proposalData) return [];
     const d = proposalData;
 
-    const list: any[] = [
+    const list = [
         // 0: Hero
         { id: 'hero', comp: <Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /> },
         // 1: Index
@@ -205,9 +175,9 @@ const App: React.FC = () => {
         // 2: Situation
         { id: 'situation', comp: <Situation data={d.situation} />, headerPage: 3 },
         // 3: Mission
-        { id: 'mission', comp: <Mission isPrinting={isPrinting} data={d.mission} step={internalStep} />, headerPage: 4 },
+        { id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: 4 },
         // 4: Process
-        { id: 'process', comp: <Process isPrinting={isPrinting} data={d.process} guaranteeItem={d.guarantees?.items?.[0]} step={internalStep} />, headerPage: 5 },
+        { id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} step={internalStep} />, headerPage: 5 },
         // 5: Team
         { id: 'team', comp: <Team data={d.team} />, headerPage: 6 },
         // 6: Testimonials
@@ -228,11 +198,10 @@ const App: React.FC = () => {
     });
 
     list.push(
-        { id: 'investment', comp: <Investment isPrinting={isPrinting} data={d.investment} step={internalStep} />, headerPage: 14 },
+        { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: 14 },
         { 
             id: 'special-offers', 
             comp: <SpecialOffers 
-                isPrinting={isPrinting}
                 data={d.specialOffers} 
                 investmentTitle={d.investment?.title} 
                 locationDate={d.investment?.locationDate} 
@@ -247,7 +216,6 @@ const App: React.FC = () => {
         { 
             id: 'divider-slide', 
             comp: <DividerSlide 
-                isPrinting={isPrinting}
                 data={d.dividerSlide} 
                 step={internalStep}
                 isSectionCompleted={completedSections.has('divider-slide')}
@@ -266,7 +234,7 @@ const App: React.FC = () => {
         });
     });
 
-    list.push({ id: 'contact', comp: <Contact onPrint={handlePrint} isPrinting={isPrinting} data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} /> });
+    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} /> });
 
     return list;
   })();
@@ -375,69 +343,36 @@ const App: React.FC = () => {
 
 
   // Renders
-  if (!slug) return (
-    <>
-        <CustomCursor />
-        <StudioLanding />
-    </>
-  );
+  if (!slug) return <StudioLanding />;
   if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center text-vlanc-primary font-bold tracking-widest uppercase">Cargando...</div>;
   if (error) return <div className="h-screen bg-vlanc-bg flex items-center justify-center">{error}</div>;
 
-  const activeSection = sections.length > 0 ? sections[currentIndex] : null;
-
-  if (!slug) return (
-    <>
-        <CustomCursor />
-        <StudioLanding />
-    </>
-  );
-  if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center text-vlanc-primary font-bold tracking-widest uppercase">Cargando...</div>;
-  if (error) return <div className="h-screen bg-vlanc-bg flex items-center justify-center">{error}</div>;
+  const activeSection = sections[currentIndex];
 
   return (
     <ScrollContext.Provider value={direction}>
-      <div id="app-container" className={isPrinting ? 'is-printing' : ''}>
-        <CustomCursor />
-        {isPrinting ? (
-          sections.map((section, idx) => (
-            <div key={section.id} className="z-slide-container">
-              {idx > 1 && section.headerPage && proposalData && (
+        <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
+            <CustomCursor />
+            {currentIndex > 1 && (
                 <Header 
-                  logo={proposalData.logos?.smallLogo} 
-                  pageNumber={section.headerPage} 
-                  onNavigate={() => {}}
+                    logo={proposalData.logos?.smallLogo} 
+                    pageNumber={activeSection.headerPage} 
+                    onNavigate={navigate}
                 />
-              )}
-              {section.comp}
+            )}
+            <div className="relative w-full h-full perspective-[1000px]">
+                <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                    <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
+                        {activeSection.comp}
+                    </SectionSlide>
+                </AnimatePresence>
             </div>
-          ))
-        ) : (
-          activeSection && (
-            <div className="fixed inset-0 w-full h-full overflow-hidden">
-                {currentIndex > 1 && (
-                    <Header 
-                        logo={proposalData.logos?.smallLogo} 
-                        pageNumber={activeSection.headerPage} 
-                        onNavigate={navigate}
-                    />
-                )}
-                <div className="relative w-full h-full perspective-[1000px]">
-                    <AnimatePresence initial={true} custom={direction} mode="popLayout">
-                        <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
-                            {activeSection.comp}
-                        </SectionSlide>
-                    </AnimatePresence>
-                </div>
-                <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20">
-                    {sections.map((_, i) => (
-                        <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
-                    ))}
-                </div>
+            <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20">
+                {sections.map((_, i) => (
+                    <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
+                ))}
             </div>
-          )
-        )}
-      </div>
+        </div>
     </ScrollContext.Provider>
   );
 };

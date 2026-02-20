@@ -22,8 +22,6 @@ interface ContactProps {
     };
     finalLogo?: string | null;
     finalLogoVideo?: string | null;
-    onPrint?: () => void;
-    isPrinting?: boolean;
 }
 
 type AnimationPhase = 'playing' | 'moving' | 'finished';
@@ -60,7 +58,7 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
     )
 );
 
-const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint, isPrinting = false }) => {
+const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
     const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo && !videoHasError ? 'playing' : 'finished');
     const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -76,12 +74,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
     }, [phase, videoHasError]);
 
     const handlePrint = () => {
-        if (onPrint) {
-            onPrint();
-        } else {
-            // Fallback for when the prop is not provided, though it should be.
-            window.print();
-        }
+        window.print();
     };
 
     React.useEffect(() => {
@@ -126,7 +119,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
         };
     }, [phase, videoHasError, handleVideoError]);
 
-    const showContent = isPrinting || phase === 'finished';
+    const showContent = phase === 'finished';
     const effectiveVideoSrc = videoHasError ? null : finalLogoVideo;
 
     return (
@@ -211,7 +204,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
 
             <AnimatePresence>
                 {phase === 'playing' && effectiveVideoSrc && (
-                    <div className="fixed inset-0 flex items-center justify-center z-[100] pointer-events-none print:hidden">
+                    <div className="fixed inset-0 flex items-center justify-center z-[100] pointer-events-none">
                         <motion.div
                             layoutId="final-logo-container"
                             className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4"

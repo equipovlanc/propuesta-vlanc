@@ -23,7 +23,6 @@ interface InvestmentProps {
         prices?: string[];
     };
     step?: number; // 0 = Intro, 1 = Plan 1, 2 = Plan 2, 3 = Plan 3
-    isPrinting?: boolean;
 }
 
 const CheckIcon = () => (
@@ -32,10 +31,8 @@ const CheckIcon = () => (
     </svg>
 );
 
-const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = false }) => {
+const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
     
-    const effectiveStep = isPrinting ? 3 : step;
-
     const getRowBg = (color?: string) => {
         if (color === 'light') return 'bg-[#eae0d5]';
         if (color === 'medium') return 'bg-[#dccbc1]'; 
@@ -84,43 +81,27 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                         
                     {/* Descripción de Planes (Revelación Secuencial) */}
                     <div className="space-y-6 mt-8">
-                        {(data?.plansDescription ?? []).map((p, i) => {
-                            const content = (
-                                <>
-                                    <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${effectiveStep === i + 1 || isPrinting ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
-                                        {p.name}_
-                                    </h3>
-                                    <div 
-                                        className="cuerpo [&>strong]:font-bold"
-                                        dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
-                                    />
-                                </>
-                            );
-                            
-                            if (isPrinting) {
-                                return (
-                                    <div key={i} className="space-y-2">
-                                        {content}
-                                    </div>
-                                );
-                            }
-                            
-                            return (
-                                <motion.div 
-                                    key={i} 
-                                    className="space-y-2"
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ 
-                                        opacity: effectiveStep >= i + 1 ? 1 : 0.1,
-                                        x: effectiveStep >= i + 1 ? 0 : -20,
-                                        filter: effectiveStep >= i + 1 ? 'blur(0px)' : 'blur(2px)'
-                                    }}
-                                    transition={{ duration: 0.8, ease: "easeOut" }}
-                                >
-                                    {content}
-                                </motion.div>
-                            );
-                        })}
+                        {(data?.plansDescription ?? []).map((p, i) => (
+                            <motion.div 
+                                key={i} 
+                                className="space-y-2"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ 
+                                    opacity: step >= i + 1 ? 1 : 0.1, // Dim si no es el activo? Mejor hidden si aun no llega, visible si ya pasó.
+                                    x: step >= i + 1 ? 0 : -20,
+                                    filter: step >= i + 1 ? 'blur(0px)' : 'blur(2px)'
+                                }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                            >
+                                <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${step === i + 1 ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
+                                    {p.name}_
+                                </h3>
+                                <div 
+                                    className="cuerpo [&>strong]:font-bold"
+                                    dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
+                                />
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
 
@@ -132,38 +113,26 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                         {/* Grid Layer absoluta detrás del contenido */}
                         <div className="absolute inset-0 grid grid-cols-[2.5fr_1fr_1fr_1fr] h-full pointer-events-none z-0">
                             {/* Columna Plan 1 */}
-                            {isPrinting ? (
-                                <div className="col-start-2 row-span-full bg-vlanc-primary/5" style={{ opacity: effectiveStep === 1 ? 1 : 0 }} />
-                            ) : (
-                                <motion.div 
-                                    className="col-start-2 row-span-full bg-vlanc-primary/5"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: effectiveStep === 1 ? 1 : 0 }}
-                                    transition={{ duration: 0.5 }}
-                                />
-                            )}
+                            <motion.div 
+                                className="col-start-2 row-span-full bg-vlanc-primary/5"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: step === 1 ? 1 : 0 }} // Solo resaltada cuando es el paso activo
+                                transition={{ duration: 0.5 }}
+                            />
                              {/* Columna Plan 2 */}
-                             {isPrinting ? (
-                                <div className="col-start-3 row-span-full bg-vlanc-primary/5" style={{ opacity: effectiveStep === 2 ? 1 : 0 }} />
-                            ) : (
-                                <motion.div 
-                                    className="col-start-3 row-span-full bg-vlanc-primary/5"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: effectiveStep === 2 ? 1 : 0 }} 
-                                    transition={{ duration: 0.5 }}
-                                />
-                            )}
+                             <motion.div 
+                                className="col-start-3 row-span-full bg-vlanc-primary/5"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: step === 2 ? 1 : 0 }} 
+                                transition={{ duration: 0.5 }}
+                            />
                              {/* Columna Plan 3 */}
-                             {isPrinting ? (
-                                <div className="col-start-4 row-span-full bg-vlanc-primary/5" style={{ opacity: effectiveStep === 3 ? 1 : 0 }} />
-                            ) : (
-                                <motion.div 
-                                    className="col-start-4 row-span-full bg-vlanc-primary/5"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: effectiveStep === 3 ? 1 : 0 }} 
-                                    transition={{ duration: 0.5 }}
-                                />
-                            )}
+                             <motion.div 
+                                className="col-start-4 row-span-full bg-vlanc-primary/5"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: step === 3 ? 1 : 0 }} 
+                                transition={{ duration: 0.5 }}
+                            />
                         </div>
 
                         {/* CONTENIDO TABLA (z-10) */}
@@ -172,34 +141,18 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                             {/* Cabecera Tabla */}
                             <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] bg-[#cbb6aa] shrink-0 h-[47px]">
                                 <div className="p-3"></div>
-                                {(data?.tableHeaders ?? []).map((h, i) => {
-                                    const content = (
-                                        <>
-                                            <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
-                                            <span className={`tabla1 whitespace-nowrap ${effectiveStep === i + 1 || isPrinting ? 'text-vlanc-secondary' : ''}`}>{h}</span>
-                                        </>
-                                    );
-                                    
-                                    if (isPrinting) {
-                                        return (
-                                            <div key={i} className="px-3 text-center flex items-center justify-center h-full gap-3" style={{ opacity: effectiveStep >= i + 1 ? 1 : 0 }}>
-                                                {content}
-                                            </div>
-                                        );
-                                    }
-                                    
-                                    return (
-                                        <motion.div 
-                                            key={i} 
-                                            className="px-3 text-center flex items-center justify-center h-full gap-3"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: effectiveStep >= i + 1 ? 1 : 0 }}
-                                            transition={{ duration: 0.5, delay: 0.2 }}
-                                        >
-                                            {content}
-                                        </motion.div>
-                                    );
-                                })}
+                                {(data?.tableHeaders ?? []).map((h, i) => (
+                                    <motion.div 
+                                        key={i} 
+                                        className="px-3 text-center flex items-center justify-center h-full gap-3"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: step >= i + 1 ? 1 : 0 }}
+                                        transition={{ duration: 0.5, delay: 0.2 }}
+                                    >
+                                        <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
+                                        <span className={`tabla1 whitespace-nowrap ${step === i + 1 ? 'text-vlanc-secondary' : ''}`}>{h}</span>
+                                    </motion.div>
+                                ))}
                             </div>
                             
                             {/* Cuerpo Tabla */}
@@ -222,27 +175,17 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                                             <div className="px-4 leading-tight py-1">
                                                 <span className="tabla2">{row.label}</span>
                                             </div>
-                                            {(row.checks ?? []).map((isChecked, idx) => {
-                                                if (isPrinting) {
-                                                    return (
-                                                        <div key={idx} className="flex justify-center items-center h-full" style={{ opacity: effectiveStep >= idx + 1 ? 1 : 0 }}>
-                                                            {isChecked && <CheckIcon />}
-                                                        </div>
-                                                    );
-                                                }
-                                                
-                                                return (
-                                                    <motion.div 
-                                                        key={idx} 
-                                                        className="flex justify-center items-center h-full"
-                                                        initial={{ opacity: 0 }}
-                                                        animate={{ opacity: effectiveStep >= idx + 1 ? 1 : 0 }}
-                                                        transition={{ duration: 0.4 }}
-                                                    >
-                                                        {isChecked && <CheckIcon />}
-                                                    </motion.div>
-                                                );
-                                            })}
+                                            {(row.checks ?? []).map((isChecked, idx) => (
+                                                <motion.div 
+                                                    key={idx} 
+                                                    className="flex justify-center items-center h-full"
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: step >= idx + 1 ? 1 : 0 }} // Revelar columna si el paso es suficiente
+                                                    transition={{ duration: 0.4 }}
+                                                >
+                                                    {isChecked && <CheckIcon />}
+                                                </motion.div>
+                                            ))}
                                         </div>
                                     );
                                 })}
@@ -251,27 +194,17 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrinting = fa
                             {/* Pie Tabla: Precios */}
                             <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] bg-[#8f4933] text-white shrink-0 h-[35px]">
                                 <div className="p-4"></div>
-                                {(data?.prices ?? []).map((price, i) => {
-                                    if (isPrinting) {
-                                        return (
-                                            <div key={i} className="px-4 text-center flex flex-col justify-center h-full" style={{ opacity: effectiveStep >= i + 1 ? 1 : 0 }}>
-                                                <span className="tabla3 whitespace-nowrap">{price}</span>
-                                            </div>
-                                        );
-                                    }
-                                    
-                                    return (
-                                        <motion.div 
-                                            key={i} 
-                                            className="px-4 text-center flex flex-col justify-center h-full"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: effectiveStep >= i + 1 ? 1 : 0 }}
-                                            transition={{ duration: 0.5, delay: 0.1 }}
-                                        >
-                                            <span className="tabla3 whitespace-nowrap">{price}</span>
-                                        </motion.div>
-                                    );
-                                })}
+                                {(data?.prices ?? []).map((price, i) => (
+                                    <motion.div 
+                                        key={i} 
+                                        className="px-4 text-center flex flex-col justify-center h-full"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: step >= i + 1 ? 1 : 0 }}
+                                        transition={{ duration: 0.5, delay: 0.1 }}
+                                    >
+                                        <span className="tabla3 whitespace-nowrap">{price}</span>
+                                    </motion.div>
+                                ))}
                             </div>
                         </div>
 
