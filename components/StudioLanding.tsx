@@ -13,12 +13,12 @@ const StudioLanding: React.FC = () => {
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        const query = `*[_type == "sanity.imageAsset" && title == "Logo Portada (Esquina Inferior Der)"][0]{url}`;
-        const result = await sanityClient.fetch<{ url: string }>(query);
-        if (result?.url) {
-          setLogoUrl(result.url);
+        const query = `*[_type == "proposal"][0]{ "logoUrl": logos.mainLogo.asset->url }`;
+        const result = await sanityClient.fetch<{ logoUrl: string }>(query);
+        if (result?.logoUrl) {
+          setLogoUrl(result.logoUrl);
         } else {
-          setError('No se pudo encontrar el logo. Verifica que el nombre en Sanity sea correcto.');
+          setError('No se pudo encontrar el logo. Verifica la configuración en Sanity.');
         }
       } catch (err) {
         setError('Error al cargar el logo desde Sanity.');
