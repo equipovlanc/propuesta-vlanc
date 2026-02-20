@@ -23,7 +23,30 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   mode = 'default'
 }) => {
   const scrollDir = useScrollDirection(); 
+
+  // En modo impresión queremos desactivar por completo animaciones,
+  // transforms y filtros para evitar estados intermedios/borrosos.
+  const isPrintMode = typeof window !== 'undefined' && (() => {
+    if (window.matchMedia) {
+      try {
+        if (window.matchMedia('print').matches) return true;
+      } catch {
+        // ignore
+      }
+    }
+    const app = document.getElementById('app-container');
+    return app?.classList.contains('is-printing') ?? false;
+  })();
   
+  // Si estamos en impresión, devolvemos un contenedor estático sin motion.
+  if (isPrintMode) {
+    return (
+      <div onClick={onClick} className={className} style={style}>
+        {children}
+      </div>
+    );
+  }
+
   // LOGICA DE TIEMPOS ZEN
   const isMedia = hierarchy === 0;
   
