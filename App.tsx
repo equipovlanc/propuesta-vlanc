@@ -400,8 +400,15 @@ const App: React.FC = () => {
       <div id="app-container" className={isPrinting ? 'is-printing' : ''}>
         <CustomCursor />
         {isPrinting ? (
-          sections.map(section => (
+          sections.map((section, idx) => (
             <div key={section.id} className="z-slide-container">
+              {idx > 1 && section.headerPage && (
+                <Header 
+                  logo={proposalData?.logos?.smallLogo} 
+                  pageNumber={section.headerPage} 
+                  onNavigate={() => {}}
+                />
+              )}
               {section.comp}
             </div>
           ))

@@ -170,17 +170,18 @@
           animation: none !important;
           transition: none !important;
         }
-        /* Eliminar blur y filters que puedan hacer borroso */
+        /* Eliminar filters y blur */
         * {
           filter: none !important;
           backdrop-filter: none !important;
         }
-        /* CRÍTICO: Eliminar TODOS los transforms de Framer Motion que puedan mover elementos */
+        /* Eliminar transforms inline de Framer Motion */
         [style*="transform"] {
           transform: none !important;
         }
-        /* Asegurar que elementos ocultos se muestren */
-        [style*="opacity: 0"], [style*="opacity:0"] {
+        /* Asegurar visibilidad de elementos ocultos por animaciones (pero NO tocar overlays de imágenes) */
+        div[style*="opacity: 0"]:not([class*="bg-\[#8f4933\"]"):not([class*="bg-vlanc"]),
+        div[style*="opacity:0"]:not([class*="bg-\[#8f4933\"]"):not([class*="bg-vlanc"]) {
           opacity: 1 !important;
         }
         .ken-burns {
@@ -190,23 +191,42 @@
         /* Quitar capas decorativas */
         .bg-grain::before { display: none !important; }
         body::after { display: none !important; }
-        /* Contenedor principal: permitir crecimiento */
+        /* Contenedor principal */
         #app-container {
           overflow: visible !important;
           height: auto !important;
           display: block !important;
         }
-        /* Cada slide: altura viewport, salto de página - SIN tocar nada más */
+        /* CRÍTICO: Cada slide es EXACTAMENTE 1920x1080px, centrado en A3 */
         .z-slide-container {
           position: relative !important;
-          height: 100vh !important;
-          width: 100% !important;
+          width: 1920px !important;
+          height: 1080px !important;
+          margin: 0 auto !important;
           page-break-after: always !important;
           display: block !important;
+          box-sizing: border-box !important;
+          transform: none !important;
+          opacity: 1 !important;
         }
-        /* NO tocar las secciones internas - mantener su layout exacto */
+        /* Las secciones dentro mantienen su tamaño completo y layout exacto */
+        .z-slide-container > section {
+          width: 1920px !important;
+          height: 1080px !important;
+          min-width: 1920px !important;
+          min-height: 1080px !important;
+          max-width: 1920px !important;
+          max-height: 1080px !important;
+          transform: none !important;
+          opacity: 1 !important;
+          position: relative !important;
+        }
+        /* Header visible en impresión */
         header { 
-          position: absolute !important; 
+          position: absolute !important;
+          display: block !important;
+          opacity: 1 !important;
+          transform: none !important;
         }
         .no-print { display: none !important; }
         .custom-cursor { display: none !important; }
@@ -214,7 +234,6 @@
           overflow: visible !important;
           max-height: none !important;
         }
-        /* Asegurar que videos ocultos no ocupen espacio */
         video.print\:hidden {
           display: none !important;
         }
