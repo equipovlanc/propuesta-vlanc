@@ -343,7 +343,12 @@ const App: React.FC = () => {
 
 
   // Renders
-  if (!slug) return <StudioLanding />;
+  if (!slug) return (
+    <>
+        <CustomCursor />
+        <StudioLanding />
+    </>
+  );
   if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center text-vlanc-primary font-bold tracking-widest uppercase">Cargando...</div>;
   if (error) return <div className="h-screen bg-vlanc-bg flex items-center justify-center">{error}</div>;
 
@@ -361,7 +366,7 @@ const App: React.FC = () => {
                 />
             )}
             <div className="relative w-full h-full perspective-[1000px]">
-                <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                <AnimatePresence initial={true} custom={direction} mode="popLayout">
                     <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
                         {activeSection.comp}
                     </SectionSlide>
