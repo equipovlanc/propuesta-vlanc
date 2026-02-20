@@ -41,16 +41,17 @@ const App: React.FC = () => {
   const [isNavigationBlocked, setNavigationBlocked] = useState(false);
   const [isPrintMode, setIsPrintMode] = useState(false);
 
-  const slug = window.location.pathname.substring(1);
+  const [slug, setSlug] = useState<string | null>(null);
   const wheelTimeout = useRef<number | null>(null);
+
+  useEffect(() => {
+    setSlug(window.location.pathname.substring(1));
+  }, []);
 
   // Fetch Data
   useEffect(() => {
     const fetchProposalData = async () => {
-      if (!slug) { 
-        setLoading(false); 
-        return; 
-      }
+      if (!slug) return;
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
