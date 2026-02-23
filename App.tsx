@@ -398,7 +398,7 @@ const App: React.FC = () => {
 
           return (
             <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', pageBreakAfter: 'always', pageBreakInside: 'avoid', breakAfter: 'page', breakInside: 'avoid', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
-              <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(0.82677165)', backgroundColor: '#efe8e1', overflow: 'hidden' }}>
+              <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(0.82677165)', backgroundColor: '#ffffff', overflow: 'hidden' }}>
                 {section.headerPage && (
                   <Header
                     logo={proposalData.logos?.smallLogo}

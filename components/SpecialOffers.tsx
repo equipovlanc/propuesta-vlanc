@@ -189,11 +189,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
 
-                <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar print:overflow-visible print:justify-start print:pt-4" hierarchy={2}>
+                <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar print:overflow-visible print:justify-start print:pt-4 print-force-visible" hierarchy={2}>
 
                     {/* CAJA 1: CONDICIONES ESPECIALES (Visible Step >= 1) */}
                     <div
-                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible ${getRevealClasses(step >= 1)}`}
+                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:p-[20px] print:m-[1px] ${getRevealClasses(step >= 1)}`}
                     >
                         {data?.conditionalOffer && (
                             <div className="mb-4">
@@ -212,7 +212,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 
                     {/* CAJA 2: OFERTA LANZAMIENTO (Visible Step >= 2) */}
                     <div
-                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible ${getRevealClasses(step >= 2)}`}
+                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:p-[20px] print:m-[1px] ${getRevealClasses(step >= 2)}`}
                     >
                         {data?.launchOffer && (
                             <div className="mb-4">
