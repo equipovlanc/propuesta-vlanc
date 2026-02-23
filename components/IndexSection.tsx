@@ -42,8 +42,8 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
                         className="w-full h-full object-cover"
                     />
                     <div 
-                        className="absolute inset-0 bg-[#8f4933]" 
-                        style={{ opacity: imageOpacity / 100 }}
+                        className="absolute inset-0 pointer-events-none" 
+                        style={{ backgroundColor: `rgba(143, 73, 51, ${imageOpacity / 100})` }}
                     />
                 </div>
             ) : (
