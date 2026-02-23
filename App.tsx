@@ -119,7 +119,7 @@ const App: React.FC = () => {
     // Recuperamos el ID de la sección actual para marcar como completada
     const currentSection = sectionsRef.current[currentIndex];
     if (isMovingForward && currentSection) {
-      if (['mission', 'process', 'investment', 'special-offers', 'divider-slide', 'payment'].includes(currentSection.id)) {
+      if (['mission', 'process', 'investment', 'special-offers', 'divider-slide', 'payment', 'contact'].includes(currentSection.id)) {
         setCompletedSections(prev => new Set(prev).add(currentSection.id));
       }
     }
@@ -248,7 +248,7 @@ const App: React.FC = () => {
       });
     });
 
-    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} /> });
+    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} isSectionCompleted={completedSections.has('contact')} /> });
 
     return list;
   })();

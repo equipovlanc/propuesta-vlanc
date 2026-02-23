@@ -23,6 +23,7 @@ interface ContactProps {
     finalLogo?: string | null;
     finalLogoVideo?: string | null;
     onPrint?: () => void;
+    isSectionCompleted?: boolean;
 }
 
 type AnimationPhase = 'playing' | 'moving' | 'finished';
@@ -64,9 +65,12 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
     )
 );
 
-const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint }) => {
+const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint, isSectionCompleted = false }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
-    const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo && !videoHasError ? 'playing' : 'finished');
+    // Si la sección ya fue completada, arrancamos directo en 'finished' (sin video, sin animación)
+    const [phase, setPhase] = React.useState<AnimationPhase>(
+        isSectionCompleted ? 'finished' : (finalLogoVideo && !videoHasError ? 'playing' : 'finished')
+    );
     const videoRef = React.useRef<HTMLVideoElement>(null);
 
     const handleVideoError = React.useCallback(() => {

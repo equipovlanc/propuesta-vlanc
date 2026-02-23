@@ -1,6 +1,5 @@
 
 import React from 'react';
-import AnimatedSection from './AnimatedSection';
 import { motion } from 'framer-motion';
 
 interface PaymentStep {
@@ -31,24 +30,22 @@ interface PaymentProps {
     step?: number; // 0 = nada, 1 = columna izquierda, 2 = columna derecha + firma + fecha
 }
 
-const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, step = 2 }) => {
-    // Variantes de revelación
-    const revealVariants = {
-        hidden: { opacity: 0, y: 16 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } },
-    };
+// Helper: aplica blur y opacidad según si el bloque está revelado (mismo estilo que p5 y p14)
+const getRevealStyle = (visible: boolean) => ({
+    opacity: visible ? 1 : 0.08,
+    filter: visible ? 'blur(0px)' : 'blur(5px)',
+});
 
+const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, step = 2 }) => {
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative">
             <div className="w-full h-full flex flex-col">
                 <div className="shrink-0 mb-20">
-                    <AnimatedSection hierarchy={1}>
-                        <h2 className="subtitulo1">
-                            {investmentTitle || "la inversión."}
-                        </h2>
-                    </AnimatedSection>
-                    {/* Barra decorativa animada */}
-                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                    {/* El título y la barra se muestran siempre (no forman parte del sistema de pasos) */}
+                    <h2 className="subtitulo1">
+                        {investmentTitle || "la inversión."}
+                    </h2>
+                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
 
                 {/* Grid */}
@@ -56,10 +53,10 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
 
                     {/* COLUMNA IZQUIERDA — Paso 1 */}
                     <motion.div
-                        variants={revealVariants}
-                        initial="hidden"
-                        animate={step >= 1 ? "visible" : "hidden"}
                         className="print-force-visible"
+                        initial={getRevealStyle(false)}
+                        animate={getRevealStyle(step >= 1)}
+                        transition={{ duration: 0.9, ease: 'easeInOut' }}
                     >
                         <h3 className="subtitulo2 mb-10">{data?.paymentMethods?.title}</h3>
                         <div className="space-y-8">
@@ -68,7 +65,6 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                                     <h4 className="fase-titulo text-[#703622] mb-4 !text-[16px]">
                                         {plan.title}
                                     </h4>
-
                                     <div className="flex flex-col gap-[5px]">
                                         {(plan.payments ?? []).map((p, idx) => (
                                             <div key={idx} className="flex items-center text-vlanc-secondary">
@@ -81,7 +77,6 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                                     </div>
                                 </div>
                             ))}
-
                             {data?.finePrint?.invoiceInfo && (
                                 <div className="mt-8">
                                     <p className="cuerpo font-bold text-[10px] whitespace-pre-line text-vlanc-secondary">
@@ -94,13 +89,12 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
 
                     {/* COLUMNA DERECHA + FIRMA — Paso 2 */}
                     <motion.div
-                        variants={revealVariants}
-                        initial="hidden"
-                        animate={step >= 2 ? "visible" : "hidden"}
                         className="flex flex-col relative print-force-visible"
+                        initial={getRevealStyle(false)}
+                        animate={getRevealStyle(step >= 2)}
+                        transition={{ duration: 0.9, ease: 'easeInOut' }}
                     >
                         <h3 className="subtitulo2 mb-10">{data?.finePrint?.title}</h3>
-
                         <div className="flex flex-col gap-[2px]">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
                                 <p key={i} className="cuerpo text-vlanc-secondary/80">
@@ -108,7 +102,6 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                                 </p>
                             ))}
                         </div>
-
                         <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mt-[50px]">
                             <div className="flex justify-between items-start">
                                 <span className="tabla1">VIVE VLANC SL</span>
@@ -121,10 +114,10 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
 
             {/* FECHA — Paso 2 */}
             <motion.div
-                variants={revealVariants}
-                initial="hidden"
-                animate={step >= 2 ? "visible" : "hidden"}
                 className="absolute bottom-[70px] right-[120px] z-20 print-force-visible"
+                initial={getRevealStyle(false)}
+                animate={getRevealStyle(step >= 2)}
+                transition={{ duration: 0.9, ease: 'easeInOut' }}
             >
                 <p className="cuerpo font-bold text-right">
                     {locationDate || "En Alcoi a XX de mes de 2025"}
