@@ -22,6 +22,7 @@ interface ContactProps {
     };
     finalLogo?: string | null;
     finalLogoVideo?: string | null;
+    onPrint?: () => void;
 }
 
 type AnimationPhase = 'playing' | 'moving' | 'finished';
@@ -58,7 +59,7 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
     )
 );
 
-const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) => {
+const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
     const [phase, setPhase] = React.useState<AnimationPhase>(finalLogoVideo && !videoHasError ? 'playing' : 'finished');
     const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -74,7 +75,13 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
     }, [phase, videoHasError]);
 
     const handlePrint = () => {
-        window.print();
+        if (onPrint) {
+            onPrint();
+        } else {
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
     };
 
     React.useEffect(() => {
@@ -106,7 +113,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
 
         video.addEventListener('loadedmetadata', setupAndPlay);
         video.addEventListener('ended', handleVideoEnd);
-        
+
         video.load();
 
         return () => {
@@ -125,7 +132,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
     return (
         <footer className="h-screen w-full flex flex-col pt-[150px] pb-[140px] px-[120px] relative overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
-                
+
                 <div className="flex items-center justify-center h-full w-full">
                     {/* El logo en su posición final ya no necesita AnimatePresence, 
                         permitiendo que la animación de layout sea la única responsable de la transición */}
@@ -188,14 +195,14 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                             </div>
                         </div>
                         <div>
-                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ RRSS</h4>
-                             <div className="flex gap-6 items-center pl-6">
+                            <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ RRSS</h4>
+                            <div className="flex gap-6 items-center pl-6">
                                 {(data?.rrss ?? []).map((social, i) => (
                                     <a key={i} href={social.url} target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity w-6 h-6 flex items-center justify-center" title={social.name}>
                                         {social.icon ? <img src={social.icon} alt={social.name} className="w-full h-full object-contain" /> : <div className="w-6 h-6 rounded-full bg-vlanc-secondary/20 flex items-center justify-center text-[10px] font-bold text-vlanc-secondary">{social.name ? social.name.charAt(0) : '?'}</div>}
                                     </a>
                                 ))}
-                             </div>
+                            </div>
                         </div>
                         <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[40px] ml-6" />
                     </div>
@@ -227,7 +234,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo }) =>
                 animate={{ opacity: showContent ? 1 : 0 }}
                 transition={{ duration: 1, ease: 'easeOut', delay: 0.5 }}
             >
-                <button 
+                <button
                     onClick={handlePrint}
                     className="text-[10px] font-bold tracking-[0.3em] text-vlanc-black/30 hover:text-vlanc-primary transition-all duration-300 uppercase outline-none"
                 >
