@@ -227,7 +227,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                             {imageSrc && (
                                 <div className={`w-full h-full relative ${isFinalState && videoSrc ? 'cursor-pointer' : ''}`} onClick={isFinalState ? openVideoModal : undefined}>
                                     <img src={imageSrc} alt={data?.text || "Team"} className="w-full h-full object-cover shadow-xl rounded-[1px]"/>
-                                    <div className="absolute inset-0 pointer-events-none rounded-[1px]" style={{ backgroundColor: `rgba(143, 73, 51, ${imageOpacity / 100})` }}/>
+                                    <div className="absolute inset-0 bg-[#8f4933] pointer-events-none rounded-[1px]" style={{ opacity: imageOpacity / 100 }}/>
                                 </div>
                             )}
                         </motion.div>

@@ -5,14 +5,15 @@ interface HeaderProps {
   logo?: string | null;
   pageNumber?: number;
   onNavigate?: (index: number) => void;
+  onPrint?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate }) => {
+const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate, onPrint }) => {
   return (
     <header className="absolute top-0 left-0 w-full pointer-events-none z-[60] mix-blend-multiply">
       {/* Logo Small - Navegación al Índice (Sección 1, índice 1) */}
-      <button 
-        onClick={() => onNavigate && onNavigate(1)} 
+      <button
+        onClick={() => onNavigate && onNavigate(1)}
         className="absolute top-[20px] left-[52px] w-[78px] h-[78px] flex items-center justify-center pointer-events-auto cursor-pointer group bg-transparent border-none p-0 outline-none"
       >
         {logo ? (
@@ -27,12 +28,12 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate }) => {
       {/* Número de página y línea vertical - Coordenadas fijas */}
       {pageNumber && (
         <div className="absolute top-0 right-[60px] flex flex-col items-center pointer-events-auto">
-            {/* Línea vertical */}
-            <div className="w-[1px] h-[90px] bg-[#703622]"></div>
-            
-            <div className="mt-2 text-[11px] font-sans text-[#703622] font-normal tracking-[0.2em]">
-                {pageNumber}
-            </div>
+          {/* Línea vertical */}
+          <div className="w-[1px] h-[90px] bg-[#703622]"></div>
+
+          <div className="mt-2 text-[11px] font-sans text-[#703622] font-normal tracking-[0.2em]">
+            {pageNumber}
+          </div>
         </div>
       )}
     </header>

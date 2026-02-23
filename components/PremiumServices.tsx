@@ -31,7 +31,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
         const nextBlock = allBlocks[key + 1];
-        
+
         const isConsecutiveNumbered = block.isNumbered && nextBlock?.isNumbered;
         const marginBottomClass = isConsecutiveNumbered ? "h-[5px]" : "h-5";
 
@@ -63,7 +63,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
         <section className="h-full w-full flex flex-row">
             {/* Left Column (J1 & J2) */}
             <div className="w-[888px] h-full flex flex-col justify-between pl-[120px] pr-10 pt-[150px] pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
-                
+
                 {/* 1. Cabecera Principal (J1) */}
                 <div className="shrink-0">
                     <AnimatedSection hierarchy={1}>
@@ -77,7 +77,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     </AnimatedSection>
                     <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
-                
+
                 {/* 2. Contenido del Servicio (J2) */}
                 <div className="flex flex-col justify-end max-w-xl">
                     <AnimatedSection hierarchy={2}>
@@ -92,16 +92,16 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                         <div className="w-full">
                             {(data?.description ?? []).map((block, i, arr) => renderDescriptionBlock(block, i, arr))}
                         </div>
-                        
+
                         {data?.note && (
                             <div className="mt-4">
-                                <p 
+                                <p
                                     className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary"
                                     dangerouslySetInnerHTML={{ __html: data.note }}
                                 />
                             </div>
                         )}
-                        
+
                         {data?.price && (
                             <div className="relative h-0 w-full">
                                 <div className="absolute top-8 left-0 bg-[#8f4933] text-white px-8 py-3 rounded-[1px] shadow-sm flex items-center justify-center cursor-default whitespace-nowrap">
@@ -121,8 +121,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                         {imageSrc ? (
                             <div className="w-full h-full relative">
                                 <img src={imageSrc} alt={data?.title} className="w-full h-full object-cover" />
-                                <div 
-                                    className="absolute inset-0 pointer-events-none" 
+                                <div
+                                    className="absolute inset-0 pointer-events-none transition-colors duration-1000"
                                     style={{ backgroundColor: `rgba(143, 73, 51, ${imageOpacity / 100})` }}
                                 />
                             </div>

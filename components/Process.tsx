@@ -64,7 +64,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                             initial={{ opacity: isRevealed ? 0 : 1 }}
                                             animate={{ opacity: isRevealed ? 0 : 1 }}
                                             transition={{ duration: 0.9, ease: "easeInOut" }}
-                                            className={`absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none ${isRevealed ? 'print:hidden' : ''}`}
+                                            className="absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none"
                                         />
                                     </div>
                                     
@@ -83,7 +83,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                             initial={{ opacity: isRevealed ? 0 : 1 }}
                                             animate={{ opacity: isRevealed ? 0 : 1 }}
                                             transition={{ duration: 0.9, ease: "easeInOut" }}
-                                            className={`absolute inset-0 z-20 pointer-events-none ${isRevealed ? 'print:hidden' : ''}`}
+                                            className="absolute inset-0 z-20 pointer-events-none"
                                             style={{
                                                 // Pattern para simular tachado línea por línea basado en line-height: 1.4em
                                                 // 1.25em barra sólida (aprox altura texto) + resto transparente hasta 1.4em
@@ -113,7 +113,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                                 initial={{ opacity: isRevealed ? 0 : 1 }}
                                                 animate={{ opacity: isRevealed ? 0 : 1 }}
                                                 transition={{ duration: 0.9, ease: "easeInOut" }}
-                                                className={`absolute -inset-1 bg-[#8f4933] z-30 pointer-events-none ${isRevealed ? 'print:hidden' : ''}`}
+                                                className="absolute -inset-1 bg-[#8f4933] z-30 pointer-events-none"
                                             />
                                         </div>
                                     )}
