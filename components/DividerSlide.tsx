@@ -167,7 +167,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
 
     return (
         <>
-            <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative print:pt-0 print:px-0">
+            <section className="h-full w-full flex flex-col items-center pt-[150px] px-[120px] relative">
                 <div className="w-full max-w-[1320px] flex flex-col">
                     <div className="w-full aspect-[1320/670] shrink-0 relative">
                         {videoSrc && (

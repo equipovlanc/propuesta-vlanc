@@ -38,16 +38,21 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
     ({ finalLogoVideo, finalLogo, onVideoError }, ref) => (
         <>
             {finalLogoVideo ? (
-                <video
-                    ref={ref}
-                    src={finalLogoVideo}
-                    muted
-                    playsInline
-                    loop={false}
-                    className="w-full h-full object-contain"
-                    onError={onVideoError}
-                    data-cursor-ignore
-                />
+                <>
+                    <video
+                        ref={ref}
+                        src={finalLogoVideo}
+                        muted
+                        playsInline
+                        loop={false}
+                        className="w-full h-full object-contain print:hidden"
+                        onError={onVideoError}
+                        data-cursor-ignore
+                    />
+                    {finalLogo && (
+                        <img src={finalLogo} alt="VLANC Final Logo Print" className="w-full h-full object-contain hidden print:block" />
+                    )}
+                </>
             ) : finalLogo ? (
                 <img src={finalLogo} alt="VLANC Final Logo" className="w-full h-full object-contain" />
             ) : (
@@ -134,27 +139,25 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
 
                 <div className="flex items-center justify-center h-full w-full">
-                    {/* El logo en su posición final ya no necesita AnimatePresence, 
-                        permitiendo que la animación de layout sea la única responsable de la transición */}
-                    {phase !== 'playing' && (
-                        <motion.div
-                            layoutId="final-logo-container"
-                            className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px]"
-                            transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
-                            onLayoutAnimationComplete={() => {
-                                if (phase === 'moving') {
-                                    setPhase('finished');
-                                }
-                            }}
-                        >
-                            <LogoContent
-                                ref={videoRef}
-                                finalLogo={finalLogo}
-                                finalLogoVideo={effectiveVideoSrc}
-                                onVideoError={handleVideoError}
-                            />
-                        </motion.div>
-                    )}
+                    {/* El logo en su posición final.
+                        Para impresión, lo mantenemos en el DOM forzando su visualización aunque phase sea playing */}
+                    <motion.div
+                        layoutId="final-logo-container"
+                        className={`w-full max-w-[785px] aspect-[785/691] items-center justify-center overflow-hidden relative p-4 -translate-x-[100px] ${phase === 'playing' ? 'hidden print:flex' : 'flex'}`}
+                        transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
+                        onLayoutAnimationComplete={() => {
+                            if (phase === 'moving') {
+                                setPhase('finished');
+                            }
+                        }}
+                    >
+                        <LogoContent
+                            ref={phase !== 'playing' ? videoRef : undefined}
+                            finalLogo={finalLogo}
+                            finalLogoVideo={effectiveVideoSrc}
+                            onVideoError={handleVideoError}
+                        />
+                    </motion.div>
                 </div>
 
                 <motion.div

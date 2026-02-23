@@ -82,9 +82,9 @@ const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean }> = (
 
                 {/* CARA TRASERA (Descuento - 3 LÍNEAS) */}
                 <div
-                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-0.5 print:transform-none print:opacity-100 print:relative print:inset-auto print:block print:visible"
+                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-0.5 print-force-visible print:relative print:inset-auto print:block print:visible"
                     // translateZ(1px) evita el z-fighting en la cara trasera
-                    style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)", WebkitFontSmoothing: "antialiased" }}
+                    style={{ WebkitFontSmoothing: "antialiased", ...(isFlipped ? { backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)" } : { backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)" }) }}
                 >
                     {/* Línea 1: Nombre del Plan - AUMENTADO A 12px */}
                     <span className="tabla1 text-white text-[12px] mb-0.5 tracking-wider">{plan.name}</span>
@@ -176,7 +176,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 
     // Usar filter-none para evitar capas de composición que borronean el texto en 3D
     const getRevealClasses = (isVisible: boolean) => {
-        return `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 filter-none' : 'opacity-10 blur-[2px]'} print:opacity-100 print:blur-0 print:filter-none`;
+        return `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 filter-none' : 'opacity-10 blur-[2px]'} print-force-visible`;
     };
 
     return (
