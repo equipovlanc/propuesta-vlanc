@@ -211,7 +211,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
 
             <AnimatePresence>
                 {phase === 'playing' && effectiveVideoSrc && (
-                    <div className="fixed inset-0 flex items-center justify-center z-[100] pointer-events-none">
+                    <div className="fixed inset-0 flex items-center justify-center z-[100] pointer-events-none print:hidden">
                         <motion.div
                             layoutId="final-logo-container"
                             className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4"

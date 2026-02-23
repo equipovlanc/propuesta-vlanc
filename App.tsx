@@ -397,8 +397,8 @@ const App: React.FC = () => {
             : section.comp;
 
           return (
-            <div key={`print-slide-${index}`} style={{ width: '100%', height: '100vh', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', pageBreakAfter: 'always', breakAfter: 'page', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
-              <div style={{ width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(calc(100vw / 1920))', backgroundColor: '#efe8e1', overflow: 'hidden' }}>
+            <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', pageBreakAfter: 'always', pageBreakInside: 'avoid', breakAfter: 'page', breakInside: 'avoid', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
+              <div style={{ width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(0.82677)', backgroundColor: '#efe8e1', overflow: 'hidden' }}>
                 {compWithMaxStep}
               </div>
             </div>
