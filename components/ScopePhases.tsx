@@ -117,7 +117,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                             {hasGuarantee && (() => {
                                 const { badge, desc } = getGuaranteeParts(data!.guaranteeText!);
                                 return (
-                                    <button onClick={openGuaranteeModal} className="flex items-center bg-vlanc-primary text-white px-6 py-4 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group outline-none active:scale-[0.98]">
+                                    <button onClick={openGuaranteeModal} className="flex items-center h-[52px] bg-vlanc-primary text-white px-6 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group outline-none active:scale-[0.98]">
                                         <span className="boton1 text-white">{badge}</span>
                                         {desc && (
                                             <>
@@ -129,7 +129,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                                 );
                             })()}
                             {data?.videoButtonText && (
-                                <button onClick={handleVideoClick} className="border border-vlanc-primary text-vlanc-primary px-8 py-4 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group outline-none active:scale-[0.98]">
+                                <button onClick={handleVideoClick} className="flex items-center h-[52px] border border-vlanc-primary text-vlanc-primary px-8 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group outline-none active:scale-[0.98]">
                                     <span className="boton1 text-vlanc-primary group-hover:text-white">{data.videoButtonText}</span>
                                 </button>
                             )}

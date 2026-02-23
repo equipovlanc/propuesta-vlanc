@@ -93,7 +93,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             >
-                                <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${step === i + 1 ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
+                                <h3 className="font-sans font-bold text-[15px] uppercase leading-tight text-vlanc-black">
                                     {p.name}_
                                 </h3>
                                 <div

@@ -86,16 +86,16 @@ const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean }> = (
                     // translateZ(1px) evita el z-fighting en la cara trasera
                     style={{ WebkitFontSmoothing: "antialiased", ...(isFlipped ? { backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)" } : { backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)" }) }}
                 >
-                    {/* Línea 1: Nombre del Plan - AUMENTADO A 12px */}
-                    <span className="tabla1 text-white text-[12px] mb-0.5 tracking-wider">{plan.name}</span>
+                    {/* Línea 1: Nombre del Plan */}
+                    <span className="tabla1 text-white text-[13px] tracking-wider leading-tight">{plan.name}</span>
 
-                    {/* Línea 2: Precio Original (Tachado y sin negrita) */}
+                    {/* Línea 2: Precio Original (Tachado, más pequeño) */}
                     <span className="text-white/70 text-[10px] font-sans font-normal line-through decoration-white/60 leading-none">
                         {plan.originalPrice}
                     </span>
 
-                    {/* Línea 3: Precio Descuento (Negrita) */}
-                    <span className="tabla2 text-white font-bold text-[12px] leading-none mt-0.5">
+                    {/* Línea 3: Precio Descuento (Más grande y negrita) */}
+                    <span className="tabla2 text-white font-bold text-[17px] leading-tight mt-0.5">
                         {plan.discountedPrice}
                     </span>
                 </div>

@@ -60,7 +60,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                                     <div className="w-full aspect-[428/264] overflow-hidden rounded-[1px] relative">
                                         {imgSrc ? (
                                             <div className="w-full h-full relative group">
-                                                <img src={imgSrc} alt={member.name} className="w-full h-full object-cover" />
+                                                <img src={imgSrc} alt={member.name} className="w-full h-full object-cover object-top" />
                                                 {/* Overlay estático */}
                                                 <div
                                                     className="absolute inset-0 pointer-events-none transition-colors duration-300 group-hover:bg-transparent"

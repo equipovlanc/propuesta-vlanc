@@ -46,26 +46,23 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
                     {(data?.steps ?? []).map((s, index) => {
-                        // El item está visible (sin tachar) si el 'step' actual es mayor que el índice del item.
+                        // El item está visible si el 'step' actual es mayor que el índice del item.
                         const isRevealed = step > index;
 
                         return (
                             <AnimatedSection key={index} hierarchy={2}>
-                                <div className="space-y-6 flex flex-col items-start relative">
-
+                                <motion.div
+                                    className="space-y-6 flex flex-col items-start relative print-force-visible"
+                                    initial={{ opacity: isRevealed ? 1 : 0.08, filter: isRevealed ? 'blur(0px)' : 'blur(5px)' }}
+                                    animate={{ opacity: isRevealed ? 1 : 0.08, filter: isRevealed ? 'blur(0px)' : 'blur(5px)' }}
+                                    transition={{ duration: 0.9, ease: "easeInOut" }}
+                                >
                                     {/* Título + Número */}
                                     <div className="relative inline-block">
                                         <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
                                             <span className="font-serif mr-2">{`0${index + 1}`} /</span>
                                             <span>{s.title}</span>
                                         </h3>
-                                        {/* MÁSCARA TACHADO TÍTULO (Bloque sólido) */}
-                                        <motion.div
-                                            initial={{ opacity: isRevealed ? 0 : 1 }}
-                                            animate={{ opacity: isRevealed ? 0 : 1 }}
-                                            transition={{ duration: 0.9, ease: "easeInOut" }}
-                                            className="absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none"
-                                        />
                                     </div>
 
                                     {/* Descripción */}
@@ -78,19 +75,6 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                                 </p>
                                             )}
                                         </div>
-                                        {/* MÁSCARA TACHADO DESCRIPCIÓN (Líneas independientes) */}
-                                        <motion.div
-                                            initial={{ opacity: isRevealed ? 0 : 1 }}
-                                            animate={{ opacity: isRevealed ? 0 : 1 }}
-                                            transition={{ duration: 0.9, ease: "easeInOut" }}
-                                            className="absolute inset-0 z-20 pointer-events-none"
-                                            style={{
-                                                // Pattern para simular tachado línea por línea basado en line-height: 1.4em
-                                                // 1.25em barra sólida (aprox altura texto) + resto transparente hasta 1.4em
-                                                background: 'repeating-linear-gradient(to bottom, #8f4933 0, #8f4933 1.25em, transparent 1.25em, transparent 1.4em)',
-                                                backgroundPosition: '0 0.075em' // Ajuste fino vertical para centrar con el texto
-                                            }}
-                                        />
                                     </div>
 
                                     {/* Botón Garantía (Solo index 2 / Paso 3) */}
@@ -108,16 +92,9 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                                     Somos tu equipo
                                                 </span>
                                             </button>
-                                            {/* MÁSCARA TACHADO BOTÓN */}
-                                            <motion.div
-                                                initial={{ opacity: isRevealed ? 0 : 1 }}
-                                                animate={{ opacity: isRevealed ? 0 : 1 }}
-                                                transition={{ duration: 0.9, ease: "easeInOut" }}
-                                                className="absolute -inset-1 bg-[#8f4933] z-30 pointer-events-none"
-                                            />
                                         </div>
                                     )}
-                                </div>
+                                </motion.div>
                             </AnimatedSection>
                         );
                     })}
