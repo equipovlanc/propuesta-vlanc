@@ -119,9 +119,13 @@ const App: React.FC = () => {
     // Recuperamos el ID de la sección actual para marcar como completada
     const currentSection = sectionsRef.current[currentIndex];
     if (isMovingForward && currentSection) {
-      if (['mission', 'process', 'investment', 'special-offers', 'divider-slide', 'payment', 'contact'].includes(currentSection.id)) {
+      if (['mission', 'process', 'investment', 'special-offers', 'divider-slide', 'payment'].includes(currentSection.id)) {
         setCompletedSections(prev => new Set(prev).add(currentSection.id));
       }
+    }
+    // 'contact' es la última página: siempre se abandona hacia atrás → marcarla completada en cualquier dirección
+    if (currentSection?.id === 'contact') {
+      setCompletedSections(prev => new Set(prev).add('contact'));
     }
 
     // Determinamos el paso inicial de la NUEVA sección

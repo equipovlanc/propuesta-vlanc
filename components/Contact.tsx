@@ -26,17 +26,19 @@ interface ContactProps {
     isSectionCompleted?: boolean;
 }
 
-type AnimationPhase = 'playing' | 'moving' | 'finished';
+type AnimationPhase = 'playing' | 'finished';
 
 // --- Sub-componente para el contenido del logo (Video o Imagen) ---
 interface LogoContentProps {
     finalLogoVideo?: string | null;
     finalLogo?: string | null;
     onVideoError?: () => void;
+    onVideoEnd?: () => void;
+    autoPlay?: boolean;
 }
 
 const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
-    ({ finalLogoVideo, finalLogo, onVideoError }, ref) => (
+    ({ finalLogoVideo, finalLogo, onVideoError, onVideoEnd, autoPlay = false }, ref) => (
         <>
             {finalLogoVideo ? (
                 <>
@@ -46,8 +48,10 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
                         muted
                         playsInline
                         loop={false}
+                        autoPlay={autoPlay}
                         className="w-full h-full object-contain print:hidden"
                         onError={onVideoError}
+                        onEnded={onVideoEnd}
                         data-cursor-ignore
                     />
                     {finalLogo && (
@@ -67,108 +71,57 @@ const LogoContent = React.forwardRef<HTMLVideoElement, LogoContentProps>(
 
 const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint, isSectionCompleted = false }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
-    // Si la sección ya fue completada, arrancamos directo en 'finished' (sin video, sin animación)
+
+    // Si ya estaba completado (se vuelve a la página), arrancamos directo en 'finished'.
+    // Sin overlay, sin video, sin animación: logo ya en su sitio.
+    const hasVideo = !!finalLogoVideo && !videoHasError;
     const [phase, setPhase] = React.useState<AnimationPhase>(
-        isSectionCompleted ? 'finished' : (finalLogoVideo && !videoHasError ? 'playing' : 'finished')
+        isSectionCompleted || !hasVideo ? 'finished' : 'playing'
     );
-    const videoRef = React.useRef<HTMLVideoElement>(null);
 
     const handleVideoError = React.useCallback(() => {
-        console.warn("Animated logo failed to load. Falling back to static image.");
-        if (!videoHasError) {
-            setVideoHasError(true);
-            if (phase === 'playing') {
-                setPhase('moving');
-            }
-        }
-    }, [phase, videoHasError]);
+        setVideoHasError(true);
+        setPhase('finished');
+    }, []);
+
+    const handleVideoEnd = React.useCallback(() => {
+        setPhase('finished');
+    }, []);
 
     const handlePrint = () => {
         if (onPrint) {
             onPrint();
         } else {
-            setTimeout(() => {
-                window.print();
-            }, 500);
+            setTimeout(() => window.print(), 500);
         }
     };
 
-    React.useEffect(() => {
-        const video = videoRef.current;
-        if (phase !== 'playing' || !video || videoHasError) {
-            return;
-        }
-
-        let playbackTimeout: number;
-
-        const handleVideoEnd = () => {
-            setPhase('moving');
-        };
-
-        const setupAndPlay = () => {
-            video.style.opacity = '0';
-            video.currentTime = 0.1;
-
-            playbackTimeout = window.setTimeout(() => {
-                if (videoRef.current) {
-                    videoRef.current.style.opacity = '1';
-                    videoRef.current.play().catch(e => {
-                        console.error("Autoplay was prevented for the animated logo.", e);
-                        handleVideoError();
-                    });
-                }
-            }, 800);
-        };
-
-        video.addEventListener('loadedmetadata', setupAndPlay);
-        video.addEventListener('ended', handleVideoEnd);
-
-        video.load();
-
-        return () => {
-            clearTimeout(playbackTimeout);
-            if (video) {
-                video.removeEventListener('loadedmetadata', setupAndPlay);
-                video.removeEventListener('ended', handleVideoEnd);
-                video.style.opacity = '1';
-            }
-        };
-    }, [phase, videoHasError, handleVideoError]);
-
     const showContent = phase === 'finished';
-    const effectiveVideoSrc = videoHasError ? null : finalLogoVideo;
 
     return (
         <footer className="h-screen w-full flex flex-col pt-[150px] pb-[140px] px-[120px] relative overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
 
+                {/* COLUMNA IZQUIERDA: Logo siempre en su posición final */}
                 <div className="flex items-center justify-center h-full w-full">
-                    {/* El logo en su posición final.
-                        Para impresión, lo mantenemos en el DOM forzando su visualización aunque phase sea playing */}
-                    <motion.div
-                        layoutId="final-logo-container"
-                        className={`w-full max-w-[785px] aspect-[785/691] items-center justify-center overflow-hidden relative p-4 -translate-x-[100px] print-force-visible ${phase === 'playing' ? 'hidden print:flex' : 'flex'}`}
-                        transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
-                        onLayoutAnimationComplete={() => {
-                            if (phase === 'moving') {
-                                setPhase('finished');
-                            }
-                        }}
-                    >
-                        <LogoContent
-                            ref={phase !== 'playing' ? videoRef : undefined}
-                            finalLogo={finalLogo}
-                            finalLogoVideo={effectiveVideoSrc}
-                            onVideoError={handleVideoError}
-                        />
-                    </motion.div>
+                    <div className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px] print-force-visible">
+                        {/* Cuando está completado o no hay video, mostramos el logo estático */}
+                        {showContent && (
+                            <LogoContent
+                                finalLogo={finalLogo}
+                                finalLogoVideo={null} // En estado final siempre imagen, no video
+                                onVideoError={handleVideoError}
+                            />
+                        )}
+                    </div>
                 </div>
 
+                {/* COLUMNA DERECHA: Info de contacto */}
                 <motion.div
                     className="flex items-center justify-center h-full w-full pl-10 print-force-visible"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: showContent ? 1 : 0 }}
-                    transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+                    transition={{ duration: 1, ease: 'easeOut', delay: showContent ? 0.3 : 0 }}
                 >
                     <div className="flex flex-col space-y-12 text-left w-full max-w-md translate-x-[100px]">
                         <div>
@@ -216,25 +169,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                 </motion.div>
             </div>
 
-            <AnimatePresence>
-                {phase === 'playing' && effectiveVideoSrc && (
-                    <div className="fixed inset-0 flex items-center justify-center z-[100] pointer-events-none print:hidden">
-                        <motion.div
-                            layoutId="final-logo-container"
-                            className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4"
-                            style={{ pointerEvents: 'auto' }}
-                        >
-                            <LogoContent
-                                ref={videoRef}
-                                finalLogo={finalLogo}
-                                finalLogoVideo={effectiveVideoSrc}
-                                onVideoError={handleVideoError}
-                            />
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-
+            {/* Botón de imprimir */}
             <motion.div
                 className="absolute bottom-8 left-12 no-print"
                 initial={{ opacity: 0 }}
@@ -248,6 +183,28 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                     [ IMPRIMIR PROPUESTA / PDF ]
                 </button>
             </motion.div>
+
+            {/* OVERLAY DE REPRODUCCIÓN — Solo en primera visita, sin duplicado posible */}
+            <AnimatePresence>
+                {phase === 'playing' && hasVideo && (
+                    <motion.div
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg pointer-events-none print:hidden"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1.5, ease: 'easeInOut' }}
+                    >
+                        <div className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4">
+                            <LogoContent
+                                finalLogo={finalLogo}
+                                finalLogoVideo={finalLogoVideo}
+                                onVideoError={handleVideoError}
+                                onVideoEnd={handleVideoEnd}
+                                autoPlay={true}
+                            />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </footer>
     );
 };
