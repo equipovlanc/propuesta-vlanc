@@ -42,14 +42,17 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
     const skipAnimation = isSectionCompleted || !hasVideo;
     const [phase, setPhase] = React.useState<Phase>(skipAnimation ? 'done' : 'playing');
 
-    // Posición inicial del overlay (centrado en pantalla)
     const [startRect, setStartRect] = React.useState<OverlayRect | null>(null);
-    // Posición destino del overlay (donde está el placeholder del footer)
     const [targetRect, setTargetRect] = React.useState<OverlayRect | null>(null);
 
+    // Ref al video del OVERLAY (el que juega y se mueve)
+    const overlayVideoRef = React.useRef<HTMLVideoElement>(null);
+    // Ref al video del FOOTER (siempre en DOM, invisible hasta el switch, para sincronizar frame)
+    const footerVideoRef = React.useRef<HTMLVideoElement>(null);
+    // Ref al contenedor del footer para medir su posición
     const footerPlaceholderRef = React.useRef<HTMLDivElement>(null);
 
-    // Calcular posición inicial al montar (centrado en viewport)
+    // Calcular posición inicial centrada al montar
     React.useEffect(() => {
         if (skipAnimation) return;
         const logoAspect = 691 / 785;
@@ -81,8 +84,15 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
         setPhase('done');
     }, []);
 
+    // Al terminar la animación: sincronizar el frame del video del footer con el del overlay ANTES de hacer visible el footer
     const handleAnimationComplete = React.useCallback(() => {
-        if (phase === 'sliding') setPhase('done');
+        if (phase === 'sliding') {
+            if (footerVideoRef.current && overlayVideoRef.current) {
+                // Copiar el currentTime del overlay al footer para que muestren el mismo frame
+                footerVideoRef.current.currentTime = overlayVideoRef.current.currentTime;
+            }
+            setPhase('done');
+        }
     }, [phase]);
 
     const handlePrint = () => {
@@ -96,36 +106,37 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
         <footer className="h-screen w-full flex flex-col pt-[150px] pb-[140px] px-[120px] relative overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] w-full h-full">
 
-                {/* COLUMNA IZQUIERDA: Placeholder del logo (siempre en el DOM para medir, invisible mientras el overlay está activo) */}
+                {/* COLUMNA IZQUIERDA: Placeholder — siempre en DOM para medir posición.
+                    El video del footer se renderiza siempre pero invisible, para que al sincronizar
+                    el currentTime justo antes del switch no haya diferencia de frame visible. */}
                 <div className="flex items-center justify-center h-full w-full">
                     <div
                         ref={footerPlaceholderRef}
-                        className="w-full max-w-[785px] aspect-[785/691] flex items-center justify-center overflow-hidden relative p-4 -translate-x-[100px] print-force-visible"
+                        className="w-full max-w-[785px] aspect-[785/691] overflow-hidden relative -translate-x-[100px] print-force-visible"
                         style={{ opacity: showContent ? 1 : 0 }}
                     >
-                        {/* Logo en posición final: video (primer frame) o imagen si no hay video */}
-                        {showContent && (
-                            hasVideo ? (
-                                <>
-                                    <video
-                                        src={finalLogoVideo!}
-                                        muted
-                                        playsInline
-                                        className="w-full h-full object-contain print:hidden"
-                                        data-cursor-ignore
-                                    />
-                                    {finalLogo && (
-                                        <img src={finalLogo} alt="VLANC Logo" className="w-full h-full object-contain hidden print:block" />
-                                    )}
-                                </>
-                            ) : finalLogo ? (
-                                <img src={finalLogo} alt="VLANC Logo" className="w-full h-full object-contain" />
-                            ) : null
-                        )}
+                        {hasVideo ? (
+                            <>
+                                {/* Video siempre montado para poder sincronizar frame. autoPlay=false → primer frame (se sobreescribe con currentTime sync) */}
+                                <video
+                                    ref={footerVideoRef}
+                                    src={finalLogoVideo!}
+                                    muted
+                                    playsInline
+                                    className="w-full h-full object-contain print:hidden"
+                                    data-cursor-ignore
+                                />
+                                {finalLogo && (
+                                    <img src={finalLogo} alt="VLANC Logo" className="w-full h-full object-contain hidden print:block" />
+                                )}
+                            </>
+                        ) : finalLogo ? (
+                            <img src={finalLogo} alt="VLANC Logo" className="w-full h-full object-contain" />
+                        ) : null}
                     </div>
                 </div>
 
-                {/* COLUMNA DERECHA: Info de contacto */}
+                {/* COLUMNA DERECHA: Datos de contacto */}
                 <motion.div
                     className="flex items-center justify-center h-full w-full pl-10 print-force-visible"
                     initial={{ opacity: 0 }}
@@ -217,10 +228,9 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                 </button>
             </motion.div>
 
-            {/* OVERLAY ÚNICO: logo en fixed, se desplaza desde el centro hasta el placeholder del footer.
-                - phase='playing': centrado, video reproduciéndose
-                - phase='sliding': anima desde startRect hasta targetRect (posición del placeholder)
-                - phase='done': desmontado; el placeholder del footer toma el relevo en exactamente el mismo lugar */}
+            {/* OVERLAY ÚNICO: video animándose de centro a izquierda.
+                - Sin padding (igual que el footer placeholder) para que las dimensiones coincidan exactamente.
+                - Al completar la animación, sincroniza currentTime con el footer video antes de desmontarse. */}
             {phase !== 'done' && startRect && (
                 <motion.div
                     className="fixed z-[100] overflow-hidden pointer-events-none print:hidden"
@@ -232,18 +242,8 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                     }}
                     animate={
                         phase === 'sliding' && targetRect
-                            ? {
-                                left: targetRect.left,
-                                top: targetRect.top,
-                                width: targetRect.width,
-                                height: targetRect.height,
-                            }
-                            : {
-                                left: startRect.left,
-                                top: startRect.top,
-                                width: startRect.width,
-                                height: startRect.height,
-                            }
+                            ? { left: targetRect.left, top: targetRect.top, width: targetRect.width, height: targetRect.height }
+                            : { left: startRect.left, top: startRect.top, width: startRect.width, height: startRect.height }
                     }
                     transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
                     onAnimationComplete={handleAnimationComplete}
@@ -252,6 +252,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                     {hasVideo ? (
                         <>
                             <video
+                                ref={overlayVideoRef}
                                 src={finalLogoVideo!}
                                 muted
                                 playsInline
