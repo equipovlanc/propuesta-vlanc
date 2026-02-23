@@ -211,7 +211,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                     </AnimatedSection>
 
                     {/* FIRMA */}
-                    <AnimatedSection className="w-[820px] flex flex-col border-t border-[#703622] mt-[25px] pt-1 print-force-visible" hierarchy={2}>
+                    <AnimatedSection className="w-[820px] flex flex-col border-t border-[#703622] mt-[25px] pt-1 print-force-visible print:border-t-2 print:!border-[#703622]" hierarchy={2}>
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>

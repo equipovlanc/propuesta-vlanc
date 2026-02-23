@@ -43,16 +43,16 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                     </AnimatedSection>
                     <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-12 flex-grow content-between">
                     {(data?.steps ?? []).map((s, index) => {
                         // El item está visible (sin tachar) si el 'step' actual es mayor que el índice del item.
                         const isRevealed = step > index;
-                        
+
                         return (
                             <AnimatedSection key={index} hierarchy={2}>
                                 <div className="space-y-6 flex flex-col items-start relative">
-                                    
+
                                     {/* Título + Número */}
                                     <div className="relative inline-block">
                                         <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
@@ -60,14 +60,14 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                             <span>{s.title}</span>
                                         </h3>
                                         {/* MÁSCARA TACHADO TÍTULO (Bloque sólido) */}
-                                        <motion.div 
+                                        <motion.div
                                             initial={{ opacity: isRevealed ? 0 : 1 }}
                                             animate={{ opacity: isRevealed ? 0 : 1 }}
                                             transition={{ duration: 0.9, ease: "easeInOut" }}
                                             className="absolute -inset-1 bg-[#8f4933] z-20 pointer-events-none"
                                         />
                                     </div>
-                                    
+
                                     {/* Descripción */}
                                     <div className="relative block w-full">
                                         <div className="cuerpo2 text-left">
@@ -78,8 +78,8 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                                 </p>
                                             )}
                                         </div>
-                                         {/* MÁSCARA TACHADO DESCRIPCIÓN (Líneas independientes) */}
-                                         <motion.div 
+                                        {/* MÁSCARA TACHADO DESCRIPCIÓN (Líneas independientes) */}
+                                        <motion.div
                                             initial={{ opacity: isRevealed ? 0 : 1 }}
                                             animate={{ opacity: isRevealed ? 0 : 1 }}
                                             transition={{ duration: 0.9, ease: "easeInOut" }}
@@ -92,13 +92,13 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                             }}
                                         />
                                     </div>
-                                    
+
                                     {/* Botón Garantía (Solo index 2 / Paso 3) */}
                                     {index === 2 && (
                                         <div className="relative inline-block mt-6">
-                                            <button 
+                                            <button
                                                 onClick={openModal}
-                                                className="inline-flex items-center border border-vlanc-primary text-vlanc-primary px-5 py-3 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group"
+                                                className="inline-flex items-center border border-vlanc-primary text-vlanc-primary px-5 py-3 rounded-[1px] bg-transparent hover:bg-vlanc-primary hover:text-white transition-all duration-300 cursor-pointer outline-none active:scale-[0.98] z-20 group print:border-2 print:!border-vlanc-primary"
                                             >
                                                 <span className="boton1">
                                                     {data?.badge || "GARANTÍA"}
@@ -109,7 +109,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                                 </span>
                                             </button>
                                             {/* MÁSCARA TACHADO BOTÓN */}
-                                            <motion.div 
+                                            <motion.div
                                                 initial={{ opacity: isRevealed ? 0 : 1 }}
                                                 animate={{ opacity: isRevealed ? 0 : 1 }}
                                                 transition={{ duration: 0.9, ease: "easeInOut" }}
@@ -126,16 +126,16 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
 
             {/* MODAL DE GARANTÍA */}
             {isModalOpen && guaranteeItem && (
-                <div 
+                <div
                     className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10"
                     onClick={closeModal}
                 >
-                    <AnimatedSection 
+                    <AnimatedSection
                         className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[613px] w-full relative"
                         onClick={(e) => e.stopPropagation()}
                         hierarchy={2}
                     >
-                        <button 
+                        <button
                             onClick={closeModal}
                             className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none"
                         >
@@ -146,8 +146,8 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                             <h3 className="subtitulo2 not-italic mb-6 leading-tight text-vlanc-black">
                                 / {guaranteeItem.title}
                             </h3>
-                            
-                            <div 
+
+                            <div
                                 className="cuerpo mb-12"
                                 dangerouslySetInnerHTML={{ __html: guaranteeItem.description || '' }}
                             />
@@ -165,14 +165,14 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                     </div>
 
                                     <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
-                                        <div 
+                                        <div
                                             className="cuerpo !text-vlanc-black text-[14px] leading-snug"
                                             dangerouslySetInnerHTML={{ __html: guaranteeItem.badgeContent || '' }}
                                         />
                                     </div>
                                 </div>
                             )}
-                            
+
                             {guaranteeItem.note && (
                                 <div className="mt-8 border-t border-vlanc-primary/10 pt-4 w-full">
                                     <p className="text-[10px] text-vlanc-secondary/60 italic">
