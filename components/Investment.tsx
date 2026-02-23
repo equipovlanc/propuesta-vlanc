@@ -32,10 +32,10 @@ const CheckIcon = () => (
 );
 
 const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
-    
+
     const getRowBg = (color?: string) => {
         if (color === 'light') return 'bg-[#eae0d5]';
-        if (color === 'medium') return 'bg-[#dccbc1]'; 
+        if (color === 'medium') return 'bg-[#dccbc1]';
         if (color === 'dark') return 'bg-[#cbb6aa]';
         return 'border-b border-vlanc-primary/10';
     };
@@ -51,7 +51,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
             <div className="mb-8 shrink-0">
                 <AnimatedSection hierarchy={1}>
                     <h2 className="subtitulo1">
-                       {data?.title || "la inversión."}
+                        {data?.title || "la inversión."}
                     </h2>
                 </AnimatedSection>
                 <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
@@ -59,34 +59,34 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
 
             {/* Contenedor Principal */}
             <div className="w-full flex flex-row gap-[120px] items-start h-full relative">
-                
+
                 {/* COLUMNA IZQUIERDA (Textos) */}
                 <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
                     {/* Intro siempre visible */}
                     <AnimatedSection className="space-y-6" hierarchy={2}>
-                        <div 
-                            className="cuerpo [&>strong]:font-bold" 
-                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }} 
+                        <div
+                            className="cuerpo [&>strong]:font-bold"
+                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }}
                         />
                         {data?.highlightPhrase && (
-                             <p className="cuerpo2 font-bold text-vlanc-black">
+                            <p className="cuerpo2 font-bold text-vlanc-black">
                                 {data.highlightPhrase}
-                             </p>
+                            </p>
                         )}
-                        <div 
-                            className="cuerpo [&>strong]:font-bold" 
-                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }} 
+                        <div
+                            className="cuerpo [&>strong]:font-bold"
+                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }}
                         />
                     </AnimatedSection>
-                        
+
                     {/* Descripción de Planes (Revelación Secuencial) */}
                     <div className="space-y-6 mt-8">
                         {(data?.plansDescription ?? []).map((p, i) => (
-                            <motion.div 
-                                key={i} 
-                                className="space-y-2"
+                            <motion.div
+                                key={i}
+                                className="space-y-2 print-force-visible"
                                 initial={{ opacity: 0, x: -20 }}
-                                animate={{ 
+                                animate={{
                                     opacity: step >= i + 1 ? 1 : 0.1, // Dim si no es el activo? Mejor hidden si aun no llega, visible si ya pasó.
                                     x: step >= i + 1 ? 0 : -20,
                                     filter: step >= i + 1 ? 'blur(0px)' : 'blur(2px)'
@@ -96,7 +96,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                 <h3 className={`font-sans font-bold text-[15px] uppercase leading-tight ${step === i + 1 ? 'text-vlanc-primary' : 'text-vlanc-black'}`}>
                                     {p.name}_
                                 </h3>
-                                <div 
+                                <div
                                     className="cuerpo [&>strong]:font-bold"
                                     dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
                                 />
@@ -108,43 +108,43 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                 {/* COLUMNA DERECHA: Tabla Interactiva */}
                 <div className="shrink-0 flex flex-col items-end">
                     <AnimatedSection className="w-[820px] h-[532px] flex flex-col relative rounded-sm overflow-hidden" hierarchy={2}>
-                        
+
                         {/* CAPAS DE RESALTADO (Highlight Columns) */}
                         {/* Grid Layer absoluta detrás del contenido */}
                         <div className="absolute inset-0 grid grid-cols-[2.5fr_1fr_1fr_1fr] h-full pointer-events-none z-0">
                             {/* Columna Plan 1 */}
-                            <motion.div 
+                            <motion.div
                                 className="col-start-2 row-span-full bg-vlanc-primary/5"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: step === 1 ? 1 : 0 }} // Solo resaltada cuando es el paso activo
                                 transition={{ duration: 0.5 }}
                             />
-                             {/* Columna Plan 2 */}
-                             <motion.div 
+                            {/* Columna Plan 2 */}
+                            <motion.div
                                 className="col-start-3 row-span-full bg-vlanc-primary/5"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 2 ? 1 : 0 }} 
+                                animate={{ opacity: step === 2 ? 1 : 0 }}
                                 transition={{ duration: 0.5 }}
                             />
-                             {/* Columna Plan 3 */}
-                             <motion.div 
+                            {/* Columna Plan 3 */}
+                            <motion.div
                                 className="col-start-4 row-span-full bg-vlanc-primary/5"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 3 ? 1 : 0 }} 
+                                animate={{ opacity: step === 3 ? 1 : 0 }}
                                 transition={{ duration: 0.5 }}
                             />
                         </div>
 
                         {/* CONTENIDO TABLA (z-10) */}
                         <div className="relative z-10 w-full h-full flex flex-col">
-                            
+
                             {/* Cabecera Tabla */}
                             <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] bg-[#cbb6aa] shrink-0 h-[47px]">
                                 <div className="p-3"></div>
                                 {(data?.tableHeaders ?? []).map((h, i) => (
-                                    <motion.div 
-                                        key={i} 
-                                        className="px-3 text-center flex items-center justify-center h-full gap-3"
+                                    <motion.div
+                                        key={i}
+                                        className="px-3 text-center flex items-center justify-center h-full gap-3 print-force-visible"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: step >= i + 1 ? 1 : 0 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
@@ -154,7 +154,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                     </motion.div>
                                 ))}
                             </div>
-                            
+
                             {/* Cuerpo Tabla */}
                             <div className="flex-grow flex flex-col bg-transparent">
                                 {(data?.tableRows ?? []).map((row, i) => {
@@ -169,15 +169,15 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                             </div>
                                         );
                                     }
-                                    
+
                                     return (
                                         <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`}>
                                             <div className="px-4 leading-tight py-1">
                                                 <span className="tabla2">{row.label}</span>
                                             </div>
                                             {(row.checks ?? []).map((isChecked, idx) => (
-                                                <motion.div 
-                                                    key={idx} 
+                                                <motion.div
+                                                    key={idx}
                                                     className="flex justify-center items-center h-full"
                                                     initial={{ opacity: 0 }}
                                                     animate={{ opacity: step >= idx + 1 ? 1 : 0 }} // Revelar columna si el paso es suficiente
@@ -195,8 +195,8 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                             <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] bg-[#8f4933] text-white shrink-0 h-[35px]">
                                 <div className="p-4"></div>
                                 {(data?.prices ?? []).map((price, i) => (
-                                    <motion.div 
-                                        key={i} 
+                                    <motion.div
+                                        key={i}
                                         className="px-4 text-center flex flex-col justify-center h-full"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: step >= i + 1 ? 1 : 0 }}
