@@ -199,7 +199,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                         key={i}
                                         className="px-4 text-center flex flex-col justify-center h-full"
                                         initial={{ opacity: 0 }}
-                                        animate={{ opacity: step >= i + 1 ? 1 : 0 }}
+                                        animate={{ opacity: step >= i + 4 ? 1 : 0 }}
                                         transition={{ duration: 0.5, delay: 0.1 }}
                                     >
                                         <span className="tabla3 whitespace-nowrap">{price}</span>

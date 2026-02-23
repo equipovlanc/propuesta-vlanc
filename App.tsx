@@ -119,7 +119,7 @@ const App: React.FC = () => {
     // Recuperamos el ID de la sección actual para marcar como completada
     const currentSection = sectionsRef.current[currentIndex];
     if (isMovingForward && currentSection) {
-      if (['mission', 'process', 'investment', 'special-offers', 'divider-slide'].includes(currentSection.id)) {
+      if (['mission', 'process', 'investment', 'special-offers', 'divider-slide', 'payment'].includes(currentSection.id)) {
         setCompletedSections(prev => new Set(prev).add(currentSection.id));
       }
     }
@@ -137,8 +137,12 @@ const App: React.FC = () => {
         else setInternalStep(isMovingForward ? 0 : processStepsCount);
       }
       else if (nextSection.id === 'investment') {
-        if (completedSections.has('investment')) setInternalStep(3);
-        else setInternalStep(isMovingForward ? 0 : 3);
+        if (completedSections.has('investment')) setInternalStep(6);
+        else setInternalStep(isMovingForward ? 0 : 6);
+      }
+      else if (nextSection.id === 'payment') {
+        if (completedSections.has('payment')) setInternalStep(2);
+        else setInternalStep(isMovingForward ? 0 : 2);
       }
       else if (nextSection.id === 'special-offers') {
         // Pasos: 0 (Init), 1 (Condiciones), 2 (Oferta), 3 (Video), 4 (Logo)
@@ -222,7 +226,7 @@ const App: React.FC = () => {
         />,
         headerPage: 15
       },
-      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 16 },
+      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: 16 },
       {
         id: 'divider-slide',
         comp: <DividerSlide
@@ -285,7 +289,15 @@ const App: React.FC = () => {
 
         if (activeSection.id === 'investment' && !isCompleted) {
           if (e.deltaY > 0) {
-            if (internalStep < 3) { setInternalStep(prev => prev + 1); return; }
+            if (internalStep < 6) { setInternalStep(prev => prev + 1); return; }
+          } else {
+            if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
+          }
+        }
+
+        if (activeSection.id === 'payment' && !isCompleted) {
+          if (e.deltaY > 0) {
+            if (internalStep < 2) { setInternalStep(prev => prev + 1); return; }
           } else {
             if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
           }
@@ -333,7 +345,8 @@ const App: React.FC = () => {
 
       if (activeSection.id === 'mission' && !isCompleted) if (handleStep(2)) return;
       if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
-      if (activeSection.id === 'investment' && !isCompleted) if (handleStep(3)) return;
+      if (activeSection.id === 'investment' && !isCompleted) if (handleStep(6)) return;
+      if (activeSection.id === 'payment' && !isCompleted) if (handleStep(2)) return;
       if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(4)) return;
       if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(3)) return;
 
