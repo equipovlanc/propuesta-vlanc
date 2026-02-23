@@ -425,7 +425,6 @@ const App: React.FC = () => {
             logo={proposalData.logos?.smallLogo}
             pageNumber={activeSection.headerPage}
             onNavigate={navigate}
-            onPrint={handleManualPrint}
           />
         )}
         <div className="relative w-full h-full perspective-[1000px]">
