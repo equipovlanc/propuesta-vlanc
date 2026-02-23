@@ -330,61 +330,33 @@
         width: 100% !important;
         overflow: visible !important;
         background-color: white !important;
-        cursor: auto !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
 
-      * {
-        cursor: auto !important;
+      body * {
+        visibility: hidden;
       }
 
-      .bg-grain::before {
-        display: none !important;
+      #app-container,
+      #app-container * {
+        visibility: visible;
       }
 
       #app-container {
-        overflow: visible !important;
-        height: auto !important;
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 100% !important;
+        overflow: visible !important;
         display: block !important;
-        position: relative !important;
-        inset: auto !important;
       }
 
       .print-container {
         display: block !important;
         height: auto !important;
         overflow: visible !important;
-      }
-
-      .z-slide-container {
-        position: relative !important;
-        opacity: 1 !important;
-        transform: none !important;
-        height: 297mm !important;
-        width: 100% !important;
-        /* Asegurar que las secciones cortan la página al acabar */
-        page-break-after: always !important;
-        break-after: page !important;
-        display: block !important;
-        overflow: hidden !important;
-      }
-
-      /* 1920x1080 -> 297mm is 1122.5px. scale factor = 1122.5 / 1080 = ~1.039, but we can do an exact match using CSS viewport or fixed px */
-      /* To maintain EXACT 1920x1080 proportion that fits directly inside A3 landscape aspect ratio */
-      .scale-wrapper {
-        position: relative !important;
-        width: 1920px !important;
-        height: 1080px !important;
-        /* A3 Landscape is 420x297mm. Ratio is 1.414. 1920/1080 is 1.777. Width is the limiting factor. */
-        /* 420mm width in px (assuming 96dpi layout) is roughly 1587.4px */
-        /* The browser scales based on its own dpi, so using exact mm and top/left transforms is safer */
-        transform-origin: top left !important;
-        transform: scale(0.826) !important;
-        /* Aproximado para que 1920 encaje en 420mm (1587px / 1920px = 0.826) */
-        overflow: hidden !important;
-        display: block !important;
+        background-color: white;
       }
 
       header {

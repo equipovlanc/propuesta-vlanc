@@ -398,8 +398,8 @@ const App: React.FC = () => {
             : section.comp;
 
           return (
-            <div key={`print-slide-${index}`} className="z-slide-container relative w-full h-full page-break-after-always overflow-hidden" style={{ pageBreakAfter: 'always', breakAfter: 'page' }}>
-              <div className="scale-wrapper absolute top-0 left-0 w-[1920px] h-[1080px] origin-top-left transform scale-[0.826]">
+            <div key={`print-slide-${index}`} className="relative w-full overflow-hidden" style={{ height: '297mm', pageBreakAfter: 'always', breakAfter: 'page' }}>
+              <div className="absolute top-0 left-0 w-[1920px] h-[1080px] origin-top-left transform scale-[0.826]">
                 {index > 1 && (
                   <Header
                     logo={proposalData.logos?.smallLogo}
