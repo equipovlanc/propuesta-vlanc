@@ -143,7 +143,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                         Para impresión, lo mantenemos en el DOM forzando su visualización aunque phase sea playing */}
                     <motion.div
                         layoutId="final-logo-container"
-                        className={`w-full max-w-[785px] aspect-[785/691] items-center justify-center overflow-hidden relative p-4 -translate-x-[100px] ${phase === 'playing' ? 'hidden print:flex' : 'flex'}`}
+                        className={`w-full max-w-[785px] aspect-[785/691] items-center justify-center overflow-hidden relative p-4 -translate-x-[100px] print-force-visible ${phase === 'playing' ? 'hidden print:flex' : 'flex'}`}
                         transition={{ duration: 1.5, ease: [0.4, 0, 0.2, 1] }}
                         onLayoutAnimationComplete={() => {
                             if (phase === 'moving') {

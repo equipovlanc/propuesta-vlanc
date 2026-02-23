@@ -82,7 +82,7 @@ const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean }> = (
 
                 {/* CARA TRASERA (Descuento - 3 LÍNEAS) */}
                 <div
-                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-0.5 print-force-visible print:relative print:inset-auto print:block print:visible"
+                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-0.5 print-force-visible print:relative print:inset-auto print:visible print:!transform-none"
                     // translateZ(1px) evita el z-fighting en la cara trasera
                     style={{ WebkitFontSmoothing: "antialiased", ...(isFlipped ? { backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)" } : { backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)" }) }}
                 >
@@ -180,8 +180,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     };
 
     return (
-        <section id="special-offers" className="h-full w-full flex flex-row pt-[150px] pb-[140px] px-[120px] overflow-hidden">
-            <div className="w-1/2 h-full flex flex-col pr-[69.5px] relative">
+        <section id="special-offers" className="h-full w-full flex flex-row pt-[150px] pb-[140px] px-[120px] overflow-hidden print:overflow-visible">
+            <div className="w-1/2 h-full flex flex-col pr-[69.5px] relative print:overflow-visible">
                 <div className="shrink-0 mb-6">
                     <AnimatedSection hierarchy={1}>
                         <h2 className="subtitulo1">{investmentTitle || "la inversión."}</h2>
@@ -189,11 +189,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
 
-                <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar" hierarchy={2}>
+                <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar print:overflow-visible print:justify-start print:pt-4" hierarchy={2}>
 
                     {/* CAJA 1: CONDICIONES ESPECIALES (Visible Step >= 1) */}
                     <div
-                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 ${getRevealClasses(step >= 1)}`}
+                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible ${getRevealClasses(step >= 1)}`}
                     >
                         {data?.conditionalOffer && (
                             <div className="mb-4">
@@ -212,7 +212,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 
                     {/* CAJA 2: OFERTA LANZAMIENTO (Visible Step >= 2) */}
                     <div
-                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 ${getRevealClasses(step >= 2)}`}
+                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible ${getRevealClasses(step >= 2)}`}
                     >
                         {data?.launchOffer && (
                             <div className="mb-4">
