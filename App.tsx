@@ -345,6 +345,7 @@ const App: React.FC = () => {
 
   // Print Mode Handler
   useEffect(() => {
+    // Escucha el evento 'beforeprint' y 'afterprint' que dispara el navegador nativamente.
     const handleBeforePrint = () => {
       setIsPrintMode(true);
     };
@@ -355,11 +356,29 @@ const App: React.FC = () => {
     window.addEventListener('beforeprint', handleBeforePrint);
     window.addEventListener('afterprint', handleAfterPrint);
 
+    // Safari fallback (A veces beforeprint puede fallar, dependemos fuertemente del onPrint del Header)
+    const mediaQueryList = window.matchMedia('print');
+    mediaQueryList.addEventListener('change', (mql) => {
+      if (mql.matches) {
+        setIsPrintMode(true);
+      } else {
+        setIsPrintMode(false);
+      }
+    });
+
     return () => {
       window.removeEventListener('beforeprint', handleBeforePrint);
       window.removeEventListener('afterprint', handleAfterPrint);
     };
   }, []);
+
+  // Handler manual del botón de imprimir (Header) para asegurar la carga *antes* del prompt
+  const handleManualPrint = () => {
+    setIsPrintMode(true);
+    setTimeout(() => {
+      window.print();
+    }, 500); // 500ms de delay para darle tiempo a React a renderizar todas las páginas de golpe
+  }
 
 
   // Renders
@@ -379,8 +398,8 @@ const App: React.FC = () => {
             : section.comp;
 
           return (
-            <div key={index} className="z-slide-container">
-              <div className="scale-wrapper">
+            <div key={`print-slide-${index}`} className="z-slide-container relative w-full h-full page-break-after-always overflow-hidden" style={{ pageBreakAfter: 'always', breakAfter: 'page' }}>
+              <div className="scale-wrapper absolute top-0 left-0 w-[1920px] h-[1080px] origin-top-left transform scale-[0.826]">
                 {index > 1 && (
                   <Header
                     logo={proposalData.logos?.smallLogo}
@@ -406,6 +425,7 @@ const App: React.FC = () => {
             logo={proposalData.logos?.smallLogo}
             pageNumber={activeSection.headerPage}
             onNavigate={navigate}
+            onPrint={handleManualPrint}
           />
         )}
         <div className="relative w-full h-full perspective-[1000px]">
