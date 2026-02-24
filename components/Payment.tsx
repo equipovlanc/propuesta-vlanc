@@ -99,15 +99,16 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                     >
                         <h3 className="subtitulo2 mb-10">{data?.finePrint?.title}</h3>
 
-                        {/* Contenedor de puntos con tamaño dinámico */}
-                        <div className="flex-grow">
+                        {/* Contenedor de puntos con tamaño dinámico y margen de seguridad de 50px */}
+                        <div className="flex-grow mb-[50px]">
                             <div className="flex flex-col gap-[2px]">
                                 {(data?.finePrint?.points ?? []).map((point, i) => {
                                     const pointsCount = data?.finePrint?.points?.length || 0;
-                                    // Ajuste más natural: 14px base, baja a 13px si hay > 7 puntos, 12px si hay > 11 puntos
+                                    // Ajuste granular para respetar el hueco de 50px
                                     let textSizeClass = "";
-                                    if (pointsCount > 11) textSizeClass = "!text-[12px]";
-                                    else if (pointsCount > 7) textSizeClass = "!text-[13px]";
+                                    if (pointsCount > 11) textSizeClass = "!text-[11.5px]";
+                                    else if (pointsCount > 8) textSizeClass = "!text-[12.5px]";
+                                    else if (pointsCount > 6) textSizeClass = "!text-[13.5px]";
 
                                     return (
                                         <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`}>
