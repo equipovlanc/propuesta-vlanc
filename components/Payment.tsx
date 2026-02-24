@@ -104,10 +104,9 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                             <div className="flex flex-col gap-[2px]">
                                 {(data?.finePrint?.points ?? []).map((point, i) => {
                                     const pointsCount = data?.finePrint?.points?.length || 0;
-                                    // Ajuste dinámico de tamaño: 12px base, baja a 11px si > 6 puntos, 10px si > 10 puntos
-                                    let textSizeClass = "!text-[12px]";
-                                    if (pointsCount > 10) textSizeClass = "!text-[10px]";
-                                    else if (pointsCount > 6) textSizeClass = "!text-[11px]";
+                                    // Ajuste más suave: 13px base, 12px si hay mucho contenido (> 8 puntos)
+                                    let textSizeClass = "!text-[13px]";
+                                    if (pointsCount > 8) textSizeClass = "!text-[12px]";
 
                                     return (
                                         <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`}>
@@ -131,7 +130,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
 
             {/* FECHA — Paso 2 */}
             <motion.div
-                className="absolute bottom-[70px] right-[120px] z-20 print-force-visible"
+                className="absolute bottom-[140px] right-[120px] z-20 print-force-visible"
                 initial={getRevealStyle(isPrintMode)}
                 animate={getRevealStyle(effectiveStep >= 2)}
                 transition={{ duration: 0.9, ease: 'easeInOut' }}
