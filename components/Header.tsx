@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate, onPrint }
         className="absolute top-[20px] left-[52px] w-[78px] h-[78px] flex items-center justify-center pointer-events-auto cursor-pointer group bg-transparent border-none p-0 outline-none"
       >
         {logo ? (
-          <img src={logo} alt="VLANC Studio" className="w-full h-full object-contain transition-opacity group-hover:opacity-70" />
+          <img src={logo} alt="VLANC Studio" className="w-full h-full object-contain transition-opacity group-hover:opacity-70 print-force-visible print:opacity-100 print:filter-none print:transform-none" />
         ) : (
           <div className="w-full h-full border border-vlanc-primary/30 bg-vlanc-primary/5 flex items-center justify-center rounded-[1px]">
             <span className="text-[6px] uppercase tracking-[0.3em] text-vlanc-primary/50 font-bold">Logo</span>

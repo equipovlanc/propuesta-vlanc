@@ -229,8 +229,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     </div>
 
                     {/* FIRMA (Visible Step >= 2) */}
-                    <div className={`w-full shrink-0 ${getRevealClasses(step >= 2)}`}>
-                        <div className="w-full flex flex-col border-t border-[#8f4933] mt-[20px] pt-1">
+                    <div className={`w-full shrink-0 ${getRevealClasses(step >= 2)} print-force-visible`}>
+                        <div className="w-full flex flex-col border-t border-[#8f4933] mt-[20px] pt-1 print:border-t-2 print:!border-[#8f4933]">
                             <div className="flex justify-between items-start">
                                 <span className="tabla1">VIVE VLANC SL</span>
                                 <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
