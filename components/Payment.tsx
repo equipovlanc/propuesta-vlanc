@@ -28,6 +28,7 @@ interface PaymentProps {
     investmentTitle?: string;
     locationDate?: string;
     step?: number; // 0 = nada, 1 = columna izquierda, 2 = columna derecha + firma + fecha
+    isPrintMode?: boolean;
 }
 
 // Helper: aplica blur y opacidad según si el bloque está revelado (mismo estilo que p5 y p14)
@@ -36,7 +37,9 @@ const getRevealStyle = (visible: boolean) => ({
     filter: visible ? 'blur(0px)' : 'blur(5px)',
 });
 
-const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, step = 2 }) => {
+const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, step = 2, isPrintMode = false }) => {
+    const effectiveStep = isPrintMode ? 2 : step;
+
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative">
             <div className="w-full h-full flex flex-col">
@@ -54,8 +57,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                     {/* COLUMNA IZQUIERDA — Paso 1 */}
                     <motion.div
                         className="print-force-visible"
-                        initial={getRevealStyle(false)}
-                        animate={getRevealStyle(step >= 1)}
+                        initial={getRevealStyle(isPrintMode)}
+                        animate={getRevealStyle(effectiveStep >= 1)}
                         transition={{ duration: 0.9, ease: 'easeInOut' }}
                     >
                         <h3 className="subtitulo2 mb-10">{data?.paymentMethods?.title}</h3>
@@ -90,14 +93,14 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                     {/* COLUMNA DERECHA + FIRMA — Paso 2 */}
                     <motion.div
                         className="flex flex-col relative print-force-visible"
-                        initial={getRevealStyle(false)}
-                        animate={getRevealStyle(step >= 2)}
+                        initial={getRevealStyle(isPrintMode)}
+                        animate={getRevealStyle(effectiveStep >= 2)}
                         transition={{ duration: 0.9, ease: 'easeInOut' }}
                     >
                         <h3 className="subtitulo2 mb-10">{data?.finePrint?.title}</h3>
                         <div className="flex flex-col gap-[2px]">
                             {(data?.finePrint?.points ?? []).map((point, i) => (
-                                <p key={i} className="cuerpo text-vlanc-secondary/80">
+                                <p key={i} className="cuerpo text-vlanc-secondary/80 !text-[12px] !leading-[1.4]">
                                     {point}
                                 </p>
                             ))}
@@ -115,8 +118,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
             {/* FECHA — Paso 2 */}
             <motion.div
                 className="absolute bottom-[70px] right-[120px] z-20 print-force-visible"
-                initial={getRevealStyle(false)}
-                animate={getRevealStyle(step >= 2)}
+                initial={getRevealStyle(isPrintMode)}
+                animate={getRevealStyle(effectiveStep >= 2)}
                 transition={{ duration: 0.9, ease: 'easeInOut' }}
             >
                 <p className="cuerpo font-bold text-right">
