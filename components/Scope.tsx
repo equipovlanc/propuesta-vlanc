@@ -185,7 +185,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             >
                 {/* Datos Técnicos */}
                 <div ref={infoBlockRef}>
-                    <AnimatedSection hierarchy={1}>
+                    <AnimatedSection hierarchy={2}>
                         <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
                         <div className="space-y-4 cuerpo text-left">
                             <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
@@ -197,7 +197,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
                 {/* Program - 1 línea de espacio debajo de Scope */}
                 <div ref={programRef} className="mt-6"> {/* mt-6 ~ un salto de linea amplio */}
-                    <AnimatedSection hierarchy={1}>
+                    <AnimatedSection hierarchy={2}>
                         <p className="cuerpo text-left">
                             <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
                         </p>
@@ -206,7 +206,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
                 {/* Breakdown (Columna Izquierda) */}
                 <div className="mt-4 flex flex-col">
-                    <AnimatedSection hierarchy={1}>
+                    <AnimatedSection hierarchy={2}>
                         {breakdown.map((item, i) => (
                             <div
                                 key={i}
@@ -233,7 +233,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             <div className="fixed right-[120px] w-[735px] pointer-events-none" style={{ top: 0, bottom: 0 }}>
                 {/* Breakdown Items: Naciendo desde abajo hacia arriba hasta los 140px */}
                 <div className="absolute bottom-[140px] w-full flex flex-col justify-end pointer-events-auto">
-                    <AnimatedSection hierarchy={1}>
+                    <AnimatedSection hierarchy={2}>
                         {col2Items.map((item, i) => (
                             <div key={`c2-${i}`} className="mb-4">
                                 <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
@@ -245,7 +245,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 {/* Nota: Naciendo de arriba hacia abajo desde los 140px */}
                 {data?.intervention?.note && (
                     <div className="absolute top-[calc(100vh-140px)] w-full pt-1 pointer-events-auto">
-                        <AnimatedSection hierarchy={1}>
+                        <AnimatedSection hierarchy={2}>
                             <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
                                 {data?.intervention?.note}
                             </p>
