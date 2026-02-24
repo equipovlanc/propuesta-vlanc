@@ -124,6 +124,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal Premium
     const [showVideo, setShowVideo] = useState(false); // Modal Video (Estado final)
+    const videoRef = React.useRef<HTMLVideoElement>(null);
 
     const plans = data?.conditionalOffer?.discountedPlans || [];
     const imageSrc = data?.callToAction?.image?.src;
@@ -146,6 +147,26 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
         setShowVideo(false);
         if (setNavigationBlocked) setNavigationBlocked(false);
     };
+
+    // Efecto para forzar playback con audio cuando entramos al paso 3
+    useEffect(() => {
+        if (step === 3 && videoRef.current) {
+            // Intentar reproducir con audio (sin muted)
+            videoRef.current.muted = false;
+            const playPromise = videoRef.current.play();
+
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // Si el navegador bloquea el audio automático, fallamos a muted como último recurso
+                    // para que al menos se vea el vídeo, aunque la prioridad es el audio.
+                    if (videoRef.current) {
+                        videoRef.current.muted = true;
+                        videoRef.current.play();
+                    }
+                });
+            }
+        }
+    }, [step]);
 
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
