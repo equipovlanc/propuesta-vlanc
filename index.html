@@ -337,6 +337,9 @@
       * {
         transition: none !important;
         animation: none !important;
+        will-change: auto !important;
+        -webkit-filter: none !important;
+        filter: none !important;
       }
 
       body * {
@@ -376,6 +379,15 @@
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
+        transform: none !important;
+        filter: none !important;
+        mix-blend-mode: normal !important;
+      }
+
+      header * {
+        transform: none !important;
+        filter: none !important;
+        mix-blend-mode: normal !important;
       }
 
       .no-print {
@@ -383,6 +395,12 @@
       }
 
       .custom-cursor {
+        display: none !important;
+      }
+
+      /* Disable global overlays that force rasterization */
+      .bg-grain::before,
+      body::after {
         display: none !important;
       }
     }
