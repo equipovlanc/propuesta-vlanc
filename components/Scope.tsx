@@ -30,6 +30,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     const programRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
     const noteRef = useRef<HTMLDivElement>(null);
+    const subtitleRef = useRef<HTMLDivElement>(null);
 
     // Estados para el layout dinámico
     const [splitIndex, setSplitIndex] = useState<number>(breakdown.length);
@@ -81,10 +82,24 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             }
             if (col2BreakdownHeight > 0) col2BreakdownHeight -= 16;
 
-            // 4. Lógica de Media Adaptativa
+            // 4. Lógica de Media Adaptativa y Límites de Crecimiento
             // El texto de la derecha (breakdown) crece hacia arriba desde el margen inferior (maxBottomY)
             // La nota es ignorada ya que tiene permiso para estar en el margen.
-            const col2TopY = maxBottomY - col2BreakdownHeight;
+
+            // Calculamos el límite superior basado en la posición del subtítulo
+            let maxTopY = 0;
+            if (subtitleRef.current) {
+                const subRect = subtitleRef.current.getBoundingClientRect();
+                const containerRect = containerRef.current!.getBoundingClientRect();
+                maxTopY = subRect.bottom - containerRect.top;
+            }
+
+            let col2TopY = maxBottomY - col2BreakdownHeight;
+
+            // Si el texto intenta subir más que el subtítulo, lo frenamos
+            if (col2TopY < maxTopY) {
+                col2TopY = maxTopY;
+            }
 
             // La media tiene un gap de 50px con el texto de la derecha
             const mediaMargin = 50;
@@ -167,7 +182,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 )}
 
                 {/* DATOS TÉCNICOS */}
-                <div className="absolute bottom-0 left-[120px] z-20 pointer-events-auto" style={{ width: '735px' }}>
+                <div ref={subtitleRef} className="absolute bottom-0 left-[120px] z-20 pointer-events-auto" style={{ width: '735px' }}>
                     <AnimatedSection hierarchy={2}>
                         <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
                         <div className="space-y-4 cuerpo text-left">
