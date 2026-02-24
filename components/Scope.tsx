@@ -82,15 +82,17 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             if (col2BreakdownHeight > 0) col2BreakdownHeight -= 16;
 
             // 4. Lógica de Media Adaptativa
-            // El inicio del texto de la derecha (por arriba) es: Margen inferior - Altura texto derecha
+            // El texto de la derecha crece hacia arriba desde el margen inferior (maxBottomY)
             const col2TopY = maxBottomY - col2BreakdownHeight;
 
+            // La media tiene un gap de 50px con el texto de la derecha
             const mediaMargin = 50;
             const idealMediaBottom = col2TopY - mediaMargin;
 
             let finalMediaHeight = initialTopHeight;
             let finalTopBlockHeight = initialTopHeight;
 
+            // Solo reducimos si el texto realmente sube por encima del nivel original
             if (newSplitIndex < breakdown.length && idealMediaBottom < initialTopHeight) {
                 finalMediaHeight = idealMediaBottom;
                 finalTopBlockHeight = idealMediaBottom;
@@ -99,7 +101,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             // Ocultar si la reducción supera el 30% (358.4px)
             if (finalMediaHeight < initialTopHeight * 0.7) {
                 setShowMedia(false);
-                setTopBlockHeight(initialTopHeight); // Mantenemos altura original del bloque de titulo
+                setTopBlockHeight(initialTopHeight);
                 setMediaHeight(0);
             } else {
                 setShowMedia(true);
@@ -177,7 +179,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </div>
 
             {/* --- BLOQUE INFERIOR (TEXTO DINÁMICO) --- */}
-            <div className="w-full px-[120px] pt-[50px] flex justify-between relative flex-grow overflow-visible items-start">
+            <div className="w-full px-[120px] pt-[50px] flex relative flex-grow overflow-visible items-stretch">
 
                 {/* Columna Izquierda */}
                 <div ref={col1Ref} className="w-[735px] flex flex-col shrink-0">
@@ -208,7 +210,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </div>
 
                 {/* Columna Derecha (Alineada con el borde izquierdo de la imagen superior) */}
-                <div className="w-[735px] flex flex-col shrink-0 relative flex-grow min-h-full">
+                <div className="w-[735px] ml-auto flex flex-col shrink-0 relative min-h-full">
                     <div className="flex flex-col h-full justify-end" style={{ paddingBottom: '140px' }}>
                         <div className="flex flex-col">
                             {col2Items.map((item, i) => (
@@ -218,7 +220,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                             ))}
 
                             {/* Nota Final (Dentro de los 140px inferiores) */}
-                            <div ref={noteRef} className="absolute bottom-1 w-full translate-y-[-24px]">
+                            <div ref={noteRef} className="absolute bottom-1 right-0 w-full translate-y-[-10px]">
                                 {data?.intervention?.note && (
                                     <div className="pt-6 border-t border-vlanc-primary/5">
                                         <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
