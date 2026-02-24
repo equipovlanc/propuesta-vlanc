@@ -104,9 +104,10 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                             <div className="flex flex-col gap-[2px]">
                                 {(data?.finePrint?.points ?? []).map((point, i) => {
                                     const pointsCount = data?.finePrint?.points?.length || 0;
-                                    // Ajuste más suave: 13px base, 12px si hay mucho contenido (> 8 puntos)
-                                    let textSizeClass = "!text-[13px]";
-                                    if (pointsCount > 8) textSizeClass = "!text-[12px]";
+                                    // Ajuste más natural: 14px base, baja a 13px si hay > 7 puntos, 12px si hay > 11 puntos
+                                    let textSizeClass = "";
+                                    if (pointsCount > 11) textSizeClass = "!text-[12px]";
+                                    else if (pointsCount > 7) textSizeClass = "!text-[13px]";
 
                                     return (
                                         <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`}>
@@ -117,8 +118,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                             </div>
                         </div>
 
-                        {/* FIRMA - Empujada al final con mt-auto */}
-                        <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mt-auto print-force-visible print:border-t-2 print:!border-[#8f4933]">
+                        {/* FIRMA - Empujada al final con mt-auto y mb-[70px] para estar a 3/2m (210px) */}
+                        <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mt-auto mb-[70px] print-force-visible print:border-t-2 print:!border-[#8f4933]">
                             <div className="flex justify-between items-start">
                                 <span className="tabla1">VIVE VLANC SL</span>
                                 <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
@@ -130,7 +131,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
 
             {/* FECHA — Paso 2 */}
             <motion.div
-                className="absolute bottom-[140px] right-[120px] z-20 print-force-visible"
+                className="absolute bottom-[70px] right-[120px] z-20 print-force-visible"
                 initial={getRevealStyle(isPrintMode)}
                 animate={getRevealStyle(effectiveStep >= 2)}
                 transition={{ duration: 0.9, ease: 'easeInOut' }}
