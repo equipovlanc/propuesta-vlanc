@@ -123,7 +123,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     isPrintMode = false
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal Premium
-    const [showVideo, setShowVideo] = useState(false); // Modal Video (Paso 3)
 
     const plans = data?.conditionalOffer?.discountedPlans || [];
     const imageSrc = data?.callToAction?.image?.src;
@@ -134,26 +133,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 
     const openModal = () => { if (premiumService) setIsModalOpen(true); };
     const closeModal = () => setIsModalOpen(false);
-
-    // Efecto para abrir el video automáticamente en el Paso 3 y bloquear navegación
-    useEffect(() => {
-        if (step === 3 && data?.popupVideo) {
-            setShowVideo(true);
-            if (setNavigationBlocked) setNavigationBlocked(true);
-        }
-    }, [step, data?.popupVideo, setNavigationBlocked]);
-
-    const openVideo = () => {
-        if (data?.popupVideo) {
-            setShowVideo(true);
-            if (setNavigationBlocked) setNavigationBlocked(true);
-        }
-    };
-
-    const closeVideo = () => {
-        setShowVideo(false);
-        if (setNavigationBlocked) setNavigationBlocked(false);
-    };
 
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
@@ -260,11 +239,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 <AnimatedSection className="w-full h-full relative overflow-hidden" hierarchy={0}>
                     {/* Contenedor Clickable para re-abrir video */}
                     <div
-                        className="w-full h-full relative cursor-pointer group"
-                        onClick={openVideo}
+                        className="w-full h-full relative"
                     >
+                        {/* IMAGEN DE FONDO */}
                         {imageSrc && (
-                            <>
+                            <div className={`w-full h-full absolute inset-0 transition-opacity duration-700 ${step === 3 ? 'opacity-0' : 'opacity-100'}`}>
                                 <img src={imageSrc} alt="Special Offer" className="w-full h-full object-cover" />
                                 <div
                                     className="absolute inset-0 pointer-events-none transition-colors duration-1000"
@@ -277,24 +256,43 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                         <h2 className="especial1">{data.callToAction.text}</h2>
                                     </div>
                                 )}
+                            </div>
+                        )}
 
-                                {/* LOGO OVERLAY (Paso 4) - Transición más lenta (3s) */}
-                                {data?.overlayLogo && (
-                                    <motion.div
-                                        className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px] print-force-visible"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: step >= 4 ? 1 : 0 }}
-                                        transition={{ duration: 3.0, ease: "easeInOut" }}
-                                    >
-                                        <div className="w-full max-w-[400px] p-10">
-                                            <img src={data.overlayLogo} alt="Logo Overlay" className="w-full h-auto drop-shadow-xl" />
-                                        </div>
-                                    </motion.div>
-                                )}
+                        {/* VIDEO (Paso 3) */}
+                        <AnimatePresence>
+                            {step === 3 && data?.popupVideo && (
+                                <motion.div
+                                    className="absolute inset-0 z-20 w-full h-full"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.8 }}
+                                >
+                                    <video
+                                        src={data.popupVideo}
+                                        autoPlay
+                                        muted
+                                        loop
+                                        playsInline
+                                        className="w-full h-full object-cover"
+                                    />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
-                                {/* Overlay de color en hover */}
-                                <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-vlanc-primary/10" />
-                            </>
+                        {/* LOGO OVERLAY (Paso 4) - Transición más lenta (3s) */}
+                        {data?.overlayLogo && (
+                            <motion.div
+                                className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px] print-force-visible"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: step >= 4 ? 1 : 0 }}
+                                transition={{ duration: 3.0, ease: "easeInOut" }}
+                            >
+                                <div className="w-full max-w-[400px] p-10">
+                                    <img src={data.overlayLogo} alt="Logo Overlay" className="w-full h-auto drop-shadow-xl" />
+                                </div>
+                            </motion.div>
                         )}
                     </div>
                 </AnimatedSection>
@@ -316,37 +314,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 </div>
             )}
 
-            {/* MODAL VIDEO (Paso 3) - print:hidden */}
-            <AnimatePresence>
-                {showVideo && data?.popupVideo && (
-                    <motion.div
-                        className="fixed inset-0 z-[200] flex items-center justify-center bg-vlanc-black/95 backdrop-blur-md p-4 md:p-10 pointer-events-auto print:hidden"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={closeVideo} // Cerrar al click fuera
-                    >
-                        <AnimatedSection
-                            className="relative w-full max-w-6xl aspect-video bg-black shadow-2xl flex items-center justify-center"
-                            hierarchy={0}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <button
-                                onClick={closeVideo}
-                                className="absolute -top-12 right-0 text-white hover:text-vlanc-primary transition-colors text-[12px] tracking-[0.2em] font-bold uppercase flex items-center gap-2"
-                            >
-                                [ Cerrar y Continuar ]
-                            </button>
-                            {/* VIDEO PAUSADO POR DEFECTO (sin autoPlay) */}
-                            <video
-                                src={data.popupVideo}
-                                controls
-                                className="w-full h-full object-contain"
-                            />
-                        </AnimatedSection>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </section>
     );
 };
