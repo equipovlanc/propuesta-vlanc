@@ -286,7 +286,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                     <video
                                         src={data.popupVideo}
                                         autoPlay
-                                        muted
                                         loop
                                         playsInline
                                         data-cursor-ignore
@@ -353,7 +352,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                             {/* VIDEO PAUSADO POR DEFECTO (sin autoPlay) */}
                             <video
                                 src={data.popupVideo}
+                                autoPlay
                                 controls
+                                playsInline
                                 className="w-full h-full object-contain"
                             />
                         </AnimatedSection>
