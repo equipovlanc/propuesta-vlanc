@@ -26,6 +26,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
     // Refs para medición
     const containerRef = useRef<HTMLDivElement>(null);
+    const titleRef = useRef<HTMLDivElement>(null);
+    const barRef = useRef<HTMLDivElement>(null);
+    const infoBlockRef = useRef<HTMLDivElement>(null);
     const programRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -34,39 +37,56 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     const [mediaHeight, setMediaHeight] = useState<number>(512);
     const [showMedia, setShowMedia] = useState(true);
     const [topBlockHeight, setTopBlockHeight] = useState<number>(512);
+    const [interventionTop, setInterventionTop] = useState<number>(300);
 
     useLayoutEffect(() => {
         const calculateLayout = () => {
-            if (!containerRef.current || !programRef.current) return;
+            if (!containerRef.current || !titleRef.current || !barRef.current) return;
 
             const windowHeight = window.innerHeight;
-            const bottomAxisY = windowHeight - 140; // Línea de los 140px
-            const initialTopHeight = 512;
-            const startTopY = initialTopHeight + 50; // Punto donde el texto de la col 1 empieza tras el título
+            const bottomAxisY = windowHeight - 140; // Eje de los 140px
+            const initialMediaHeight = 512;
 
-            let currentY = startTopY;
+            // 1. Posicionamiento del bloque de Intervención (75px bajo la barra)
+            const titleRect = titleRef.current.getBoundingClientRect();
+            const barRect = barRef.current.getBoundingClientRect();
+            // La barra está en absolute respecto al contenedor del título, pero queremos la posición absoluta en la página
+            // Como el título está en top-150px, podemos calcularlo:
+            const barBottomY = 150 + barRef.current.offsetTop + barRef.current.offsetHeight;
+            const finalInterventionTop = barBottomY + 75;
+            setInterventionTop(finalInterventionTop);
 
-            // 1. Altura del Programa (Col 1 siempre)
-            const programHeight = programRef.current.offsetHeight;
-            currentY += programHeight + 20; // Espacio bajo programa
+            // 2. Determinar Split para Breakdown (Col 1)
+            // Necesitamos saber dónde termina la info técnica + program para empezar el breakdown
+            // Pero el "Program" va un salto de línea bajo el bloque de info (que acaba en Scope)
+            let currentLeftY = finalInterventionTop;
 
-            // 2. Determinar Split para Col 1 (No puede pasar de los 140px del fondo)
+            // Medimos el bloque de info (Title, Location, ProjectType, Scope)
+            if (infoBlockRef.current) {
+                currentLeftY += infoBlockRef.current.offsetHeight + 24; // Espacio para el salto de línea al Program
+            }
+
+            // Medimos el Program
+            if (programRef.current) {
+                currentLeftY += programRef.current.offsetHeight + 16; // Espacio bajo el Program para empezar breakdown
+            }
+
             let newSplitIndex = breakdown.length;
             for (let i = 0; i < breakdown.length; i++) {
                 const item = itemRefs.current[i];
                 if (item) {
                     const itemHeight = item.offsetHeight;
-                    if (currentY + itemHeight > bottomAxisY && newSplitIndex === breakdown.length) {
+                    if (currentLeftY + itemHeight > bottomAxisY && newSplitIndex === breakdown.length) {
                         newSplitIndex = i;
                     }
                     if (i < newSplitIndex) {
-                        currentY += itemHeight + 16; // mb-4
+                        currentLeftY += itemHeight + 16;
                     }
                 }
             }
             setSplitIndex(newSplitIndex);
 
-            // 3. Medir altura de la Columna Derecha (Breakdown)
+            // 3. Medir altura de la Columna Derecha
             let col2BreakdownHeight = 0;
             for (let i = newSplitIndex; i < breakdown.length; i++) {
                 const item = itemRefs.current[i];
@@ -74,25 +94,23 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             }
             if (col2BreakdownHeight > 0) col2BreakdownHeight -= 16;
 
-            // 4. Calcular Crecimiento e Impacto sobre el Bloque Superior
-            // El texto de la derecha sube desde bottomAxisY
+            // 4. Lógica de Reducción de Media
             const col2TopY = bottomAxisY - col2BreakdownHeight;
             const mediaMargin = 50;
             const idealMediaBottom = col2TopY - mediaMargin;
 
-            let finalMediaHeight = initialTopHeight;
-            let finalTopBlockHeight = initialTopHeight;
+            let finalMediaHeight = initialMediaHeight;
+            let finalTopBlockHeight = initialMediaHeight;
 
-            // Si el texto de la derecha invade el espacio del bloque superior
-            if (newSplitIndex < breakdown.length && idealMediaBottom < initialTopHeight) {
+            if (newSplitIndex < breakdown.length && idealMediaBottom < initialMediaHeight) {
                 finalMediaHeight = idealMediaBottom;
                 finalTopBlockHeight = idealMediaBottom;
             }
 
-            // Ocultar si la reducción es > 30% (limite inferior: 358px)
-            if (finalMediaHeight < initialTopHeight * 0.7) {
+            // Ocultar si la reducción es > 30%
+            if (finalMediaHeight < initialMediaHeight * 0.7) {
                 setShowMedia(false);
-                setTopBlockHeight(initialTopHeight); // Verbo: El bloque de título vuelve a su altura original
+                setTopBlockHeight(initialMediaHeight);
                 setMediaHeight(0);
             } else {
                 setShowMedia(true);
@@ -102,7 +120,6 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         };
 
         calculateLayout();
-        // Doble pasada para asegurar que los elementos han sido renderizados con sus fuentes
         const timeout = setTimeout(calculateLayout, 100);
         window.addEventListener('resize', calculateLayout);
         return () => {
@@ -116,24 +133,27 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     return (
         <section ref={containerRef} className="h-screen w-full relative overflow-hidden flex flex-col bg-white">
 
-            {/* --- BLOQUE SUPERIOR --- */}
+            {/* --- CABECERA Y MEDIA --- */}
             <div className="w-full relative shrink-0 transition-all duration-300 pointer-events-none" style={{ height: `${topBlockHeight}px` }}>
 
                 {/* TÍTULO SECCIÓN */}
-                <div className="absolute top-[150px] left-[120px] z-20 pointer-events-auto">
+                <div className="absolute top-[150px] left-[120px] z-20 pointer-events-auto" ref={titleRef}>
                     <AnimatedSection hierarchy={1}>
                         <h2 className="subtitulo1 text-vlanc-black">
                             {data?.title || "qué vamos a hacer por ti."}
                         </h2>
                     </AnimatedSection>
-                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                    <div ref={barRef}>
+                        <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                    </div>
                 </div>
 
-                {/* MEDIA ADAPTATIVA */}
+                {/* MEDIA */}
                 {showMedia && (
                     <div
                         className="absolute top-0 right-[120px] w-[735px] z-10 overflow-hidden transition-all duration-300 pointer-events-auto"
                         style={{ height: `${mediaHeight}px` }}
+                        data-cursor-ignore
                     >
                         <AnimatedSection className="h-full w-full relative" hierarchy={0}>
                             {data?.video && (
@@ -156,9 +176,15 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         </AnimatedSection>
                     </div>
                 )}
+            </div>
 
-                {/* DATOS TÉCNICOS */}
-                <div className="absolute bottom-0 left-[120px] z-20 pointer-events-auto" style={{ width: '735px' }}>
+            {/* --- BLOQUE DE INTERVENCIÓN (POSICIONAMIENTO ABSOLUTO) --- */}
+            <div
+                className="absolute left-[120px] w-[735px] z-20 transition-all duration-300"
+                style={{ top: `${interventionTop}px` }}
+            >
+                {/* Datos Técnicos */}
+                <div ref={infoBlockRef}>
                     <AnimatedSection hierarchy={2}>
                         <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
                         <div className="space-y-4 cuerpo text-left">
@@ -168,60 +194,58 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         </div>
                     </AnimatedSection>
                 </div>
-            </div>
 
-            {/* --- BLOQUE DE TEXTO --- */}
-            <div className="w-full px-[120px] pt-[50px] relative flex-grow overflow-visible flex items-start">
+                {/* Program - 1 línea de espacio debajo de Scope */}
+                <div ref={programRef} className="mt-6"> {/* mt-6 ~ un salto de linea amplio */}
+                    <p className="cuerpo text-left">
+                        <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
+                    </p>
+                </div>
 
-                {/* Columna Izquierda */}
-                <div className="w-[735px] flex flex-col shrink-0">
-                    <div ref={programRef} className="mb-4">
-                        <p className="cuerpo text-left">
-                            <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
-                        </p>
-                    </div>
-
+                {/* Breakdown (Columna Izquierda) */}
+                <div className="mt-4 flex flex-col">
                     {breakdown.map((item, i) => (
                         <div
                             key={i}
                             ref={el => itemRefs.current[i] = el}
-                            className={`mb-4 break-inside-avoid ${i >= splitIndex ? 'hidden' : 'block'}`}
+                            className={`mb-4 ${i >= splitIndex ? 'hidden' : 'block'}`}
                         >
                             <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
                         </div>
                     ))}
-
-                    {/* Elementos ocultos para medir siempre el split correcto */}
-                    <div className="absolute opacity-0 pointer-events-none -z-10" aria-hidden="true" style={{ width: '735px' }}>
-                        {breakdown.map((item, i) => (
-                            <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el }}>
-                                <p className="cuerpo leading-[1.4]" dangerouslySetInnerHTML={{ __html: item }} />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Columna Derecha */}
-                <div className="w-[735px] ml-auto flex flex-col shrink-0 relative min-h-full">
-                    {/* El breakdown se ancla por abajo a los 140px y crece hacia arriba */}
-                    <div className="absolute bottom-[140px] w-full flex flex-col justify-end">
-                        {col2Items.map((item, i) => (
-                            <div key={`c2-${i}`} className="mb-4">
-                                <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* La Nota se ancla EXACTAMENTE por arriba a los 140px y baja */}
-                    {data?.intervention?.note && (
-                        <div className="absolute top-[calc(100%-140px)] w-full pt-1">
-                            <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
-                                {data?.intervention?.note}
-                            </p>
-                        </div>
-                    )}
                 </div>
             </div>
+
+            {/* Medidor invisible para Columna Derecha */}
+            <div className="absolute opacity-0 pointer-events-none -z-10" aria-hidden="true" style={{ width: '735px', left: '-2000px' }}>
+                {breakdown.map((item, i) => (
+                    <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el }}>
+                        <p className="cuerpo leading-[1.4]" dangerouslySetInnerHTML={{ __html: item }} />
+                    </div>
+                ))}
+            </div>
+
+            {/* --- COLUMNA DERECHA (ACCIÓN INVERTIDA) --- */}
+            <div className="fixed right-[120px] w-[735px] pointer-events-none" style={{ top: 0, bottom: 0 }}>
+                {/* Breakdown Items: Naciendo desde abajo hacia arriba hasta los 140px */}
+                <div className="absolute bottom-[140px] w-full flex flex-col justify-end pointer-events-auto">
+                    {col2Items.map((item, i) => (
+                        <div key={`c2-${i}`} className="mb-4">
+                            <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
+                        </div>
+                    ))}
+                </div>
+
+                {/* Nota: Naciendo de arriba hacia abajo desde los 140px */}
+                {data?.intervention?.note && (
+                    <div className="absolute top-[calc(100vh-140px)] w-full pt-1 pointer-events-auto">
+                        <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
+                            {data?.intervention?.note}
+                        </p>
+                    </div>
+                )}
+            </div>
+
         </section>
     );
 };
