@@ -51,13 +51,17 @@ interface SpecialOffersProps {
     step?: number;
     setNavigationBlocked?: (blocked: boolean) => void;
     isSectionCompleted?: boolean;
+    isPrintMode?: boolean;
 }
 
 // Sub-componente Flip Card
-const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean }> = ({ plan, initialFlipped = false }) => {
+const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean; isPrintMode?: boolean }> = ({ plan, initialFlipped = false, isPrintMode = false }) => {
     // Inicializamos el estado con initialFlipped.
     // Al navegar y volver (desmontar/montar), tomará el valor actualizado de initialFlipped.
     const [isFlipped, setIsFlipped] = useState(initialFlipped);
+
+    // En modo impresión, forzamos el estado flipped
+    const effectiveFlipped = isPrintMode ? true : isFlipped;
 
     return (
         <div
@@ -65,14 +69,14 @@ const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean }> = (
             onClick={() => setIsFlipped(!isFlipped)}
         >
             <motion.div
-                className="relative w-full h-full preserve-3d print:transform-none"
+                className="relative w-full h-full preserve-3d print:transform-none print-force-visible"
                 style={{ transformStyle: "preserve-3d" }}
-                animate={{ rotateY: isFlipped ? 180 : 0 }}
+                animate={{ rotateY: effectiveFlipped ? 180 : 0 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
             >
                 {/* CARA FRONTAL (Original) */}
                 <div
-                    className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933]/20 bg-vlanc-bg hover:bg-[#8f4933]/5 flex flex-col items-center justify-center gap-1 print:hidden"
+                    className={`absolute inset-0 w-full h-full backface-hidden border border-[#8f4933]/20 bg-vlanc-bg hover:bg-[#8f4933]/5 flex flex-col items-center justify-center gap-1 ${isPrintMode ? 'hidden' : 'print:hidden'}`}
                     // translateZ(1px) evita el z-fighting (solapamiento visual) separando la capa del plano cero
                     style={{ backfaceVisibility: "hidden", transform: "rotateY(0deg) translateZ(1px)", WebkitFontSmoothing: "antialiased" }}
                 >
@@ -84,7 +88,11 @@ const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean }> = (
                 <div
                     className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-0.5 print-force-visible print:relative print:inset-auto print:visible print:!transform-none"
                     // translateZ(1px) evita el z-fighting en la cara trasera
-                    style={{ WebkitFontSmoothing: "antialiased", ...(isFlipped ? { backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)" } : { backfaceVisibility: "hidden", transform: "rotateY(180deg) translateZ(1px)" }) }}
+                    style={{
+                        WebkitFontSmoothing: "antialiased",
+                        backfaceVisibility: isPrintMode ? "visible" : "hidden",
+                        transform: isPrintMode ? "none" : "rotateY(180deg) translateZ(1px)"
+                    }}
                 >
                     {/* Línea 1: Nombre del Plan */}
                     <span className="tabla1 text-white text-[13px] tracking-wider leading-tight">{plan.name}</span>
@@ -111,7 +119,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     premiumService,
     step = 4,
     setNavigationBlocked,
-    isSectionCompleted = false
+    isSectionCompleted = false,
+    isPrintMode = false
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal Premium
     const [showVideo, setShowVideo] = useState(false); // Modal Video (Paso 3)
@@ -205,7 +214,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                         {/* FLIP CARDS */}
                         <div className="flex flex-row justify-between gap-2 w-full flex-wrap xl:flex-nowrap">
                             {plans.map((plan, i) => (
-                                <FlipCard key={i} plan={plan} initialFlipped={isSectionCompleted} />
+                                <FlipCard key={i} plan={plan} initialFlipped={isSectionCompleted} isPrintMode={isPrintMode} />
                             ))}
                         </div>
                     </div>
