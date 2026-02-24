@@ -123,6 +123,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     isPrintMode = false
 }) => {
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal Premium
+    const [showVideo, setShowVideo] = useState(false); // Modal Video (Estado final)
 
     const plans = data?.conditionalOffer?.discountedPlans || [];
     const imageSrc = data?.callToAction?.image?.src;
@@ -133,6 +134,18 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 
     const openModal = () => { if (premiumService) setIsModalOpen(true); };
     const closeModal = () => setIsModalOpen(false);
+
+    const openVideo = () => {
+        if (data?.popupVideo && step >= 4) {
+            setShowVideo(true);
+            if (setNavigationBlocked) setNavigationBlocked(true);
+        }
+    };
+
+    const closeVideo = () => {
+        setShowVideo(false);
+        if (setNavigationBlocked) setNavigationBlocked(false);
+    };
 
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
@@ -239,7 +252,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 <AnimatedSection className="w-full h-full relative overflow-hidden" hierarchy={0}>
                     {/* Contenedor Clickable para re-abrir video */}
                     <div
-                        className="w-full h-full relative"
+                        className={`w-full h-full relative ${step >= 4 ? 'cursor-pointer group' : ''}`}
+                        onClick={step >= 4 ? openVideo : undefined}
                     >
                         {/* IMAGEN DE FONDO */}
                         {imageSrc && (
@@ -275,6 +289,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                         muted
                                         loop
                                         playsInline
+                                        data-cursor-ignore
                                         className="w-full h-full object-cover"
                                     />
                                 </motion.div>
@@ -313,6 +328,38 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     </AnimatedSection>
                 </div>
             )}
+
+            {/* MODAL VIDEO (Estado Final) - print:hidden */}
+            <AnimatePresence>
+                {showVideo && data?.popupVideo && (
+                    <motion.div
+                        className="fixed inset-0 z-[200] flex items-center justify-center bg-vlanc-black/95 backdrop-blur-md p-4 md:p-10 pointer-events-auto print:hidden"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={closeVideo} // Cerrar al click fuera
+                    >
+                        <AnimatedSection
+                            className="relative w-full max-w-6xl aspect-video bg-black shadow-2xl flex items-center justify-center"
+                            hierarchy={0}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                onClick={closeVideo}
+                                className="absolute -top-12 right-0 text-white hover:text-vlanc-primary transition-colors text-[12px] tracking-[0.2em] font-bold uppercase flex items-center gap-2"
+                            >
+                                [ Cerrar ]
+                            </button>
+                            {/* VIDEO PAUSADO POR DEFECTO (sin autoPlay) */}
+                            <video
+                                src={data.popupVideo}
+                                controls
+                                className="w-full h-full object-contain"
+                            />
+                        </AnimatedSection>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
         </section>
     );
