@@ -29,7 +29,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     const col1Ref = useRef<HTMLDivElement>(null);
     const programRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const noteRef = useRef<HTMLDivElement>(null);
+    const col2ContentRef = useRef<HTMLDivElement>(null);
 
     // Estados para el layout dinámico
     const [splitIndex, setSplitIndex] = useState<number>(breakdown.length);
@@ -73,26 +73,24 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
             setSplitIndex(newSplitIndex);
 
-            // 3. Medir altura de la Col 2 (Items del breakdown en la derecha)
-            let col2BreakdownHeight = 0;
-            for (let i = newSplitIndex; i < breakdown.length; i++) {
-                const item = itemRefs.current[i];
-                if (item) col2BreakdownHeight += item.offsetHeight + 16;
+            // 3. Medir altura real de la Columna 2
+            let col2Height = 0;
+            if (col2ContentRef.current) {
+                col2Height = col2ContentRef.current.offsetHeight;
             }
-            if (col2BreakdownHeight > 0) col2BreakdownHeight -= 16;
 
             // 4. Lógica de Media Adaptativa
-            // El texto de la derecha crece hacia arriba desde el margen inferior (maxBottomY)
-            const col2TopY = maxBottomY - col2BreakdownHeight;
+            // La columna derecha está fija en bottom: 140px. Su 'top' visual es:
+            const col2VisualTop = windowHeight - bottomMargin - col2Height;
 
-            // La media tiene un gap de 50px con el texto de la derecha
+            // La media tiene un gap de 50px con el inicio del texto de la derecha
             const mediaMargin = 50;
-            const idealMediaBottom = col2TopY - mediaMargin;
+            const idealMediaBottom = col2VisualTop - mediaMargin;
 
             let finalMediaHeight = initialTopHeight;
             let finalTopBlockHeight = initialTopHeight;
 
-            // Solo reducimos si el texto realmente sube por encima del nivel original
+            // Si el texto de la derecha sube por encima del nivel 512, encogemos
             if (newSplitIndex < breakdown.length && idealMediaBottom < initialTopHeight) {
                 finalMediaHeight = idealMediaBottom;
                 finalTopBlockHeight = idealMediaBottom;
@@ -111,7 +109,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         };
 
         calculateLayout();
-        const timeout = setTimeout(calculateLayout, 100);
+        const timeout = setTimeout(calculateLayout, 150); // Un poco más de tiempo para asegurar que el DOM esté listo
         window.addEventListener('resize', calculateLayout);
         return () => {
             window.removeEventListener('resize', calculateLayout);
@@ -124,7 +122,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     return (
         <section ref={containerRef} className="h-screen w-full relative overflow-hidden flex flex-col bg-white">
 
-            {/* --- BLOQUE SUPERIOR (Padre con altura dinámica para permitir que el texto suba) --- */}
+            {/* --- BLOQUE SUPERIOR (Padre con altura dinámica) --- */}
             <div className="w-full relative shrink-0 transition-all duration-300 pointer-events-none" style={{ height: `${topBlockHeight}px` }}>
 
                 {/* TÍTULO SECCIÓN */}
@@ -178,10 +176,10 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* --- BLOQUE INFERIOR (TEXTO DINÁMICO) --- */}
-            <div className="w-full px-[120px] pt-[50px] flex relative flex-grow overflow-visible items-stretch">
+            {/* --- BLOQUE DE TEXTO --- */}
+            <div className="w-full h-full px-[120px] pt-[50px] relative overflow-visible">
 
-                {/* Columna Izquierda */}
+                {/* Columna Izquierda (Flujo normal) */}
                 <div ref={col1Ref} className="w-[735px] flex flex-col shrink-0">
                     <div ref={programRef} className="mb-4">
                         <p className="cuerpo text-left">
@@ -209,27 +207,28 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     </div>
                 </div>
 
-                {/* Columna Derecha (Alineada con el borde izquierdo de la imagen superior) */}
-                <div className="w-[735px] ml-auto flex flex-col shrink-0 relative min-h-full">
-                    <div className="flex flex-col h-full justify-end" style={{ paddingBottom: '140px' }}>
-                        <div className="flex flex-col">
-                            {col2Items.map((item, i) => (
-                                <div key={`c2-${i}`} className="mb-4">
-                                    <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
-                                </div>
-                            ))}
-
-                            {/* Nota Final (Dentro de los 140px inferiores) */}
-                            <div ref={noteRef} className="absolute bottom-1 right-0 w-full translate-y-[-10px]">
-                                {data?.intervention?.note && (
-                                    <div className="pt-6 border-t border-vlanc-primary/5">
-                                        <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
-                                            {data?.intervention?.note}
-                                        </p>
-                                    </div>
-                                )}
+                {/* Columna Derecha (Posicionamiento absoluto para independencia total) 
+                    Se asume que la nota va fuera del cálculo del margen de 140px del breakdown
+                */}
+                <div
+                    className="absolute right-[120px] w-[735px] flex flex-col justify-end"
+                    style={{ bottom: '140px' }}
+                >
+                    <div ref={col2ContentRef} className="flex flex-col">
+                        {col2Items.map((item, i) => (
+                            <div key={`c2-${i}`} className="mb-4">
+                                <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
                             </div>
-                        </div>
+                        ))}
+
+                        {/* Nota Final (Sin linea, margen de 1 linea) */}
+                        {data?.intervention?.note && (
+                            <div className="mt-4">
+                                <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
+                                    {data?.intervention?.note}
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
