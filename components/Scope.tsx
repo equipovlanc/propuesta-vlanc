@@ -82,7 +82,8 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             if (col2BreakdownHeight > 0) col2BreakdownHeight -= 16;
 
             // 4. Lógica de Media Adaptativa
-            // El texto de la derecha crece hacia arriba desde el margen inferior (maxBottomY)
+            // El texto de la derecha (breakdown) crece hacia arriba desde el margen inferior (maxBottomY)
+            // La nota es ignorada ya que tiene permiso para estar en el margen.
             const col2TopY = maxBottomY - col2BreakdownHeight;
 
             // La media tiene un gap de 50px con el texto de la derecha
@@ -92,7 +93,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             let finalMediaHeight = initialTopHeight;
             let finalTopBlockHeight = initialTopHeight;
 
-            // Solo reducimos si el texto realmente sube por encima del nivel original
+            // Solo reducimos si el texto realmente sube por encima del nivel original (512px)
             if (newSplitIndex < breakdown.length && idealMediaBottom < initialTopHeight) {
                 finalMediaHeight = idealMediaBottom;
                 finalTopBlockHeight = idealMediaBottom;
@@ -210,26 +211,26 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </div>
 
                 {/* Columna Derecha (Alineada con el borde izquierdo de la imagen superior) */}
-                <div className="w-[735px] ml-auto flex flex-col shrink-0 relative min-h-full">
-                    <div className="flex flex-col h-full justify-end" style={{ paddingBottom: '140px' }}>
-                        <div className="flex flex-col">
-                            {col2Items.map((item, i) => (
-                                <div key={`c2-${i}`} className="mb-4">
-                                    <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
-                                </div>
-                            ))}
+                <div className="w-[735px] ml-auto flex flex-col shrink-0 relative min-h-full justify-end">
 
-                            {/* Nota Final (Dentro de los 140px inferiores) */}
-                            <div ref={noteRef} className="absolute bottom-1 right-0 w-full translate-y-[-10px]">
-                                {data?.intervention?.note && (
-                                    <div className="pt-6 border-t border-vlanc-primary/5">
-                                        <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
-                                            {data?.intervention?.note}
-                                        </p>
-                                    </div>
-                                )}
+                    {/* El cuerpo del breakdown termina a 140px del fondo */}
+                    <div className="flex flex-col">
+                        {col2Items.map((item, i) => (
+                            <div key={`c2-${i}`} className="mb-4">
+                                <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
                             </div>
-                        </div>
+                        ))}
+                    </div>
+
+                    {/* Contenedor del margen inferior (140px) donde vive la nota */}
+                    <div className="h-[140px] w-full pt-4 relative">
+                        {data?.intervention?.note && (
+                            <div ref={noteRef}>
+                                <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
+                                    {data?.intervention?.note}
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
