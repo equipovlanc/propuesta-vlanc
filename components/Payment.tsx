@@ -56,7 +56,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
 
                     {/* COLUMNA IZQUIERDA — Paso 1 */}
                     <motion.div
-                        className="print-force-visible"
+                        className="h-full flex flex-col print-force-visible"
                         initial={getRevealStyle(isPrintMode)}
                         animate={getRevealStyle(effectiveStep >= 1)}
                         transition={{ duration: 0.9, ease: 'easeInOut' }}
@@ -92,20 +92,34 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
 
                     {/* COLUMNA DERECHA + FIRMA — Paso 2 */}
                     <motion.div
-                        className="flex flex-col relative print-force-visible"
+                        className="h-full flex flex-col relative print-force-visible"
                         initial={getRevealStyle(isPrintMode)}
                         animate={getRevealStyle(effectiveStep >= 2)}
                         transition={{ duration: 0.9, ease: 'easeInOut' }}
                     >
                         <h3 className="subtitulo2 mb-10">{data?.finePrint?.title}</h3>
-                        <div className="flex flex-col gap-[2px]">
-                            {(data?.finePrint?.points ?? []).map((point, i) => (
-                                <p key={i} className="cuerpo text-vlanc-secondary/80 !text-[12px] !leading-[1.4]">
-                                    {point}
-                                </p>
-                            ))}
+
+                        {/* Contenedor de puntos con tamaño dinámico */}
+                        <div className="flex-grow">
+                            <div className="flex flex-col gap-[2px]">
+                                {(data?.finePrint?.points ?? []).map((point, i) => {
+                                    const pointsCount = data?.finePrint?.points?.length || 0;
+                                    // Ajuste dinámico de tamaño: 12px base, baja a 11px si > 6 puntos, 10px si > 10 puntos
+                                    let textSizeClass = "!text-[12px]";
+                                    if (pointsCount > 10) textSizeClass = "!text-[10px]";
+                                    else if (pointsCount > 6) textSizeClass = "!text-[11px]";
+
+                                    return (
+                                        <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`}>
+                                            {point}
+                                        </p>
+                                    );
+                                })}
+                            </div>
                         </div>
-                        <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mt-[50px]">
+
+                        {/* FIRMA - Empujada al final con mt-auto */}
+                        <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mt-auto print-force-visible print:border-t-2 print:!border-[#8f4933]">
                             <div className="flex justify-between items-start">
                                 <span className="tabla1">VIVE VLANC SL</span>
                                 <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
