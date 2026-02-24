@@ -221,8 +221,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                             </div>
                         )}
 
-                        <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0" onClick={openModal}>
-                            <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors">TU HOGAR COMO NUNCA LO IMAGINASTE</span>
+                        <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0 print-force-visible print:!bg-[#8f4933] print:opacity-100" onClick={openModal}>
+                            <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors print:text-white">TU HOGAR COMO NUNCA LO IMAGINASTE</span>
                         </button>
 
                         {data?.offerFooterText && <div className="cuerpo text-sm" dangerouslySetInnerHTML={{ __html: data.offerFooterText }} />}

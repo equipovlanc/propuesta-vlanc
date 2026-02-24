@@ -129,7 +129,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                                 );
                             })()}
                             {data?.videoButtonText && (
-                                <button onClick={handleVideoClick} className="flex items-center h-[52px] border border-vlanc-primary text-vlanc-primary px-8 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group outline-none active:scale-[0.98]">
+                                <button onClick={handleVideoClick} className="flex items-center h-[52px] border border-vlanc-primary text-vlanc-primary px-8 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group outline-none active:scale-[0.98] print:hidden">
                                     <span className="boton1 text-vlanc-primary group-hover:text-white">{data.videoButtonText}</span>
                                 </button>
                             )}
