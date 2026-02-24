@@ -244,7 +244,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
                 {/* Nota: Naciendo de arriba hacia abajo desde los 140px */}
                 {data?.intervention?.note && (
-                    <div className="absolute top-[calc(100vh-140px)] w-full pt-1 pointer-events-auto">
+                    <div className="absolute top-[calc(100vh-140px)] w-full pt-1 pointer-events-auto print-force-visible print:top-[940px]">
                         <AnimatedSection hierarchy={2}>
                             <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
                                 {data?.intervention?.note}
