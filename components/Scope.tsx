@@ -26,12 +26,10 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
     // Refs para medición
     const containerRef = useRef<HTMLDivElement>(null);
-    const col1Ref = useRef<HTMLDivElement>(null);
     const programRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const col2ContentRef = useRef<HTMLDivElement>(null);
 
-    // Estados para el layout dinámico
+    // Estados para el layout
     const [splitIndex, setSplitIndex] = useState<number>(breakdown.length);
     const [mediaHeight, setMediaHeight] = useState<number>(512);
     const [showMedia, setShowMedia] = useState(true);
@@ -49,14 +47,12 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
             let currentY = startTopY;
 
-            // 1. Calcular altura del Programa
+            // 1. Altura del Programa
             const programHeight = programRef.current.offsetHeight;
-            currentY += programHeight + 16; // mb-4
+            currentY += programHeight + 20; // Aprox un salto de línea
 
-            // 2. Determinar punto de corte (Split) para Col 1
+            // 2. Determinar Split para Col 1
             let newSplitIndex = breakdown.length;
-            let lastItemBottomY = currentY;
-
             for (let i = 0; i < breakdown.length; i++) {
                 const item = itemRefs.current[i];
                 if (item) {
@@ -66,41 +62,38 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     }
                     if (i < newSplitIndex) {
                         currentY += itemHeight + 16;
-                        lastItemBottomY = currentY - 16;
                     }
                 }
             }
-
             setSplitIndex(newSplitIndex);
 
-            // 3. Medir altura real de la Columna 2
-            let col2Height = 0;
-            if (col2ContentRef.current) {
-                col2Height = col2ContentRef.current.offsetHeight;
+            // 3. Medir altura de Col 2 (Breakdown items en la derecha)
+            let col2BreakdownHeight = 0;
+            for (let i = newSplitIndex; i < breakdown.length; i++) {
+                const item = itemRefs.current[i];
+                if (item) col2BreakdownHeight += item.offsetHeight + 16;
             }
+            if (col2BreakdownHeight > 0) col2BreakdownHeight -= 16;
 
-            // 4. Lógica de Media Adaptativa
-            // La columna derecha está fija en bottom: 140px. Su 'top' visual es:
-            const col2VisualTop = windowHeight - bottomMargin - col2Height;
-
-            // La media tiene un gap de 50px con el inicio del texto de la derecha
+            // 4. Calcular Crecimiento e Impacto en Media
+            // La columna derecha "muere" en maxBottomY (140px del fondo)
+            const col2TopY = maxBottomY - col2BreakdownHeight;
             const mediaMargin = 50;
-            const idealMediaBottom = col2VisualTop - mediaMargin;
+            const idealMediaBottom = col2TopY - mediaMargin;
 
             let finalMediaHeight = initialTopHeight;
             let finalTopBlockHeight = initialTopHeight;
 
-            // Si el texto de la derecha sube por encima del nivel 512, encogemos
+            // Si el texto de la derecha sube por encima del nivel original
             if (newSplitIndex < breakdown.length && idealMediaBottom < initialTopHeight) {
                 finalMediaHeight = idealMediaBottom;
                 finalTopBlockHeight = idealMediaBottom;
             }
 
-            // Ocultar si la reducción supera el 30% (358.4px)
+            // Ocultar si la reducción es > 30% (358.4px)
             if (finalMediaHeight < initialTopHeight * 0.7) {
                 setShowMedia(false);
-                setTopBlockHeight(initialTopHeight);
-                setMediaHeight(0);
+                setTopBlockHeight(initialTopHeight); // Verbo: Mantener bloque superior para titulo
             } else {
                 setShowMedia(true);
                 setMediaHeight(Math.max(0, finalMediaHeight));
@@ -109,7 +102,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         };
 
         calculateLayout();
-        const timeout = setTimeout(calculateLayout, 150); // Un poco más de tiempo para asegurar que el DOM esté listo
+        const timeout = setTimeout(calculateLayout, 100);
         window.addEventListener('resize', calculateLayout);
         return () => {
             window.removeEventListener('resize', calculateLayout);
@@ -122,7 +115,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     return (
         <section ref={containerRef} className="h-screen w-full relative overflow-hidden flex flex-col bg-white">
 
-            {/* --- BLOQUE SUPERIOR (Padre con altura dinámica) --- */}
+            {/* --- BLOQUE SUPERIOR --- */}
             <div className="w-full relative shrink-0 transition-all duration-300 pointer-events-none" style={{ height: `${topBlockHeight}px` }}>
 
                 {/* TÍTULO SECCIÓN */}
@@ -140,16 +133,17 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     <div
                         className="absolute top-0 right-[120px] w-[735px] z-10 overflow-hidden transition-all duration-300 pointer-events-auto"
                         style={{ height: `${mediaHeight}px` }}
+                        data-cursor-ignore
                     >
                         <AnimatedSection className="h-full w-full relative" hierarchy={0}>
-                            {data?.video && (
+                            {data?.video ? (
                                 <video
                                     src={data.video}
                                     autoPlay loop muted playsInline
                                     className="w-full h-full object-cover relative z-10 print:hidden"
                                     data-cursor-ignore
                                 />
-                            )}
+                            ) : null}
                             {imageSrc && (
                                 <div className={`absolute inset-0 w-full h-full z-0 ${data?.video ? 'hidden print:block' : 'block'}`}>
                                     <img src={imageSrc} alt="Scope" className="w-full h-full object-cover" data-cursor-ignore />
@@ -176,11 +170,11 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 </div>
             </div>
 
-            {/* --- BLOQUE DE TEXTO --- */}
-            <div className="w-full h-full px-[120px] pt-[50px] relative overflow-visible">
+            {/* --- BLOQUE DE TEXTO (Distribuido) --- */}
+            <div className="w-full px-[120px] pt-[50px] flex relative flex-grow overflow-visible items-start">
 
-                {/* Columna Izquierda (Flujo normal) */}
-                <div ref={col1Ref} className="w-[735px] flex flex-col shrink-0">
+                {/* Columna Izquierda (Flow normal hacia abajo) */}
+                <div className="w-[735px] flex flex-col shrink-0">
                     <div ref={programRef} className="mb-4">
                         <p className="cuerpo text-left">
                             <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
@@ -191,13 +185,13 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         <div
                             key={i}
                             ref={el => itemRefs.current[i] = el}
-                            className={`mb-4 break-inside-avoid ${i >= splitIndex ? 'hidden' : 'block'}`}
+                            className={`mb-4 ${i >= splitIndex ? 'hidden' : 'block'}`}
                         >
                             <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
                         </div>
                     ))}
 
-                    {/* Elementos invisibles para medición constante */}
+                    {/* Items para medición (invisibles) */}
                     <div className="absolute opacity-0 pointer-events-none -z-10" aria-hidden="true" style={{ width: '735px' }}>
                         {breakdown.map((item, i) => (
                             <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el }}>
@@ -207,28 +201,26 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     </div>
                 </div>
 
-                {/* Columna Derecha (Posicionamiento absoluto para independencia total) 
-                    Se asume que la nota va fuera del cálculo del margen de 140px del breakdown
-                */}
-                <div
-                    className="absolute right-[120px] w-[735px] flex flex-col justify-end"
-                    style={{ bottom: '140px' }}
-                >
-                    <div ref={col2ContentRef} className="flex flex-col">
-                        {col2Items.map((item, i) => (
-                            <div key={`c2-${i}`} className="mb-4">
-                                <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
-                            </div>
-                        ))}
+                {/* Columna Derecha (Crecimiento de abajo hacia arriba) */}
+                <div className="w-[735px] ml-auto flex flex-col shrink-0 relative min-h-full">
+                    {/* Al estar en min-h-full y justify-end, se sitúa abajo y crece arriba */}
+                    <div className="flex flex-col h-full justify-end" style={{ paddingBottom: '140px' }}>
+                        <div className="flex flex-col">
+                            {col2Items.map((item, i) => (
+                                <div key={`c2-${i}`} className="mb-4">
+                                    <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
+                                </div>
+                            ))}
 
-                        {/* Nota Final (Sin linea, margen de 1 linea) */}
-                        {data?.intervention?.note && (
-                            <div className="mt-4">
-                                <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
-                                    {data?.intervention?.note}
-                                </p>
-                            </div>
-                        )}
+                            {/* Nota Final (Situada justo debajo del texto, permitiendo entrar en el margen inferior) */}
+                            {data?.intervention?.note && (
+                                <div className="mt-4">
+                                    <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
+                                        {data?.intervention?.note}
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
