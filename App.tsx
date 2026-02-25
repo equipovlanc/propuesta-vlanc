@@ -410,7 +410,12 @@ const App: React.FC = () => {
   }, []);
 
   // Renders
-  if (!slug) return <StudioLanding />;
+  if (!slug) return (
+    <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
+      <CustomCursor />
+      <StudioLanding />
+    </div>
+  );
   if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center text-vlanc-primary font-bold tracking-widest uppercase">Cargando...</div>;
   if (error) return <div className="h-screen bg-vlanc-bg flex items-center justify-center">{error}</div>;
 

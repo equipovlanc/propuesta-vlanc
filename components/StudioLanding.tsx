@@ -1,9 +1,27 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AnimatedSection from './AnimatedSection';
+import sanityClient from '../sanity/client';
 
 const StudioLanding: React.FC = () => {
   const [projectCode, setProjectCode] = useState('');
+  const [studioLogo, setStudioLogo] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLogo = async () => {
+      try {
+        const query = `*[_type == "proposal"] | order(_createdAt desc)[0]{
+          "mainLogo": logos.mainLogo.asset->url
+        }`;
+        const data = await sanityClient.fetch(query);
+        if (data?.mainLogo) {
+          setStudioLogo(data.mainLogo);
+        }
+      } catch (err) {
+        console.error("Error fetching studio logo:", err);
+      }
+    };
+    fetchLogo();
+  }, []);
 
   const handleAccess = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,8 +36,18 @@ const StudioLanding: React.FC = () => {
         {/* Logo Section */}
         <AnimatedSection>
           <div className="flex flex-col items-center">
-            <span className="text-5xl font-bold tracking-[0.3em] text-vlanc-black font-serif mb-2">VLANC</span>
-            <span className="text-[12px] tracking-[0.2em] text-vlanc-primary font-bold uppercase">Arquitectura + Interiorismo</span>
+            {studioLogo ? (
+              <img
+                src={studioLogo}
+                alt="VLANC Architecture + Interiorismo"
+                className="w-auto h-32 md:h-40 object-contain"
+              />
+            ) : (
+              <div className="flex flex-col items-center">
+                <span className="text-5xl font-bold tracking-[0.3em] text-vlanc-black font-serif mb-2">VLANC</span>
+                <span className="text-[12px] tracking-[0.2em] text-vlanc-primary font-bold uppercase">Arquitectura + Interiorismo</span>
+              </div>
+            )}
           </div>
         </AnimatedSection>
 
