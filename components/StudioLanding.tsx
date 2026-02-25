@@ -40,7 +40,7 @@ const StudioLanding: React.FC = () => {
               <img
                 src={studioLogo}
                 alt="VLANC Architecture + Interiorismo"
-                className="w-auto h-32 md:h-40 object-contain"
+                className="w-full h-auto max-h-64 object-contain"
               />
             ) : (
               <div className="flex flex-col items-center">
