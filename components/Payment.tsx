@@ -74,7 +74,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                                                 <div className="w-[50px] h-[20px] bg-vlanc-primary text-white text-[14px] font-bold flex items-center justify-center mr-4 rounded-[1px] shrink-0">
                                                     {p.percent}
                                                 </div>
-                                                <span className="cuerpo">{p.description}</span>
+                                                <span className="cuerpo" dangerouslySetInnerHTML={{ __html: p.description || '' }} />
                                             </div>
                                         ))}
                                     </div>
@@ -82,9 +82,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                             ))}
                             {data?.finePrint?.invoiceInfo && (
                                 <div className="mt-8">
-                                    <p className="cuerpo font-bold text-[10px] whitespace-pre-line text-vlanc-secondary">
-                                        {data?.finePrint?.invoiceInfo}
-                                    </p>
+                                    <p className="cuerpo font-bold text-[10px] whitespace-pre-line text-vlanc-secondary" dangerouslySetInnerHTML={{ __html: data.finePrint.invoiceInfo }} />
                                 </div>
                             )}
                         </div>
@@ -97,7 +95,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         animate={getRevealStyle(effectiveStep >= 2)}
                         transition={{ duration: 0.9, ease: 'easeInOut' }}
                     >
-                        <h3 className="subtitulo2 mb-10">{data?.finePrint?.title}</h3>
+                        <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: data?.finePrint?.title || '' }} />
 
                         {/* Contenedor de puntos con tamaño dinámico y margen de seguridad de 50px */}
                         <div className="flex-grow mb-[50px]">
@@ -111,9 +109,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                                     else if (pointsCount > 6) textSizeClass = "!text-[13.5px]";
 
                                     return (
-                                        <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`}>
-                                            {point}
-                                        </p>
+                                        <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`} dangerouslySetInnerHTML={{ __html: point }} />
                                     );
                                 })}
                             </div>

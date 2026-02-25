@@ -61,14 +61,14 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                     <div className="relative inline-block">
                                         <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
                                             <span className="font-serif mr-2">{`0${index + 1}`} /</span>
-                                            <span>{s.title}</span>
+                                            <span dangerouslySetInnerHTML={{ __html: s.title || '' }} />
                                         </h3>
                                     </div>
 
                                     {/* Descripción */}
                                     <div className="relative block w-full">
                                         <div className="cuerpo2 text-left">
-                                            <p>{s.description}</p>
+                                            <div dangerouslySetInnerHTML={{ __html: s.description || '' }} />
                                             {index === 4 && (
                                                 <p className="mt-4 font-bold text-vlanc-secondary">
                                                     · Tu interés es el nuestro ·

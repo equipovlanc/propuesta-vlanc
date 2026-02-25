@@ -48,20 +48,20 @@ export const proposalData = {
     },
     mission: {
         image: "",
-        mission: { 
-            title: "la misión.", 
-            subtitle: "Transformar viviendas en hogares", 
-            description: "Encontrar junto a ti la mejor opción y la mejor propuesta para tu nuevo hogar, en función de su esencia y tus necesidades, siguiendo todo el proceso de transformación de la vivienda para que el resultado sea totalmente satisfactorio, con los mínimos agobios, miedos y sorpresas." 
+        mission: {
+            title: "la misión.",
+            subtitle: "Transformar viviendas en hogares",
+            description: "Encontrar junto a ti la mejor opción y la mejor propuesta para tu nuevo hogar, en función de su esencia y tus necesidades, siguiendo todo el proceso de transformación de la vivienda para que el resultado sea totalmente satisfactorio, con los mínimos agobios, miedos y sorpresas."
         },
-        achievements: { 
-            title: "qué vas a conseguir.", 
+        achievements: {
+            title: "qué vas a conseguir.",
             listItems: [
                 "Proyectarás tu soñada futura vivienda, y visualizarás el resultado final antes de que empiece la obra.",
                 "Podrás despreocuparte y dedicarte tiempo a ti y a lo que os gusta, al delegar las gestiones y trámites que suponen llevar una obra adelante.",
                 "Conseguirás estar tranquila económicamente ya que sabrás cuál será el presupuesto definitivo antes de la ejecución.",
                 "Ahorrarás dinero en la contratación, ya que negociaremos por ti la mejor calidad-precio final.",
                 "Y disfrutarás de la creación de tu hogar a través de la experiencia VLANC."
-            ] 
+            ]
         },
     },
     process: {
@@ -80,13 +80,13 @@ export const proposalData = {
     },
     team: {
         title: "conoce a VLANC",
-        purpose: { 
-            title: "Nuestro propósito", 
-            description: "VLANC nace de la inquietud de cuatro profesionales vinculados al mundo de la arquitectura y el diseño por crear un concepto diferente de viviendas. Nuestro propósito es conseguir conjugar los sueños de nuestros clientes con la esencia de las viviendas, para convertirlas en hogares reales." 
+        purpose: {
+            title: "Nuestro propósito",
+            description: "VLANC nace de la inquietud de cuatro profesionales vinculados al mundo de la arquitectura y el diseño por crear un concepto diferente de viviendas. Nuestro propósito es conseguir conjugar los sueños de nuestros clientes con la esencia de las viviendas, para convertirlas en hogares reales."
         },
-        history: { 
-            title: "Nuestra historia", 
-            description: "VLANC nace en el año 2020, en pleno confinamiento de la COVID-19. Se crea a partir de la asociación de cuatro profesionales independientes: Alba y Laura, diseñadoras de interiores, David, arquitecto técnico y Emilio, arquitecto, acumulando una experiencia de más de 350 obras." 
+        history: {
+            title: "Nuestra historia",
+            description: "VLANC nace en el año 2020, en pleno confinamiento de la COVID-19. Se crea a partir de la asociación de cuatro profesionales independientes: Alba y Laura, diseñadoras de interiores, David, arquitecto técnico y Emilio, arquitecto, acumulando una experiencia de más de 350 obras."
         },
         members: [
             { name: "EMILIO CORRECHER", role: "Arquitecto", image: "" },
@@ -121,12 +121,12 @@ export const proposalData = {
         },
         image: ""
     },
-    scopePhases1: { 
-        title: "trabajos contemplados.", 
+    scopePhases1: {
+        title: "trabajos contemplados.",
         phases: [
             {
                 title: "1. FASE ANTEPROYECTO",
-                image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1034&auto=format&fit=crop", 
+                image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1034&auto=format&fit=crop",
                 video: "#",
                 videoButtonText: "VER VIDEO",
                 guaranteeText: "GARANTÍA 20 / Proceso de creación de hogares",
@@ -139,7 +139,7 @@ export const proposalData = {
             },
             {
                 title: "2. FASE INTERIORISMO",
-                image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1000&auto=format&fit=crop", 
+                image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1000&auto=format&fit=crop",
                 guaranteeText: "GARANTÍA / Soporte Ilimitado",
                 subPhases: [
                     { number: "2.1", title: "MODELADO 3D + PROPUESTA DE ACABADOS", description: "Realizaremos un 3D con una preselección de materiales y acabados asociados al ámbito de intervención según tus preferencias." },
@@ -151,39 +151,39 @@ export const proposalData = {
                     { number: "2.7", title: "DOCUMENTO", description: "Te entregamos el PROYECTO DE INTERIORISMO, documento explicativo de la actuación donde quedan detallados los materiales elegidos y su colocación, así como los modelos de griferías y el mobiliario a medida derivado del proceso de diseño, con imágenes fotorrealistas, una por estancia, para que puedas ver cómo se quedará tu hogar antes de ejecutarlo." }
                 ]
             }
-        ] 
+        ]
     },
-    scopePhases2: { 
-        title: "trabajos contemplados.", 
+    scopePhases2: {
+        title: "trabajos contemplados.",
         phases: [
             {
                 title: "3. FASE CONTRATACIÓN",
                 image: "https://images.unsplash.com/photo-1556912172-45b7abe8d7e1?q=80&w=1000&auto=format&fit=crop",
                 subPhases: [
-                     { number: "3.1", title: "GESTIÓN DE PRESUPUESTO DE EJECUCIÓN", description: "Visitamos la vivienda con el constructor y oficios de nuestra confianza que mejores garantías de calidad y precio nos dan, para explicarles el proyecto, facilitarles la MEDICIÓN y los PLANOS DE EJECUCIÓN. Documentos necesarios para que presupuesten todo aquello que está contemplado en el diseño." },
-                     { number: "3.2", title: "NEGOCIACIÓN DE PRESUPUESTO", description: "Realizamos un análisis exhaustivo del presupuesto o presupuestos recibidos, y negociamos por ti un precio justo y acorde a mercado y a las calidades solicitadas, para que no pagues de más por la obra, sin renunciar a tu objetivo de calidad." },
-                     { number: "3.3", title: "DOCUMENTO", description: "En esta fase os entregaremos los PRESUPUESTOS recibidos, así como un resumen económico de la intervención según la hemos diseñado, junto a la MEDICIÓN y los PLANOS DE EJECUCIÓN a partir de los cuales se ha obtenido el precio de la intervención." }
+                    { number: "3.1", title: "GESTIÓN DE PRESUPUESTO DE EJECUCIÓN", description: "Visitamos la vivienda con el constructor y oficios de nuestra confianza que mejores garantías de calidad y precio nos dan, para explicarles el proyecto, facilitarles la MEDICIÓN y los PLANOS DE EJECUCIÓN. Documentos necesarios para que presupuesten todo aquello que está contemplado en el diseño." },
+                    { number: "3.2", title: "NEGOCIACIÓN DE PRESUPUESTO", description: "Realizamos un análisis exhaustivo del presupuesto o presupuestos recibidos, y negociamos por ti un precio justo y acorde a mercado y a las calidades solicitadas, para que no pagues de más por la obra, sin renunciar a tu objetivo de calidad." },
+                    { number: "3.3", title: "DOCUMENTO", description: "En esta fase os entregaremos los PRESUPUESTOS recibidos, así como un resumen económico de la intervención según la hemos diseñado, junto a la MEDICIÓN y los PLANOS DE EJECUCIÓN a partir de los cuales se ha obtenido el precio de la intervención." }
                 ]
             },
             {
                 title: "4. FASE DOCUMENTACIÓN",
                 image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop",
                 subPhases: [
-                     { number: "4.1", title: "PROYECTO BÁSICO Y DE EJECUCIÓN", description: "Documento técnico necesario para la solicitud de la licencia de obras y obtención de financiación, para obras de reforma interior.", note: "NOTA: Incluye VISADO por Colegio Profesional imprescindible en el caso de solicitud de financiación bancaria." },
-                     { number: "4.2", title: "ESTUDIO DE SEGURIDAD Y SALUD", description: "Documento que contiene las medidas y sistemas de seguridad necesarios para ejecutar la obra con arreglo a las normativas de Seguridad y Salud Laboral." },
-                     { number: "4.3", title: "ESTUDIO DE GESTIÓN DE RESIDUOS", description: "Documento firmado por el productor de los residuos, el promotor, que tiene por objeto establecer el régimen jurídico de la producción y gestión de los residuos de construcción." },
-                     { number: "4.4", title: "CUESTIONARIO ESTADÍSTICO DEL MINISTERIO DE FOMENTO", description: "Impreso donde el promotor y el técnico responsable deberán consignar los datos de la obra." }
+                    { number: "4.1", title: "PROYECTO BÁSICO Y DE EJECUCIÓN", description: "Documento técnico necesario para la solicitud de la licencia de obras y obtención de financiación, para obras de reforma interior.", note: "NOTA: Incluye VISADO por Colegio Profesional imprescindible en el caso de solicitud de financiación bancaria." },
+                    { number: "4.2", title: "ESTUDIO DE SEGURIDAD Y SALUD", description: "Documento que contiene las medidas y sistemas de seguridad necesarios para ejecutar la obra con arreglo a las normativas de Seguridad y Salud Laboral." },
+                    { number: "4.3", title: "ESTUDIO DE GESTIÓN DE RESIDUOS", description: "Documento firmado por el productor de los residuos, el promotor, que tiene por objeto establecer el régimen jurídico de la producción y gestión de los residuos de construcción." },
+                    { number: "4.4", title: "CUESTIONARIO ESTADÍSTICO DEL MINISTERIO DE FOMENTO", description: "Impreso donde el promotor y el técnico responsable deberán consignar los datos de la obra." }
                 ]
             },
             {
                 title: "5. FASE OBRA",
                 image: "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=1000&auto=format&fit=crop",
                 subPhases: [
-                     { number: "5.1", title: "GESTIONES ADMINISTRATIVAS", description: "Una vez elaborada la documentación técnica nos encargamos de toda la gestión de licencias y permisos con la administración, de forma que quede todo listo para poder empezar las obras." },
-                     { number: "5.2", title: "GESTIÓN DE OBRA", description: "Planificamos, coordinamos y supervisamos regularmente la obra y nos aseguramos de que el proyecto se lleve a cabo tal cual lo hemos diseñado contigo. En caso de incidencias o cambios durante la ejecución, buscamos soluciones de manera fácil y ventajosa para ti." }
+                    { number: "5.1", title: "GESTIONES ADMINISTRATIVAS", description: "Una vez elaborada la documentación técnica nos encargamos de toda la gestión de licencias y permisos con la administración, de forma que quede todo listo para poder empezar las obras." },
+                    { number: "5.2", title: "GESTIÓN DE OBRA", description: "Planificamos, coordinamos y supervisamos regularmente la obra y nos aseguramos de que el proyecto se lleve a cabo tal cual lo hemos diseñado contigo. En caso de incidencias o cambios durante la ejecución, buscamos soluciones de manera fácil y ventajosa para ti." }
                 ]
             }
-        ] 
+        ]
     },
     investment: {
         title: "la inversión.",
@@ -218,9 +218,9 @@ export const proposalData = {
             title: "Condiciones especiales",
             description: "Para VLANC es muy importante la organización y la confianza. Teniendo en cuenta que a fecha de hoy tu proyecto podríamos empezarlo la tercera semana de septiembre, si cuentas con nosotros hasta el próximo 24 de junio de 2025 a las 23:59 se te aplicará un descuento de un 20% sobre el Plan que elijas.",
             discountedPlans: [
-                {name: "PLAN ESENCIA", originalPrice: "0000 €", discountedPrice: "0000 €"},
-                {name: "PLAN VIVE", originalPrice: "0000 €", discountedPrice: "0000 €"},
-                {name: "PLAN VLANC", originalPrice: "0000 €", discountedPrice: "0000 €"}
+                { name: "PLAN ESENCIA", originalPrice: "0000 €", discountedPrice: "0000 €" },
+                { name: "PLAN VIVE", originalPrice: "0000 €", discountedPrice: "0000 €" },
+                { name: "PLAN VLANC", originalPrice: "0000 €", discountedPrice: "0000 €" }
             ]
         },
         launchOffer: {
@@ -236,16 +236,16 @@ export const proposalData = {
     },
     payment: {
         title: "la inversión.",
-        paymentMethods: { 
-            title: "Formas de pago", 
+        paymentMethods: {
+            title: "Formas de pago",
             plans: [
-                { title: "PLAN ESENCIA", payments: [{percent: "40%", description: "Provisión de fondos"}, {percent: "40%", description: "Entrega Proyecto Distribución"}, {percent: "20%", description: "Entrega Proyecto Interiorismo"}] }
-            ] 
+                { title: "PLAN ESENCIA", payments: [{ percent: "40%", description: "Provisión de fondos" }, { percent: "40%", description: "Entrega Proyecto Distribución" }, { percent: "20%", description: "Entrega Proyecto Interiorismo" }] }
+            ]
         },
-        finePrint: { 
-            title: "La letra pequeña", 
-            points: ["Precio IVA no incluido (21%)", "Validez del presupuesto: 20 días"], 
-            invoiceInfo: "VIVE VLANC SL\nCAJAMAR: ES33 3058 2599 2627 2000 6941" 
+        finePrint: {
+            title: "La letra pequeña",
+            points: ["Precio IVA no incluido (21%)", "Validez del presupuesto: 20 días"],
+            invoiceInfo: "VIVE VLANC SL\nCAJAMAR: ES33 3058 2599 2627 2000 6941"
         }
     },
     guarantees: {
@@ -259,7 +259,7 @@ export const proposalData = {
     premiumServices: {
         title: "servicios premium.",
         services: [
-            { subtitle: "Soluciones en el momento justo", title: "ASISTENCIA EN OBRA", description: [{text: "Nuestro equipo se traslada a tu inmueble para resolver dudas durante la ejecución.", style: 'normal'}], price: "150€ / visita" }
+            { subtitle: "Soluciones en el momento justo", title: "ASISTENCIA EN OBRA", description: [{ text: "Nuestro equipo se traslada a tu inmueble para resolver dudas durante la ejecución.", style: 'normal' }], price: "150€ / visita" }
         ]
     },
     contact: {
@@ -267,8 +267,8 @@ export const proposalData = {
         callToAction: "¿Nos dejas acompañarte?",
         location: { title: "Dónde estamos", address: "C/ Na Saurina d’Entença, 69 Bajo | ALCOI", email: "hola@vivevlanc.com" },
         // Actualizado teléfonos para coincidir con el esquema nuevo (Objetos con number y icon)
-        phone: { 
-            title: "Contáctanos", 
+        phone: {
+            title: "Contáctanos",
             landline: { number: "(+34) 965 54 73 24", icon: "" },
             mobile: { number: "613 05 44 80", icon: "" }
         },

@@ -40,28 +40,21 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
       {/* Esquina Superior Izquierda: Info Técnica (J2) */}
       <AnimatedSection direction="right" hierarchy={2} className="absolute top-20 left-20 text-left pointer-events-none">
         <div className="flex flex-col gap-6">
+          {/* Código y Título: Tracking normal explícito, sin negrita */}
           <div className="text-[14px] font-serif text-vlanc-black leading-tight tracking-normal">
-            <p className="font-normal">{headerData?.projectCode}</p>
-            <p className="font-normal">{headerData?.title}</p>
+              <p className="font-normal" dangerouslySetInnerHTML={{ __html: headerData?.projectCode || '' }} />
+              <p className="font-normal" dangerouslySetInnerHTML={{ __html: headerData?.title || '' }} />
           </div>
+          
           <div className="w-[52px] h-[2.4px] bg-[#8f4933]"></div>
+
+          {/* Nombre y Ubicación: Sin negrita (font-normal) */}
           <div className="text-[14px] font-sans text-vlanc-secondary leading-tight tracking-wider">
-            <p className="font-normal">{data?.clientName || headerData?.clientName}</p>
-            <p className="opacity-80 font-normal">{headerData?.location}</p>
+              <p className="font-normal" dangerouslySetInnerHTML={{ __html: data?.clientName || headerData?.clientName || '' }} />
+              <p className="opacity-80 font-normal" dangerouslySetInnerHTML={{ __html: headerData?.location || '' }} />
           </div>
         </div>
       </AnimatedSection>
-
-      {/* Texto Secundario en Centro (J2) */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="translate-y-[-160px]">
-          <AnimatedSection direction="up" hierarchy={2}>
-            <p className="text-[40px] text-vlanc-secondary font-sans font-normal leading-tight text-center">
-              {data?.clientName || headerData?.clientName}
-            </p>
-          </AnimatedSection>
-        </div>
-      </div>
 
       {/* Esquina Inferior Derecha: Logo (J3) */}
       <AnimatedSection direction="left" hierarchy={3} className="absolute bottom-[11px] right-[108px] text-right flex flex-col items-end">

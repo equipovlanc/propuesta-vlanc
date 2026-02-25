@@ -80,13 +80,13 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                                 rel="noopener noreferrer"
                                                 className="block cursor-pointer no-underline"
                                             >
-                                                <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors">{testimonial.name}</h4>
-                                                <p className="cuerpo">"{testimonial.quote}"</p>
+                                                <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors" dangerouslySetInnerHTML={{ __html: testimonial.name || '' }} />
+                                                <p className="cuerpo" dangerouslySetInnerHTML={{ __html: `"${testimonial.quote}"` }} />
                                             </a>
                                         ) : (
                                             <div>
-                                                <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors">{testimonial.name}</h4>
-                                                <p className="cuerpo">"{testimonial.quote}"</p>
+                                                <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors" dangerouslySetInnerHTML={{ __html: testimonial.name || '' }} />
+                                                <p className="cuerpo" dangerouslySetInnerHTML={{ __html: `"${testimonial.quote}"` }} />
                                             </div>
                                         )}
                                     </AnimatedSection>

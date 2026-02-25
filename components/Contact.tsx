@@ -145,14 +145,14 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                 >
                     <div className="flex flex-col space-y-12 text-left w-full max-w-md translate-x-[100px]">
                         <div>
-                            <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ {data?.location?.title}</h4>
+                            <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black" dangerouslySetInnerHTML={{ __html: `/ ${data?.location?.title || ''}` }} />
                             <div className="cuerpo space-y-1 text-vlanc-secondary pl-6">
-                                <p>{data?.location?.address}</p>
-                                <p className="font-bold">{data?.location?.email}</p>
+                                <p dangerouslySetInnerHTML={{ __html: data?.location?.address || '' }} />
+                                <p className="font-bold" dangerouslySetInnerHTML={{ __html: data?.location?.email || '' }} />
                             </div>
                         </div>
                         <div>
-                            <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ {data?.phone?.title}</h4>
+                            <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black" dangerouslySetInnerHTML={{ __html: `/ ${data?.phone?.title || ''}` }} />
                             <div className="cuerpo space-y-4 text-vlanc-secondary pl-6">
                                 {data?.phone?.landline?.number && (
                                     <div className="flex items-center gap-4">
@@ -161,7 +161,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                                                 ? <img src={data.phone.landline.icon} alt="Tel" className="w-full h-full object-contain" />
                                                 : <div className="w-4 h-4 bg-vlanc-secondary/20 rounded-full" />}
                                         </div>
-                                        <p className="text-[15px]">{data.phone.landline.number}</p>
+                                        <p className="text-[15px]" dangerouslySetInnerHTML={{ __html: data.phone.landline.number || '' }} />
                                     </div>
                                 )}
                                 {data?.phone?.mobile?.number && (
@@ -171,22 +171,21 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                                                 ? <img src={data.phone.mobile.icon} alt="Mobile" className="w-full h-full object-contain" />
                                                 : <div className="w-4 h-4 bg-vlanc-secondary/20 rounded-full" />}
                                         </div>
-                                        <p className="text-[15px]">{data.phone.mobile.number}</p>
+                                        <p className="text-[15px]" dangerouslySetInnerHTML={{ __html: data.phone.mobile.number || '' }} />
                                     </div>
                                 )}
                             </div>
                         </div>
                         <div>
-                            <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ {data?.web?.title}</h4>
+                            <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black" dangerouslySetInnerHTML={{ __html: `/ ${data?.web?.title || ''}` }} />
                             <div className="pl-6">
                                 <a
                                     href={data?.web?.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="cuerpo border-b border-vlanc-primary text-vlanc-secondary hover:text-vlanc-primary transition-colors"
-                                >
-                                    {data?.web?.displayText}
-                                </a>
+                                    dangerouslySetInnerHTML={{ __html: data?.web?.displayText || '' }}
+                                />
                             </div>
                         </div>
                         <div>

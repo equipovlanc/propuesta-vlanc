@@ -156,7 +156,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
             <div className="w-1/2 h-full flex flex-col pr-[69.5px] relative print:overflow-visible">
                 <div className="shrink-0 mb-6">
                     <AnimatedSection hierarchy={1}>
-                        <h2 className="subtitulo1">{investmentTitle || "la inversión."}</h2>
+                        <h2 className="subtitulo1" dangerouslySetInnerHTML={{ __html: investmentTitle || "la inversión." }} />
                     </AnimatedSection>
                     <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
@@ -165,7 +165,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 1)}`}>
                         {data?.conditionalOffer && (
                             <div className="mb-4">
-                                <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.conditionalOffer.title}</h3>
+                                <h3 className="subtitulo2 mb-2 text-vlanc-black" dangerouslySetInnerHTML={{ __html: data.conditionalOffer.title || '' }} />
                                 <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.conditionalOffer.description || '' }} />
                             </div>
                         )}
@@ -179,7 +179,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 2)}`}>
                         {data?.launchOffer && (
                             <div className="mb-4">
-                                <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.launchOffer.title}</h3>
+                                <h3 className="subtitulo2 mb-2 text-vlanc-black" dangerouslySetInnerHTML={{ __html: data.launchOffer.title || '' }} />
                                 <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.launchOffer.description || '' }} />
                             </div>
                         )}

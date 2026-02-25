@@ -108,19 +108,13 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
                 {step >= 1 && (
                     <div className="flex flex-col">
                         <AnimatedSection hierarchy={1}>
-                            <h2 className="subtitulo1 leading-none">
-                                {data?.mission?.title || "la misión."}
-                            </h2>
+                            <h2 className="subtitulo1 leading-none" dangerouslySetInnerHTML={{ __html: data?.mission?.title || "la misión." }} />
                         </AnimatedSection>
                         <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12" />
 
                         <AnimatedSection hierarchy={2}>
-                            <h3 className="subtitulo2 mb-6 leading-tight max-w-sm">
-                                {data?.mission?.subtitle}
-                            </h3>
-                            <p className="cuerpo w-full">
-                                {data?.mission?.description}
-                            </p>
+                            <h3 className="subtitulo2 mb-6 leading-tight max-w-sm" dangerouslySetInnerHTML={{ __html: data?.mission?.subtitle || '' }} />
+                            <p className="cuerpo w-full" dangerouslySetInnerHTML={{ __html: data?.mission?.description || '' }} />
                         </AnimatedSection>
                     </div>
                 )}
@@ -129,18 +123,14 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
                 {step >= 2 && (
                     <div className="flex flex-col">
                         <AnimatedSection hierarchy={1}>
-                            <h2 className="subtitulo1 leading-none">
-                                {data?.achievements?.title || "qué vas a conseguir."}
-                            </h2>
+                            <h2 className="subtitulo1 leading-none" dangerouslySetInnerHTML={{ __html: data?.achievements?.title || "qué vas a conseguir." }} />
                         </AnimatedSection>
                         <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12" />
 
                         <AnimatedSection hierarchy={2}>
                             <ul className="space-y-4 w-full">
                                 {(data?.achievements?.listItems ?? []).map((item, i) => (
-                                    <li key={i} className="cuerpo">
-                                        {item}
-                                    </li>
+                                    <li key={i} className="cuerpo" dangerouslySetInnerHTML={{ __html: item }} />
                                 ))}
                             </ul>
                         </AnimatedSection>

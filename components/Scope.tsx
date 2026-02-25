@@ -186,11 +186,11 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 {/* Datos Técnicos */}
                 <div ref={infoBlockRef}>
                     <AnimatedSection hierarchy={2}>
-                        <h3 className="subtitulo2 mb-6">{data?.intervention?.title}</h3>
+                        <h3 className="subtitulo2 mb-6" dangerouslySetInnerHTML={{ __html: data?.intervention?.title || '' }} />
                         <div className="space-y-4 cuerpo text-left">
-                            <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> {data?.intervention?.location}</p>
-                            <p><strong className="font-bold uppercase">TIPO DE PROYECTO:</strong> {data?.intervention?.projectType}</p>
-                            <p><strong className="font-bold uppercase">ÁMBITO DE INTERVENCIÓN:</strong> {data?.intervention?.scope}</p>
+                            <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.location || '' }} /></p>
+                            <p><strong className="font-bold uppercase">TIPO DE PROYECTO:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.projectType || '' }} /></p>
+                            <p><strong className="font-bold uppercase">ÁMBITO DE INTERVENCIÓN:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.scope || '' }} /></p>
                         </div>
                     </AnimatedSection>
                 </div>

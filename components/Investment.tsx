@@ -70,9 +70,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                             dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }}
                         />
                         {data?.highlightPhrase && (
-                            <p className="cuerpo2 font-bold text-vlanc-black">
-                                {data.highlightPhrase}
-                            </p>
+                            <p className="cuerpo2 font-bold text-vlanc-black" dangerouslySetInnerHTML={{ __html: data.highlightPhrase }} />
                         )}
                         <div
                             className="cuerpo [&>strong]:font-bold"
@@ -95,7 +93,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             >
                                 <h3 className="font-sans font-bold text-[15px] uppercase leading-tight text-vlanc-black">
-                                    {p.name}_
+                                    <span dangerouslySetInnerHTML={{ __html: `${p.name}_` }} />
                                 </h3>
                                 <div
                                     className="cuerpo [&>strong]:font-bold"
@@ -151,7 +149,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                     >
                                         <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
-                                        <span className={`tabla1 whitespace-nowrap ${step === i + 1 ? 'text-vlanc-secondary' : ''}`}>{h}</span>
+                                        <span className={`tabla1 whitespace-nowrap ${step === i + 1 ? 'text-vlanc-secondary' : ''}`} dangerouslySetInnerHTML={{ __html: h }} />
                                     </motion.div>
                                 ))}
                             </div>
@@ -174,7 +172,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                     return (
                                         <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`}>
                                             <div className="px-4 leading-tight py-1">
-                                                <span className="tabla2">{row.label}</span>
+                                                <span className="tabla2" dangerouslySetInnerHTML={{ __html: row.label }} />
                                             </div>
                                             {(row.checks ?? []).map((isChecked, idx) => (
                                                 <motion.div
