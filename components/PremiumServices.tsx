@@ -114,33 +114,37 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             {/* Right Column: Imagen (J0) */}
             {/* CAMBIO: Se centra verticalmente (justify-center) y se mantiene a la derecha (items-end pr-[120px]). Se elimina pt-[150px]. */}
             <div className="flex-grow h-full bg-white flex flex-col justify-center items-end pr-[120px] relative overflow-hidden z-0">
-                <AnimatedSection hierarchy={0}>
-                    <div className="w-[827px] h-[709px] relative shrink-0">
-                        {imageSrc ? (
-                            <div className="w-full h-full relative">
-                                <img src={imageSrc} alt={data?.title} className="w-full h-full object-cover" />
-                                <div
-                                    className="absolute inset-0 pointer-events-none transition-colors duration-1000"
-                                    style={{ backgroundColor: `rgba(143, 73, 51, ${imageOpacity / 100})` }}
-                                />
-                            </div>
-                        ) : (
-                            <div className="w-full h-full bg-vlanc-black/5 flex items-center justify-center">
-                                <span className="text-[10px] uppercase tracking-widest text-vlanc-black/20">Imagen 827x709</span>
-                            </div>
-                        )}
-                    </div>
-                </AnimatedSection>
-
-                {/* Nota Bajo Imagen (Extra Note) */}
-                {data?.showExtraNote && data?.extraNote && (
-                    <AnimatedSection hierarchy={2} className="w-full mt-[50px]">
-                        <p
-                            className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full text-right whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary"
-                            dangerouslySetInnerHTML={{ __html: data.extraNote }}
-                        />
+                <div className="relative">
+                    <AnimatedSection hierarchy={0}>
+                        <div className="w-[827px] h-[709px] relative shrink-0">
+                            {imageSrc ? (
+                                <div className="w-full h-full relative">
+                                    <img src={imageSrc} alt={data?.title} className="w-full h-full object-cover" />
+                                    <div
+                                        className="absolute inset-0 pointer-events-none transition-colors duration-1000"
+                                        style={{ backgroundColor: `rgba(143, 73, 51, ${imageOpacity / 100})` }}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="w-full h-full bg-vlanc-black/5 flex items-center justify-center">
+                                    <span className="text-[10px] uppercase tracking-widest text-vlanc-black/20">Imagen 827x709</span>
+                                </div>
+                            )}
+                        </div>
                     </AnimatedSection>
-                )}
+
+                    {/* Nota Bajo Imagen (Extra Note) - Posición Absoluta para no mover la imagen */}
+                    {data?.showExtraNote && data?.extraNote && (
+                        <div className="absolute top-full right-0 w-full mt-[50px] pointer-events-none">
+                            <AnimatedSection hierarchy={2}>
+                                <p
+                                    className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full text-right whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary"
+                                    dangerouslySetInnerHTML={{ __html: data.extraNote }}
+                                />
+                            </AnimatedSection>
+                        </div>
+                    )}
+                </div>
             </div>
         </section>
     );
