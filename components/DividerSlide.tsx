@@ -231,8 +231,8 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
 
                     {/* IMAGE CONTAINER */}
                     <motion.div
-                        className="w-full h-full absolute inset-0"
-                        initial={{ opacity: 0 }}
+                        className="w-full h-full absolute inset-0 print-force-visible"
+                        initial={isPrintMode ? { opacity: 1 } : { opacity: 0 }}
                         animate={{ opacity: isImageVisible ? 1 : 0 }}
                         transition={{ duration: 1.5, ease: "easeInOut" }}
                         style={{ pointerEvents: isImageVisible ? 'auto' : 'none' }}
@@ -248,12 +248,12 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
 
                 <motion.div
                     className="mt-12 text-right print-force-visible"
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={isPrintMode ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     animate={{
-                        opacity: (isSectionCompleted || videoFinished) ? 1 : 0,
-                        y: (isSectionCompleted || videoFinished) ? 0 : 20
+                        opacity: (isSectionCompleted || videoFinished || isPrintMode) ? 1 : 0,
+                        y: (isSectionCompleted || videoFinished || isPrintMode) ? 0 : 20
                     }}
-                    transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || videoFinished) ? 0.5 : 0 }}
+                    transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || videoFinished || isPrintMode) ? 0.5 : 0 }}
                 >
                     <h2 className="especial2">{data?.text || "¿Nos dejas acompañarte?"}</h2>
                 </motion.div>
