@@ -39,7 +39,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {/* Fase 3 */}
                         <div>
                             <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
-                                <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[0]?.title}</h3>
+                                <h3 className="subtitle-md text-vlanc-secondary font-bold" dangerouslySetInnerHTML={{ __html: data?.phases?.[0]?.title || '' }} />
                             </div>
                             <div className="space-y-6">
                                 {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
@@ -68,7 +68,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                                                 className="whitespace-pre-line"
                                                 dangerouslySetInnerHTML={{ __html: sub.description || '' }}
                                             />
-                                            {sub.note && <p className="text-[10px] italic text-vlanc-black/50 mt-2">{sub.note}</p>}
+                                            {sub.note && <p className="text-[10px] italic text-vlanc-black/50 mt-2" dangerouslySetInnerHTML={{ __html: sub.note }} />}
                                         </div>
                                     ))}
                                 </div>
