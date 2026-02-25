@@ -69,9 +69,23 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
     // Effect for programmatic playback on scroll
     useEffect(() => {
         if (step === 1 && !isSectionCompleted && videoRef.current) {
-            videoRef.current.play().catch(error => {
-                console.error("Video playback was prevented by the browser:", error);
-            });
+            // Slight delay to ensure page transition has progressed
+            const timer = setTimeout(() => {
+                if (!videoRef.current) return;
+
+                const playPromise = videoRef.current.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.warn("Unmuted play failed, trying muted fallback:", error);
+                        if (videoRef.current) {
+                            videoRef.current.muted = true;
+                            setIsMuted(true);
+                            videoRef.current.play().catch(e => console.error("Muted play also failed:", e));
+                        }
+                    });
+                }
+            }, 150);
+            return () => clearTimeout(timer);
         }
     }, [step, isSectionCompleted]);
 
@@ -173,6 +187,7 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                                     ref={videoRef}
                                     src={videoSrc}
                                     playsInline
+                                    muted={isMuted}
                                     onEnded={handleVideoEnd}
                                     className="w-full h-full object-contain shadow-xl rounded-[1px]"
                                 />
