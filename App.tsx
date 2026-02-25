@@ -103,7 +103,7 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-  // Navigation Logic defined BEFORE sections to be used in closure
+
   const navigate = (newIndex: number) => {
     if (newIndex < 0) return;
     if (newIndex === currentIndex) return;
@@ -165,6 +165,12 @@ const App: React.FC = () => {
 
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 1000);
+
+    // Actualizamos el hash para persistencia (URL)
+    const nextSectionId = sectionsRef.current[newIndex]?.id;
+    if (nextSectionId) {
+      window.location.hash = nextSectionId;
+    }
   };
 
   const navigateToId = (id: string) => {
@@ -261,6 +267,39 @@ const App: React.FC = () => {
   sectionsRef.current = sections;
 
 
+  // Sync currentIndex and internalStep with URL hash on load and hash change
+  useEffect(() => {
+    if (!proposalData || !sections.length) return;
+
+    const handleHashSync = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash) {
+        // Formato esperado: sectionId o sectionId:step
+        const [sectionId, stepStr] = hash.split(':');
+        const targetIndex = sections.findIndex(s => s.id === sectionId);
+
+        if (targetIndex !== -1 && targetIndex !== currentIndex) {
+          // Si estamos cambiando de sección, forzamos la navegación sin animación para que sea instantáneo al recargar
+          setCurrentIndex(targetIndex);
+          if (stepStr !== undefined) {
+            setInternalStep(parseInt(stepStr, 10) || 0);
+          }
+        } else if (targetIndex === currentIndex && stepStr !== undefined) {
+          const step = parseInt(stepStr, 10) || 0;
+          if (step !== internalStep) {
+            setInternalStep(step);
+          }
+        }
+      }
+    };
+
+    // Al cargar los datos por primera vez (o si cambia el slug)
+    handleHashSync();
+
+    window.addEventListener('hashchange', handleHashSync);
+    return () => window.removeEventListener('hashchange', handleHashSync);
+  }, [proposalData, sections, currentIndex, internalStep]);
+
   // Event Listeners
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -330,6 +369,21 @@ const App: React.FC = () => {
 
       }, 50);
     };
+
+    // Efecto para actualizar el hash cuando cambia el internalStep (opcional, pero útil para persistencia fina)
+    const updateHashWithStep = () => {
+      const activeSection = sections[currentIndex];
+      if (activeSection && [
+        'mission', 'process', 'investment', 'payment', 'special-offers', 'divider-slide'
+      ].includes(activeSection.id)) {
+        const newHash = `${activeSection.id}:${internalStep}`;
+        if (window.location.hash !== `#${newHash}`) {
+          // Usamos replaceState para no llenar el historial con cada pequeño paso de scroll
+          window.history.replaceState(null, '', `#${newHash}`);
+        }
+      }
+    };
+    updateHashWithStep();
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isAnimating) return;
