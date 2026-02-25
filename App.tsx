@@ -461,7 +461,7 @@ const App: React.FC = () => {
           />
         )}
         <div className="relative w-full h-full perspective-[1000px]">
-          <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <AnimatePresence initial={true} custom={direction} mode="popLayout">
             <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
               {activeSection.comp}
             </SectionSlide>
