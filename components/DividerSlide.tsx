@@ -229,8 +229,8 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                     className="mt-12 text-right print-force-visible"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{
-                        opacity: (isSectionCompleted || videoFinished || step >= 1) ? 1 : 0,
-                        y: (isSectionCompleted || videoFinished || step >= 1) ? 0 : 20
+                        opacity: (isSectionCompleted || videoFinished) ? 1 : 0,
+                        y: (isSectionCompleted || videoFinished) ? 0 : 20
                     }}
                     transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || videoFinished) ? 0.5 : 0 }}
                 >
