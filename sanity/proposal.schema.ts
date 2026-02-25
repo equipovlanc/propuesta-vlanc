@@ -388,7 +388,7 @@ export default defineType({
                 }),
                 defineField({
                     name: 'video',
-                    title: 'Video (Opcional, se reproduce al scrollear)',
+                    title: 'Video Personalizado Expediente',
                     type: 'file',
                     options: { accept: 'video/*' }
                 }),
