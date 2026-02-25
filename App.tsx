@@ -29,7 +29,14 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Virtual Scroll State
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#page-')) {
+      const index = parseInt(hash.replace('#page-', ''), 10);
+      return isNaN(index) ? 0 : index;
+    }
+    return 0;
+  });
   const [direction, setDirection] = useState(0); // 1 = forward, -1 = backward
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -166,6 +173,11 @@ const App: React.FC = () => {
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 1000);
   };
+
+  // Sync index to URL hash
+  useEffect(() => {
+    window.location.hash = `page-${currentIndex}`;
+  }, [currentIndex]);
 
   const navigateToId = (id: string) => {
     const index = sections.findIndex(s => s.id === id);
@@ -402,7 +414,7 @@ const App: React.FC = () => {
   if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center text-vlanc-primary font-bold tracking-widest uppercase">Cargando...</div>;
   if (error) return <div className="h-screen bg-vlanc-bg flex items-center justify-center">{error}</div>;
 
-  const activeSection = sections[currentIndex];
+  const activeSection = sections[currentIndex] || sections[0];
 
   if (isPrintMode) {
     return (
