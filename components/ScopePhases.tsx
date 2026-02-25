@@ -98,7 +98,10 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             </div>
 
             {/* FASES Y BOTONES (J2) */}
-            <div className="absolute bottom-[140px] left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto">
+            <div
+                className="absolute left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto"
+                style={{ bottom: hasButtons ? '180px' : '140px' }}
+            >
                 <AnimatedSection className="w-full" hierarchy={2}>
                     <h3 className="fase-titulo mb-8 text-vlanc-black">{data?.title}</h3>
                     <div className="space-y-6">
@@ -113,7 +116,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                     </div>
 
                     {hasButtons && (
-                        <div className="flex items-center gap-6 mt-12">
+                        <div className="absolute top-[calc(100%+40px)] left-0 flex items-center gap-6">
                             {hasGuarantee && (() => {
                                 const { badge, desc } = getGuaranteeParts(data!.guaranteeText!);
                                 return (
