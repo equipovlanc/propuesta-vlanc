@@ -79,9 +79,7 @@ const IndexSection: React.FC<IndexSectionProps> = ({ data, onNavigate }) => {
                 aria-label={`Ir a ${item.title}`}
               >
                 <span className="text-[20px] font-serif text-vlanc-black/40 mr-4 group-hover:text-vlanc-primary transition-colors transform translate-y-[2px] group-hover:translate-x-1 duration-500 pointer-events-none">/</span>
-                <span className="subtitulo3 tracking-tight font-normal pointer-events-none">
-                  {item.title}
-                </span>
+                <span className="subtitulo3 tracking-tight font-normal pointer-events-none" dangerouslySetInnerHTML={{ __html: item.title || '' }} />
               </button>
             </AnimatedSection>
           )) : (

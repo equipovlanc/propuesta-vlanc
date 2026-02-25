@@ -23,104 +23,102 @@ interface ScopePhases2Props {
 }
 
 const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
-  return (
-    <section className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
-      <div className="max-w-7xl mx-auto w-full">
-         <div className="relative mb-12">
-            <AnimatedSection>
-                <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter">
-                    {data?.title || 'trabajos contemplados.'}
-                </h2>
-            </AnimatedSection>
-            <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-             {/* Columna Izq: Fases 3 y 4 (Parte 1) */}
-             <div className="space-y-12">
-                 {/* Fase 3 */}
-                 <div>
-                    <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
-                        <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[0]?.title}</h3>
-                    </div>
-                    <div className="space-y-6">
-                        {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
-                            <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
-                                <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
-                                <p 
-                                    className="whitespace-pre-line"
-                                    dangerouslySetInnerHTML={{ __html: sub.description || '' }}
-                                />
+    return (
+        <section className="min-h-screen bg-vlanc-bg flex flex-col justify-start pt-[150px] pb-[140px] px-[120px]">
+            <div className="max-w-7xl mx-auto w-full">
+                <div className="relative mb-12">
+                    <AnimatedSection>
+                        <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter" dangerouslySetInnerHTML={{ __html: data?.title || 'trabajos contemplados.' }} />
+                    </AnimatedSection>
+                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+                    {/* Columna Izq: Fases 3 y 4 (Parte 1) */}
+                    <div className="space-y-12">
+                        {/* Fase 3 */}
+                        <div>
+                            <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
+                                <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[0]?.title}</h3>
                             </div>
-                        ))}
-                    </div>
-                 </div>
-                 
-                 {/* Fase 4 - Inicio */}
-                 {data?.phases?.[1] && (
-                    <div>
-                        <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
-                            <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[1]?.title}</h3>
+                            <div className="space-y-6">
+                                {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
+                                    <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
+                                        <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: `${sub.number || ''} ${sub.title || ''}` }} /></p>
+                                        <p
+                                            className="whitespace-pre-line"
+                                            dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div className="space-y-6">
-                            {(data?.phases?.[1]?.subPhases ?? []).slice(0, 1).map((sub, i) => (
-                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
-                                    <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
-                                    <p 
-                                        className="whitespace-pre-line"
-                                        dangerouslySetInnerHTML={{ __html: sub.description || '' }}
-                                    />
-                                    {sub.note && <p className="text-[10px] italic text-vlanc-black/50 mt-2">{sub.note}</p>}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                 )}
-            </div>
 
-            {/* Columna Der: Fase 4 (resto) y Fase 5 */}
-            <div className="space-y-12">
-                {/* Fase 4 - Continuación */}
-                {data?.phases?.[1] && (data?.phases?.[1]?.subPhases?.length ?? 0) > 1 && (
-                    <div className="lg:pt-[76px]">
-                        <div className="space-y-6">
-                             {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
-                                 <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
-                                    <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
-                                    <p 
-                                        className="whitespace-pre-line"
-                                        dangerouslySetInnerHTML={{ __html: sub.description || '' }}
-                                    />
+                        {/* Fase 4 - Inicio */}
+                        {data?.phases?.[1] && (
+                            <div>
+                                <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
+                                    <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[1]?.title}</h3>
                                 </div>
-                            ))}
-                        </div>
+                                <div className="space-y-6">
+                                    {(data?.phases?.[1]?.subPhases ?? []).slice(0, 1).map((sub, i) => (
+                                        <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
+                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
+                                            <p
+                                                className="whitespace-pre-line"
+                                                dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                            />
+                                            {sub.note && <p className="text-[10px] italic text-vlanc-black/50 mt-2">{sub.note}</p>}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
 
-                 {/* Fase 5 */}
-                 {data?.phases?.[2] && (
-                     <div>
-                        <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
-                            <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[2]?.title}</h3>
-                        </div>
-                        <div className="space-y-6">
-                            {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
-                                <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
-                                    <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
-                                    <p 
-                                        className="whitespace-pre-line"
-                                        dangerouslySetInnerHTML={{ __html: sub.description || '' }}
-                                    />
+                    {/* Columna Der: Fase 4 (resto) y Fase 5 */}
+                    <div className="space-y-12">
+                        {/* Fase 4 - Continuación */}
+                        {data?.phases?.[1] && (data?.phases?.[1]?.subPhases?.length ?? 0) > 1 && (
+                            <div className="lg:pt-[76px]">
+                                <div className="space-y-6">
+                                    {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
+                                        <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
+                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
+                                            <p
+                                                className="whitespace-pre-line"
+                                                dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                            />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                     </div>
-                 )}
+                            </div>
+                        )}
+
+                        {/* Fase 5 */}
+                        {data?.phases?.[2] && (
+                            <div>
+                                <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
+                                    <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[2]?.title}</h3>
+                                </div>
+                                <div className="space-y-6">
+                                    {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
+                                        <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
+                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
+                                            <p
+                                                className="whitespace-pre-line"
+                                                dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
 
 export default ScopePhases2;

@@ -81,13 +81,9 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 {/* 2. Contenido del Servicio (J2) */}
                 <div className="flex flex-col justify-end max-w-xl">
                     <AnimatedSection hierarchy={2}>
-                        <h3 className="subtitulo2 not-italic font-bold mb-8">
-                            / {data?.subtitle}
-                        </h3>
+                        <h3 className="subtitulo2 not-italic font-bold mb-8" dangerouslySetInnerHTML={{ __html: `/ ${data?.subtitle || ''}` }} />
 
-                        <h4 className="cuerpo uppercase mb-5 text-vlanc-black">
-                            {data?.title}
-                        </h4>
+                        <h4 className="cuerpo uppercase mb-5 text-vlanc-black" dangerouslySetInnerHTML={{ __html: data?.title || '' }} />
 
                         <div className="w-full">
                             {(data?.description ?? []).map((block, i, arr) => renderDescriptionBlock(block, i, arr))}
