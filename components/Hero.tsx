@@ -25,6 +25,12 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
       <div className="text-center relative z-10 flex flex-col items-center">
         {/* Título Principal (J1) */}
         <AnimatedSection direction="up" hierarchy={1} className="flex flex-col items-center">
+          {data?.clientName && (
+            <p
+              className="text-[40px] text-vlanc-secondary mb-2 font-sans font-normal leading-tight"
+              dangerouslySetInnerHTML={{ __html: data.clientName }}
+            />
+          )}
           <h1 className="titulo leading-[1.05]">
             {data?.line1}
           </h1>
