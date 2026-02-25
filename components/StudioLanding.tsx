@@ -72,7 +72,7 @@ const StudioLanding: React.FC = () => {
         <img
           src={studioLogo}
           alt="VLANC Architecture + Interiorismo"
-          className="w-[600px] md:w-[900px] h-auto object-contain"
+          className="w-[360px] md:w-[540px] h-auto object-contain"
         />
       </motion.div>
 
