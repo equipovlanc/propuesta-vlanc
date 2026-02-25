@@ -23,6 +23,7 @@ interface InvestmentProps {
         prices?: string[];
     };
     step?: number; // 0 = Intro, 1 = Plan 1, 2 = Plan 2, 3 = Plan 3
+    isPrintMode?: boolean;
 }
 
 const CheckIcon = () => (
@@ -31,7 +32,7 @@ const CheckIcon = () => (
     </svg>
 );
 
-const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
+const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = false }) => {
 
     const getRowBg = (color?: string) => {
         if (color === 'light') return 'bg-[#eae0d5]';
@@ -85,11 +86,11 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                             <motion.div
                                 key={i}
                                 className="space-y-2 print-force-visible"
-                                initial={{ opacity: 0, x: -20 }}
+                                initial={isPrintMode ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                                 animate={{
-                                    opacity: step >= i + 1 ? 1 : 0.1, // Dim si no es el activo? Mejor hidden si aun no llega, visible si ya pasó.
-                                    x: step >= i + 1 ? 0 : -20,
-                                    filter: step >= i + 1 ? 'blur(0px)' : 'blur(2px)'
+                                    opacity: (step >= i + 1 || isPrintMode) ? 1 : 0.1,
+                                    x: (step >= i + 1 || isPrintMode) ? 0 : -20,
+                                    filter: (step >= i + 1 || isPrintMode) ? 'blur(0px)' : 'blur(2px)'
                                 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             >
@@ -145,8 +146,8 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                     <motion.div
                                         key={i}
                                         className="px-3 text-center flex items-center justify-center h-full gap-3 print-force-visible"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: step >= i + 1 ? 1 : 0 }}
+                                        initial={isPrintMode ? { opacity: 1 } : { opacity: 0 }}
+                                        animate={{ opacity: (step >= i + 1 || isPrintMode) ? 1 : 0 }}
                                         transition={{ duration: 0.5, delay: 0.2 }}
                                     >
                                         <div className="w-[14px] h-[14px] border border-[#703622] bg-[#efe8e1]/50 print:bg-white shrink-0 rounded-[1px]" />
@@ -178,9 +179,9 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                             {(row.checks ?? []).map((isChecked, idx) => (
                                                 <motion.div
                                                     key={idx}
-                                                    className="flex justify-center items-center h-full"
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: step >= idx + 1 ? 1 : 0 }} // Revelar columna si el paso es suficiente
+                                                    className="flex justify-center items-center h-full print-force-visible"
+                                                    initial={isPrintMode ? { opacity: 1 } : { opacity: 0 }}
+                                                    animate={{ opacity: (step >= idx + 1 || isPrintMode) ? 1 : 0 }} // Revelar columna si el paso es suficiente
                                                     transition={{ duration: 0.4 }}
                                                 >
                                                     {isChecked && <CheckIcon />}
@@ -197,9 +198,9 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3 }) => {
                                 {(data?.prices ?? []).map((price, i) => (
                                     <motion.div
                                         key={i}
-                                        className="px-4 text-center flex flex-col justify-center h-full"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: step >= i + 4 ? 1 : 0 }}
+                                        className="px-4 text-center flex flex-col justify-center h-full print-force-visible"
+                                        initial={isPrintMode ? { opacity: 1 } : { opacity: 0 }}
+                                        animate={{ opacity: (step >= i + 4 || isPrintMode) ? 1 : 0 }}
                                         transition={{ duration: 0.5, delay: 0.1 }}
                                     >
                                         <span className="tabla3 whitespace-nowrap">{price}</span>
