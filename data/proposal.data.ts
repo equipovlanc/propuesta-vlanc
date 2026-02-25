@@ -9,7 +9,7 @@ export const proposalData = {
     header: {
         projectCode: "25-459-RIN",
         title: "Propuesta de honorarios",
-        clientName: "CELIA BLANES",
+        clientName: "NOMBRE CLIENTE",
         location: "ALCOI | Avd. País Valencià nº 68 1ºB",
         company: {
             name: "VLANC",
@@ -17,7 +17,7 @@ export const proposalData = {
         }
     },
     hero: {
-        clientName: "CELIA BLANES",
+        clientName: "NOMBRE CLIENTE",
         line1: "Tu nuevo hogar",
         line2: "empieza hoy"
     },
@@ -40,9 +40,9 @@ export const proposalData = {
     situation: {
         title: "la situación.",
         paragraphs: [
-            "CELIA es una mujer joven que ha decidido dar un paso importante: independizarse y crear su propio hogar. Para ello, quiere transformar un lugar muy especial para ella: ALCOI. Un espacio cargado de recuerdos que ahora quiere convertir en un rincón que hable de su presente y de su futuro.",
-            "Ubicada en ALCOI, busca una reforma que refleje su personalidad. Tiene claro lo que necesita, pero también muchas dudas sobre cuál será la mejor opción y cómo quedará todo al final.",
-            "Por recomendación —y tras conocernos un poco más— Celia ha decidido contactar con VLANC. Porque aquí todo está pensado, todo tiene sentido y todo está bajo control."
+            "LA CLIENTE es una mujer joven que ha decidido dar un paso importante: independizarse y crear su propio hogar...",
+            "Ubicada en ALCOI, busca una reforma que refleje su personalidad...",
+            "Por recomendación —y tras conocernos un poco más— la cliente ha decidido contactar con VLANC..."
         ],
         image: ""
     },
