@@ -73,18 +73,19 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
             const timer = setTimeout(() => {
                 if (!videoRef.current) return;
 
+                // Ensure unmuted/full volume before play attempt
+                videoRef.current.muted = false;
+                videoRef.current.volume = 1;
+                setIsMuted(false);
+                setVolume(1);
+
                 const playPromise = videoRef.current.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(error => {
-                        console.warn("Unmuted play failed, trying muted fallback:", error);
-                        if (videoRef.current) {
-                            videoRef.current.muted = true;
-                            setIsMuted(true);
-                            videoRef.current.play().catch(e => console.error("Muted play also failed:", e));
-                        }
+                        console.warn("Unmuted play attempt blocked by browser policies.", error);
                     });
                 }
-            }, 150);
+            }, 250);
             return () => clearTimeout(timer);
         }
     }, [step, isSectionCompleted]);
