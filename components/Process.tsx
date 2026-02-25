@@ -78,7 +78,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                     </div>
 
                                     {/* Botón Garantía (Solo index 2 / Paso 3) */}
-                                    {index === 2 && (
+                                    {(index === 2 && guaranteeItem && guaranteeItem.isActive !== false) && (
                                         <div className="relative inline-block mt-6">
                                             <button
                                                 onClick={openModal}

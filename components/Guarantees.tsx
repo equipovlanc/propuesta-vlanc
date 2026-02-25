@@ -8,6 +8,7 @@ interface Guarantee {
     title?: string;
     description?: string;
     note?: string;
+    isActive?: boolean;
 }
 
 interface GuaranteesProps {
@@ -76,39 +77,52 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
         </React.Fragment>
     ));
 
-    const items = data?.items || [];
-    const item1 = items[0];
-    const item2 = items[1];
-    const item3 = items[2];
+    const activeItems = (data?.items || []).filter(item => item.isActive !== false);
+
+    // Determinar qué va en cada columna
+    // Col 1: activeItems[0]
+    // Col 2: activeItems[1] o Título (si solo hay 1 item)
+    // Col 3: Título (si hay 2 items) o Título + activeItems[2] (si hay 3)
+
+    const renderTitleBlock = () => (
+        <div className="shrink-0">
+            <AnimatedSection hierarchy={1}>
+                <h2 className="subtitulo1 text-left">
+                    {formattedTitle}
+                </h2>
+            </AnimatedSection>
+            <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+        </div>
+    );
 
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-16 h-full">
 
-                {/* COLUMNA 1 */}
+                {/* COLUMNA 1: Siempre el primer item activo si existe */}
                 <div className="flex flex-col justify-end h-full">
-                    {item1 && <GuaranteeItem item={item1} />}
+                    {activeItems[0] && <GuaranteeItem item={activeItems[0]} />}
                 </div>
 
-                {/* COLUMNA 2 */}
+                {/* COLUMNA 2: Segundo item activo O el título */}
                 <div className="flex flex-col justify-end h-full">
-                    {item2 && <GuaranteeItem item={item2} />}
+                    {activeItems.length >= 2 ? (
+                        <GuaranteeItem item={activeItems[1]} />
+                    ) : (
+                        renderTitleBlock()
+                    )}
                 </div>
 
-                {/* COLUMNA 3 */}
+                {/* COLUMNA 3: Título O Título + Tercer item */}
                 <div className="flex flex-col h-full justify-between">
-                    <div className="shrink-0">
-                        <AnimatedSection hierarchy={1}>
-                            <h2 className="subtitulo1 text-left">
-                                {formattedTitle}
-                            </h2>
-                        </AnimatedSection>
-                        <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
-                    </div>
-
-                    <div className="mt-auto">
-                        {item3 && <GuaranteeItem item={item3} />}
-                    </div>
+                    {activeItems.length >= 2 ? (
+                        <>
+                            {renderTitleBlock()}
+                            <div className="mt-auto">
+                                {activeItems[2] && <GuaranteeItem item={activeItems[2]} />}
+                            </div>
+                        </>
+                    ) : null}
                 </div>
             </div>
         </section>

@@ -117,7 +117,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
 
                     {hasButtons && (
                         <div className="absolute top-[calc(100%+40px)] left-0 flex items-center gap-6">
-                            {hasGuarantee && (() => {
+                            {(hasGuarantee && guaranteeItem && guaranteeItem.isActive !== false) && (() => {
                                 const { badge, desc } = getGuaranteeParts(data!.guaranteeText!);
                                 return (
                                     <button onClick={openGuaranteeModal} className="flex items-center h-[52px] bg-vlanc-primary text-white px-6 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group outline-none active:scale-[0.98]">
