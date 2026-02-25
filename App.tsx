@@ -154,7 +154,7 @@ const App: React.FC = () => {
         else setInternalStep(isMovingForward ? 0 : 3);
       }
       else if (nextSection.id === 'divider-slide') {
-        const dividerStepsCount = 2; // 0: init, 1: video, 2: final/ready to move
+        const dividerStepsCount = 1; // 0: init, 1: video/final
         if (completedSections.has('divider-slide')) setInternalStep(dividerStepsCount);
         else setInternalStep(isMovingForward ? 0 : dividerStepsCount);
       }
@@ -316,7 +316,7 @@ const App: React.FC = () => {
         }
 
         if (activeSection.id === 'divider-slide' && !isCompleted) {
-          const totalSteps = 2; // 0: init, 1: video, 2: final/ready to move
+          const totalSteps = 1; // 0: init, 1: video/final
           if (e.deltaY > 0) {
             if (internalStep < totalSteps) { setInternalStep(prev => prev + 1); return; }
           } else {
@@ -352,7 +352,7 @@ const App: React.FC = () => {
       if (activeSection.id === 'investment' && !isCompleted) if (handleStep(6)) return;
       if (activeSection.id === 'payment' && !isCompleted) if (handleStep(2)) return;
       if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(3)) return;
-      if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(2)) return;
+      if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(1)) return;
 
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
