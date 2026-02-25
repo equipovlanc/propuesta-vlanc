@@ -19,7 +19,25 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
   return (
-    <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative px-[120px] py-32 overflow-hidden">
+    <section id="hero-section" className="min-h-screen w-full flex flex-col justify-center items-center relative px-[120px] py-32 overflow-hidden bg-vlanc-bg">
+      {/* Fondo Animado (Video o Fallback) */}
+      <div className="absolute inset-0 z-0 print:hidden overflow-hidden">
+        {data?.bgVideo ? (
+          <video
+            src={data.bgVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover scale-105"
+            style={{ filter: 'brightness(0.95) contrast(1.02)' }}
+          />
+        ) : (
+          <div className="w-full h-full bg-vlanc-bg ken-burns" />
+        )}
+        {/* Overlay para asegurar legibilidad */}
+        <div className="absolute inset-0 bg-vlanc-bg/20" />
+      </div>
 
       {/* Centro: Títulos (J1) */}
       <div className="text-center relative z-10 flex flex-col items-center">
