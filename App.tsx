@@ -62,6 +62,7 @@ const App: React.FC = () => {
       try {
         const query = `*[_type == "proposal" && slug.current == $slug][0]{
           ...,
+          "hero": hero{..., "bgVideo": bgVideo.asset->url},
           "logos": logos{
             "smallLogo": smallLogo.asset->url, 
             "mainLogo": mainLogo.asset->url, 

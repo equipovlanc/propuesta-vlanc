@@ -57,6 +57,13 @@ export default defineType({
                 defineField({ name: 'clientName', title: 'Client Name (Título)', type: 'string' }),
                 defineField({ name: 'line1', type: 'string' }),
                 defineField({ name: 'line2', type: 'string' }),
+                defineField({
+                    name: 'bgVideo',
+                    title: 'Video de Fondo (Loop)',
+                    type: 'file',
+                    options: { accept: 'video/*' },
+                    description: 'Video sutil para el fondo de la portada. Se reproducirá en bucle y silenciado.'
+                }),
             ]
         }),
         defineField({
