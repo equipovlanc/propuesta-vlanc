@@ -228,11 +228,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                             <motion.div
                                 className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px] print-force-visible"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step >= 3 ? 1 : 0 }}
+                                animate={{ opacity: (step ?? 3) >= 3 ? 1 : 0 }}
                                 transition={{ duration: 3.0, ease: "easeInOut" }}
                             >
-                                <div className="w-full max-w-[400px] p-10">
-                                    <img src={data.overlayLogo} alt="Logo Overlay" className="w-full h-auto drop-shadow-xl" />
+                                <div className="w-[460px] h-[255px] flex items-center justify-center">
+                                    <img src={data.overlayLogo} alt="Logo Overlay" className="max-w-full max-h-full object-contain drop-shadow-xl" />
                                 </div>
                             </motion.div>
                         )}
