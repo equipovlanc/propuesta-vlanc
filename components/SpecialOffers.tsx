@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 interface DescriptionBlock {
     text: string;
@@ -56,11 +56,7 @@ interface SpecialOffersProps {
 
 // Sub-componente Flip Card
 const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean; isPrintMode?: boolean }> = ({ plan, initialFlipped = false, isPrintMode = false }) => {
-    // Inicializamos el estado con initialFlipped.
-    // Al navegar y volver (desmontar/montar), tomará el valor actualizado de initialFlipped.
     const [isFlipped, setIsFlipped] = useState(initialFlipped);
-
-    // En modo impresión, forzamos el estado flipped
     const effectiveFlipped = isPrintMode ? true : isFlipped;
 
     return (
@@ -74,35 +70,26 @@ const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean; isPri
                 animate={{ rotateY: effectiveFlipped ? 180 : 0 }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
             >
-                {/* CARA FRONTAL (Original) */}
                 <div
                     className={`absolute inset-0 w-full h-full backface-hidden border border-[#8f4933]/20 bg-vlanc-bg hover:bg-[#8f4933]/5 flex flex-col items-center justify-center gap-1 ${isPrintMode ? 'hidden' : 'print:hidden'}`}
-                    // translateZ(1px) evita el z-fighting (solapamiento visual) separando la capa del plano cero
                     style={{ backfaceVisibility: "hidden", transform: "rotateY(0deg) translateZ(1px)", WebkitFontSmoothing: "antialiased" }}
                 >
                     <span className="tabla1 text-[#8f4933] text-[10px]">{plan.name}</span>
                     <span className="tabla2 text-[#8f4933] font-bold decoration-slice">{plan.originalPrice}</span>
                 </div>
 
-                {/* CARA TRASERA (Descuento - 3 LÍNEAS) */}
                 <div
                     className="absolute inset-0 w-full h-full backface-hidden border border-[#8f4933] bg-[#8f4933] flex flex-col items-center justify-center gap-0.5 print-force-visible print:relative print:inset-auto print:visible print:!transform-none"
-                    // translateZ(1px) evita el z-fighting en la cara trasera
                     style={{
                         WebkitFontSmoothing: "antialiased",
                         backfaceVisibility: isPrintMode ? "visible" : "hidden",
                         transform: isPrintMode ? "none" : "rotateY(180deg) translateZ(1px)"
                     }}
                 >
-                    {/* Línea 1: Nombre del Plan */}
                     <span className="tabla1 text-white text-[13px] tracking-wider leading-tight">{plan.name}</span>
-
-                    {/* Línea 2: Precio Original (Tachado, más pequeño) */}
                     <span className="text-white/70 text-[10px] font-sans font-normal line-through decoration-white/60 leading-none">
                         {plan.originalPrice}
                     </span>
-
-                    {/* Línea 3: Precio Descuento (Más grande y negrita) */}
                     <span className="tabla2 text-white font-bold text-[17px] leading-tight mt-0.5">
                         {plan.discountedPrice}
                     </span>
@@ -117,56 +104,20 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     investmentTitle,
     locationDate,
     premiumService,
-    step = 4,
+    step = 3,
     setNavigationBlocked,
     isSectionCompleted = false,
     isPrintMode = false
 }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false); // Modal Premium
-    const [showVideo, setShowVideo] = useState(false); // Modal Video (Estado final)
-    const videoRef = React.useRef<HTMLVideoElement>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const plans = data?.conditionalOffer?.discountedPlans || [];
     const imageSrc = data?.callToAction?.image?.src;
     const imageOpacity = data?.callToAction?.image?.opacity ?? 15;
-
-    // Verificación estricta de texto
     const hasCtaText = data?.callToAction?.text && data.callToAction.text.trim().length > 0;
 
     const openModal = () => { if (premiumService) setIsModalOpen(true); };
     const closeModal = () => setIsModalOpen(false);
-
-    const openVideo = () => {
-        if (data?.popupVideo && step >= 4) {
-            setShowVideo(true);
-            if (setNavigationBlocked) setNavigationBlocked(true);
-        }
-    };
-
-    const closeVideo = () => {
-        setShowVideo(false);
-        if (setNavigationBlocked) setNavigationBlocked(false);
-    };
-
-    // Efecto para forzar playback con audio cuando entramos al paso 3
-    useEffect(() => {
-        if (step === 3 && videoRef.current) {
-            // Intentar reproducir con audio (sin muted)
-            videoRef.current.muted = false;
-            const playPromise = videoRef.current.play();
-
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    // Si el navegador bloquea el audio automático, fallamos a muted como último recurso
-                    // para que al menos se vea el vídeo, aunque la prioridad es el audio.
-                    if (videoRef.current) {
-                        videoRef.current.muted = true;
-                        videoRef.current.play();
-                    }
-                });
-            }
-        }
-    }, [step]);
 
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
@@ -196,7 +147,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
         );
     };
 
-    // Usar filter-none para evitar capas de composición que borronean el texto en 3D
     const getRevealClasses = (isVisible: boolean) => {
         return `transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 filter-none' : 'opacity-10 blur-[2px]'} print-force-visible`;
     };
@@ -212,19 +162,13 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 </div>
 
                 <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar print:overflow-visible print:justify-start print:pt-4 print-force-visible" hierarchy={2}>
-
-                    {/* CAJA 1: CONDICIONES ESPECIALES (Visible Step >= 1) */}
-                    <div
-                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 1)}`}
-                    >
+                    <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 1)}`}>
                         {data?.conditionalOffer && (
                             <div className="mb-4">
                                 <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.conditionalOffer.title}</h3>
                                 <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.conditionalOffer.description || '' }} />
                             </div>
                         )}
-
-                        {/* FLIP CARDS */}
                         <div className="flex flex-row justify-between gap-2 w-full flex-wrap xl:flex-nowrap">
                             {plans.map((plan, i) => (
                                 <FlipCard key={i} plan={plan} initialFlipped={isSectionCompleted} isPrintMode={isPrintMode} />
@@ -232,25 +176,19 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                         </div>
                     </div>
 
-                    {/* CAJA 2: OFERTA LANZAMIENTO (Visible Step >= 2) */}
-                    <div
-                        className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 2)}`}
-                    >
+                    <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 2)}`}>
                         {data?.launchOffer && (
                             <div className="mb-4">
                                 <h3 className="subtitulo2 mb-2 text-vlanc-black">{data.launchOffer.title}</h3>
                                 <div className="cuerpo leading-relaxed" dangerouslySetInnerHTML={{ __html: data.launchOffer.description || '' }} />
                             </div>
                         )}
-
                         <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0 print-force-visible print:!bg-[#8f4933] print:opacity-100" onClick={openModal}>
                             <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors print:text-white">TU HOGAR COMO NUNCA LO IMAGINASTE</span>
                         </button>
-
                         {data?.offerFooterText && <div className="cuerpo text-sm" dangerouslySetInnerHTML={{ __html: data.offerFooterText }} />}
                     </div>
 
-                    {/* FIRMA (Visible Step >= 2) */}
                     <div className={`w-full shrink-0 ${getRevealClasses(step >= 2)} print-force-visible`}>
                         <div className="w-full flex flex-col border-t border-[#8f4933] mt-[20px] pt-1 print:border-t-2 print:!border-[#8f4933]">
                             <div className="flex justify-between items-start">
@@ -261,7 +199,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     </div>
                 </AnimatedSection>
 
-                {/* Fecha (Visible Step >= 2) */}
                 <AnimatedSection className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20" hierarchy={2}>
                     <div className={getRevealClasses(step >= 2)}>
                         <p className="cuerpo font-bold text-right">{locationDate || "En Alcoi a XX de mes de 2025"}</p>
@@ -271,57 +208,27 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
 
             <div className="w-1/2 h-full pl-[69.5px]">
                 <AnimatedSection className="w-full h-full relative overflow-hidden" hierarchy={0}>
-                    {/* Contenedor Clickable para re-abrir video */}
-                    <div
-                        className={`w-full h-full relative ${step >= 4 ? 'cursor-pointer group' : ''}`}
-                        onClick={step >= 4 ? openVideo : undefined}
-                    >
-                        {/* IMAGEN DE FONDO */}
+                    <div className="w-full h-full relative">
                         {imageSrc && (
-                            <div className={`w-full h-full absolute inset-0 transition-opacity duration-700 ${step === 3 ? 'opacity-0' : 'opacity-100'}`}>
+                            <div className="w-full h-full absolute inset-0 opacity-100">
                                 <img src={imageSrc} alt="Special Offer" className="w-full h-full object-cover" />
                                 <div
                                     className="absolute inset-0 pointer-events-none transition-colors duration-1000"
                                     style={{ backgroundColor: `rgba(143, 73, 51, ${imageOpacity / 100})` }}
                                 />
-
-                                {/* CTA TEXT - SOLO SI HAY TEXTO (VERIFICADO) */}
                                 {hasCtaText && (
                                     <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 px-8">
-                                        <h2 className="especial1">{data.callToAction.text}</h2>
+                                        <h2 className="especial1">{data?.callToAction?.text}</h2>
                                     </div>
                                 )}
                             </div>
                         )}
 
-                        {/* VIDEO (Paso 3) */}
-                        <AnimatePresence>
-                            {step === 3 && data?.popupVideo && (
-                                <motion.div
-                                    className="absolute inset-0 z-20 w-full h-full"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.8 }}
-                                >
-                                    <video
-                                        src={data.popupVideo}
-                                        autoPlay
-                                        loop
-                                        playsInline
-                                        data-cursor-ignore
-                                        className="w-full h-full object-cover"
-                                    />
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-
-                        {/* LOGO OVERLAY (Paso 4) - Transición más lenta (3s) */}
                         {data?.overlayLogo && (
                             <motion.div
                                 className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px] print-force-visible"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: step >= 4 ? 1 : 0 }}
+                                animate={{ opacity: step >= 3 ? 1 : 0 }}
                                 transition={{ duration: 3.0, ease: "easeInOut" }}
                             >
                                 <div className="w-full max-w-[400px] p-10">
@@ -333,7 +240,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 </AnimatedSection>
             </div>
 
-            {/* MODAL SERVICIO PREMIUM */}
             {isModalOpen && premiumService && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10 print:hidden" onClick={closeModal}>
                     <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[672px] w-full relative max-h-[90vh] overflow-y-auto no-scrollbar" onClick={(e) => e.stopPropagation()} hierarchy={2}>
@@ -348,41 +254,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     </AnimatedSection>
                 </div>
             )}
-
-            {/* MODAL VIDEO (Estado Final) - print:hidden */}
-            <AnimatePresence>
-                {showVideo && data?.popupVideo && (
-                    <motion.div
-                        className="fixed inset-0 z-[200] flex items-center justify-center bg-vlanc-black/95 backdrop-blur-md p-4 md:p-10 pointer-events-auto print:hidden"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={closeVideo} // Cerrar al click fuera
-                    >
-                        <AnimatedSection
-                            className="relative w-full max-w-6xl aspect-video bg-black shadow-2xl flex items-center justify-center"
-                            hierarchy={0}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <button
-                                onClick={closeVideo}
-                                className="absolute -top-12 right-0 text-white hover:text-vlanc-primary transition-colors text-[12px] tracking-[0.2em] font-bold uppercase flex items-center gap-2"
-                            >
-                                [ Cerrar ]
-                            </button>
-                            {/* VIDEO PAUSADO POR DEFECTO (sin autoPlay) */}
-                            <video
-                                src={data.popupVideo}
-                                autoPlay
-                                controls
-                                playsInline
-                                className="w-full h-full object-contain"
-                            />
-                        </AnimatedSection>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
         </section>
     );
 };

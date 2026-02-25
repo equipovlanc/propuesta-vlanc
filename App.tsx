@@ -149,9 +149,9 @@ const App: React.FC = () => {
         else setInternalStep(isMovingForward ? 0 : 2);
       }
       else if (nextSection.id === 'special-offers') {
-        // Pasos: 0 (Init), 1 (Condiciones), 2 (Oferta), 3 (Video), 4 (Logo)
-        if (completedSections.has('special-offers')) setInternalStep(4);
-        else setInternalStep(isMovingForward ? 0 : 4);
+        // Pasos: 0 (Init), 1 (Condiciones), 2 (Oferta), 3 (Logo)
+        if (completedSections.has('special-offers')) setInternalStep(3);
+        else setInternalStep(isMovingForward ? 0 : 3);
       }
       else if (nextSection.id === 'divider-slide') {
         const dividerStepsCount = 3; // 0: init, 1: video, 2: image, 3: text
@@ -309,7 +309,7 @@ const App: React.FC = () => {
 
         if (activeSection.id === 'special-offers' && !isCompleted) {
           if (e.deltaY > 0) {
-            if (internalStep < 4) { setInternalStep(prev => prev + 1); return; }
+            if (internalStep < 3) { setInternalStep(prev => prev + 1); return; }
           } else {
             if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
           }
@@ -351,7 +351,7 @@ const App: React.FC = () => {
       if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
       if (activeSection.id === 'investment' && !isCompleted) if (handleStep(6)) return;
       if (activeSection.id === 'payment' && !isCompleted) if (handleStep(2)) return;
-      if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(4)) return;
+      if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(3)) return;
       if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(3)) return;
 
 
