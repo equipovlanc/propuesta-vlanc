@@ -38,7 +38,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
         if (color === 'light') return 'bg-[#eae0d5]';
         if (color === 'medium') return 'bg-[#dccbc1]';
         if (color === 'dark') return 'bg-[#cbb6aa]';
-        return 'border-b border-vlanc-primary/10';
+        return 'border-b border-vlanc-primary/10 print:border-b-2 print:border-[#8f4933]/20';
     };
 
     const formatText = (text?: string) => {
@@ -163,7 +163,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
 
                                     if (row.isPremiumSeparator) {
                                         return (
-                                            <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10`}>
+                                            <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10 print:border-b-2 print:border-[#8f4933]/30`}>
                                                 <div className="px-4 text-right pr-4 col-span-4 h-full flex items-center justify-end">
                                                     <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
                                                 </div>
