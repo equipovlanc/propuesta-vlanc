@@ -103,7 +103,7 @@ const App: React.FC = () => {
     fetchProposalData();
   }, [slug]);
 
-
+  // Navigation Logic defined BEFORE sections to be used in closure
   const navigate = (newIndex: number) => {
     if (newIndex < 0) return;
     if (newIndex === currentIndex) return;
@@ -165,12 +165,6 @@ const App: React.FC = () => {
 
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 1000);
-
-    // Actualizamos el hash para persistencia (URL) sin disparar un scroll infinito
-    const nextSectionId = sectionsRef.current[newIndex]?.id;
-    if (nextSectionId && window.location.hash !== `#${nextSectionId}`) {
-      window.history.pushState(null, '', `#${nextSectionId}`);
-    }
   };
 
   const navigateToId = (id: string) => {
@@ -266,75 +260,6 @@ const App: React.FC = () => {
   const sectionsRef = useRef(sections);
   sectionsRef.current = sections;
 
-
-  // Sync currentIndex and internalStep with URL hash on load and hash change
-  useEffect(() => {
-    if (!proposalData || !sections.length) return;
-
-    const handleHashSync = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (!hash) return;
-
-      const [sectionId, stepStr] = hash.split(':');
-      const targetIndex = sections.findIndex(s => s.id === sectionId);
-
-      if (targetIndex !== -1 && targetIndex !== currentIndex) {
-        // Calculamos dirección para que la animación no sea errática
-        setDirection(targetIndex > currentIndex ? 1 : -1);
-        setCurrentIndex(targetIndex);
-
-        if (stepStr !== undefined) {
-          setInternalStep(parseInt(stepStr, 10) || 0);
-        } else {
-          // Si no hay step en el hash, decidimos el step inicial según la dirección
-          const nextSection = sections[targetIndex];
-          if (nextSection.id === 'mission') setInternalStep(targetIndex > currentIndex ? 0 : 2);
-          else if (nextSection.id === 'process') {
-            const processStepsCount = proposalData?.process?.steps?.length || 8;
-            setInternalStep(targetIndex > currentIndex ? 0 : processStepsCount);
-          }
-          else if (nextSection.id === 'investment') setInternalStep(targetIndex > currentIndex ? 0 : 6);
-          else if (nextSection.id === 'payment') setInternalStep(targetIndex > currentIndex ? 0 : 2);
-          else if (nextSection.id === 'special-offers') setInternalStep(targetIndex > currentIndex ? 0 : 3);
-          else if (nextSection.id === 'divider-slide') setInternalStep(targetIndex > currentIndex ? 0 : 1);
-          else setInternalStep(0);
-        }
-      } else if (targetIndex === currentIndex && stepStr !== undefined) {
-        const step = parseInt(stepStr, 10) || 0;
-        if (step !== internalStep) {
-          setInternalStep(step);
-        }
-      }
-    };
-
-    handleHashSync();
-
-    window.addEventListener('hashchange', handleHashSync);
-    return () => window.removeEventListener('hashchange', handleHashSync);
-    // IMPORTANTE: Quitamos currentIndex e internalStep de las dependencias para evitar bucles.
-    // Solo reaccionamos cuando cambian los datos base o el evento externo de hash.
-  }, [proposalData, sections]);
-
-  // Sync internalStep TO hash (replaceState to avoid polluting history)
-  useEffect(() => {
-    if (!proposalData || !sections.length) return;
-    const activeSection = sections[currentIndex];
-    if (!activeSection) return;
-
-    const sectionsWithSteps = ['mission', 'process', 'investment', 'payment', 'special-offers', 'divider-slide'];
-    const currentHash = window.location.hash.replace('#', '');
-
-    if (sectionsWithSteps.includes(activeSection.id)) {
-      const expectedHash = `${activeSection.id}:${internalStep}`;
-      if (currentHash !== expectedHash) {
-        window.history.replaceState(null, '', `#${expectedHash}`);
-      }
-    } else {
-      if (currentHash !== activeSection.id) {
-        window.history.replaceState(null, '', `#${activeSection.id}`);
-      }
-    }
-  }, [currentIndex, internalStep, proposalData, sections]);
 
   // Event Listeners
   useEffect(() => {
