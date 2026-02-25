@@ -58,12 +58,12 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {data?.phases?.[1] && (
                             <div>
                                 <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
-                                    <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[1]?.title}</h3>
+                                    <h3 className="subtitle-md text-vlanc-secondary font-bold" dangerouslySetInnerHTML={{ __html: data?.phases?.[1]?.title || '' }} />
                                 </div>
                                 <div className="space-y-6">
                                     {(data?.phases?.[1]?.subPhases ?? []).slice(0, 1).map((sub, i) => (
                                         <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
-                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
+                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: `${sub.number || ''} ${sub.title || ''}` }} /></p>
                                             <p
                                                 className="whitespace-pre-line"
                                                 dangerouslySetInnerHTML={{ __html: sub.description || '' }}
@@ -84,7 +84,7 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                                 <div className="space-y-6">
                                     {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
                                         <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
-                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
+                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: `${sub.number || ''} ${sub.title || ''}` }} /></p>
                                             <p
                                                 className="whitespace-pre-line"
                                                 dangerouslySetInnerHTML={{ __html: sub.description || '' }}
@@ -99,12 +99,12 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {data?.phases?.[2] && (
                             <div>
                                 <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
-                                    <h3 className="subtitle-md text-vlanc-secondary font-bold">{data?.phases?.[2]?.title}</h3>
+                                    <h3 className="subtitle-md text-vlanc-secondary font-bold" dangerouslySetInnerHTML={{ __html: data?.phases?.[2]?.title || '' }} />
                                 </div>
                                 <div className="space-y-6">
                                     {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
                                         <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
-                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase">{sub.number} {sub.title}</strong></p>
+                                            <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: `${sub.number || ''} ${sub.title || ''}` }} /></p>
                                             <p
                                                 className="whitespace-pre-line"
                                                 dangerouslySetInnerHTML={{ __html: sub.description || '' }}
