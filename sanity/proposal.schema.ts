@@ -45,7 +45,7 @@ export default defineType({
             fields: [
                 defineField({ name: 'projectCode', type: 'string' }),
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'clientName', type: 'string' }),
+                defineField({ name: 'clientName', title: 'Client Name (esquina superior izquierda)', type: 'string' }),
                 defineField({ name: 'location', type: 'string' }),
             ]
         }),
@@ -54,7 +54,7 @@ export default defineType({
             title: 'Portada',
             type: 'object',
             fields: [
-                defineField({ name: 'clientName', type: 'string' }),
+                defineField({ name: 'clientName', title: 'Client Name (Título)', type: 'string' }),
                 defineField({ name: 'line1', type: 'string' }),
                 defineField({ name: 'line2', type: 'string' }),
             ]

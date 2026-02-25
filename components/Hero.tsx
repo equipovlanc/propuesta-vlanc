@@ -42,16 +42,16 @@ const Hero: React.FC<HeroProps> = ({ data, headerData, logo }) => {
         <div className="flex flex-col gap-6">
           {/* Código y Título: Tracking normal explícito, sin negrita */}
           <div className="text-[14px] font-serif text-vlanc-black leading-tight tracking-normal">
-              <p className="font-normal" dangerouslySetInnerHTML={{ __html: headerData?.projectCode || '' }} />
-              <p className="font-normal" dangerouslySetInnerHTML={{ __html: headerData?.title || '' }} />
+            <p className="font-normal" dangerouslySetInnerHTML={{ __html: headerData?.projectCode || '' }} />
+            <p className="font-normal" dangerouslySetInnerHTML={{ __html: headerData?.title || '' }} />
           </div>
-          
+
           <div className="w-[52px] h-[2.4px] bg-[#8f4933]"></div>
 
           {/* Nombre y Ubicación: Sin negrita (font-normal) */}
           <div className="text-[14px] font-sans text-vlanc-secondary leading-tight tracking-wider">
-              <p className="font-normal" dangerouslySetInnerHTML={{ __html: data?.clientName || headerData?.clientName || '' }} />
-              <p className="opacity-80 font-normal" dangerouslySetInnerHTML={{ __html: headerData?.location || '' }} />
+            <p className="font-normal" dangerouslySetInnerHTML={{ __html: headerData?.clientName || '' }} />
+            <p className="opacity-80 font-normal" dangerouslySetInnerHTML={{ __html: headerData?.location || '' }} />
           </div>
         </div>
       </AnimatedSection>
