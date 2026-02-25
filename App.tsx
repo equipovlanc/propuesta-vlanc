@@ -166,10 +166,10 @@ const App: React.FC = () => {
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 1000);
 
-    // Actualizamos el hash para persistencia (URL)
+    // Actualizamos el hash para persistencia (URL) sin disparar un scroll infinito
     const nextSectionId = sectionsRef.current[newIndex]?.id;
-    if (nextSectionId) {
-      window.location.hash = nextSectionId;
+    if (nextSectionId && window.location.hash !== `#${nextSectionId}`) {
+      window.history.pushState(null, '', `#${nextSectionId}`);
     }
   };
 
@@ -273,32 +273,68 @@ const App: React.FC = () => {
 
     const handleHashSync = () => {
       const hash = window.location.hash.replace('#', '');
-      if (hash) {
-        // Formato esperado: sectionId o sectionId:step
-        const [sectionId, stepStr] = hash.split(':');
-        const targetIndex = sections.findIndex(s => s.id === sectionId);
+      if (!hash) return;
 
-        if (targetIndex !== -1 && targetIndex !== currentIndex) {
-          // Si estamos cambiando de sección, forzamos la navegación sin animación para que sea instantáneo al recargar
-          setCurrentIndex(targetIndex);
-          if (stepStr !== undefined) {
-            setInternalStep(parseInt(stepStr, 10) || 0);
+      const [sectionId, stepStr] = hash.split(':');
+      const targetIndex = sections.findIndex(s => s.id === sectionId);
+
+      if (targetIndex !== -1 && targetIndex !== currentIndex) {
+        // Calculamos dirección para que la animación no sea errática
+        setDirection(targetIndex > currentIndex ? 1 : -1);
+        setCurrentIndex(targetIndex);
+
+        if (stepStr !== undefined) {
+          setInternalStep(parseInt(stepStr, 10) || 0);
+        } else {
+          // Si no hay step en el hash, decidimos el step inicial según la dirección
+          const nextSection = sections[targetIndex];
+          if (nextSection.id === 'mission') setInternalStep(targetIndex > currentIndex ? 0 : 2);
+          else if (nextSection.id === 'process') {
+            const processStepsCount = proposalData?.process?.steps?.length || 8;
+            setInternalStep(targetIndex > currentIndex ? 0 : processStepsCount);
           }
-        } else if (targetIndex === currentIndex && stepStr !== undefined) {
-          const step = parseInt(stepStr, 10) || 0;
-          if (step !== internalStep) {
-            setInternalStep(step);
-          }
+          else if (nextSection.id === 'investment') setInternalStep(targetIndex > currentIndex ? 0 : 6);
+          else if (nextSection.id === 'payment') setInternalStep(targetIndex > currentIndex ? 0 : 2);
+          else if (nextSection.id === 'special-offers') setInternalStep(targetIndex > currentIndex ? 0 : 3);
+          else if (nextSection.id === 'divider-slide') setInternalStep(targetIndex > currentIndex ? 0 : 1);
+          else setInternalStep(0);
+        }
+      } else if (targetIndex === currentIndex && stepStr !== undefined) {
+        const step = parseInt(stepStr, 10) || 0;
+        if (step !== internalStep) {
+          setInternalStep(step);
         }
       }
     };
 
-    // Al cargar los datos por primera vez (o si cambia el slug)
     handleHashSync();
 
     window.addEventListener('hashchange', handleHashSync);
     return () => window.removeEventListener('hashchange', handleHashSync);
-  }, [proposalData, sections, currentIndex, internalStep]);
+    // IMPORTANTE: Quitamos currentIndex e internalStep de las dependencias para evitar bucles.
+    // Solo reaccionamos cuando cambian los datos base o el evento externo de hash.
+  }, [proposalData, sections]);
+
+  // Sync internalStep TO hash (replaceState to avoid polluting history)
+  useEffect(() => {
+    if (!proposalData || !sections.length) return;
+    const activeSection = sections[currentIndex];
+    if (!activeSection) return;
+
+    const sectionsWithSteps = ['mission', 'process', 'investment', 'payment', 'special-offers', 'divider-slide'];
+    const currentHash = window.location.hash.replace('#', '');
+
+    if (sectionsWithSteps.includes(activeSection.id)) {
+      const expectedHash = `${activeSection.id}:${internalStep}`;
+      if (currentHash !== expectedHash) {
+        window.history.replaceState(null, '', `#${expectedHash}`);
+      }
+    } else {
+      if (currentHash !== activeSection.id) {
+        window.history.replaceState(null, '', `#${activeSection.id}`);
+      }
+    }
+  }, [currentIndex, internalStep, proposalData, sections]);
 
   // Event Listeners
   useEffect(() => {
@@ -369,21 +405,6 @@ const App: React.FC = () => {
 
       }, 50);
     };
-
-    // Efecto para actualizar el hash cuando cambia el internalStep (opcional, pero útil para persistencia fina)
-    const updateHashWithStep = () => {
-      const activeSection = sections[currentIndex];
-      if (activeSection && [
-        'mission', 'process', 'investment', 'payment', 'special-offers', 'divider-slide'
-      ].includes(activeSection.id)) {
-        const newHash = `${activeSection.id}:${internalStep}`;
-        if (window.location.hash !== `#${newHash}`) {
-          // Usamos replaceState para no llenar el historial con cada pequeño paso de scroll
-          window.history.replaceState(null, '', `#${newHash}`);
-        }
-      }
-    };
-    updateHashWithStep();
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isAnimating) return;
