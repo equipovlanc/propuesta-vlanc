@@ -16,6 +16,8 @@ interface Service {
     price?: string;
     description?: DescriptionBlock[];
     note?: string;
+    extraNote?: string;
+    showExtraNote?: boolean;
 }
 
 interface PremiumServicesProps {
@@ -129,6 +131,16 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                         )}
                     </div>
                 </AnimatedSection>
+
+                {/* Nota Bajo Imagen (Extra Note) */}
+                {data?.showExtraNote && data?.extraNote && (
+                    <AnimatedSection hierarchy={2} className="w-full mt-[50px]">
+                        <p
+                            className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full text-right whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary"
+                            dangerouslySetInnerHTML={{ __html: data.extraNote }}
+                        />
+                    </AnimatedSection>
+                )}
             </div>
         </section>
     );

@@ -514,6 +514,18 @@ export default defineType({
                                 name: 'image',
                                 type: 'image',
                                 fields: [overlayField]
+                            }),
+                            defineField({
+                                name: 'extraNote',
+                                title: 'Nota Bajo Imagen',
+                                type: 'text',
+                                description: 'Nota que aparecerá bajo la imagen de la derecha. Soporta <strong> y saltos de línea.'
+                            }),
+                            defineField({
+                                name: 'showExtraNote',
+                                title: '¿Mostrar Nota Bajo Imagen?',
+                                type: 'boolean',
+                                initialValue: false
                             })
                         ]
                     }]

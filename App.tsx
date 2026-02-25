@@ -86,7 +86,7 @@ const App: React.FC = () => {
           },
           "dividerSlide": dividerSlide{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
           "guarantees": guarantees{..., "items": items[]{..., isActive, "icon": icon.asset->url}},
-          "premiumServicesList": premiumServices.services[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
+          "premiumServicesList": premiumServices.services[]{..., extraNote, showExtraNote, "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "contact": contact{
             ..., 
             "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, 
