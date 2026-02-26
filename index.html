@@ -223,37 +223,21 @@
       padding-top: 76px !important;
     }
 
-
-    /* ── ANTI-BLUR: GPU rendering hints ──
-       El transform:scale() en #viewport-scaler puede causar blurriness en texto
-       e imágenes debido a composición de capas GPU en píxeles fraccionales.
-       Estos hints mejoran la nitidez sin cambiar el diseño visual. */
-
-    /* Forzar capa GPU propia para el scaler → evita que el blur de animaciones
-       secundarias (AnimatedSection, SectionSlide) sangre hacia elementos hermanos */
-    #viewport-scaler {
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      will-change: transform;
-    }
-
-    /* El header y sus hijos nunca deben estar borrosos */
-    #app-container header {
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-    }
-
-    /* Las modales/popups (position:fixed dentro del container) tampoco */
-    #app-container .fixed {
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-    }
-
-    /* Mejorar renderizado de texto a cualquier escala */
+    /* ── RENDERIZADO DE TEXTO ──
+       Mejora la nitidez de texto cuando el lienzo está escalado.
+       NO uses will-change ni backface-visibility en #viewport-scaler:
+       causan pre-rasterización a 1920px que se escala como bitmap (pixelación, blur). */
     #app-container {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      text-rendering: optimizeLegibility;
+    }
+
+    /* ── LÍNEA DEL HEADER: siempre 1 píxel físico ──
+       La línea tiene w-[1px] en CSS, pero transform:scale() puede hacerla
+       sub-píxel e invisible. --line-scale = 1/vp-scale compensa esto
+       para que el resultado sea siempre exactamente 1px físico. */
+    #app-container header .w-\[1px\] {
+      width: calc(1px * var(--line-scale, 1)) !important;
     }
 
 
@@ -628,6 +612,9 @@
           var scale = Math.max(0.15, Math.min(scaleX, scaleY));
 
           document.documentElement.style.setProperty('--vp-scale', scale);
+          // --line-scale compensa el scale para que elementos de 1px
+          // siempre sean exactamente 1 píxel físico
+          document.documentElement.style.setProperty('--line-scale', 1 / scale);
 
           // Marcar body para activar los estilos del scaler
           document.body.classList.add('vp-scale-active');

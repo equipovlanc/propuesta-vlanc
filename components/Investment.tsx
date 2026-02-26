@@ -107,7 +107,6 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                 <div className="shrink-0 flex flex-col items-end">
                     <AnimatedSection
                         className="w-[820px] h-[532px] flex flex-col relative rounded-sm overflow-hidden"
-                        style={{ transform: 'translateZ(0)', willChange: 'transform' }}
                         hierarchy={2}
                     >
 
