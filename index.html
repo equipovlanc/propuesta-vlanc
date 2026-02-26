@@ -233,20 +233,19 @@
     }
 
     /* ── LÍNEA DEL HEADER: siempre 1 píxel físico ──
-       La línea tiene w-[1px] en CSS, pero zoom puede hacerla
+       La línea tiene w-[1px] en CSS, pero transform:scale() puede hacerla
        sub-píxel e invisible. --line-scale = 1/vp-scale compensa esto
        para que el resultado sea siempre exactamente 1px físico. */
     #app-container header .w-\[1px\] {
       width: calc(1px * var(--line-scale, 1)) !important;
     }
 
-    /* En impresión, --line-scale refleja la escala de pantalla (no la de impresión),
-       lo que haría la línea más gruesa. La reseteamos a 1px exacto. */
     @media print {
       #app-container header .w-\[1px\] {
         width: 1px !important;
       }
     }
+
 
 
     /* Grain Filter */
