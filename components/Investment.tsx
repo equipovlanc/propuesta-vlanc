@@ -84,7 +84,6 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                             <motion.div
                                 key={i}
                                 className="space-y-2 print-force-visible"
-                                style={{ willChange: 'transform' }}
                                 initial={isPrintMode ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                                 animate={{
                                     opacity: (step >= i + 1 || isPrintMode) ? 1 : 0.1,
