@@ -232,22 +232,7 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ── LÍNEA DEL HEADER: siempre 1 píxel físico ──
-       La línea ahora es un SVG. transform:scale() puede hacerla
-       sub-píxel e invisible. --line-scale = 1/vp-scale compensa esto
-       para que el resultado sea siempre exactamente 1px físico de stroke. */
-    #app-container header .header-line line {
-      stroke-width: calc(1px * var(--line-scale, 1)) !important;
-    }
 
-    /* En impresión, el SVG se inyecta como vector, por lo que 
-       forzamos exactamente 1px en el PDF; el motor gráfico 
-       no lo destruirá. */
-    @media print {
-      #app-container header .header-line line {
-        stroke-width: 1px !important;
-      }
-    }
 
 
 
