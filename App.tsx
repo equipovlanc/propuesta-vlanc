@@ -449,10 +449,8 @@ const App: React.FC = () => {
   if (!slug) return (
     <>
       <CustomCursor />
-      <div id="viewport-scaler">
-        <div id="app-container" style={{ width: '1920px', height: '1080px', position: 'relative', overflow: 'hidden' }}>
-          <StudioLanding />
-        </div>
+      <div id="app-container" style={{ width: '1920px', height: '1080px', position: 'relative', overflow: 'hidden' }}>
+        <StudioLanding />
       </div>
     </>
   );
@@ -492,29 +490,27 @@ const App: React.FC = () => {
   return (
     <ScrollContext.Provider value={direction}>
       <CustomCursor />
-      <div id="viewport-scaler">
-        <div id="app-container" style={{ width: '1920px', height: '1080px', position: 'relative', overflow: 'hidden' }}>
-          <div className="relative w-full h-full perspective-[1000px]">
-            <AnimatePresence initial={true} custom={direction} mode="popLayout">
-              <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
-                {activeSection.comp}
-              </SectionSlide>
-            </AnimatePresence>
-          </div>
-          <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
-            {sections.map((_, i) => (
-              <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
-            ))}
-          </div>
-          {/* Header al final del DOM para que su z-[60] siempre gane sobre el perspective container */}
-          {currentIndex > 1 && (
-            <Header
-              logo={proposalData.logos?.smallLogo}
-              pageNumber={activeSection.headerPage}
-              onNavigate={navigate}
-            />
-          )}
+      <div id="app-container" style={{ width: '1920px', height: '1080px', position: 'relative', overflow: 'hidden' }}>
+        <div className="relative w-full h-full perspective-[1000px]">
+          <AnimatePresence initial={true} custom={direction} mode="popLayout">
+            <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
+              {activeSection.comp}
+            </SectionSlide>
+          </AnimatePresence>
         </div>
+        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
+          {sections.map((_, i) => (
+            <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
+          ))}
+        </div>
+        {/* Header al final del DOM para que su z-[60] siempre gane sobre el perspective container */}
+        {currentIndex > 1 && (
+          <Header
+            logo={proposalData.logos?.smallLogo}
+            pageNumber={activeSection.headerPage}
+            onNavigate={navigate}
+          />
+        )}
       </div>
     </ScrollContext.Provider>
   );

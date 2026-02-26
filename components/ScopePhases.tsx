@@ -143,7 +143,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
 
             {/* MODAL GARANTÍA */}
             {isGuaranteeModalOpen && guaranteeItem && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10 pointer-events-auto" onClick={closeGuaranteeModal}>
+                <div className="absolute inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10 pointer-events-auto" onClick={closeGuaranteeModal}>
                     <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[613px] w-full relative" onClick={(e) => e.stopPropagation()} hierarchy={2}>
                         <button onClick={closeGuaranteeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                         <div className="flex flex-col items-start w-full relative">
@@ -172,7 +172,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             {/* MODAL VIDEO */}
             {showVideo && data?.video && (
                 <div
-                    className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-black/95 backdrop-blur-md p-4 md:p-10 pointer-events-auto"
+                    className="absolute inset-0 z-[100] flex items-center justify-center bg-vlanc-black/95 backdrop-blur-md p-4 md:p-10 pointer-events-auto"
                     onClick={() => setShowVideo(false)}
                 >
                     <AnimatedSection

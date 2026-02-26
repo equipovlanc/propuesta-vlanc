@@ -104,7 +104,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
             {/* MODAL DE GARANTÍA */}
             {isModalOpen && guaranteeItem && (
                 <div
-                    className="fixed inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10"
+                    className="absolute inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10"
                     onClick={closeModal}
                 >
                     <AnimatedSection

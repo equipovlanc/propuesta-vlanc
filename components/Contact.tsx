@@ -72,15 +72,15 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
     const handleVideoEnd = React.useCallback(() => {
         if (footerPlaceholderRef.current) {
             const rect = footerPlaceholderRef.current.getBoundingClientRect();
-            // getBoundingClientRect devuelve coordenadas en espacio de ventana real.
-            // Como el contenedor está escalado por --vp-scale, hay que convertirlas
-            // dividiendo por la escala para obtener coordenadas en espacio de diseño (1920×1080).
+            // Obtenemos el offset del contenedor para restar el margen de letterbox
+            const container = document.getElementById('app-container');
+            const containerRect = container ? container.getBoundingClientRect() : { left: 0, top: 0 };
             const scale = parseFloat(
                 getComputedStyle(document.documentElement).getPropertyValue('--vp-scale') || '1'
             ) || 1;
             setTargetRect({
-                left: rect.left / scale,
-                top: rect.top / scale,
+                left: (rect.left - containerRect.left) / scale,
+                top: (rect.top - containerRect.top) / scale,
                 width: rect.width / scale,
                 height: rect.height / scale,
             });

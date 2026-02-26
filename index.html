@@ -438,8 +438,8 @@
       animation: kenburns 40s ease-in-out infinite;
     }
 
-    /* ── VIEWPORT SCALER ── */
-    /* #root centra el scaler con flexbox */
+    /* ── ESCALADO DEL CANVAS ── */
+    /* #root centra el canvas con flexbox */
     #root {
       display: flex;
       align-items: center;
@@ -449,31 +449,27 @@
       overflow: hidden;
     }
 
-    #viewport-scaler {
-      /* Tamaño fijo del lienzo de diseño. transform-origin: center permite
-         escalar desde el centro, combinado con el flexbox de #root para centrar. */
+    /* CSS zoom en lugar de transform:scale.
+       zoom renderiza cada elemento al tamaño físico de salida real
+       (no como bitmap pre-rasterizado), lo que da texto e imágenes
+       perfectamente nítidos a cualquier escala de ventana. */
+    #app-container {
+      zoom: var(--vp-scale, 1);
       flex-shrink: 0;
-      width: 1920px;
-      height: 1080px;
-      transform-origin: center center;
-      transform: scale(var(--vp-scale, 1));
-      position: relative;
     }
 
-    /* En impresión el scaler no aplica: App.tsx gestiona el print-container */
+    /* En impresión, zoom = 1 (App.tsx ya gestiona el escalado de impresión) */
     @media print {
-      body.vp-scale-active {
+      #root {
         display: block;
         overflow: visible;
       }
 
-      #viewport-scaler {
-        width: 100% !important;
-        height: auto !important;
-        transform: none !important;
-        position: static !important;
+      #app-container {
+        zoom: 1 !important;
       }
     }
+
 
     /* --- PRINT --- */
     /* --- PRINT --- */
