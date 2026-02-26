@@ -192,8 +192,18 @@ const App: React.FC = () => {
     setIsExporting(true);
 
     setTimeout(() => {
-      const element = document.getElementById('app-container');
+      // @ts-ignore
+      if (typeof html2pdf === 'undefined') {
+        console.error("html2pdf library not loaded");
+        setIsPrintMode(false);
+        setIsExporting(false);
+        alert("Error: La librería de PDF no se ha cargado correctamente. Por favor, recarga la página.");
+        return;
+      }
+
+      const element = document.getElementById('pdf-export-container');
       if (!element) {
+        console.error("Export container not found");
         setIsPrintMode(false);
         setIsExporting(false);
         return;
@@ -223,7 +233,7 @@ const App: React.FC = () => {
         setIsPrintMode(false);
         setIsExporting(false);
       });
-    }, 1500); // 1.5s para asegurar render completo y carga de recursos
+    }, 2000); // 2s para asegurar render completo
   };
 
   // Construct Sections Array dynamically
@@ -298,7 +308,7 @@ const App: React.FC = () => {
       });
     });
 
-    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} isSectionCompleted={completedSections.has('contact')} /> });
+    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} isSectionCompleted={completedSections.has('contact')} isExporting={isExporting} /> });
 
     return list;
   })();
@@ -455,67 +465,64 @@ const App: React.FC = () => {
 
   const activeSection = sections[currentIndex] || sections[0];
 
-  if (isPrintMode) {
-    return (
-      <div id="app-container" className="print-container">
-        {sections.map((section, index) => {
-          // Clone the element to force max step if needed
-          const compWithMaxStep = React.isValidElement(section.comp)
-            ? React.cloneElement(section.comp, { step: 99, isPrintMode: true } as any)
-            : section.comp;
-
-          return (
-            <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', pageBreakAfter: 'always', pageBreakInside: 'avoid', breakAfter: 'page', breakInside: 'avoid', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
-              <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(0.82677165)', backgroundColor: '#ffffff', overflow: 'visible' }}>
-                {section.headerPage && (
-                  <Header
-                    logo={proposalData.logos?.smallLogo}
-                    pageNumber={section.headerPage}
-                    onNavigate={() => { }}
-                  />
-                )}
-                {compWithMaxStep}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-
   return (
     <ScrollContext.Provider value={direction}>
-      <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
-        <CustomCursor />
-        {currentIndex > 1 && (
-          <Header
-            logo={proposalData.logos?.smallLogo}
-            pageNumber={activeSection.headerPage}
-            onNavigate={navigate}
-          />
-        )}
-        <div className="relative w-full h-full perspective-[1000px]">
-          <AnimatePresence initial={true} custom={direction} mode="popLayout">
-            <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
-              {activeSection.comp}
-            </SectionSlide>
-          </AnimatePresence>
-        </div>
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
-          {sections.map((_, i) => (
-            <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
-          ))}
-        </div>
+      {isPrintMode ? (
+        <div id="pdf-export-container" className="print-container">
+          {sections.map((section, index) => {
+            const compWithMaxStep = React.isValidElement(section.comp)
+              ? React.cloneElement(section.comp, { step: 99, isPrintMode: true } as any)
+              : section.comp;
 
-        {/* Overlay de Exportación */}
-        {isExporting && (
-          <div className="fixed inset-0 z-[9999] bg-vlanc-bg/90 flex flex-col items-center justify-center">
-            <div className="w-12 h-12 border-4 border-vlanc-primary border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p className="tabla1 animate-pulse">Generando Propuesta PDF...</p>
-            <p className="text-[10px] uppercase tracking-widest mt-2 opacity-50">Por favor, espera un momento</p>
+            return (
+              <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', pageBreakAfter: 'always', pageBreakInside: 'avoid', breakAfter: 'page', breakInside: 'avoid', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
+                <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(0.82677165)', backgroundColor: '#ffffff', overflow: 'visible' }}>
+                  {section.headerPage && (
+                    <Header
+                      logo={proposalData.logos?.smallLogo}
+                      pageNumber={section.headerPage}
+                      onNavigate={() => { }}
+                    />
+                  )}
+                  {compWithMaxStep}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
+          <CustomCursor />
+          {currentIndex > 1 && (
+            <Header
+              logo={proposalData.logos?.smallLogo}
+              pageNumber={activeSection.headerPage}
+              onNavigate={navigate}
+            />
+          )}
+          <div className="relative w-full h-full perspective-[1000px]">
+            <AnimatePresence initial={true} custom={direction} mode="popLayout">
+              <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
+                {activeSection.comp}
+              </SectionSlide>
+            </AnimatePresence>
           </div>
-        )}
-      </div>
+          <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
+            {sections.map((_, i) => (
+              <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Overlay de Exportación (siempre accesible) */}
+      {isExporting && (
+        <div className="fixed inset-0 z-[9999] bg-vlanc-bg/95 flex flex-col items-center justify-center">
+          <div className="w-12 h-12 border-4 border-vlanc-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="tabla1 animate-pulse">Generando Propuesta PDF...</p>
+          <p className="text-[10px] uppercase tracking-widest mt-2 opacity-50">Por favor, espera un momento</p>
+        </div>
+      )}
     </ScrollContext.Provider>
   );
 };
