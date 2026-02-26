@@ -55,12 +55,15 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
     // Calcular posición inicial centrada al montar
     React.useEffect(() => {
         if (skipAnimation) return;
+        // Usamos las dimensiones del lienzo de diseño (1920×1080) en lugar de la ventana real
+        const DESIGN_W = 1920;
+        const DESIGN_H = 1080;
         const logoAspect = 691 / 785;
-        const logoW = Math.min(785, window.innerWidth * 0.5);
+        const logoW = Math.min(785, DESIGN_W * 0.5);
         const logoH = logoW * logoAspect;
         setStartRect({
-            left: window.innerWidth / 2 - logoW / 2,
-            top: window.innerHeight / 2 - logoH / 2,
+            left: DESIGN_W / 2 - logoW / 2,
+            top: DESIGN_H / 2 - logoH / 2,
             width: logoW,
             height: logoH,
         });
@@ -69,11 +72,17 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
     const handleVideoEnd = React.useCallback(() => {
         if (footerPlaceholderRef.current) {
             const rect = footerPlaceholderRef.current.getBoundingClientRect();
+            // getBoundingClientRect devuelve coordenadas en espacio de ventana real.
+            // Como el contenedor está escalado por --vp-scale, hay que convertirlas
+            // dividiendo por la escala para obtener coordenadas en espacio de diseño (1920×1080).
+            const scale = parseFloat(
+                getComputedStyle(document.documentElement).getPropertyValue('--vp-scale') || '1'
+            ) || 1;
             setTargetRect({
-                left: rect.left,
-                top: rect.top,
-                width: rect.width,
-                height: rect.height,
+                left: rect.left / scale,
+                top: rect.top / scale,
+                width: rect.width / scale,
+                height: rect.height / scale,
             });
             setPhase('sliding');
         }

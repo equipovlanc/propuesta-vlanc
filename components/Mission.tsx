@@ -46,10 +46,10 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
                 <motion.div
                     className="flex items-center justify-center w-full h-full px-10"
                     initial={{
-                        x: step === 0 ? '22.15vw' : 0
+                        x: step === 0 ? '425px' : 0
                     }}
                     animate={{
-                        x: step === 0 ? '22.15vw' : 0
+                        x: step === 0 ? '425px' : 0
                     }}
                     transition={{
                         duration: 1.2,

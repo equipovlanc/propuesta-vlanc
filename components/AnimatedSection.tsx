@@ -67,7 +67,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   // Variantes para la BARRA (Motion Blur + Dirección Dinámica)
   const barVariants: Variants = {
     hidden: {
-      x: scrollDir > 0 ? '-120vw' : '120vw',
+      x: scrollDir > 0 ? '-2304px' : '2304px',
       opacity: 1,
       scaleX: 2.5,
       filter: 'blur(10px)',
@@ -84,7 +84,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       }
     },
     exit: {
-      x: scrollDir > 0 ? '120vw' : '-120vw',
+      x: scrollDir > 0 ? '2304px' : '-2304px',
       opacity: 1,
       scaleX: 3.0,
       filter: 'blur(15px)',

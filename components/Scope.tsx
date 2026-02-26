@@ -43,7 +43,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         const calculateLayout = () => {
             if (!containerRef.current || !titleRef.current || !barRef.current) return;
 
-            const windowHeight = window.innerHeight;
+            const windowHeight = 1080; // diseño fijo 1920×1080
             const bottomAxisY = windowHeight - 140; // Eje de los 140px
             const initialMediaHeight = 512;
 
@@ -121,9 +121,8 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
         calculateLayout();
         const timeout = setTimeout(calculateLayout, 100);
-        window.addEventListener('resize', calculateLayout);
+        // No necesitamos escuchar resize real: el layout siempre es 1920×1080
         return () => {
-            window.removeEventListener('resize', calculateLayout);
             clearTimeout(timeout);
         };
     }, [breakdown, data]);
@@ -244,7 +243,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
                 {/* Nota: Naciendo de arriba hacia abajo desde los 140px */}
                 {data?.intervention?.note && (
-                    <div className="absolute top-[calc(100vh-140px)] w-full pt-1 pointer-events-auto print-force-visible print:top-[940px]">
+                    <div className="absolute top-[940px] w-full pt-1 pointer-events-auto print-force-visible">
                         <AnimatedSection hierarchy={2}>
                             <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
                                 {data?.intervention?.note}

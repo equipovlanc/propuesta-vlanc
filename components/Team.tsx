@@ -40,7 +40,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
             </div>
 
             {/* Contenedor Principal */}
-            <div className="flex w-full mt-[297px] h-[calc(100vh-297px)] pb-[140px] print:h-[783px]">
+            <div className="flex w-full mt-[297px] h-[783px] pb-[140px]">
 
                 {/* MITAD IZQUIERDA (50%): IMÁGENES (J0) */}
                 <div className="w-1/2 h-full pr-[30px] pl-0">
