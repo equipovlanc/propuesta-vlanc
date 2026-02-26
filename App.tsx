@@ -191,19 +191,27 @@ const App: React.FC = () => {
     setIsPrintMode(true);
     setIsExporting(true);
 
+    // Watchdog: Si en 60s no ha terminado, reseteamos el estado para no bloquear al usuario
+    const watchdog = setTimeout(() => {
+      setIsPrintMode(false);
+      setIsExporting(false);
+    }, 60000);
+
     setTimeout(() => {
       // @ts-ignore
       if (typeof html2pdf === 'undefined') {
         console.error("html2pdf library not loaded");
+        clearTimeout(watchdog);
         setIsPrintMode(false);
         setIsExporting(false);
-        alert("Error: La librería de PDF no se ha cargado correctamente. Por favor, recarga la página.");
+        alert("Error: La librería de PDF no se ha cargado. Por favor, recarga la página.");
         return;
       }
 
       const element = document.getElementById('pdf-export-container');
       if (!element) {
         console.error("Export container not found");
+        clearTimeout(watchdog);
         setIsPrintMode(false);
         setIsExporting(false);
         return;
@@ -213,27 +221,31 @@ const App: React.FC = () => {
       const opt = {
         margin: 0,
         filename: `Propuesta_Vlanc_${clientClean}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: 'jpeg', quality: 0.95 },
         html2canvas: {
-          scale: 2,
+          scale: 1.5, // Reducimos escala para mayor estabilidad
           useCORS: true,
           letterRendering: true,
           allowTaint: true,
-          logging: false
+          logging: false,
+          backgroundColor: '#ffffff'
         },
         jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape', compress: true }
       };
 
       // @ts-ignore
       html2pdf().from(element).set(opt).save().then(() => {
+        clearTimeout(watchdog);
         setIsPrintMode(false);
         setIsExporting(false);
       }).catch((err: any) => {
         console.error("PDF Export Error:", err);
+        clearTimeout(watchdog);
         setIsPrintMode(false);
         setIsExporting(false);
+        alert("Ha ocurrido un error al generar el PDF. Por favor, intenta usar un navegador como Chrome o Firefox.");
       });
-    }, 2000); // 2s para asegurar render completo
+    }, 3000); // 3s para asegurar render completo
   };
 
   // Construct Sections Array dynamically
@@ -467,15 +479,50 @@ const App: React.FC = () => {
 
   return (
     <ScrollContext.Provider value={direction}>
-      {isPrintMode ? (
-        <div id="pdf-export-container" className="print-container">
+      {/* Contenedor Normal */}
+      <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
+        <CustomCursor />
+        {currentIndex > 1 && (
+          <Header
+            logo={proposalData.logos?.smallLogo}
+            pageNumber={activeSection.headerPage}
+            onNavigate={navigate}
+          />
+        )}
+        <div className="relative w-full h-full perspective-[1000px]">
+          <AnimatePresence initial={true} custom={direction} mode="popLayout">
+            <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
+              {activeSection.comp}
+            </SectionSlide>
+          </AnimatePresence>
+        </div>
+        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
+          {sections.map((_, i) => (
+            <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
+          ))}
+        </div>
+      </div>
+
+      {/* Contenedor de Exportación (Fuera de vista pero en DOM mientras se exporta) */}
+      {isPrintMode && (
+        <div
+          id="pdf-export-container"
+          className="print-container"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '-10000px', // Fuera de la pantalla para el usuario
+            width: '420mm', // Forzamos tamaño A3 para el capturador
+            backgroundColor: 'white'
+          }}
+        >
           {sections.map((section, index) => {
             const compWithMaxStep = React.isValidElement(section.comp)
               ? React.cloneElement(section.comp, { step: 99, isPrintMode: true } as any)
               : section.comp;
 
             return (
-              <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', pageBreakAfter: 'always', pageBreakInside: 'avoid', breakAfter: 'page', breakInside: 'avoid', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
+              <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', pageBreakAfter: 'always', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
                 <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(0.82677165)', backgroundColor: '#ffffff', overflow: 'visible' }}>
                   {section.headerPage && (
                     <Header
@@ -489,29 +536,6 @@ const App: React.FC = () => {
               </div>
             );
           })}
-        </div>
-      ) : (
-        <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
-          <CustomCursor />
-          {currentIndex > 1 && (
-            <Header
-              logo={proposalData.logos?.smallLogo}
-              pageNumber={activeSection.headerPage}
-              onNavigate={navigate}
-            />
-          )}
-          <div className="relative w-full h-full perspective-[1000px]">
-            <AnimatePresence initial={true} custom={direction} mode="popLayout">
-              <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
-                {activeSection.comp}
-              </SectionSlide>
-            </AnimatePresence>
-          </div>
-          <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
-            {sections.map((_, i) => (
-              <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
-            ))}
-          </div>
         </div>
       )}
 
