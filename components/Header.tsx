@@ -32,8 +32,10 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate, onPrint }
       {/* Número de página y línea vertical - Coordenadas fijas */}
       {pageNumber && (
         <div className="absolute top-0 right-[60px] flex flex-col items-center pointer-events-auto">
-          {/* Línea vertical */}
-          <div className="w-[1px] h-[90px] bg-[#703622]"></div>
+          {/* Línea vertical (SVG para forzar vectorizado perfecto en PDF) */}
+          <svg width="1" height="90" className="header-line">
+            <line x1="0.5" y1="0" x2="0.5" y2="90" stroke="#703622" strokeWidth="1" />
+          </svg>
 
           <div className="mt-2 text-[11px] font-sans text-[#703622] font-normal tracking-[0.2em]">
             {pageNumber}
