@@ -372,12 +372,47 @@ const App: React.FC = () => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') navigate(currentIndex - 1);
     };
 
+    // Touch / Swipe para móvil
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (isAnimating) return;
+      if (isNavigationBlocked) return;
+      const deltaY = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(deltaY) < 50) return; // mínimo 50px para considerar swipe
+
+      const activeSection = sections[currentIndex];
+      const isCompleted = completedSections.has(activeSection.id);
+
+      const tryStep = (maxSteps: number): boolean => {
+        if (deltaY > 0) { if (internalStep < maxSteps) { setInternalStep(prev => prev + 1); return true; } }
+        else { if (internalStep > 0) { setInternalStep(prev => prev - 1); return true; } }
+        return false;
+      };
+
+      if (activeSection.id === 'mission' && !isCompleted && tryStep(2)) return;
+      if (activeSection.id === 'process' && !isCompleted && tryStep(proposalData?.process?.steps?.length || 8)) return;
+      if (activeSection.id === 'investment' && !isCompleted && tryStep(6)) return;
+      if (activeSection.id === 'payment' && !isCompleted && tryStep(2)) return;
+      if (activeSection.id === 'special-offers' && !isCompleted && tryStep(3)) return;
+      if (activeSection.id === 'divider-slide' && !isCompleted && tryStep(1)) return;
+
+      if (deltaY > 0) navigate(currentIndex + 1);
+      else navigate(currentIndex - 1);
+    };
+
     window.addEventListener('wheel', handleWheel);
     window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [currentIndex, isAnimating, sections, internalStep, proposalData, completedSections, isNavigationBlocked]);
 

@@ -143,6 +143,89 @@
       }
     }
 
+    /* ── FORZAR LAYOUT DESKTOP DENTRO DEL CANVAS ──
+       Los prefijos Tailwind lg: sm: md: usan @media min-width sobre el viewport REAL.
+       En móvil/ventana pequeña estas breakpoints no se activan, rompiendo el layout.
+       Dentro de #app-container siempre asumimos que estamos en "desktop" (1920px).
+       Sobrescribimos directamente las clases con prefijo lg: que están en uso. */
+    #app-container .lg\:flex-row {
+      flex-direction: row !important;
+    }
+
+    #app-container .lg\:flex-col {
+      flex-direction: column !important;
+    }
+
+    /* Widths con lg: */
+    #app-container .lg\:w-\[55\.7\%\] {
+      width: 55.7% !important;
+    }
+
+    #app-container .lg\:w-\[44\.3\%\] {
+      width: 44.3% !important;
+    }
+
+    #app-container .lg\:w-1\/4 {
+      width: 25% !important;
+    }
+
+    #app-container .lg\:w-3\/4 {
+      width: 75% !important;
+    }
+
+    #app-container .lg\:flex-1 {
+      flex: 1 1 0% !important;
+    }
+
+    /* Display con lg: */
+    #app-container .lg\:block {
+      display: block !important;
+    }
+
+    #app-container .hidden.lg\:block {
+      display: block !important;
+    }
+
+    /* Grid cols con lg: */
+    #app-container .lg\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    #app-container .lg\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    #app-container .sm\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    /* Grid cols personalizados con lg: */
+    #app-container .lg\:grid-cols-\[60\%_40\%\] {
+      grid-template-columns: 60% 40% !important;
+    }
+
+    /* Paddings y gaps con lg: */
+    #app-container .lg\:pl-\[120px\] {
+      padding-left: 120px !important;
+    }
+
+    #app-container .lg\:pr-\[120px\] {
+      padding-right: 120px !important;
+    }
+
+    #app-container .lg\:pl-\[76px\] {
+      padding-left: 76px !important;
+    }
+
+    #app-container .lg\:gap-24 {
+      gap: 6rem !important;
+    }
+
+    #app-container .lg\:pt-\[76px\] {
+      padding-top: 76px !important;
+    }
+
+
 
     /* Grain Filter */
     .bg-grain::before {
