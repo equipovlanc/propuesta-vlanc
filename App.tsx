@@ -188,21 +188,18 @@ const App: React.FC = () => {
 
   // Handler manual para descarga de PDF por software
   const handleManualPrint = () => {
-    setIsPrintMode(true);
     setIsExporting(true);
+    window.scrollTo(0, 0);
 
     // Watchdog: Si en 60s no ha terminado, reseteamos el estado para no bloquear al usuario
     const watchdog = setTimeout(() => {
-      setIsPrintMode(false);
       setIsExporting(false);
     }, 60000);
 
     setTimeout(() => {
       // @ts-ignore
       if (typeof html2pdf === 'undefined') {
-        console.error("html2pdf library not loaded");
         clearTimeout(watchdog);
-        setIsPrintMode(false);
         setIsExporting(false);
         alert("Error: La librería de PDF no se ha cargado. Por favor, recarga la página.");
         return;
@@ -210,9 +207,7 @@ const App: React.FC = () => {
 
       const element = document.getElementById('pdf-export-container');
       if (!element) {
-        console.error("Export container not found");
         clearTimeout(watchdog);
-        setIsPrintMode(false);
         setIsExporting(false);
         return;
       }
@@ -223,11 +218,11 @@ const App: React.FC = () => {
         filename: `Propuesta_Vlanc_${clientClean}.pdf`,
         image: { type: 'jpeg', quality: 0.95 },
         html2canvas: {
-          scale: 1.5, // Reducimos escala para mayor estabilidad
+          scale: 1, // Escala conservadora para evitar errores de memoria o canvas en blanco
           useCORS: true,
-          letterRendering: true,
-          allowTaint: true,
           logging: false,
+          scrollY: 0,
+          scrollX: 0,
           backgroundColor: '#ffffff'
         },
         jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape', compress: true }
@@ -236,16 +231,14 @@ const App: React.FC = () => {
       // @ts-ignore
       html2pdf().from(element).set(opt).save().then(() => {
         clearTimeout(watchdog);
-        setIsPrintMode(false);
         setIsExporting(false);
       }).catch((err: any) => {
         console.error("PDF Export Error:", err);
         clearTimeout(watchdog);
-        setIsPrintMode(false);
         setIsExporting(false);
-        alert("Ha ocurrido un error al generar el PDF. Por favor, intenta usar un navegador como Chrome o Firefox.");
+        alert("Error al generar el PDF. Por favor, intenta de nuevo.");
       });
-    }, 4000); // 4s para asegurar render completo de todas las diapositivas
+    }, 5000); // 5s de espera para asegurar que todo el renderizado y fuentes estén listos
   };
 
   // Construct Sections Array dynamically
@@ -436,35 +429,6 @@ const App: React.FC = () => {
     };
   }, [currentIndex, isAnimating, sections, internalStep, proposalData, completedSections, isNavigationBlocked]);
 
-  // Print Mode Handler
-  useEffect(() => {
-    // Escucha el evento 'beforeprint' y 'afterprint' que dispara el navegador nativamente.
-    const handleBeforePrint = () => {
-      setIsPrintMode(true);
-    };
-    const handleAfterPrint = () => {
-      setIsPrintMode(false);
-    };
-
-    window.addEventListener('beforeprint', handleBeforePrint);
-    window.addEventListener('afterprint', handleAfterPrint);
-
-    // Safari fallback (A veces beforeprint puede fallar, dependemos fuertemente del onPrint del Header)
-    const mediaQueryList = window.matchMedia('print');
-    mediaQueryList.addEventListener('change', (mql) => {
-      if (mql.matches) {
-        setIsPrintMode(true);
-      } else {
-        setIsPrintMode(false);
-      }
-    });
-
-    return () => {
-      window.removeEventListener('beforeprint', handleBeforePrint);
-      window.removeEventListener('afterprint', handleAfterPrint);
-    };
-  }, []);
-
   // Renders
   if (!slug) return (
     <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
@@ -503,21 +467,17 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Contenedor de Exportación (Invisible para el usuario pero presente para el motor de PDF) */}
-      {isPrintMode && (
+      {/* Contenedor de Exportación (Nombramiento dedicado y fuera de vista) */}
+      {isExporting && (
         <div
           id="pdf-export-container"
-          className="print-container"
           style={{
-            position: 'fixed',
+            position: 'absolute',
             top: 0,
-            left: 0,
-            zIndex: -1000,
-            opacity: 0.01, // Casi invisible pero renderizado
-            pointerEvents: 'none',
+            left: '-20000px', // Lo alejamos lo suficiente para que no sea visible
             width: '420mm',
             backgroundColor: 'white',
-            overflow: 'hidden'
+            overflow: 'visible'
           }}
         >
           {sections.map((section, index) => {
