@@ -251,8 +251,7 @@ const App: React.FC = () => {
           step={internalStep}
           isSectionCompleted={completedSections.has('divider-slide')}
           setNavigationBlocked={setNavigationBlocked}
-        />,
-        headerPage: 17
+        />
       },
       { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 18 }
     );
@@ -471,6 +470,7 @@ const App: React.FC = () => {
           return (
             <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', pageBreakAfter: 'always', pageBreakInside: 'avoid', breakAfter: 'page', breakInside: 'avoid', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
               <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', zoom: 0.82677165, backgroundColor: '#ffffff', overflow: 'visible' }}>
+                {compWithMaxStep}
                 {section.headerPage && (
                   <Header
                     logo={proposalData.logos?.smallLogo}
@@ -478,7 +478,6 @@ const App: React.FC = () => {
                     onNavigate={() => { }}
                   />
                 )}
-                {compWithMaxStep}
               </div>
             </div>
           );
