@@ -112,11 +112,9 @@
       z-index: -1;
     }
 
-    #root,
-    #app-container {
+    #root {
       width: 100%;
       height: 100%;
-      overflow: hidden;
     }
 
     /* Grain Filter */
@@ -316,6 +314,39 @@
       animation: kenburns 40s ease-in-out infinite;
     }
 
+    /* ── VIEWPORT SCALER ── */
+    /* El body actúa como contenedor centrado para el scaler */
+    body.vp-scale-active {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+
+    #viewport-scaler {
+      flex-shrink: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: top left;
+      transform: scale(var(--vp-scale, 1));
+      position: relative;
+    }
+
+    /* En impresión el scaler no aplica: App.tsx gestiona el print-container */
+    @media print {
+      body.vp-scale-active {
+        display: block;
+        overflow: visible;
+      }
+
+      #viewport-scaler {
+        width: 100% !important;
+        height: auto !important;
+        transform: none !important;
+        position: static !important;
+      }
+    }
+
     /* --- PRINT --- */
     /* --- PRINT --- */
     @media print {
@@ -436,6 +467,42 @@
   </svg>
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
+
+  <!-- Viewport Scaler: mantiene 1920x1080 escalado al tamaño de ventana -->
+  <script>
+      (function () {
+        var DESIGN_W = 1920;
+        var DESIGN_H = 1080;
+
+        function updateScale() {
+          // No aplicar durante impresión
+          if (window.matchMedia('print').matches) return;
+
+          var scaleX = window.innerWidth / DESIGN_W;
+          var scaleY = window.innerHeight / DESIGN_H;
+          var scale = Math.min(scaleX, scaleY);
+
+          document.documentElement.style.setProperty('--vp-scale', scale);
+
+          var scaler = document.getElementById('viewport-scaler');
+          if (scaler) {
+            // Centrar el scaler (letterbox)
+            var offsetX = (window.innerWidth - DESIGN_W * scale) / 2;
+            var offsetY = (window.innerHeight - DESIGN_H * scale) / 2;
+            scaler.style.marginLeft = offsetX + 'px';
+            scaler.style.marginTop = offsetY + 'px';
+          }
+
+          // Marcar body para activar los estilos del scaler
+          document.body.classList.add('vp-scale-active');
+        }
+
+        window.addEventListener('resize', updateScale);
+        // Ejecutar lo antes posible y también tras la carga completa
+        updateScale();
+        window.addEventListener('load', updateScale);
+      })();
+  </script>
 </body>
 
 </html>

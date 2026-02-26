@@ -412,10 +412,14 @@ const App: React.FC = () => {
 
   // Renders
   if (!slug) return (
-    <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
+    <>
       <CustomCursor />
-      <StudioLanding />
-    </div>
+      <div id="viewport-scaler">
+        <div id="app-container" style={{ width: '1920px', height: '1080px', position: 'relative', overflow: 'hidden' }}>
+          <StudioLanding />
+        </div>
+      </div>
+    </>
   );
   if (loading) return <div className="h-screen bg-vlanc-bg flex items-center justify-center text-vlanc-primary font-bold tracking-widest uppercase">Cargando...</div>;
   if (error) return <div className="h-screen bg-vlanc-bg flex items-center justify-center">{error}</div>;
@@ -452,26 +456,28 @@ const App: React.FC = () => {
 
   return (
     <ScrollContext.Provider value={direction}>
-      <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
-        <CustomCursor />
-        {currentIndex > 1 && (
-          <Header
-            logo={proposalData.logos?.smallLogo}
-            pageNumber={activeSection.headerPage}
-            onNavigate={navigate}
-          />
-        )}
-        <div className="relative w-full h-full perspective-[1000px]">
-          <AnimatePresence initial={true} custom={direction} mode="popLayout">
-            <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
-              {activeSection.comp}
-            </SectionSlide>
-          </AnimatePresence>
-        </div>
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
-          {sections.map((_, i) => (
-            <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
-          ))}
+      <CustomCursor />
+      <div id="viewport-scaler">
+        <div id="app-container" style={{ width: '1920px', height: '1080px', position: 'relative', overflow: 'hidden' }}>
+          {currentIndex > 1 && (
+            <Header
+              logo={proposalData.logos?.smallLogo}
+              pageNumber={activeSection.headerPage}
+              onNavigate={navigate}
+            />
+          )}
+          <div className="relative w-full h-full perspective-[1000px]">
+            <AnimatePresence initial={true} custom={direction} mode="popLayout">
+              <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
+                {activeSection.comp}
+              </SectionSlide>
+            </AnimatePresence>
+          </div>
+          <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 pointer-events-none opacity-20 no-print">
+            {sections.map((_, i) => (
+              <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
+            ))}
+          </div>
         </div>
       </div>
     </ScrollContext.Provider>

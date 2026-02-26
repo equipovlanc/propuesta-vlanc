@@ -7,7 +7,7 @@ const CustomCursor: React.FC = () => {
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-  
+
   const springConfig = { damping: 28, stiffness: 600, mass: 0.5 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
@@ -18,7 +18,7 @@ const CustomCursor: React.FC = () => {
       cursorY.set(e.clientY);
 
       const target = e.target as HTMLElement;
-      
+
       const isInteractable = !!target.closest('button, a, input, select, .cursor-pointer, video[controls]');
       setIsOverInteractive(isInteractable);
 
@@ -26,19 +26,19 @@ const CustomCursor: React.FC = () => {
       const isIgnored = !!target.closest('[data-cursor-ignore]');
 
       if (!isIgnored && isVideoWithoutControls && !isInteractable) {
-          setCursorMode('play');
+        setCursorMode('play');
       } else {
-          setCursorMode('default');
+        setCursorMode('default');
       }
     };
-    
+
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, [cursorX, cursorY]);
-  
+
   const size = isOverInteractive ? 40 : cursorMode === 'play' ? 80 : 16;
   const bgColor = cursorMode === 'play' ? 'rgba(143, 73, 51, 0.15)' : 'rgba(143, 73, 51, 0.05)';
 
