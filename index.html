@@ -117,6 +117,36 @@
       height: 100%;
     }
 
+    /* ── OVERRIDE vh UNITS INSIDE DESIGN CANVAS ──
+       Tailwind h-screen / min-h-screen usan 100vh, que referencia el viewport REAL.
+       Dentro de #app-container (1920×1080) forzamos que usen height: 100%
+       para que siempre sean exactamente 1080px. */
+    #app-container .h-screen,
+    #app-container section.h-screen,
+    #app-container footer.h-screen {
+      height: 100% !important;
+    }
+
+    #app-container .min-h-screen,
+    #app-container section.min-h-screen,
+    #app-container footer.min-h-screen {
+      min-height: 100% !important;
+      height: 100% !important;
+    }
+
+    @media print {
+
+      #app-container .h-screen,
+      #app-container section.h-screen,
+      #app-container footer.h-screen,
+      #app-container .min-h-screen,
+      #app-container section.min-h-screen {
+        height: 1080px !important;
+        min-height: 1080px !important;
+      }
+    }
+
+
     /* Grain Filter */
     .bg-grain::before {
       content: "";
