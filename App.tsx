@@ -494,13 +494,6 @@ const App: React.FC = () => {
       <CustomCursor />
       <div id="viewport-scaler">
         <div id="app-container" style={{ width: '1920px', height: '1080px', position: 'relative', overflow: 'hidden' }}>
-          {currentIndex > 1 && (
-            <Header
-              logo={proposalData.logos?.smallLogo}
-              pageNumber={activeSection.headerPage}
-              onNavigate={navigate}
-            />
-          )}
           <div className="relative w-full h-full perspective-[1000px]">
             <AnimatePresence initial={true} custom={direction} mode="popLayout">
               <SectionSlide key={currentIndex} id={activeSection.id} direction={direction}>
@@ -513,6 +506,14 @@ const App: React.FC = () => {
               <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
             ))}
           </div>
+          {/* Header al final del DOM para que su z-[60] siempre gane sobre el perspective container */}
+          {currentIndex > 1 && (
+            <Header
+              logo={proposalData.logos?.smallLogo}
+              pageNumber={activeSection.headerPage}
+              onNavigate={navigate}
+            />
+          )}
         </div>
       </div>
     </ScrollContext.Provider>
