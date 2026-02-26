@@ -10,7 +10,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate, onPrint }) => {
   return (
-    <header className="absolute top-0 left-0 w-full pointer-events-none z-[60] mix-blend-multiply print:mix-blend-normal">
+    <header className="absolute top-0 left-0 w-full pointer-events-none z-[60]">
       {/* Logo Small - Navegación al Índice (Sección 1, índice 1) */}
       <button
         onClick={() => onNavigate && onNavigate(1)}
@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate, onPrint }
       {pageNumber && (
         <div className="absolute top-0 right-[60px] flex flex-col items-center pointer-events-auto">
           {/* Línea vertical */}
-          <div className="w-[1px] h-[90px] bg-[#703622]"></div>
+          <div className="w-[2px] h-[90px] bg-[#703622]"></div>
 
           <div className="mt-2 text-[11px] font-sans text-[#703622] font-normal tracking-[0.2em]">
             {pageNumber}

@@ -224,6 +224,41 @@
     }
 
 
+    /* ── ANTI-BLUR: GPU rendering hints ──
+       El transform:scale() en #viewport-scaler puede causar blurriness en texto
+       e imágenes debido a composición de capas GPU en píxeles fraccionales.
+       Estos hints mejoran la nitidez sin cambiar el diseño visual. */
+
+    /* Forzar capa GPU propia para el scaler → evita que el blur de animaciones
+       secundarias (AnimatedSection, SectionSlide) sangre hacia elementos hermanos */
+    #viewport-scaler {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      will-change: transform;
+    }
+
+    /* El header y sus hijos nunca deben estar borrosos, aunque el slide de debajo
+       esté en medio de una animación de blur */
+    #app-container header {
+      isolation: isolate;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    /* Las modales/popups (position:fixed dentro del container) tampoco */
+    #app-container .fixed {
+      isolation: isolate;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    /* Mejorar renderizado de texto a cualquier escala */
+    #app-container {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
 
     /* Grain Filter */
     .bg-grain::before {
