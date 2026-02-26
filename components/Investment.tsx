@@ -88,7 +88,6 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                 animate={{
                                     opacity: (step >= i + 1 || isPrintMode) ? 1 : 0.1,
                                     x: (step >= i + 1 || isPrintMode) ? 0 : -20,
-                                    filter: (step >= i + 1 || isPrintMode) ? 'blur(0px)' : 'blur(2px)'
                                 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             >

@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate, onPrint }
       {pageNumber && (
         <div className="absolute top-0 right-[60px] flex flex-col items-center pointer-events-auto">
           {/* Línea vertical */}
-          <div className="w-[2px] h-[90px] bg-[#703622]"></div>
+          <div className="w-[1px] h-[90px] bg-[#703622]"></div>
 
           <div className="mt-2 text-[11px] font-sans text-[#703622] font-normal tracking-[0.2em]">
             {pageNumber}
