@@ -441,7 +441,9 @@ const App: React.FC = () => {
                     onNavigate={() => { }}
                   />
                 )}
-                {compWithMaxStep}
+                {React.isValidElement(section.comp)
+                  ? React.cloneElement(section.comp, { step: 99, isPrintMode: true } as any)
+                  : section.comp}
               </div>
             </div>
           );
