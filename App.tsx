@@ -472,11 +472,13 @@ const App: React.FC = () => {
               <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', zoom: 0.82677165, backgroundColor: '#ffffff', overflow: 'visible' }}>
                 {compWithMaxStep}
                 {section.headerPage && (
-                  <Header
-                    logo={proposalData.logos?.smallLogo}
-                    pageNumber={section.headerPage}
-                    onNavigate={() => { }}
-                  />
+                  <div className="relative z-[999]">
+                    <Header
+                      logo={proposalData.logos?.smallLogo}
+                      pageNumber={section.headerPage}
+                      onNavigate={() => { }}
+                    />
+                  </div>
                 )}
               </div>
             </div>

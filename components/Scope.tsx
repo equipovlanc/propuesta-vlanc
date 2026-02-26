@@ -229,7 +229,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             </div>
 
             {/* --- COLUMNA DERECHA (ACCIÓN INVERTIDA) --- */}
-            <div className="fixed right-[120px] w-[735px] pointer-events-none" style={{ top: 0, bottom: 0 }}>
+            <div className="absolute right-[120px] w-[735px] pointer-events-none" style={{ top: 0, bottom: 0 }}>
                 {/* Breakdown Items: Naciendo desde abajo hacia arriba hasta los 140px */}
                 <div className="absolute bottom-[140px] w-full flex flex-col justify-end pointer-events-auto">
                     <AnimatedSection hierarchy={2}>
