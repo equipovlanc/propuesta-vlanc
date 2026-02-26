@@ -432,7 +432,7 @@ const App: React.FC = () => {
             : section.comp;
 
           return (
-            <div key={`print-slide-${index}`} className="print-page-a3">
+            <div key={`print-slide-${index}`} className="print-page-a4">
               <div className="print-slide-canvas">
                 {section.headerPage && (
                   <Header

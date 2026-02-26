@@ -320,7 +320,7 @@
     /* --- PRINT --- */
     @media print {
       @page {
-        size: A3 landscape;
+        size: A4 landscape;
         margin: 0;
       }
 
@@ -374,45 +374,36 @@
         background-color: white;
       }
 
-      /* Unified Slide Container for A3 */
-      .print-page-a3 {
-        width: 420mm;
-        height: 297mm;
+      /* Unified Slide Container for A4 (297 x 210mm) */
+      .print-page-a4 {
+        width: 297mm !important;
+        height: 210mm !important;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow: visible;
+        overflow: visible !important;
         page-break-after: always;
         break-after: page;
         background-color: white;
         box-sizing: border-box;
       }
 
-      /* The 1920x1080 Canvas */
+      /* The 1920x1080 Canvas scaled to A4 Landscape */
       .print-slide-canvas {
         flex-shrink: 0;
         width: 1920px;
         height: 1080px;
         position: relative;
         background-color: white;
-        overflow: visible;
-        transform-origin: center;
-      }
+        overflow: visible !important;
+        transform-origin: center center;
+        /* Unified scale for all browsers: 297mm (1122.5px) / 1920px = ~0.5846 */
+        transform: scale(0.58464567) !important;
 
-      /* Chrome/WebKit specialized scaling (Zoom is more stable in Blink print engine) */
-      @supports (-webkit-touch-callout: none) or (-webkit-appearance: none) {
-        .print-slide-canvas {
-          zoom: 0.82677165; /* 1587.4px / 1920px */
-          transform: none !important;
-        }
-      }
-
-      /* Firefox scaling (Transform is needed as zoom isn't supported for layout) */
-      @-moz-document url-prefix() {
-        .print-slide-canvas {
-          transform: scale(0.82677165) !important;
-        }
+        /* Chrome Quality Fixes */
+        backface-visibility: hidden;
+        -webkit-font-smoothing: antialiased;
       }
 
       header {
