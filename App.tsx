@@ -245,7 +245,7 @@ const App: React.FC = () => {
         setIsExporting(false);
         alert("Ha ocurrido un error al generar el PDF. Por favor, intenta usar un navegador como Chrome o Firefox.");
       });
-    }, 3000); // 3s para asegurar render completo
+    }, 4000); // 4s para asegurar render completo de todas las diapositivas
   };
 
   // Construct Sections Array dynamically
@@ -503,17 +503,21 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Contenedor de Exportación (Fuera de vista pero en DOM mientras se exporta) */}
+      {/* Contenedor de Exportación (Invisible para el usuario pero presente para el motor de PDF) */}
       {isPrintMode && (
         <div
           id="pdf-export-container"
           className="print-container"
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: 0,
-            left: '-10000px', // Fuera de la pantalla para el usuario
-            width: '420mm', // Forzamos tamaño A3 para el capturador
-            backgroundColor: 'white'
+            left: 0,
+            zIndex: -1000,
+            opacity: 0.01, // Casi invisible pero renderizado
+            pointerEvents: 'none',
+            width: '420mm',
+            backgroundColor: 'white',
+            overflow: 'hidden'
           }}
         >
           {sections.map((section, index) => {
