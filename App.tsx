@@ -47,6 +47,7 @@ const App: React.FC = () => {
   // Estado para bloquear la navegación (ej: Modal abierto en paso 3 de special-offers)
   const [isNavigationBlocked, setNavigationBlocked] = useState(false);
   const [isPrintMode, setIsPrintMode] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   const [slug, setSlug] = useState<string | null>(null);
   const wheelTimeout = useRef<number | null>(null);
@@ -185,12 +186,44 @@ const App: React.FC = () => {
     if (index !== -1) navigate(index);
   };
 
-  // Handler manual del botón de imprimir para asegurar la carga *antes* del prompt
+  // Handler manual para descarga de PDF por software
   const handleManualPrint = () => {
     setIsPrintMode(true);
+    setIsExporting(true);
+
     setTimeout(() => {
-      window.print();
-    }, 500); // 500ms de delay para darle tiempo a React a renderizar todas las páginas de golpe
+      const element = document.getElementById('app-container');
+      if (!element) {
+        setIsPrintMode(false);
+        setIsExporting(false);
+        return;
+      }
+
+      const clientClean = proposalData?.hero?.clientName?.replace(/<[^>]*>?/gm, '').trim() || 'Cliente';
+      const opt = {
+        margin: 0,
+        filename: `Propuesta_Vlanc_${clientClean}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          letterRendering: true,
+          allowTaint: true,
+          logging: false
+        },
+        jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape', compress: true }
+      };
+
+      // @ts-ignore
+      html2pdf().from(element).set(opt).save().then(() => {
+        setIsPrintMode(false);
+        setIsExporting(false);
+      }).catch((err: any) => {
+        console.error("PDF Export Error:", err);
+        setIsPrintMode(false);
+        setIsExporting(false);
+      });
+    }, 1500); // 1.5s para asegurar render completo y carga de recursos
   };
 
   // Construct Sections Array dynamically
@@ -473,6 +506,15 @@ const App: React.FC = () => {
             <div key={i} className={`w-1 h-1 rounded-full transition-all ${i === currentIndex ? 'bg-vlanc-primary scale-150' : 'bg-vlanc-black'}`} />
           ))}
         </div>
+
+        {/* Overlay de Exportación */}
+        {isExporting && (
+          <div className="fixed inset-0 z-[9999] bg-vlanc-bg/90 flex flex-col items-center justify-center">
+            <div className="w-12 h-12 border-4 border-vlanc-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="tabla1 animate-pulse">Generando Propuesta PDF...</p>
+            <p className="text-[10px] uppercase tracking-widest mt-2 opacity-50">Por favor, espera un momento</p>
+          </div>
+        )}
       </div>
     </ScrollContext.Provider>
   );
