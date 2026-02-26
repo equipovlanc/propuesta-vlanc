@@ -47,7 +47,6 @@ const App: React.FC = () => {
   // Estado para bloquear la navegación (ej: Modal abierto en paso 3 de special-offers)
   const [isNavigationBlocked, setNavigationBlocked] = useState(false);
   const [isPrintMode, setIsPrintMode] = useState(false);
-  const [isExporting, setIsExporting] = useState(false);
 
   const [slug, setSlug] = useState<string | null>(null);
   const wheelTimeout = useRef<number | null>(null);
@@ -186,59 +185,12 @@ const App: React.FC = () => {
     if (index !== -1) navigate(index);
   };
 
-  // Handler manual para descarga de PDF por software
+  // Handler manual del botón de imprimir para asegurar la carga *antes* del prompt
   const handleManualPrint = () => {
-    setIsExporting(true);
-    window.scrollTo(0, 0);
-
-    // Watchdog: Si en 60s no ha terminado, reseteamos el estado para no bloquear al usuario
-    const watchdog = setTimeout(() => {
-      setIsExporting(false);
-    }, 60000);
-
+    setIsPrintMode(true);
     setTimeout(() => {
-      // @ts-ignore
-      if (typeof html2pdf === 'undefined') {
-        clearTimeout(watchdog);
-        setIsExporting(false);
-        alert("Error: La librería de PDF no se ha cargado. Por favor, recarga la página.");
-        return;
-      }
-
-      const element = document.getElementById('pdf-export-container');
-      if (!element) {
-        clearTimeout(watchdog);
-        setIsExporting(false);
-        return;
-      }
-
-      const clientClean = proposalData?.hero?.clientName?.replace(/<[^>]*>?/gm, '').trim() || 'Cliente';
-      const opt = {
-        margin: 0,
-        filename: `Propuesta_Vlanc_${clientClean}.pdf`,
-        image: { type: 'jpeg', quality: 0.95 },
-        html2canvas: {
-          scale: 1, // Escala conservadora para evitar errores de memoria o canvas en blanco
-          useCORS: true,
-          logging: false,
-          scrollY: 0,
-          scrollX: 0,
-          backgroundColor: '#ffffff'
-        },
-        jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape', compress: true }
-      };
-
-      // @ts-ignore
-      html2pdf().from(element).set(opt).save().then(() => {
-        clearTimeout(watchdog);
-        setIsExporting(false);
-      }).catch((err: any) => {
-        console.error("PDF Export Error:", err);
-        clearTimeout(watchdog);
-        setIsExporting(false);
-        alert("Error al generar el PDF. Por favor, intenta de nuevo.");
-      });
-    }, 5000); // 5s de espera para asegurar que todo el renderizado y fuentes estén listos
+      window.print();
+    }, 500); // 500ms de delay para darle tiempo a React a renderizar todas las páginas de golpe
   };
 
   // Construct Sections Array dynamically
@@ -313,7 +265,7 @@ const App: React.FC = () => {
       });
     });
 
-    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} isSectionCompleted={completedSections.has('contact')} isExporting={isExporting} /> });
+    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} isSectionCompleted={completedSections.has('contact')} /> });
 
     return list;
   })();
@@ -429,6 +381,35 @@ const App: React.FC = () => {
     };
   }, [currentIndex, isAnimating, sections, internalStep, proposalData, completedSections, isNavigationBlocked]);
 
+  // Print Mode Handler
+  useEffect(() => {
+    // Escucha el evento 'beforeprint' y 'afterprint' que dispara el navegador nativamente.
+    const handleBeforePrint = () => {
+      setIsPrintMode(true);
+    };
+    const handleAfterPrint = () => {
+      setIsPrintMode(false);
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+
+    // Safari fallback (A veces beforeprint puede fallar, dependemos fuertemente del onPrint del Header)
+    const mediaQueryList = window.matchMedia('print');
+    mediaQueryList.addEventListener('change', (mql) => {
+      if (mql.matches) {
+        setIsPrintMode(true);
+      } else {
+        setIsPrintMode(false);
+      }
+    });
+
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
+    };
+  }, []);
+
   // Renders
   if (!slug) return (
     <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
@@ -441,9 +422,36 @@ const App: React.FC = () => {
 
   const activeSection = sections[currentIndex] || sections[0];
 
+  if (isPrintMode) {
+    return (
+      <div id="app-container" className="print-container">
+        {sections.map((section, index) => {
+          // Clone the element to force max step if needed
+          const compWithMaxStep = React.isValidElement(section.comp)
+            ? React.cloneElement(section.comp, { step: 99, isPrintMode: true } as any)
+            : section.comp;
+
+          return (
+            <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', pageBreakAfter: 'always', pageBreakInside: 'avoid', breakAfter: 'page', breakInside: 'avoid', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
+              <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(0.82677165)', backgroundColor: '#ffffff', overflow: 'visible' }}>
+                {section.headerPage && (
+                  <Header
+                    logo={proposalData.logos?.smallLogo}
+                    pageNumber={section.headerPage}
+                    onNavigate={() => { }}
+                  />
+                )}
+                {compWithMaxStep}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <ScrollContext.Provider value={direction}>
-      {/* Contenedor Normal */}
       <div id="app-container" className="fixed inset-0 w-full h-full overflow-hidden">
         <CustomCursor />
         {currentIndex > 1 && (
@@ -466,51 +474,6 @@ const App: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* Contenedor de Exportación (Nombramiento dedicado y fuera de vista) */}
-      {isExporting && (
-        <div
-          id="pdf-export-container"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: '-20000px', // Lo alejamos lo suficiente para que no sea visible
-            width: '420mm',
-            backgroundColor: 'white',
-            overflow: 'visible'
-          }}
-        >
-          {sections.map((section, index) => {
-            const compWithMaxStep = React.isValidElement(section.comp)
-              ? React.cloneElement(section.comp, { step: 99, isPrintMode: true } as any)
-              : section.comp;
-
-            return (
-              <div key={`print-slide-${index}`} style={{ width: '420mm', height: '297mm', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible', pageBreakAfter: 'always', backgroundColor: '#ffffff', boxSizing: 'border-box' }}>
-                <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', transformOrigin: 'center', transform: 'scale(0.82677165)', backgroundColor: '#ffffff', overflow: 'visible' }}>
-                  {section.headerPage && (
-                    <Header
-                      logo={proposalData.logos?.smallLogo}
-                      pageNumber={section.headerPage}
-                      onNavigate={() => { }}
-                    />
-                  )}
-                  {compWithMaxStep}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Overlay de Exportación (siempre accesible) */}
-      {isExporting && (
-        <div className="fixed inset-0 z-[9999] bg-vlanc-bg/95 flex flex-col items-center justify-center">
-          <div className="w-12 h-12 border-4 border-vlanc-primary border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="tabla1 animate-pulse">Generando Propuesta PDF...</p>
-          <p className="text-[10px] uppercase tracking-widest mt-2 opacity-50">Por favor, espera un momento</p>
-        </div>
-      )}
     </ScrollContext.Provider>
   );
 };

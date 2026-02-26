@@ -24,7 +24,6 @@ interface ContactProps {
     finalLogoVideo?: string | null;
     onPrint?: () => void;
     isSectionCompleted?: boolean;
-    isExporting?: boolean;
 }
 
 type Phase = 'playing' | 'sliding' | 'done';
@@ -36,7 +35,7 @@ interface OverlayRect {
     height: number;
 }
 
-const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint, isSectionCompleted = false, isExporting = false }) => {
+const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint, isSectionCompleted = false }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
     const hasVideo = !!finalLogoVideo && !videoHasError;
 
@@ -97,7 +96,6 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
     }, [phase]);
 
     const handlePrint = () => {
-        if (isExporting) return;
         if (onPrint) onPrint();
         else setTimeout(() => window.print(), 500);
     };
@@ -223,10 +221,9 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
             >
                 <button
                     onClick={handlePrint}
-                    disabled={isExporting}
-                    className={`text-[10px] font-bold tracking-[0.3em] transition-all duration-300 uppercase outline-none ${isExporting ? 'text-vlanc-primary animate-pulse cursor-wait' : 'text-vlanc-black/30 hover:text-vlanc-primary cursor-pointer'}`}
+                    className="text-[10px] font-bold tracking-[0.3em] text-vlanc-black/30 hover:text-vlanc-primary transition-all duration-300 uppercase outline-none"
                 >
-                    {isExporting ? '[ GENERANDO PDF... ]' : '[ IMPRIMIR PROPUESTA / PDF ]'}
+                    [ IMPRIMIR PROPUESTA / PDF ]
                 </button>
             </motion.div>
 
