@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate, onPrint }
             src={logo}
             alt="VLANC Studio"
             className="w-full h-full object-contain transition-opacity group-hover:opacity-70 print-force-visible print:opacity-100 print:filter-none print:transform-none"
-            style={{ imageRendering: 'crisp-edges' }}
+            style={{ willChange: 'transform' }}
           />
         ) : (
           <div className="w-full h-full border border-vlanc-primary/30 bg-vlanc-primary/5 flex items-center justify-center rounded-[1px]">
