@@ -472,7 +472,7 @@ const App: React.FC = () => {
               <div style={{ flexShrink: 0, width: '1920px', height: '1080px', position: 'relative', zoom: 0.82677165, backgroundColor: '#ffffff', overflow: 'visible' }}>
                 {compWithMaxStep}
                 {section.headerPage && (
-                  <div className="relative z-[999]">
+                  <div className="absolute inset-0 z-[999] pointer-events-none">
                     <Header
                       logo={proposalData.logos?.smallLogo}
                       pageNumber={section.headerPage}
