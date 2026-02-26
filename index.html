@@ -374,6 +374,47 @@
         background-color: white;
       }
 
+      /* Unified Slide Container for A3 */
+      .print-page-a3 {
+        width: 420mm;
+        height: 297mm;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: visible;
+        page-break-after: always;
+        break-after: page;
+        background-color: white;
+        box-sizing: border-box;
+      }
+
+      /* The 1920x1080 Canvas */
+      .print-slide-canvas {
+        flex-shrink: 0;
+        width: 1920px;
+        height: 1080px;
+        position: relative;
+        background-color: white;
+        overflow: visible;
+        transform-origin: center;
+      }
+
+      /* Chrome/WebKit specialized scaling (Zoom is more stable in Blink print engine) */
+      @supports (-webkit-touch-callout: none) or (-webkit-appearance: none) {
+        .print-slide-canvas {
+          zoom: 0.82677165; /* 1587.4px / 1920px */
+          transform: none !important;
+        }
+      }
+
+      /* Firefox scaling (Transform is needed as zoom isn't supported for layout) */
+      @-moz-document url-prefix() {
+        .print-slide-canvas {
+          transform: scale(0.82677165) !important;
+        }
+      }
+
       header {
         position: absolute !important;
         top: 0 !important;
