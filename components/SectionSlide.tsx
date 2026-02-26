@@ -13,10 +13,10 @@ interface ZSlideProps {
 const slideVariants: Variants = {
   enter: (direction: number) => ({
     // Escala grande para que venga "detrás de la cabeza" o muy del fondo
-    scale: direction > 0 ? 3.0 : 0.4, 
+    scale: direction > 0 ? 3.0 : 0.4,
     opacity: 0,
-    zIndex: direction > 0 ? 50 : 0, 
-    filter: 'blur(3px)',
+    zIndex: direction > 0 ? 50 : 0,
+    filter: 'blur(1px)',
   }),
   center: {
     scale: 1,
@@ -24,16 +24,16 @@ const slideVariants: Variants = {
     zIndex: 10,
     filter: 'blur(0px)',
     transition: {
-      duration: 1.6, 
+      duration: 1.6,
       ease: [0.25, 1, 0.5, 1] as const,
     }
   },
   exit: (direction: number) => ({
-    scale: direction > 0 ? 0.4 : 3.0, 
+    scale: direction > 0 ? 0.4 : 3.0,
     opacity: 0,
     // Reducimos zIndex de salida a 45 para que no entre en conflicto con Header (z-60)
     zIndex: direction > 0 ? 0 : 45,
-    filter: 'blur(3px)', 
+    filter: 'blur(1px)',
     transition: {
       duration: 1.6,
       ease: [0.25, 1, 0.5, 1] as const,
@@ -45,7 +45,7 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
   const isPresent = useIsPresent();
 
   return (
-    <motion.div 
+    <motion.div
       id={id}
       // Volvemos a 'isolation-isolate' para mayor seguridad en el contexto de apilamiento
       // Añadimos atributo data-exiting para que el CSS global lo capture y desactive eventos
@@ -58,13 +58,13 @@ const SectionSlide: React.FC<ZSlideProps> = ({ children, id, className = "", dir
       exit="exit"
       style={{
         perspective: 2000,
-        pointerEvents: isPresent ? 'auto' : 'none' 
+        pointerEvents: isPresent ? 'auto' : 'none'
       }}
       aria-hidden={!isPresent}
     >
-        <div className="w-full h-full relative">
-            {children}
-        </div>
+      <div className="w-full h-full relative">
+        {children}
+      </div>
     </motion.div>
   );
 };
