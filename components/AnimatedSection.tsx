@@ -11,7 +11,6 @@ interface AnimatedSectionProps {
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   mode?: 'default' | 'bar';
   onClick?: React.MouseEventHandler<HTMLDivElement>;
-  isPrintMode?: boolean;
 }
 
 const AnimatedSection: React.FC<AnimatedSectionProps> = ({
@@ -21,8 +20,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   onClick,
   hierarchy = 2,
   direction = 'up',
-  mode = 'default',
-  isPrintMode = false
+  mode = 'default'
 }) => {
   const scrollDir = useScrollDirection();
 
@@ -103,7 +101,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       className={`${className || ''} print-force-visible`}
       variants={mode === 'bar' ? barVariants : defaultVariants}
       style={style}
-      initial={isPrintMode ? "visible" : "hidden"}
+      initial="hidden"
       animate="visible"
       exit="exit"
     >

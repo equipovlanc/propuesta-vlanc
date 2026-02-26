@@ -320,7 +320,7 @@
     /* --- PRINT --- */
     @media print {
       @page {
-        size: A4 landscape;
+        size: A3 landscape;
         margin: 0;
       }
 
@@ -372,45 +372,6 @@
         height: auto !important;
         overflow: visible !important;
         background-color: white;
-      }
-
-      /* Unified Slide Container for A4 (297 x 210mm) */
-      .print-page-a4 {
-        width: 297mm !important;
-        height: 210mm !important;
-        position: relative;
-        overflow: hidden !important;
-        page-break-after: always;
-        break-after: page;
-        background-color: white;
-      }
-
-      /* The 1920x1080 Canvas scaled to A4 Landscape */
-      .print-slide-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 1920px;
-        height: 1080px;
-        background-color: white;
-        transform-origin: 0 0;
-        transform: scale(0.58464567) !important;
-
-        /* Chrome Quality & Stability Fixes */
-        backface-visibility: hidden;
-        -webkit-font-smoothing: antialiased;
-      }
-
-      /* GLOBAL VISIBILITY OVERRIDE: Force all animated elements to be visible in print */
-      [class*="motion"],
-      [style*="opacity"],
-      .print-force-visible,
-      div[style*="transform"] {
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: none !important;
-        filter: none !important;
-        transition: none !important;
       }
 
       header {
