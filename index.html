@@ -240,9 +240,14 @@
       width: calc(1px * var(--line-scale, 1)) !important;
     }
 
+    /* En impresión usamos border en vez de width+bg para forzar 
+       al motor PDF a pintar la línea vectorial, solucionando el borrado
+       en coordenadas subpíxel causadas por layouts asimétricos. */
     @media print {
       #app-container header .w-\[1px\] {
-        width: calc(1px / 0.82677165) !important;
+        width: 1px !important;
+        background-color: transparent !important;
+        border-left: 1.5px solid #703622 !important;
       }
     }
 
