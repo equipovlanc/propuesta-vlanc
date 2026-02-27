@@ -65,9 +65,14 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                         )}
 
                                         {testimonial.url && (
-                                            <div className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-20">
-                                                <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase bg-vlanc-primary/80 px-4 py-2">Ver Proyecto</span>
-                                            </div>
+                                            <a
+                                                href={testimonial.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="absolute inset-0 bg-vlanc-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center z-20 cursor-pointer"
+                                            >
+                                                <span className="text-white text-[10px] font-bold tracking-[0.2em] uppercase bg-vlanc-primary/80 px-4 py-2">Testimonios</span>
+                                            </a>
                                         )}
                                     </AnimatedSection>
 
