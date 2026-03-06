@@ -86,7 +86,10 @@ const FlipCard: React.FC<{ plan: DiscountedPlan; initialFlipped?: boolean; isPri
                         transform: isPrintMode ? "none" : "rotateY(180deg) translateZ(1px)"
                     }}
                 >
-                    <span className="tabla1 text-white text-[13px] tracking-wider leading-tight">{plan.name}</span>
+                    <span className="tabla1 text-white text-[13px] tracking-wider leading-tight flex items-center gap-1.5">
+                        <div className="w-[12px] h-[12px] border border-white bg-transparent shrink-0 rounded-[1px] print:border-[#8f4933] print:bg-white" />
+                        {plan.name}
+                    </span>
                     <span className="text-white/70 text-[10px] font-sans font-normal line-through decoration-white/60 leading-none">
                         {plan.originalPrice}
                     </span>

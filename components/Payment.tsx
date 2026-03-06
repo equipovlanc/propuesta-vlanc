@@ -65,7 +65,8 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         <div className="space-y-8">
                             {(data?.paymentMethods?.plans ?? []).map((plan, i) => (
                                 <div key={i}>
-                                    <h4 className="fase-titulo text-[#703622] mb-4 !text-[16px]">
+                                    <h4 className="fase-titulo text-[#703622] mb-4 !text-[16px] flex items-center gap-2">
+                                        <div className="w-[14px] h-[14px] border border-[#703622] bg-transparent shrink-0 rounded-[1px] print:bg-white" />
                                         {plan.title}
                                     </h4>
                                     <div className="flex flex-col gap-[5px]">
