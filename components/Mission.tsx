@@ -114,7 +114,7 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
 
                         <AnimatedSection hierarchy={2}>
                             <h3 className="subtitulo2 mb-6 leading-tight max-w-sm" dangerouslySetInnerHTML={{ __html: data?.mission?.subtitle || '' }} />
-                            <p className="cuerpo w-full" dangerouslySetInnerHTML={{ __html: data?.mission?.description || '' }} />
+                            <p className="cuerpo2 w-full" dangerouslySetInnerHTML={{ __html: data?.mission?.description || '' }} />
                         </AnimatedSection>
                     </div>
                 )}
@@ -130,7 +130,7 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
                         <AnimatedSection hierarchy={2}>
                             <ul className="space-y-4 w-full">
                                 {(data?.achievements?.listItems ?? []).map((item, i) => (
-                                    <li key={i} className="cuerpo" dangerouslySetInnerHTML={{ __html: item }} />
+                                    <li key={i} className="cuerpo2" dangerouslySetInnerHTML={{ __html: item }} />
                                 ))}
                             </ul>
                         </AnimatedSection>

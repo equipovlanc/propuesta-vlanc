@@ -38,7 +38,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                                 data.paragraphs.map((p, i) => (
                                     <p
                                         key={i}
-                                        className="cuerpo"
+                                        className="cuerpo2"
                                         dangerouslySetInnerHTML={{ __html: p }}
                                     />
                                 ))
