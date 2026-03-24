@@ -138,6 +138,13 @@ export default defineType({
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'badge', title: 'Texto Garantía/Badge (Paso 3)', type: 'string' }),
                 defineField({
+                    name: 'step5Phrase',
+                    title: 'Frase Destacada Paso 5',
+                    type: 'string',
+                    initialValue: 'Tu interés es el nuestro',
+                    description: 'Frase que aparece resaltada en el quinto paso del proceso.'
+                }),
+                defineField({
                     name: 'steps', type: 'array', of: [{
                         type: 'object',
                         fields: [

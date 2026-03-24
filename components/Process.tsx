@@ -21,6 +21,7 @@ interface ProcessProps {
         title?: string;
         steps?: ProcessStep[];
         badge?: string;
+        step5Phrase?: string;
     };
     guaranteeItem?: GuaranteeItem;
     step?: number; // Prop para controlar qué items están revelados
@@ -71,7 +72,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                             <div dangerouslySetInnerHTML={{ __html: s.description || '' }} />
                                             {index === 4 && (
                                                 <p className="mt-4 font-bold text-vlanc-secondary">
-                                                    · Tu interés es el nuestro ·
+                                                    · {data?.step5Phrase || "Tu interés es el nuestro"} ·
                                                 </p>
                                             )}
                                         </div>
