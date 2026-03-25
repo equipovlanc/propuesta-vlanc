@@ -103,11 +103,27 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         <div className="flex-grow mb-[50px]">
                             <div className="flex flex-col gap-[2px]">
                                 {(() => {
-                                    const pointsCount = data?.finePrint?.content?.length || data?.finePrint?.points?.length || 0;
+                                    // Cálculo de longitud para determinar tamaño
+                                    let charCount = 0;
+                                    if (data?.finePrint?.content) {
+                                        // Extraemos todo el texto de los bloques PortableText
+                                        charCount = data.finePrint.content
+                                            .map((block: any) => (block.children || [])
+                                                .map((child: any) => child.text || "").join("")
+                                            ).join("\n").length;
+                                    } else {
+                                        // Fallback para puntos antiguos (estimación por número de puntos)
+                                        const pointsCount = data?.finePrint?.points?.length || 0;
+                                        if (pointsCount > 11) charCount = 1100;
+                                        else if (pointsCount > 8) charCount = 800;
+                                        else if (pointsCount > 6) charCount = 500;
+                                        else charCount = 0;
+                                    }
+
                                     let textSizeClass = "";
-                                    if (pointsCount > 11) textSizeClass = "!text-[11.5px]";
-                                    else if (pointsCount > 8) textSizeClass = "!text-[12.5px]";
-                                    else if (pointsCount > 6) textSizeClass = "!text-[13.5px]";
+                                    if (charCount > 1000) textSizeClass = "!text-[11.5px]";
+                                    else if (charCount > 700) textSizeClass = "!text-[12.5px]";
+                                    else if (charCount > 400) textSizeClass = "!text-[13.5px]";
 
                                     if (data?.finePrint?.content) {
                                         return (
