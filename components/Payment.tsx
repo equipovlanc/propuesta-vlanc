@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
+import { PortableText } from '@portabletext/react';
 
 interface PaymentStep {
     percent?: string;
@@ -22,6 +22,7 @@ interface PaymentProps {
         finePrint?: {
             title?: string;
             points?: string[];
+            content?: any[];
             invoiceInfo?: string;
         }
     };
@@ -101,18 +102,24 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         {/* Contenedor de puntos con tamaño dinámico y margen de seguridad de 50px */}
                         <div className="flex-grow mb-[50px]">
                             <div className="flex flex-col gap-[2px]">
-                                {(data?.finePrint?.points ?? []).map((point, i) => {
-                                    const pointsCount = data?.finePrint?.points?.length || 0;
-                                    // Ajuste granular para respetar el hueco de 50px
-                                    let textSizeClass = "";
-                                    if (pointsCount > 11) textSizeClass = "!text-[11.5px]";
-                                    else if (pointsCount > 8) textSizeClass = "!text-[12.5px]";
-                                    else if (pointsCount > 6) textSizeClass = "!text-[13.5px]";
+                                {data?.finePrint?.content ? (
+                                    <div className="cuerpo text-vlanc-secondary/80 !leading-[1.4] space-y-2">
+                                        <PortableText value={data.finePrint.content} />
+                                    </div>
+                                ) : (
+                                    (data?.finePrint?.points ?? []).map((point, i) => {
+                                        const pointsCount = data?.finePrint?.points?.length || 0;
+                                        // Ajuste granular para respetar el hueco de 50px
+                                        let textSizeClass = "";
+                                        if (pointsCount > 11) textSizeClass = "!text-[11.5px]";
+                                        else if (pointsCount > 8) textSizeClass = "!text-[12.5px]";
+                                        else if (pointsCount > 6) textSizeClass = "!text-[13.5px]";
 
-                                    return (
-                                        <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`} dangerouslySetInnerHTML={{ __html: point }} />
-                                    );
-                                })}
+                                        return (
+                                            <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`} dangerouslySetInnerHTML={{ __html: point }} />
+                                        );
+                                    })
+                                )}
                             </div>
                         </div>
 

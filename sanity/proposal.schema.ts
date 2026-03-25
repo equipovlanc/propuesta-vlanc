@@ -375,9 +375,15 @@ export default defineType({
                 }),
                 defineField({
                     name: 'finePrint', type: 'object', fields: [
-                        { name: 'title', type: 'string' },
-                        { name: 'points', type: 'array', of: [{ type: 'string' }] },
-                        { name: 'invoiceInfo', type: 'string' }
+                        defineField({ name: 'title', type: 'string' }),
+                        defineField({
+                            name: 'content',
+                            title: 'Contenido (Rich Text)',
+                            type: 'array',
+                            of: [{ type: 'block' }],
+                            description: 'Bloque de texto para la letra pequeña. Permite negritas y saltos de línea.'
+                        }),
+                        defineField({ name: 'invoiceInfo', type: 'string' }),
                     ]
                 })
             ]
