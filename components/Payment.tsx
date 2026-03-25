@@ -102,24 +102,32 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         {/* Contenedor de puntos con tamaño dinámico y margen de seguridad de 50px */}
                         <div className="flex-grow mb-[50px]">
                             <div className="flex flex-col gap-[2px]">
-                                {data?.finePrint?.content ? (
-                                    <div className="cuerpo text-vlanc-secondary/80 !leading-[1.4] space-y-2">
-                                        <PortableText value={data.finePrint.content} />
-                                    </div>
-                                ) : (
-                                    (data?.finePrint?.points ?? []).map((point, i) => {
-                                        const pointsCount = data?.finePrint?.points?.length || 0;
-                                        // Ajuste granular para respetar el hueco de 50px
-                                        let textSizeClass = "";
-                                        if (pointsCount > 11) textSizeClass = "!text-[11.5px]";
-                                        else if (pointsCount > 8) textSizeClass = "!text-[12.5px]";
-                                        else if (pointsCount > 6) textSizeClass = "!text-[13.5px]";
+                                {(() => {
+                                    const pointsCount = data?.finePrint?.content?.length || data?.finePrint?.points?.length || 0;
+                                    let textSizeClass = "";
+                                    if (pointsCount > 11) textSizeClass = "!text-[11.5px]";
+                                    else if (pointsCount > 8) textSizeClass = "!text-[12.5px]";
+                                    else if (pointsCount > 6) textSizeClass = "!text-[13.5px]";
 
+                                    if (data?.finePrint?.content) {
                                         return (
-                                            <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`} dangerouslySetInnerHTML={{ __html: point }} />
+                                            <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.4] space-y-2 ${textSizeClass}`}>
+                                                <PortableText 
+                                                    value={data.finePrint.content} 
+                                                    components={{
+                                                        block: {
+                                                            normal: ({children}) => <p className={textSizeClass}>{children}</p>
+                                                        }
+                                                    }}
+                                                />
+                                            </div>
                                         );
-                                    })
-                                )}
+                                    }
+
+                                    return (data?.finePrint?.points ?? []).map((point, i) => (
+                                        <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`} dangerouslySetInnerHTML={{ __html: point }} />
+                                    ));
+                                })()}
                             </div>
                         </div>
 
