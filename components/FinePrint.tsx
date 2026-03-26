@@ -57,19 +57,20 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                         }
 
                         let textSizeClass = "";
-                        // Ajustamos umbrales: Prioridad legibilidad. 
+                        // Ajustamos umbrales: Prioridad legibilidad. Máximo "cuerpo2" (16px).
                         // En 2 columnas, aprovechamos el ancho completo (1920 - 240 = 1680px).
-                        if (charCount > 2800) textSizeClass = "!text-[11.5px]";
-                        else if (charCount > 2000) textSizeClass = "!text-[12.5px]";
-                        else if (charCount > 1300) textSizeClass = "!text-[13.5px]";
-                        else if (charCount > 800) textSizeClass = "!text-[14.5px]";
-                        else textSizeClass = "!text-[15.5px]";
+                        if (charCount > 3500) textSizeClass = "!text-[11px]";
+                        else if (charCount > 2600) textSizeClass = "!text-[12px]";
+                        else if (charCount > 1800) textSizeClass = "!text-[13px]";
+                        else if (charCount > 1100) textSizeClass = "!text-[14px]";
+                        else if (charCount > 600) textSizeClass = "!text-[15px]";
+                        else textSizeClass = "!text-[16px]"; // "cuerpo2" es 16px
 
                         return (
-                            <div className="flex-grow flex flex-col min-h-0 w-full">
+                            <div className="flex-grow flex flex-col min-h-0 w-full font-sans">
                                 {/* Contenedor con altura restringida para forzar el salto de columna */}
                                 <div className={`flex-grow columns-2 gap-20 space-y-0 pb-10 h-full w-full ${textSizeClass}`}>
-                                    <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.5] break-inside-avoid text-justify w-full ${textSizeClass}`}>
+                                    <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.4] break-inside-avoid text-justify w-full ${textSizeClass}`}>
                                         {data?.content ? (
                                             <PortableText 
                                                 value={data.content} 
