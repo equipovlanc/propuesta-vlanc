@@ -113,7 +113,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         <img 
                             src={data.image.src} 
                             alt="Payment Detail" 
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-right"
                         />
                         {/* Overlay filter */}
                         <div 
