@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { PortableText } from '@portabletext/react';
 
@@ -12,11 +12,10 @@ interface FinePrintProps {
     };
     investmentTitle?: string;
     locationDate?: string;
-    step?: number; // Prop para controlar revelación si fuera necesario, por defecto 2 (todo visto)
+    step?: number;
     isPrintMode?: boolean;
 }
 
-// Helper: aplica blur y opacidad según si el bloque está revelado
 const getRevealStyle = (visible: boolean) => ({
     opacity: visible ? 1 : 0.08,
     filter: visible ? 'blur(0px)' : 'blur(5px)',
@@ -24,9 +23,62 @@ const getRevealStyle = (visible: boolean) => ({
 
 const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDate, step = 2, isPrintMode = false }) => {
     const effectiveStep = isPrintMode ? 2 : step;
+    const [fontSize, setFontSize] = useState(16);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isMeasured, setIsMeasured] = useState(false);
+
+    // Medición dinámica del tamaño de letra
+    useLayoutEffect(() => {
+        if (!containerRef.current || !data) return;
+
+        const checkOverflow = () => {
+            const container = containerRef.current;
+            if (!container) return false;
+
+            // En un sistema de 2 columnas con altura fija (aprox 630px efectivos tras títulos), 
+            // el contenido desborda si su scrollHeight es mayor que el offsetHeight.
+            // Pero columns-2 es especial. Usaremos un div invisible como "tester" 
+            // que simula una sola columna de 800px de ancho.
+            const tester = document.createElement('div');
+            tester.style.width = '800px';
+            tester.style.fontSize = `${fontSize}px`;
+            tester.style.lineHeight = '1.4';
+            tester.style.fontFamily = 'Montserrat, sans-serif';
+            tester.style.position = 'absolute';
+            tester.style.visibility = 'hidden';
+            tester.style.whiteSpace = 'pre-line';
+            tester.style.textAlign = 'justify';
+            
+            // Replicamos el contenido
+            if (data.content) {
+                // Simplificación para el tester: extraemos texto plano
+                const text = data.content
+                    .map((block: any) => (block.children || [])
+                        .map((child: any) => child.text || "").join("")
+                    ).join("\n\n");
+                tester.innerText = text;
+            } else {
+                tester.innerText = (data.points ?? []).join("\n\n");
+            }
+
+            document.body.appendChild(tester);
+            const totalHeight = tester.scrollHeight;
+            document.body.removeChild(tester);
+
+            // Altura disponible en 2 columnas (1080 - 150 - 140 - ~120 de títulos) ~= 670px
+            const maxColumnHeight = 670; 
+            return totalHeight > (maxColumnHeight * 2);
+        };
+
+        if (checkOverflow() && fontSize > 10) {
+            setFontSize(prev => prev - 0.5);
+        } else {
+            setIsMeasured(true);
+        }
+    }, [data, fontSize]);
 
     return (
-        <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative overflow-hidden">
+        <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative overflow-hidden font-sans">
             <div className="w-full h-full flex flex-col">
                 <div className="shrink-0 mb-20">
                     <h2 className="subtitulo1">
@@ -36,60 +88,36 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                 </div>
 
                 <motion.div 
-                    className="flex-grow flex flex-col print-force-visible min-h-0"
+                    className={`flex-grow flex flex-col print-force-visible min-h-0 transition-opacity duration-300 ${isMeasured ? 'opacity-100' : 'opacity-0'}`}
                     initial={getRevealStyle(isPrintMode)}
                     animate={getRevealStyle(effectiveStep >= 2)}
                     transition={{ duration: 0.9, ease: 'easeInOut' }}
                 >
                     <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: data?.title || 'Letra pequeña' }} />
                     
-                    {(() => {
-                        // Cálculo de longitud para determinar tamaño (mismos umbrales que antes pero adaptados a 2 columnas)
-                        let charCount = 0;
-                        if (data?.content) {
-                            charCount = data.content
-                                .map((block: any) => (block.children || [])
-                                    .map((child: any) => child.text || "").join("")
-                                ).join("\n").length;
-                        } else {
-                            const pointsCount = data?.points?.length || 0;
-                            charCount = pointsCount > 11 ? 1100 : pointsCount > 8 ? 800 : pointsCount > 6 ? 500 : 0;
-                        }
-
-                        let textSizeClass = "";
-                        // Ajustamos umbrales: Prioridad legibilidad. Máximo "cuerpo2" (16px).
-                        // En 2 columnas, aprovechamos el ancho completo (1920 - 240 = 1680px).
-                        if (charCount > 3500) textSizeClass = "!text-[11px]";
-                        else if (charCount > 2600) textSizeClass = "!text-[12px]";
-                        else if (charCount > 1800) textSizeClass = "!text-[13px]";
-                        else if (charCount > 1100) textSizeClass = "!text-[14px]";
-                        else if (charCount > 600) textSizeClass = "!text-[15px]";
-                        else textSizeClass = "!text-[16px]"; // "cuerpo2" es 16px
-
-                        return (
-                            <div className="flex-grow flex flex-col min-h-0 w-full font-sans">
-                                {/* Contenedor con altura restringida para forzar el salto de columna */}
-                                <div className={`flex-grow columns-2 gap-20 space-y-0 pb-10 h-full w-full ${textSizeClass}`}>
-                                    <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.4] break-inside-avoid text-justify w-full ${textSizeClass}`}>
-                                        {data?.content ? (
-                                            <PortableText 
-                                                value={data.content} 
-                                                components={{
-                                                    block: {
-                                                        normal: ({children}) => <p className="mb-0">{children}</p>
-                                                    }
-                                                }}
-                                            />
-                                        ) : (
-                                            (data?.points ?? []).map((point, i) => (
-                                                <p key={i} className="mb-0" dangerouslySetInnerHTML={{ __html: point }} />
-                                            ))
-                                        )}
-                                    </div>
-                                </div>
+                    <div className="flex-grow flex flex-col min-h-0 w-full" ref={containerRef}>
+                        <div 
+                            className="flex-grow columns-2 gap-20 space-y-0 pb-10 h-full w-full"
+                            style={{ fontSize: `${fontSize}px`, lineHeight: '1.4' }}
+                        >
+                            <div className="cuerpo text-vlanc-secondary/80 break-inside-avoid text-justify w-full" style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>
+                                {data?.content ? (
+                                    <PortableText 
+                                        value={data.content} 
+                                        components={{
+                                            block: {
+                                                normal: ({children}) => <p className="mb-0">{children}</p>
+                                            }
+                                        }}
+                                    />
+                                ) : (
+                                    (data?.points ?? []).map((point, i) => (
+                                        <p key={i} className="mb-0" dangerouslySetInnerHTML={{ __html: point }} />
+                                    ))
+                                )}
                             </div>
-                        );
-                    })()}
+                        </div>
+                    </div>
                 </motion.div>
             </div>
 
@@ -121,6 +149,8 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                 </p>
             </motion.div>
         </section>
+    );
+};
     );
 };
 
