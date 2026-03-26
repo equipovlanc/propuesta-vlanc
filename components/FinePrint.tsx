@@ -43,40 +43,76 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                 >
                     <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: data?.title || 'Letra pequeña' }} />
                     
-                    {/* Contenedor con altura restringida para forzar el salto de columna */}
-                    <div className="flex-grow columns-2 gap-20 space-y-0 pb-10 overflow-hidden h-full">
-                        <div className="cuerpo text-vlanc-secondary/80 !leading-[1.6] break-inside-avoid text-justify">
-                            {data?.content ? (
-                                <PortableText 
-                                    value={data.content} 
-                                    components={{
-                                        block: {
-                                            normal: ({children}) => <p className="mb-4">{children}</p>
-                                        }
-                                    }}
-                                />
-                            ) : (
-                                (data?.points ?? []).map((point, i) => (
-                                    <p key={i} className="mb-4" dangerouslySetInnerHTML={{ __html: point }} />
-                                ))
-                            )}
-                        </div>
-                    </div>
+                    {(() => {
+                        // Cálculo de longitud para determinar tamaño (mismos umbrales que antes pero adaptados a 2 columnas)
+                        let charCount = 0;
+                        if (data?.content) {
+                            charCount = data.content
+                                .map((block: any) => (block.children || [])
+                                    .map((child: any) => child.text || "").join("")
+                                ).join("\n").length;
+                        } else {
+                            const pointsCount = data?.points?.length || 0;
+                            charCount = pointsCount > 11 ? 1100 : pointsCount > 8 ? 800 : pointsCount > 6 ? 500 : 0;
+                        }
 
-                    {/* FIRMA Y FECHA - Ahora en esta página legal */}
-                    <div className="mt-auto w-full">
-                        <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mb-8 print:border-t-2 print:!border-[#8f4933]">
-                            <div className="flex justify-between items-start">
-                                <span className="tabla1">VIVE VLANC SL</span>
-                                <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                        let textSizeClass = "";
+                        // Ajustamos umbrales: en 2 columnas cabe más texto, pero queremos que sea legible.
+                        // Si hay muchísimo texto (> 2000 chars), bajamos a 10px.
+                        if (charCount > 2000) textSizeClass = "!text-[10px]";
+                        else if (charCount > 1500) textSizeClass = "!text-[11px]";
+                        else if (charCount > 1000) textSizeClass = "!text-[12px]";
+                        else if (charCount > 600) textSizeClass = "!text-[13px]";
+
+                        return (
+                            <div className="flex-grow flex flex-col min-h-0">
+                                {/* Contenedor con altura restringida para forzar el salto de columna */}
+                                <div className={`flex-grow columns-2 gap-20 space-y-0 pb-10 overflow-hidden h-full ${textSizeClass}`}>
+                                    <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.4] break-inside-avoid text-justify ${textSizeClass}`}>
+                                        {data?.content ? (
+                                            <PortableText 
+                                                value={data.content} 
+                                                components={{
+                                                    block: {
+                                                        normal: ({children}) => <p className="mb-0">{children}</p>
+                                                    }
+                                                }}
+                                            />
+                                        ) : (
+                                            (data?.points ?? []).map((point, i) => (
+                                                <p key={i} className="mb-0" dangerouslySetInnerHTML={{ __html: point }} />
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* FIRMA - Solo en la columna derecha */}
+                                <div className="mt-auto w-full grid grid-cols-2 gap-20 pointer-events-none">
+                                    <div /> {/* Columna izquierda vacía */}
+                                    <div className="flex flex-col border-t border-[#8f4933] pt-1 mb-[70px] print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
+                                        <div className="flex justify-between items-start">
+                                            <span className="tabla1">VIVE VLANC SL</span>
+                                            <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <p className="cuerpo font-bold text-right">
-                            {locationDate || "En Alcoi a XX de mes de 2025"}
-                        </p>
-                    </div>
+                        );
+                    })()}
                 </motion.div>
             </div>
+
+            {/* FECHA — Posición estándar absoluta */}
+            <motion.div
+                className="absolute bottom-[70px] right-[120px] z-20 print-force-visible"
+                initial={getRevealStyle(isPrintMode)}
+                animate={getRevealStyle(effectiveStep >= 2)}
+                transition={{ duration: 0.9, ease: 'easeInOut' }}
+            >
+                <p className="cuerpo font-bold text-right">
+                    {locationDate || "En Alcoi a XX de mes de 2025"}
+                </p>
+            </motion.div>
         </section>
     );
 };
