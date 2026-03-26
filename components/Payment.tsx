@@ -24,7 +24,11 @@ interface PaymentProps {
             points?: string[];
             content?: any[];
             invoiceInfo?: string;
-        }
+        };
+        image?: {
+            src: string;
+            opacity?: number;
+        };
     };
     investmentTitle?: string;
     locationDate?: string;
@@ -90,85 +94,41 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         </div>
                     </motion.div>
 
-                    {/* COLUMNA DERECHA + FIRMA — Paso 2 */}
+                    {/* COLUMNA DERECHA + IMAGEN — Paso 2 */}
                     <motion.div
                         className="h-full flex flex-col relative print-force-visible"
                         initial={getRevealStyle(isPrintMode)}
                         animate={getRevealStyle(effectiveStep >= 2)}
                         transition={{ duration: 0.9, ease: 'easeInOut' }}
                     >
-                        <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: data?.finePrint?.title || '' }} />
-
-                        {/* Contenedor de puntos con tamaño dinámico y margen de seguridad de 50px */}
-                        <div className="flex-grow mb-[50px]">
-                            <div className="flex flex-col gap-[2px]">
-                                {(() => {
-                                    // Cálculo de longitud para determinar tamaño
-                                    let charCount = 0;
-                                    if (data?.finePrint?.content) {
-                                        // Extraemos todo el texto de los bloques PortableText
-                                        charCount = data.finePrint.content
-                                            .map((block: any) => (block.children || [])
-                                                .map((child: any) => child.text || "").join("")
-                                            ).join("\n").length;
-                                    } else {
-                                        // Fallback para puntos antiguos (estimación por número de puntos)
-                                        const pointsCount = data?.finePrint?.points?.length || 0;
-                                        if (pointsCount > 11) charCount = 1100;
-                                        else if (pointsCount > 8) charCount = 800;
-                                        else if (pointsCount > 6) charCount = 500;
-                                        else charCount = 0;
-                                    }
-
-                                    let textSizeClass = "";
-                                    if (charCount > 1000) textSizeClass = "!text-[11.5px]";
-                                    else if (charCount > 700) textSizeClass = "!text-[12.5px]";
-                                    else if (charCount > 400) textSizeClass = "!text-[13.5px]";
-
-                                    if (data?.finePrint?.content) {
-                                        return (
-                                            <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.4] ${textSizeClass}`}>
-                                                <PortableText 
-                                                    value={data.finePrint.content} 
-                                                    components={{
-                                                        block: {
-                                                            normal: ({children}) => <p className={textSizeClass}>{children}</p>
-                                                        }
-                                                    }}
-                                                />
-                                            </div>
-                                        );
-                                    }
-
-                                    return (data?.finePrint?.points ?? []).map((point, i) => (
-                                        <p key={i} className={`cuerpo text-vlanc-secondary/80 ${textSizeClass} !leading-[1.4]`} dangerouslySetInnerHTML={{ __html: point }} />
-                                    ));
-                                })()}
+                        {data?.image?.src && (
+                            <div className="absolute inset-0 z-0">
+                                <div className="relative w-full h-full">
+                                    <img 
+                                        src={data.image.src} 
+                                        alt="Payment Detail" 
+                                        className="w-full h-full object-cover rounded-[1px]"
+                                    />
+                                    {/* Overlay filter */}
+                                    <div 
+                                        className="absolute inset-0 bg-[#8f4933]" 
+                                        style={{ opacity: (data.image.opacity ?? 15) / 100 }}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        {/* FIRMA - Empujada al final con mt-auto y mb-[70px] para estar a 3/2m (210px) */}
-                        <div className="w-full flex flex-col border-t border-[#8f4933] pt-1 mt-auto mb-[70px] print-force-visible print:border-t-2 print:!border-[#8f4933]">
-                            <div className="flex justify-between items-start">
-                                <span className="tabla1">VIVE VLANC SL</span>
-                                <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
-                            </div>
-                        </div>
+                        {/* Firma y Fecha se mantienen por ahora en esta vista si es necesario, 
+                            o se pueden mover a la dedicada. El usuario dijo "en el hueco... añadir imagen".
+                            Dejaré la firma por si acaso, pero el usuario no especificó borrarla. 
+                            Sin embargo, la imagen ahora ocupa todo el espacio. 
+                            Si la firma debe estar, la pondré sobre la imagen o debajo.
+                            Revisando petición: "hueco que quedaria en su anterior lugar".
+                            Moveré la firma a la nueva página de letra pequeña. */}
                     </motion.div>
                 </div>
             </div>
 
-            {/* FECHA — Paso 2 */}
-            <motion.div
-                className="absolute bottom-[70px] right-[120px] z-20 print-force-visible"
-                initial={getRevealStyle(isPrintMode)}
-                animate={getRevealStyle(effectiveStep >= 2)}
-                transition={{ duration: 0.9, ease: 'easeInOut' }}
-            >
-                <p className="cuerpo font-bold text-right">
-                    {locationDate || "En Alcoi a XX de mes de 2025"}
-                </p>
-            </motion.div>
         </section>
     );
 };

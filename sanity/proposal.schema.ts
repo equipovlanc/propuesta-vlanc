@@ -368,6 +368,20 @@ export default defineType({
             fields: [
                 defineField({ name: 'title', type: 'string' }),
                 defineField({
+                    name: 'image',
+                    title: 'Imagen Lateral (Ocupará hueco letra pequeña)',
+                    type: 'image',
+                    fields: [
+                        defineField({
+                            name: 'overlayOpacity',
+                            title: 'Opacidad Filtro (%)',
+                            type: 'number',
+                            initialValue: 15,
+                            validation: (Rule) => Rule.min(0).max(100)
+                        })
+                    ]
+                }),
+                defineField({
                     name: 'paymentMethods', type: 'object', fields: [
                         { name: 'title', type: 'string' },
                         { name: 'plans', type: 'array', of: [{ type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'payments', type: 'array', of: [{ type: 'object', fields: [{ name: 'percent', type: 'string' }, { name: 'description', type: 'string' }] }] }] }] }

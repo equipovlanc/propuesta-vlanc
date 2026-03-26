@@ -7,6 +7,7 @@ interface HeroProps {
     clientName?: string;
     line1?: string;
     line2?: string;
+    bgVideo?: string;
   };
   headerData?: {
     projectCode?: string;

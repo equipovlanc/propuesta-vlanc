@@ -13,6 +13,7 @@ import ScopePhases from './components/ScopePhases';
 import Investment from './components/Investment';
 import SpecialOffers from './components/SpecialOffers';
 import Payment from './components/Payment';
+import FinePrint from './components/FinePrint';
 import Guarantees from './components/Guarantees';
 import PremiumServices from './components/PremiumServices';
 import DividerSlide from './components/DividerSlide';
@@ -84,6 +85,7 @@ const App: React.FC = () => {
             "popupVideo": popupVideo.asset->url,
             "overlayLogo": overlayLogo.asset->url
           },
+          "payment": payment{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "dividerSlide": dividerSlide{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
           "guarantees": guarantees{..., "items": items[]{..., isActive, "icon": icon.asset->url}},
           "premiumServicesList": premiumServices.services[]{..., extraNote, showExtraNote, "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
@@ -244,6 +246,7 @@ const App: React.FC = () => {
         headerPage: 15
       },
       { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: 16 },
+      { id: 'fine-print', comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 17 },
       {
         id: 'divider-slide',
         comp: <DividerSlide
@@ -253,14 +256,14 @@ const App: React.FC = () => {
           setNavigationBlocked={setNavigationBlocked}
         />
       },
-      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 18 }
+      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 19 }
     );
 
     (d.premiumServicesList || []).forEach((service: any, i: number) => {
       list.push({
         id: `premium-${i + 1}`,
         comp: <PremiumServices data={service} image={service.image} index={i} />,
-        headerPage: 19 + i
+        headerPage: 20 + i
       });
     });
 
