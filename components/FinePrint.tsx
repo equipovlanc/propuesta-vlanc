@@ -151,7 +151,5 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
         </section>
     );
 };
-    );
-};
 
 export default FinePrint;
