@@ -86,22 +86,27 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                                         )}
                                     </div>
                                 </div>
-
-                                {/* FIRMA - Solo en la columna derecha, FIJADA al margen inferior (140px) 
-                                     Ancho fijado: 800px para coincidir con la columna de texto */}
-                                <div className="absolute right-[120px] bottom-[140px] w-[800px] pointer-events-none">
-                                    <div className="flex flex-col border-t border-[#8f4933] pt-1 print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
-                                        <div className="flex justify-between items-start">
-                                            <span className="tabla1">VIVE VLANC SL</span>
-                                            <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         );
                     })()}
                 </motion.div>
             </div>
+
+            {/* FIRMA - Directamente bajo el margen inferior (140px)
+                 Alineada exactamente a la columna derecha (Ancho 800px) */}
+            <motion.div
+                className="absolute right-[120px] bottom-[140px] w-[800px] pointer-events-none z-20 print-force-visible"
+                initial={getRevealStyle(isPrintMode)}
+                animate={getRevealStyle(effectiveStep >= 2)}
+                transition={{ duration: 0.9, ease: 'easeInOut' }}
+            >
+                <div className="flex flex-col border-t border-[#8f4933] pt-1 print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
+                    <div className="flex justify-between items-start">
+                        <span className="tabla1">VIVE VLANC SL</span>
+                        <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                    </div>
+                </div>
+            </motion.div>
 
             {/* FECHA — Posición estándar absoluta */}
             <motion.div
