@@ -87,9 +87,9 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                                     </div>
                                 </div>
 
-                                {/* FIRMA - Solo en la columna derecha, alineada al margen inferior (140px) */}
-                                <div className="mt-auto w-full grid grid-cols-2 gap-20 pointer-events-none">
-                                    <div /> {/* Columna izquierda vacía */}
+                                {/* FIRMA - Solo en la columna derecha, FIJADA al margen inferior (140px) 
+                                     Ancho fijado: 800px para coincidir con la columna de texto */}
+                                <div className="absolute right-[120px] bottom-[140px] w-[800px] pointer-events-none">
                                     <div className="flex flex-col border-t border-[#8f4933] pt-1 print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
                                         <div className="flex justify-between items-start">
                                             <span className="tabla1">VIVE VLANC SL</span>

@@ -100,7 +100,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
             </div>
 
             {/* IMAGEN LATERAL - Alineada a márgenes exactos (top 150, bottom 140, right 120) 
-                 Ancho calculado: (1920 - 240 (px) - 80 (gap)) / 2 = 800px */}
+                 Ancho fijado: 800px para igualar columnas de letra pequeña */}
             {data?.image?.src && (
                 <motion.div
                     className="absolute top-[150px] right-[120px] bottom-[140px] z-0 print-force-visible overflow-hidden rounded-[1px]"
