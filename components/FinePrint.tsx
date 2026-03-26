@@ -57,18 +57,19 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                         }
 
                         let textSizeClass = "";
-                        // Ajustamos umbrales: en 2 columnas cabe más texto, pero queremos que sea legible.
-                        // Si hay muchísimo texto (> 2000 chars), bajamos a 10px.
-                        if (charCount > 2000) textSizeClass = "!text-[10px]";
-                        else if (charCount > 1500) textSizeClass = "!text-[11px]";
-                        else if (charCount > 1000) textSizeClass = "!text-[12px]";
-                        else if (charCount > 600) textSizeClass = "!text-[13px]";
+                        // Ajustamos umbrales: Prioridad legibilidad. 
+                        // En 2 columnas, aprovechamos el ancho completo (1920 - 240 = 1680px).
+                        if (charCount > 2800) textSizeClass = "!text-[11.5px]";
+                        else if (charCount > 2000) textSizeClass = "!text-[12.5px]";
+                        else if (charCount > 1300) textSizeClass = "!text-[13.5px]";
+                        else if (charCount > 800) textSizeClass = "!text-[14.5px]";
+                        else textSizeClass = "!text-[15.5px]";
 
                         return (
-                            <div className="flex-grow flex flex-col min-h-0">
+                            <div className="flex-grow flex flex-col min-h-0 w-full">
                                 {/* Contenedor con altura restringida para forzar el salto de columna */}
-                                <div className={`flex-grow columns-2 gap-20 space-y-0 pb-10 overflow-hidden h-full ${textSizeClass}`}>
-                                    <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.4] break-inside-avoid text-justify ${textSizeClass}`}>
+                                <div className={`flex-grow columns-2 gap-20 space-y-0 pb-10 h-full w-full ${textSizeClass}`}>
+                                    <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.5] break-inside-avoid text-justify w-full ${textSizeClass}`}>
                                         {data?.content ? (
                                             <PortableText 
                                                 value={data.content} 
@@ -87,9 +88,9 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                                 </div>
 
                                 {/* FIRMA - Solo en la columna derecha */}
-                                <div className="mt-auto w-full grid grid-cols-2 gap-20 pointer-events-none">
+                                <div className="mt-auto w-full grid grid-cols-2 gap-20 pointer-events-none mb-[70px]">
                                     <div /> {/* Columna izquierda vacía */}
-                                    <div className="flex flex-col border-t border-[#8f4933] pt-1 mb-[70px] print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
+                                    <div className="flex flex-col border-t border-[#8f4933] pt-1 print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
                                         <div className="flex justify-between items-start">
                                             <span className="tabla1">VIVE VLANC SL</span>
                                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>

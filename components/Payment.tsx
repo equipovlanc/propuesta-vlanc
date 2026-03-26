@@ -94,39 +94,34 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         </div>
                     </motion.div>
 
-                    <motion.div
-                        className="h-full flex flex-col relative print-force-visible"
-                        initial={getRevealStyle(isPrintMode)}
-                        animate={getRevealStyle(effectiveStep >= 1)}
-                        transition={{ duration: 0.9, ease: 'easeInOut' }}
-                    >
-                        {data?.image?.src && (
-                            <div className="absolute inset-0 z-0">
-                                <div className="relative w-full h-full">
-                                    <img 
-                                        src={data.image.src} 
-                                        alt="Payment Detail" 
-                                        className="w-full h-full object-cover rounded-[1px]"
-                                    />
-                                    {/* Overlay filter */}
-                                    <div 
-                                        className="absolute inset-0 bg-[#8f4933]" 
-                                        style={{ opacity: (data.image.opacity ?? 15) / 100 }}
-                                    />
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Firma y Fecha se mantienen por ahora en esta vista si es necesario, 
-                            o se pueden mover a la dedicada. El usuario dijo "en el hueco... añadir imagen".
-                            Dejaré la firma por si acaso, pero el usuario no especificó borrarla. 
-                            Sin embargo, la imagen ahora ocupa todo el espacio. 
-                            Si la firma debe estar, la pondré sobre la imagen o debajo.
-                            Revisando petición: "hueco que quedaria en su anterior lugar".
-                            Moveré la firma a la nueva página de letra pequeña. */}
-                    </motion.div>
+                    {/* ESPACIO PARA LA IMAGEN (Columna vacía para mantener layout) */}
+                    <div className="h-full pointer-events-none opacity-0" />
                 </div>
             </div>
+
+            {/* IMAGEN LATERAL - Alineada a márgenes exactos (top 150, bottom 140, right 120) */}
+            {data?.image?.src && (
+                <motion.div
+                    className="absolute top-[150px] right-[120px] bottom-[140px] z-0 print-force-visible overflow-hidden rounded-[1px]"
+                    style={{ width: 'calc(50% - 70px)' }} // 50% menos la mitad del gap (20/2=10) y ajustando por el padding lateral
+                    initial={getRevealStyle(isPrintMode)}
+                    animate={getRevealStyle(effectiveStep >= 1)}
+                    transition={{ duration: 0.9, ease: 'easeInOut' }}
+                >
+                    <div className="relative w-full h-full">
+                        <img 
+                            src={data.image.src} 
+                            alt="Payment Detail" 
+                            className="w-full h-full object-cover"
+                        />
+                        {/* Overlay filter */}
+                        <div 
+                            className="absolute inset-0 bg-[#8f4933]" 
+                            style={{ opacity: (data.image.opacity ?? 15) / 100 }}
+                        />
+                    </div>
+                </motion.div>
+            )}
 
         </section>
     );
