@@ -127,7 +127,7 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
 
                                     if (data?.finePrint?.content) {
                                         return (
-                                            <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.4] space-y-2 ${textSizeClass}`}>
+                                            <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.4] ${textSizeClass}`}>
                                                 <PortableText 
                                                     value={data.finePrint.content} 
                                                     components={{
