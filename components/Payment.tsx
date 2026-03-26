@@ -99,11 +99,12 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                 </div>
             </div>
 
-            {/* IMAGEN LATERAL - Alineada a márgenes exactos (top 150, bottom 140, right 120) */}
+            {/* IMAGEN LATERAL - Alineada a márgenes exactos (top 150, bottom 140, right 120) 
+                 Ancho calculado: (1920 - 240 (px) - 80 (gap)) / 2 = 800px */}
             {data?.image?.src && (
                 <motion.div
                     className="absolute top-[150px] right-[120px] bottom-[140px] z-0 print-force-visible overflow-hidden rounded-[1px]"
-                    style={{ width: 'calc(50% - 70px)' }} // 50% menos la mitad del gap (20/2=10) y ajustando por el padding lateral
+                    style={{ width: '800px' }}
                     initial={getRevealStyle(isPrintMode)}
                     animate={getRevealStyle(effectiveStep >= 1)}
                     transition={{ duration: 0.9, ease: 'easeInOut' }}
