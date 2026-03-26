@@ -36,15 +36,16 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                 </div>
 
                 <motion.div 
-                    className="flex-grow flex flex-col print-force-visible"
+                    className="flex-grow flex flex-col print-force-visible min-h-0"
                     initial={getRevealStyle(isPrintMode)}
                     animate={getRevealStyle(effectiveStep >= 2)}
                     transition={{ duration: 0.9, ease: 'easeInOut' }}
                 >
                     <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: data?.title || 'Letra pequeña' }} />
                     
-                    <div className="flex-grow columns-2 gap-20 space-y-0 pb-[100px]">
-                        <div className="cuerpo text-vlanc-secondary/80 !leading-[1.6] break-inside-avoid">
+                    {/* Contenedor con altura restringida para forzar el salto de columna */}
+                    <div className="flex-grow columns-2 gap-20 space-y-0 pb-10 overflow-hidden h-full">
+                        <div className="cuerpo text-vlanc-secondary/80 !leading-[1.6] break-inside-avoid text-justify">
                             {data?.content ? (
                                 <PortableText 
                                     value={data.content} 

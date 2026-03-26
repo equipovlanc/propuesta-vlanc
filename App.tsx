@@ -155,8 +155,8 @@ const App: React.FC = () => {
         else setInternalStep(isMovingForward ? 0 : 6);
       }
       else if (nextSection.id === 'payment') {
-        if (completedSections.has('payment')) setInternalStep(2);
-        else setInternalStep(isMovingForward ? 0 : 2);
+        if (completedSections.has('payment')) setInternalStep(1);
+        else setInternalStep(isMovingForward ? 0 : 1);
       }
       else if (nextSection.id === 'special-offers') {
         // Pasos: 0 (Init), 1 (Condiciones), 2 (Oferta), 3 (Logo)
@@ -316,7 +316,7 @@ const App: React.FC = () => {
 
         if (activeSection.id === 'payment' && !isCompleted) {
           if (e.deltaY > 0) {
-            if (internalStep < 2) { setInternalStep(prev => prev + 1); return; }
+            if (internalStep < 1) { setInternalStep(prev => prev + 1); return; }
           } else {
             if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
           }
@@ -365,7 +365,7 @@ const App: React.FC = () => {
       if (activeSection.id === 'mission' && !isCompleted) if (handleStep(2)) return;
       if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
       if (activeSection.id === 'investment' && !isCompleted) if (handleStep(6)) return;
-      if (activeSection.id === 'payment' && !isCompleted) if (handleStep(2)) return;
+      if (activeSection.id === 'payment' && !isCompleted) if (handleStep(1)) return;
       if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(3)) return;
       if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(1)) return;
 
@@ -397,7 +397,7 @@ const App: React.FC = () => {
       if (activeSection.id === 'mission' && !isCompleted && tryStep(2)) return;
       if (activeSection.id === 'process' && !isCompleted && tryStep(proposalData?.process?.steps?.length || 8)) return;
       if (activeSection.id === 'investment' && !isCompleted && tryStep(6)) return;
-      if (activeSection.id === 'payment' && !isCompleted && tryStep(2)) return;
+      if (activeSection.id === 'payment' && !isCompleted && tryStep(1)) return;
       if (activeSection.id === 'special-offers' && !isCompleted && tryStep(3)) return;
       if (activeSection.id === 'divider-slide' && !isCompleted && tryStep(1)) return;
 

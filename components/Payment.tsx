@@ -32,7 +32,7 @@ interface PaymentProps {
     };
     investmentTitle?: string;
     locationDate?: string;
-    step?: number; // 0 = nada, 1 = columna izquierda, 2 = columna derecha + firma + fecha
+    step?: number; // 0 = nada, 1 = todo visible
     isPrintMode?: boolean;
 }
 
@@ -43,7 +43,7 @@ const getRevealStyle = (visible: boolean) => ({
 });
 
 const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, step = 2, isPrintMode = false }) => {
-    const effectiveStep = isPrintMode ? 2 : step;
+    const effectiveStep = isPrintMode ? 1 : step;
 
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative">
@@ -94,11 +94,10 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
                         </div>
                     </motion.div>
 
-                    {/* COLUMNA DERECHA + IMAGEN — Paso 2 */}
                     <motion.div
                         className="h-full flex flex-col relative print-force-visible"
                         initial={getRevealStyle(isPrintMode)}
-                        animate={getRevealStyle(effectiveStep >= 2)}
+                        animate={getRevealStyle(effectiveStep >= 1)}
                         transition={{ duration: 0.9, ease: 'easeInOut' }}
                     >
                         {data?.image?.src && (
