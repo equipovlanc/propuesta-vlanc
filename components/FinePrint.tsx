@@ -44,7 +44,7 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                     <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: data?.title || 'Letra pequeña' }} />
                     
                     {(() => {
-                        // Cálculo de longitud para determinar tamaño
+                        // Cálculo de longitud para determinar tamaño (mismos umbrales que antes pero adaptados a 2 columnas)
                         let charCount = 0;
                         if (data?.content) {
                             charCount = data.content
@@ -57,21 +57,18 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                         }
 
                         let textSizeClass = "";
-                        // Umbrales para forzar que todo quepa en el espacio absoluto
-                        if (charCount > 3000) textSizeClass = "!text-[10px]";
-                        else if (charCount > 2400) textSizeClass = "!text-[11px]";
-                        else if (charCount > 1800) textSizeClass = "!text-[12px]";
-                        else if (charCount > 1200) textSizeClass = "!text-[13px]";
-                        else if (charCount > 600) textSizeClass = "!text-[14px]";
-                        else textSizeClass = "!text-[15px]";
+                        // Ajustamos umbrales: Prioridad legibilidad. 
+                        // En 2 columnas, aprovechamos el ancho completo (1920 - 240 = 1680px).
+                        if (charCount > 2800) textSizeClass = "!text-[11.5px]";
+                        else if (charCount > 2000) textSizeClass = "!text-[12.5px]";
+                        else if (charCount > 1300) textSizeClass = "!text-[13.5px]";
+                        else if (charCount > 800) textSizeClass = "!text-[14.5px]";
+                        else textSizeClass = "!text-[15.5px]";
 
                         return (
-                            <>
-                                {/* Contenedor ABSOLUTO para las columnas: 
-                                     Va desde justo debajo del título hasta el margen inferior (140px) */}
-                                <div 
-                                    className={`absolute left-[120px] right-[120px] top-[400px] bottom-[140px] columns-2 gap-20 overflow-hidden ${textSizeClass}`}
-                                >
+                            <div className="flex-grow flex flex-col min-h-0 w-full">
+                                {/* Contenedor con altura restringida para forzar el salto de columna */}
+                                <div className={`flex-grow columns-2 gap-20 space-y-0 pb-10 h-full w-full ${textSizeClass}`}>
                                     <div className={`cuerpo text-vlanc-secondary/80 !leading-[1.5] break-inside-avoid text-justify w-full ${textSizeClass}`}>
                                         {data?.content ? (
                                             <PortableText 
@@ -89,26 +86,27 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                                         )}
                                     </div>
                                 </div>
-
-                                {/* FIRMA - FIJADA al margen inferior (140px) y ancho de columna (800px) */}
-                                <motion.div
-                                    className="absolute right-[120px] bottom-[140px] w-[800px] pointer-events-none z-20"
-                                    initial={getRevealStyle(isPrintMode)}
-                                    animate={getRevealStyle(effectiveStep >= 2)}
-                                    transition={{ duration: 0.9, ease: 'easeInOut' }}
-                                >
-                                    <div className="flex flex-col border-t border-[#8f4933] pt-1 print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
-                                        <div className="flex justify-between items-start">
-                                            <span className="tabla1">VIVE VLANC SL</span>
-                                            <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </>
+                            </div>
                         );
                     })()}
                 </motion.div>
             </div>
+
+            {/* FIRMA - Directamente bajo el margen inferior (140px)
+                 Alineada exactamente a la columna derecha (Ancho 800px) */}
+            <motion.div
+                className="absolute right-[120px] bottom-[140px] w-[800px] pointer-events-none z-20 print-force-visible"
+                initial={getRevealStyle(isPrintMode)}
+                animate={getRevealStyle(effectiveStep >= 2)}
+                transition={{ duration: 0.9, ease: 'easeInOut' }}
+            >
+                <div className="flex flex-col border-t border-[#8f4933] pt-1 print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
+                    <div className="flex justify-between items-start">
+                        <span className="tabla1">VIVE VLANC SL</span>
+                        <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
+                    </div>
+                </div>
+            </motion.div>
 
             {/* FECHA — Posición estándar absoluta */}
             <motion.div
