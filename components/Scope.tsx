@@ -112,7 +112,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             let finalMediaHeight = initialMediaHeight;
             let finalTopBlockHeight = initialMediaHeight;
 
-            if (newSplitIndex < breakdown.length && idealMediaBottom < initialMediaHeight) {
+            if (newSplitIndex < totalFlowItems && idealMediaBottom < initialMediaHeight) {
                 finalMediaHeight = idealMediaBottom;
                 finalTopBlockHeight = idealMediaBottom;
             }
