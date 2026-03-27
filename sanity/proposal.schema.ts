@@ -223,7 +223,12 @@ export default defineType({
                         defineField({ name: 'projectType', type: 'string' }),
                         defineField({ name: 'scope', type: 'string' }),
                         defineField({ name: 'program', type: 'text' }),
-                        defineField({ name: 'breakdown', type: 'array', of: [{ type: 'string' }] }),
+                        defineField({ 
+                            name: 'breakdown', 
+                            title: 'Desglose / Puntos (Rich Text)', 
+                            type: 'array', 
+                            of: [{ type: 'string' }, { type: 'block' }] 
+                        }),
                         defineField({ name: 'note', type: 'string' })
                     ]
                 })

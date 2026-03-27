@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import AnimatedSection from './AnimatedSection';
+import { PortableText } from '@portabletext/react';
 
 interface ScopeProps {
     data?: {
@@ -210,9 +211,13 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                             <div
                                 key={i}
                                 ref={el => itemRefs.current[i] = el}
-                                className={`mb-4 ${i >= splitIndex ? 'hidden' : 'block'}`}
+                                className={`mb-4 cuerpo leading-[1.4] text-left ${i >= splitIndex ? 'hidden' : 'block'}`}
                             >
-                                <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
+                                {typeof item === 'string' ? (
+                                    <p dangerouslySetInnerHTML={{ __html: item }} />
+                                ) : (
+                                    <PortableText value={[item]} components={{ block: { normal: ({children}) => <p>{children}</p> } }} />
+                                )}
                             </div>
                         ))}
                     </AnimatedSection>
@@ -222,8 +227,12 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             {/* Medidor invisible para Columna Derecha */}
             <div className="absolute opacity-0 pointer-events-none -z-10" aria-hidden="true" style={{ width: '735px', left: '-2000px' }}>
                 {breakdown.map((item, i) => (
-                    <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el }}>
-                        <p className="cuerpo leading-[1.4]" dangerouslySetInnerHTML={{ __html: item }} />
+                    <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el }} className="cuerpo leading-[1.4]">
+                        {typeof item === 'string' ? (
+                            <p dangerouslySetInnerHTML={{ __html: item }} />
+                        ) : (
+                            <PortableText value={[item]} components={{ block: { normal: ({children}) => <p>{children}</p> } }} />
+                        )}
                     </div>
                 ))}
             </div>
@@ -233,9 +242,13 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 {/* Breakdown Items: Naciendo desde abajo hacia arriba hasta los 140px */}
                 <div className="absolute bottom-[140px] w-full flex flex-col justify-end pointer-events-auto">
                     <AnimatedSection hierarchy={2}>
-                        {col2Items.map((item, i) => (
-                            <div key={`c2-${i}`} className="mb-4">
-                                <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
+                        {col2Items.map((item: any, i: number) => (
+                            <div key={`c2-${i}`} className="mb-4 cuerpo leading-[1.4] text-left">
+                                {typeof item === 'string' ? (
+                                    <p dangerouslySetInnerHTML={{ __html: item }} />
+                                ) : (
+                                    <PortableText value={[item]} components={{ block: { normal: ({children}) => <p>{children}</p> } }} />
+                                )}
                             </div>
                         ))}
                     </AnimatedSection>
