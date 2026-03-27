@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import AnimatedSection from './AnimatedSection';
 import { PortableText } from '@portabletext/react';
@@ -13,16 +12,15 @@ interface ScopeProps {
             location?: string;
             projectType?: string;
             scope?: string;
-            program?: any;
+            program?: any[] | string;
+            breakdown?: string[];
             note?: string;
         };
     }
 }
 
 const Scope: React.FC<ScopeProps> = ({ data }) => {
-    const programBlocks = Array.isArray(data?.intervention?.program)
-        ? data.intervention.program
-        : (data?.intervention?.program ? [data.intervention.program] : []);
+    const breakdown = data?.intervention?.breakdown ?? [];
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
 
@@ -31,10 +29,11 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     const titleRef = useRef<HTMLDivElement>(null);
     const barRef = useRef<HTMLDivElement>(null);
     const infoBlockRef = useRef<HTMLDivElement>(null);
+    const programRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     // Estados para el layout
-    const [splitIndex, setSplitIndex] = useState<number>(programBlocks.length);
+    const [splitIndex, setSplitIndex] = useState<number>(breakdown.length);
     const [mediaHeight, setMediaHeight] = useState<number>(512);
     const [showMedia, setShowMedia] = useState(true);
     const [topBlockHeight, setTopBlockHeight] = useState<number>(512);
@@ -67,12 +66,17 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 currentLeftY += infoBlockRef.current.offsetHeight + 24; // Espacio para el salto de línea al Program
             }
 
-            let newSplitIndex = programBlocks.length;
-            for (let i = 0; i < programBlocks.length; i++) {
+            // Medimos el Program
+            if (programRef.current) {
+                currentLeftY += programRef.current.offsetHeight + 16; // Espacio bajo el Program para empezar breakdown
+            }
+
+            let newSplitIndex = breakdown.length;
+            for (let i = 0; i < breakdown.length; i++) {
                 const item = itemRefs.current[i];
                 if (item) {
                     const itemHeight = item.offsetHeight;
-                    if (currentLeftY + itemHeight > bottomAxisY && newSplitIndex === programBlocks.length) {
+                    if (currentLeftY + itemHeight > bottomAxisY && newSplitIndex === breakdown.length) {
                         newSplitIndex = i;
                     }
                     if (i < newSplitIndex) {
@@ -84,7 +88,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
             // 3. Medir altura de la Columna Derecha
             let col2BreakdownHeight = 0;
-            for (let i = newSplitIndex; i < programBlocks.length; i++) {
+            for (let i = newSplitIndex; i < breakdown.length; i++) {
                 const item = itemRefs.current[i];
                 if (item) col2BreakdownHeight += item.offsetHeight + 16;
             }
@@ -98,7 +102,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             let finalMediaHeight = initialMediaHeight;
             let finalTopBlockHeight = initialMediaHeight;
 
-            if (newSplitIndex < programBlocks.length && idealMediaBottom < initialMediaHeight) {
+            if (newSplitIndex < breakdown.length && idealMediaBottom < initialMediaHeight) {
                 finalMediaHeight = idealMediaBottom;
                 finalTopBlockHeight = idealMediaBottom;
             }
@@ -121,9 +125,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         return () => {
             clearTimeout(timeout);
         };
-    }, [programBlocks, data]);
+    }, [breakdown, data]);
 
-    const col2Items = programBlocks.slice(splitIndex);
+    const col2Items = breakdown.slice(splitIndex);
 
     return (
         <section ref={containerRef} className="h-screen w-full relative overflow-hidden flex flex-col bg-white">
@@ -190,20 +194,43 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* Program Blocks (Columna Izquierda) */}
-                <div className="mt-6 flex flex-col">
+                {/* Program - 1 línea de espacio debajo de Scope */}
+                <div ref={programRef} className="mt-6"> {/* mt-6 ~ un salto de linea amplio */}
                     <AnimatedSection hierarchy={2}>
-                        {programBlocks.map((item, i) => (
+                        <div className="cuerpo text-left space-y-2">
+                            <strong className="font-bold uppercase block mb-1">PROGRAMA:</strong> 
+                            {Array.isArray(data?.intervention?.program) ? (
+                                <PortableText 
+                                    value={data.intervention.program} 
+                                    components={{
+                                        block: {
+                                            normal: ({children}) => <p className="mb-0 leading-[1.4]">{children}</p>
+                                        },
+                                        list: {
+                                            bullet: ({children}) => <ul className="list-disc pl-5 mt-1">{children}</ul>,
+                                        },
+                                        listItem: {
+                                            bullet: ({children}) => <li className="mb-1">{children}</li>
+                                        }
+                                    }}
+                                />
+                            ) : (
+                                <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
+                            )}
+                        </div>
+                    </AnimatedSection>
+                </div>
+
+                {/* Breakdown (Columna Izquierda) */}
+                <div className="mt-4 flex flex-col">
+                    <AnimatedSection hierarchy={2}>
+                        {breakdown.map((item, i) => (
                             <div
                                 key={i}
-                                ref={el => { itemRefs.current[i] = el; }}
-                                className={`cuerpo leading-[1.4] text-left ${i >= splitIndex ? 'hidden' : 'block'}`}
+                                ref={(el) => { itemRefs.current[i] = el; }}
+                                className={`mb-4 ${i >= splitIndex ? 'hidden' : 'block'}`}
                             >
-                                {typeof item === 'string' ? (
-                                    <p dangerouslySetInnerHTML={{ __html: item }} />
-                                ) : (
-                                    <PortableText value={[item]} components={{ block: { normal: ({children}) => <p>{children}</p> } }} />
-                                )}
+                                <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
                             </div>
                         ))}
                     </AnimatedSection>
@@ -212,13 +239,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
             {/* Medidor invisible para Columna Derecha */}
             <div className="absolute opacity-0 pointer-events-none -z-10" aria-hidden="true" style={{ width: '735px', left: '-2000px' }}>
-                {programBlocks.map((item, i) => (
-                    <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el; }} className="cuerpo leading-[1.4]">
-                        {typeof item === 'string' ? (
-                            <p dangerouslySetInnerHTML={{ __html: item }} />
-                        ) : (
-                            <PortableText value={[item]} components={{ block: { normal: ({children}) => <p>{children}</p> } }} />
-                        )}
+                {breakdown.map((item, i) => (
+                    <div key={`m-${i}`} ref={(el) => { if (i >= splitIndex) { itemRefs.current[i] = el; } }}>
+                        <p className="cuerpo leading-[1.4]" dangerouslySetInnerHTML={{ __html: item }} />
                     </div>
                 ))}
             </div>
@@ -228,13 +251,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 {/* Breakdown Items: Naciendo desde abajo hacia arriba hasta los 140px */}
                 <div className="absolute bottom-[140px] w-full flex flex-col justify-end pointer-events-auto">
                     <AnimatedSection hierarchy={2}>
-                        {col2Items.map((item: any, i: number) => (
-                            <div key={`c2-${i}`} className="cuerpo leading-[1.4] text-left">
-                                {typeof item === 'string' ? (
-                                    <p dangerouslySetInnerHTML={{ __html: item }} />
-                                ) : (
-                                    <PortableText value={[item]} components={{ block: { normal: ({children}) => <p>{children}</p> } }} />
-                                )}
+                        {col2Items.map((item, i) => (
+                            <div key={`c2-${i}`} className="mb-4">
+                                <p className="cuerpo leading-[1.4] text-left" dangerouslySetInnerHTML={{ __html: item }} />
                             </div>
                         ))}
                     </AnimatedSection>
