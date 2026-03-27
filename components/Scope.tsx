@@ -210,7 +210,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         {breakdown.map((item, i) => (
                             <div
                                 key={i}
-                                ref={el => itemRefs.current[i] = el}
+                                ref={el => { itemRefs.current[i] = el; }}
                                 className={`mb-4 cuerpo leading-[1.4] text-left ${i >= splitIndex ? 'hidden' : 'block'}`}
                             >
                                 {typeof item === 'string' ? (
@@ -227,7 +227,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             {/* Medidor invisible para Columna Derecha */}
             <div className="absolute opacity-0 pointer-events-none -z-10" aria-hidden="true" style={{ width: '735px', left: '-2000px' }}>
                 {breakdown.map((item, i) => (
-                    <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el }} className="cuerpo leading-[1.4]">
+                    <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el; }} className="cuerpo leading-[1.4]">
                         {typeof item === 'string' ? (
                             <p dangerouslySetInnerHTML={{ __html: item }} />
                         ) : (

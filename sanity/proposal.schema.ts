@@ -227,7 +227,7 @@ export default defineType({
                             name: 'breakdown', 
                             title: 'Desglose / Puntos (Rich Text)', 
                             type: 'array', 
-                            of: [{ type: 'string' }, { type: 'block' }] 
+                            of: [{ type: 'block' }] 
                         }),
                         defineField({ name: 'note', type: 'string' })
                     ]
