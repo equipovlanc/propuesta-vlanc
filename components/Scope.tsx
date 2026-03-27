@@ -197,20 +197,22 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 {/* Program - 1 línea de espacio debajo de Scope */}
                 <div ref={programRef} className="mt-6"> {/* mt-6 ~ un salto de linea amplio */}
                     <AnimatedSection hierarchy={2}>
-                        <div className="cuerpo text-left space-y-2">
+                        <div className="cuerpo text-left">
                             <strong className="font-bold uppercase block mb-1">PROGRAMA:</strong> 
                             {Array.isArray(data?.intervention?.program) ? (
                                 <PortableText 
                                     value={data.intervention.program} 
                                     components={{
                                         block: {
-                                            normal: ({children}) => <p className="mb-0 leading-[1.4]">{children}</p>
+                                            normal: ({children}) => <p className="mb-0 min-h-[1.4em]">{children}</p>
                                         },
                                         list: {
-                                            bullet: ({children}) => <ul className="list-disc pl-5 mt-1">{children}</ul>,
+                                            bullet: ({children}) => <ul className="list-disc pl-5 mb-0">{children}</ul>,
+                                            number: ({children}) => <ol className="list-decimal pl-5 mb-0">{children}</ol>,
                                         },
                                         listItem: {
-                                            bullet: ({children}) => <li className="mb-1">{children}</li>
+                                            bullet: ({children}) => <li className="mb-0 min-h-[1.4em]">{children}</li>,
+                                            number: ({children}) => <li className="mb-0 min-h-[1.4em]">{children}</li>,
                                         }
                                     }}
                                 />

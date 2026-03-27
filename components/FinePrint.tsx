@@ -106,7 +106,15 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                                         value={data.content} 
                                         components={{
                                             block: {
-                                                normal: ({children}) => <p className="mb-0">{children}</p>
+                                                normal: ({children}) => <p className="mb-0 min-h-[1.4em]">{children}</p>
+                                            },
+                                            list: {
+                                                bullet: ({children}) => <ul className="list-disc pl-5 mb-0">{children}</ul>,
+                                                number: ({children}) => <ol className="list-decimal pl-5 mb-0">{children}</ol>,
+                                            },
+                                            listItem: {
+                                                bullet: ({children}) => <li className="mb-0 min-h-[1.4em]">{children}</li>,
+                                                number: ({children}) => <li className="mb-0 min-h-[1.4em]">{children}</li>,
                                             }
                                         }}
                                     />
