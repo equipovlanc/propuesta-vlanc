@@ -13,15 +13,16 @@ interface ScopeProps {
             location?: string;
             projectType?: string;
             scope?: string;
-            program?: string;
-            breakdown?: string[];
+            program?: any;
             note?: string;
         };
     }
 }
 
 const Scope: React.FC<ScopeProps> = ({ data }) => {
-    const breakdown = data?.intervention?.breakdown ?? [];
+    const programBlocks = Array.isArray(data?.intervention?.program)
+        ? data.intervention.program
+        : (data?.intervention?.program ? [data.intervention.program] : []);
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
 
@@ -30,11 +31,10 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     const titleRef = useRef<HTMLDivElement>(null);
     const barRef = useRef<HTMLDivElement>(null);
     const infoBlockRef = useRef<HTMLDivElement>(null);
-    const programRef = useRef<HTMLDivElement>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     // Estados para el layout
-    const [splitIndex, setSplitIndex] = useState<number>(breakdown.length);
+    const [splitIndex, setSplitIndex] = useState<number>(programBlocks.length);
     const [mediaHeight, setMediaHeight] = useState<number>(512);
     const [showMedia, setShowMedia] = useState(true);
     const [topBlockHeight, setTopBlockHeight] = useState<number>(512);
@@ -67,17 +67,12 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 currentLeftY += infoBlockRef.current.offsetHeight + 24; // Espacio para el salto de línea al Program
             }
 
-            // Medimos el Program
-            if (programRef.current) {
-                currentLeftY += programRef.current.offsetHeight + 16; // Espacio bajo el Program para empezar breakdown
-            }
-
-            let newSplitIndex = breakdown.length;
-            for (let i = 0; i < breakdown.length; i++) {
+            let newSplitIndex = programBlocks.length;
+            for (let i = 0; i < programBlocks.length; i++) {
                 const item = itemRefs.current[i];
                 if (item) {
                     const itemHeight = item.offsetHeight;
-                    if (currentLeftY + itemHeight > bottomAxisY && newSplitIndex === breakdown.length) {
+                    if (currentLeftY + itemHeight > bottomAxisY && newSplitIndex === programBlocks.length) {
                         newSplitIndex = i;
                     }
                     if (i < newSplitIndex) {
@@ -89,7 +84,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
             // 3. Medir altura de la Columna Derecha
             let col2BreakdownHeight = 0;
-            for (let i = newSplitIndex; i < breakdown.length; i++) {
+            for (let i = newSplitIndex; i < programBlocks.length; i++) {
                 const item = itemRefs.current[i];
                 if (item) col2BreakdownHeight += item.offsetHeight + 16;
             }
@@ -103,7 +98,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
             let finalMediaHeight = initialMediaHeight;
             let finalTopBlockHeight = initialMediaHeight;
 
-            if (newSplitIndex < breakdown.length && idealMediaBottom < initialMediaHeight) {
+            if (newSplitIndex < programBlocks.length && idealMediaBottom < initialMediaHeight) {
                 finalMediaHeight = idealMediaBottom;
                 finalTopBlockHeight = idealMediaBottom;
             }
@@ -126,9 +121,9 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
         return () => {
             clearTimeout(timeout);
         };
-    }, [breakdown, data]);
+    }, [programBlocks, data]);
 
-    const col2Items = breakdown.slice(splitIndex);
+    const col2Items = programBlocks.slice(splitIndex);
 
     return (
         <section ref={containerRef} className="h-screen w-full relative overflow-hidden flex flex-col bg-white">
@@ -195,19 +190,10 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                     </AnimatedSection>
                 </div>
 
-                {/* Program - 1 línea de espacio debajo de Scope */}
-                <div ref={programRef} className="mt-6"> {/* mt-6 ~ un salto de linea amplio */}
+                {/* Program Blocks (Columna Izquierda) */}
+                <div className="mt-6 flex flex-col">
                     <AnimatedSection hierarchy={2}>
-                        <p className="cuerpo text-left">
-                            <strong className="font-bold uppercase">PROGRAMA:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.program || '' }} />
-                        </p>
-                    </AnimatedSection>
-                </div>
-
-                {/* Breakdown (Columna Izquierda) */}
-                <div className="mt-4 flex flex-col">
-                    <AnimatedSection hierarchy={2}>
-                        {breakdown.map((item, i) => (
+                        {programBlocks.map((item, i) => (
                             <div
                                 key={i}
                                 ref={el => { itemRefs.current[i] = el; }}
@@ -226,7 +212,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
             {/* Medidor invisible para Columna Derecha */}
             <div className="absolute opacity-0 pointer-events-none -z-10" aria-hidden="true" style={{ width: '735px', left: '-2000px' }}>
-                {breakdown.map((item, i) => (
+                {programBlocks.map((item, i) => (
                     <div key={`m-${i}`} ref={el => { if (i >= splitIndex) itemRefs.current[i] = el; }} className="cuerpo leading-[1.4]">
                         {typeof item === 'string' ? (
                             <p dangerouslySetInnerHTML={{ __html: item }} />

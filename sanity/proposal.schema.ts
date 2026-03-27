@@ -222,10 +222,9 @@ export default defineType({
                         defineField({ name: 'location', type: 'string' }),
                         defineField({ name: 'projectType', type: 'string' }),
                         defineField({ name: 'scope', type: 'string' }),
-                        defineField({ name: 'program', type: 'text' }),
                         defineField({ 
-                            name: 'breakdown', 
-                            title: 'Desglose / Puntos (Rich Text)', 
+                            name: 'program', 
+                            title: 'Programa (Rich Text)', 
                             type: 'array', 
                             of: [{ type: 'block' }] 
                         }),
