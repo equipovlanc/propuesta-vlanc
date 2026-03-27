@@ -29,7 +29,9 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
             <div className="max-w-7xl mx-auto w-full">
                 <div className="relative mb-12">
                     <AnimatedSection>
-                        <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter" dangerouslySetInnerHTML={{ __html: data?.title || 'trabajos contemplados.' }} />
+                        <h2 className="title-xl text-vlanc-secondary font-bold tracking-tighter">
+                            <CustomPortableText value={data?.title || 'trabajos contemplados.'} isInline />
+                        </h2>
                     </AnimatedSection>
                     <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
@@ -40,7 +42,9 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                         {/* Fase 3 */}
                         <div>
                             <div className="border-b border-vlanc-primary/20 pb-2 mb-6">
-                                <h3 className="subtitle-md text-vlanc-secondary font-bold" dangerouslySetInnerHTML={{ __html: data?.phases?.[0]?.title || '' }} />
+                                <h3 className="subtitle-md text-vlanc-secondary font-bold">
+                                    <CustomPortableText value={data?.phases?.[0]?.title} isInline />
+                                </h3>
                             </div>
                             <div className="space-y-6">
                                 {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (

@@ -64,7 +64,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                     <div className="relative inline-block">
                                         <h3 className="subtitulo3 font-bold text-vlanc-black leading-tight">
                                             <span className="font-serif mr-2">{`0${index + 1}`} /</span>
-                                            <span dangerouslySetInnerHTML={{ __html: s.title || '' }} />
+                                            <CustomPortableText value={s.title} isInline />
                                         </h3>
                                     </div>
 
@@ -124,7 +124,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
 
                         <div className="flex flex-col items-start w-full relative">
                             <h3 className="subtitulo2 not-italic mb-6 leading-tight text-vlanc-black">
-                                / {guaranteeItem.title}
+                                / <CustomPortableText value={guaranteeItem.title} isInline />
                             </h3>
 
                             <CustomPortableText 

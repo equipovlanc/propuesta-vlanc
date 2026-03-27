@@ -95,12 +95,12 @@ const Team: React.FC<TeamProps> = ({ data }) => {
 
                     {/* Bloque Superior: Nuestro propósito (J2 - Aparece primero) */}
                     <AnimatedSection className="flex flex-col items-start" hierarchy={2}>
-                        <h3 className="subtitulo2 mb-6">
-                            {data?.purpose?.title || "Nuestro propósito"}
+                        <h3 className="subtitulo2 not-italic font-bold mb-8">
+                            / <CustomPortableText value={data?.purpose?.title || "Nuestro propósito"} isInline />
                         </h3>
-                        <CustomPortableText 
-                            value={data?.purpose?.description} 
-                            className="cuerpo2 space-y-4 text-left" 
+                        <CustomPortableText
+                            value={data?.purpose?.description}
+                            className="cuerpo2 text-left"
                         />
                     </AnimatedSection>
 

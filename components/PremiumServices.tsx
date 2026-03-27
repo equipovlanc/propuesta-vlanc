@@ -41,9 +41,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
         return (
             <div key={key} className="w-full">
                 {isTitle ? (
-                    <h4 className="cuerpo uppercase mb-0 text-vlanc-black">
-                        <CustomPortableText value={block.text} />
-                    </h4>
+                        <CustomPortableText value={block.text} isInline />
                 ) : (
                     <div className="flex flex-row items-start gap-4">
                         {block.isNumbered && block.number && (
@@ -87,9 +85,13 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 {/* 2. Contenido del Servicio (J2) */}
                 <div className="flex flex-col justify-end max-w-xl">
                     <AnimatedSection hierarchy={2}>
-                        <h3 className="subtitulo2 not-italic font-bold mb-8" dangerouslySetInnerHTML={{ __html: `/ ${data?.subtitle || ''}` }} />
+                        <h3 className="subtitulo2 not-italic font-bold mb-8">
+                            / <CustomPortableText value={data?.subtitle} isInline />
+                        </h3>
 
-                        <h4 className="cuerpo uppercase mb-5 text-vlanc-black" dangerouslySetInnerHTML={{ __html: data?.title || '' }} />
+                        <h4 className="cuerpo uppercase mb-5 text-vlanc-black">
+                            <CustomPortableText value={data?.title} isInline />
+                        </h4>
 
                         <div className="w-full">
                             {(data?.description ?? []).map((block, i, arr) => renderDescriptionBlock(block, i, arr))}

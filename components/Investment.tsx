@@ -91,7 +91,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             >
                                 <h3 className="font-sans font-bold text-[15px] uppercase leading-tight text-vlanc-black">
-                                    <span dangerouslySetInnerHTML={{ __html: `${p.name}_` }} />
+                                    <CustomPortableText value={`${p.name}_`} isInline />
                                 </h3>
                                 <CustomPortableText 
                                     value={p.desc} 

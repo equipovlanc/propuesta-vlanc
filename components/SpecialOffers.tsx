@@ -132,9 +132,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
         return (
             <div key={key} className="w-full">
                 {isTitle ? (
-                    <h4 className="cuerpo uppercase mb-0 text-vlanc-black">
-                        <span dangerouslySetInnerHTML={{ __html: block.text }} />
-                    </h4>
+                        <CustomPortableText value={block.text} isInline />
                 ) : (
                     <div className="flex flex-row items-start gap-4">
                         {block.isNumbered && block.number && (
@@ -173,7 +171,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 1)}`}>
                         {data?.conditionalOffer && (
                             <div className="mb-4">
-                                <h3 className="subtitulo2 mb-2 text-vlanc-black" dangerouslySetInnerHTML={{ __html: data.conditionalOffer.title || '' }} />
+                                <h3 className="subtitulo2 mb-2 text-vlanc-black">
+                                    <CustomPortableText value={data.conditionalOffer.title} isInline />
+                                </h3>
                                 <CustomPortableText 
                                     value={data.conditionalOffer.description} 
                                     className="cuerpo leading-relaxed" 
@@ -190,7 +190,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 2)}`}>
                         {data?.launchOffer && (
                             <div className="mb-4">
-                                <h3 className="subtitulo2 mb-2 text-vlanc-black" dangerouslySetInnerHTML={{ __html: data.launchOffer.title || '' }} />
+                                <h3 className="subtitulo2 mb-2 text-vlanc-black">
+                                    <CustomPortableText value={data.launchOffer.title} isInline />
+                                </h3>
                                 <CustomPortableText 
                                     value={data.launchOffer.description} 
                                     className="cuerpo leading-relaxed" 
@@ -264,8 +266,12 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[672px] w-full relative max-h-[972px] overflow-y-auto no-scrollbar" onClick={(e) => e.stopPropagation()} hierarchy={2}>
                         <button onClick={closeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                         <div className="flex flex-col items-start w-full relative">
-                            <h3 className="subtitulo2 not-italic font-bold mb-8 text-vlanc-black">/ {premiumService.subtitle}</h3>
-                            <h4 className="cuerpo uppercase mb-5 text-vlanc-black">{premiumService.title}</h4>
+                            <h3 className="subtitulo2 not-italic font-bold mb-8 text-vlanc-black">
+                                / <CustomPortableText value={premiumService.subtitle} isInline />
+                            </h3>
+                            <h4 className="cuerpo uppercase mb-5 text-vlanc-black">
+                                <CustomPortableText value={premiumService.title} isInline />
+                            </h4>
                             <div className="w-full">{(premiumService.description ?? []).map((block, i, arr) => renderDescriptionBlock(block, i, arr))}</div>
                             {premiumService.note && (
                                 <div className="mt-4">

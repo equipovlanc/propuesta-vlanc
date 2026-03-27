@@ -26,7 +26,9 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
         <AnimatedSection className="flex flex-col items-start w-full relative" hierarchy={2}>
 
             {/* 1. TÍTULO GARANTÍA */}
-            <h3 className="subtitulo2 not-italic mb-6 leading-tight" dangerouslySetInnerHTML={{ __html: `/ ${item.title || ''}` }} />
+            <h3 className="subtitulo2 not-italic mb-6 leading-tight">
+                / <CustomPortableText value={item.title} isInline />
+            </h3>
 
             {/* 2. DESCRIPCIÓN */}
             <CustomPortableText 

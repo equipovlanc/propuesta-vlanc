@@ -36,7 +36,6 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                     <AnimatedSection hierarchy={2}>
                         <CustomPortableText 
                             value={data?.paragraphs} 
-                            className="space-y-4" 
                             paragraphClassName="cuerpo2" 
                         />
                     </AnimatedSection>

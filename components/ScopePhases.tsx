@@ -152,7 +152,9 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                     <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[613px] w-full relative" onClick={(e) => e.stopPropagation()} hierarchy={2}>
                         <button onClick={closeGuaranteeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                         <div className="flex flex-col items-start w-full relative">
-                            <h3 className="subtitulo2 not-italic mb-6 leading-tight text-vlanc-black">/ {guaranteeItem.title}</h3>
+                            <h3 className="subtitulo2 not-italic mb-6 leading-tight text-vlanc-black">
+                                / <CustomPortableText value={guaranteeItem.title} isInline />
+                            </h3>
                             <CustomPortableText 
                                 value={guaranteeItem.description} 
                                 className="cuerpo mb-12" 
@@ -166,6 +168,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                                         <CustomPortableText 
                                             value={guaranteeItem.badgeContent} 
                                             className="cuerpo !text-vlanc-black text-[14px] leading-snug" 
+                                            isInline
                                         />
                                     </div>
                                 </div>

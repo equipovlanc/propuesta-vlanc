@@ -5,75 +5,103 @@ interface CustomPortableTextProps {
     value: any;
     className?: string;
     paragraphClassName?: string;
+    isInline?: boolean;
 }
 
 const CustomPortableText: React.FC<CustomPortableTextProps> = ({ 
     value, 
     className = "", 
-    paragraphClassName = "" 
+    paragraphClassName = "",
+    isInline = false
 }) => {
     if (!value) return null;
 
-    // Si es un string (formato antiguo), lo renderizamos con dangerouslySetInnerHTML
-    if (typeof value === 'string') {
-        const formatted = value.replace(/\n/g, '<br />');
-        return (
-            <div 
-                className={className} 
-                dangerouslySetInnerHTML={{ __html: formatted }} 
-            />
-        );
-    }
-
-    // Si es un array, comprobar qué tipo de elementos tiene
-    if (Array.isArray(value)) {
-        // Si el primer elemento es un string, asumimos que es un array de párrafos (formato antiguo de Situation)
-        if (typeof value[0] === 'string') {
+    // Helper para renderizar el contenido sin un div envoltorio si es inline
+    const renderContent = () => {
+        // 1. Si es un string (formato antiguo)
+        if (typeof value === 'string') {
+            const formatted = value.replace(/\n/g, '<br />');
             return (
-                <div className={className}>
-                    {value.map((p: string, i: number) => (
-                        <p key={i} className={`mb-4 min-h-[1.4em] ${paragraphClassName}`} dangerouslySetInnerHTML={{ __html: p }} />
-                    ))}
-                </div>
+                <span 
+                    className={paragraphClassName || className} 
+                    dangerouslySetInnerHTML={{ __html: formatted }} 
+                />
             );
         }
 
-        // Si es un array de bloques (formato nuevo), usamos PortableText
-        return (
-            <div className={className}>
+        // 2. Si es un array
+        if (Array.isArray(value)) {
+            // Caso A: Array de strings (formato antiguo de Situation)
+            if (typeof value[0] === 'string') {
+                return (
+                    <>
+                        {value.map((p: string, i: number) => {
+                            const Tag = isInline ? 'span' : 'p';
+                            return <Tag key={i} className={`mb-0 min-h-[1.4em] ${paragraphClassName || className}`} dangerouslySetInnerHTML={{ __html: p }} />;
+                        })}
+                    </>
+                );
+            }
+
+            // Caso B: Array de bloques (PortableText)
+            return (
                 <PortableText 
                     value={value} 
                     components={{
                         block: {
-                            normal: ({ children }: any) => (
-                                <p className={`mb-0 min-h-[1.4em] ${paragraphClassName}`}>
-                                    {children}
-                                </p>
-                            )
+                            normal: ({ children }: any) => {
+                                const Tag = isInline ? 'span' : 'p';
+                                return (
+                                    <Tag className={`mb-0 min-h-[1.4em] ${paragraphClassName || className}`}>
+                                        {children}
+                                    </Tag>
+                                );
+                            }
                         },
                         list: {
-                            bullet: ({ children }: any) => <ul className="list-disc pl-5 mb-0">{children}</ul>,
-                            number: ({ children }: any) => <ol className="list-decimal pl-5 mb-0">{children}</ol>,
+                            bullet: ({ children }: any) => {
+                                if (isInline) return <span className="list-disc pl-5 mb-0">{children}</span>;
+                                return <ul className="list-disc pl-5 mb-0">{children}</ul>;
+                            },
+                            number: ({ children }: any) => {
+                                if (isInline) return <span className="list-decimal pl-5 mb-0">{children}</span>;
+                                return <ol className="list-decimal pl-5 mb-0">{children}</ol>;
+                            },
                         },
                         listItem: {
-                            bullet: ({ children }: any) => (
-                                <li className={`mb-0 min-h-[1.4em] ${paragraphClassName}`}>
-                                    {children}
-                                </li>
-                            ),
-                            number: ({ children }: any) => (
-                                <li className={`mb-0 min-h-[1.4em] ${paragraphClassName}`}>
-                                    {children}
-                                </li>
-                            ),
+                            bullet: ({ children }: any) => {
+                                const Tag = isInline ? 'span' : 'li';
+                                return (
+                                    <Tag className={`mb-0 min-h-[1.4em] ${paragraphClassName || className}`}>
+                                        {children}
+                                    </Tag>
+                                );
+                            },
+                            number: ({ children }: any) => {
+                                const Tag = isInline ? 'span' : 'li';
+                                return (
+                                    <Tag className={`mb-0 min-h-[1.4em] ${paragraphClassName || className}`}>
+                                        {children}
+                                    </Tag>
+                                );
+                            },
                         }
                     }}
                 />
-            </div>
-        );
+            );
+        }
+        return null;
+    };
+
+    if (isInline) {
+        return renderContent();
     }
 
-    return null;
+    return (
+        <div className={className}>
+            {renderContent()}
+        </div>
+    );
 };
 
 export default CustomPortableText;
