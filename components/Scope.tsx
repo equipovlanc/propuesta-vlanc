@@ -42,6 +42,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
     const [showMedia, setShowMedia] = useState(true);
     const [topBlockHeight, setTopBlockHeight] = useState<number>(512);
     const [interventionTop, setInterventionTop] = useState<number>(300);
+    const [col2Top, setCol2Top] = useState<number>(562);
 
     useLayoutEffect(() => {
         const calculateLayout = () => {
@@ -121,10 +122,12 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 setShowMedia(false);
                 setTopBlockHeight(initialMediaHeight);
                 setMediaHeight(0);
+                setCol2Top(finalInterventionTop);
             } else {
                 setShowMedia(true);
                 setMediaHeight(Math.max(0, finalMediaHeight));
                 setTopBlockHeight(finalTopBlockHeight);
+                setCol2Top(finalTopBlockHeight + mediaMargin);
             }
         };
 
@@ -264,8 +267,11 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
 
             {/* --- COLUMNA DERECHA (ACCIÓN INVERTIDA) --- */}
             <div className="absolute right-[120px] w-[735px] pointer-events-none" style={{ top: 0, bottom: 0 }}>
-                {/* Items: Naciendo desde abajo hacia arriba hasta los 140px */}
-                <div className="absolute bottom-[140px] w-full flex flex-col justify-end pointer-events-auto">
+                {/* Items: Alineados arriba justo debajo de la imagen */}
+                <div 
+                    className="absolute w-full pointer-events-auto transition-all duration-300"
+                    style={{ top: `${col2Top}px` }}
+                >
                     <AnimatedSection hierarchy={2}>
                         <div className="cuerpo text-left flex flex-col">
                             {splitIndex < programBlocksCount && (
