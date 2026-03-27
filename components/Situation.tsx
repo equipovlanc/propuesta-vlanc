@@ -1,6 +1,7 @@
 
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 
 interface SituationProps {
     data?: {
@@ -33,19 +34,11 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                 {/* CUERPO DE TEXTO (J2) */}
                 <div className="shrink-0">
                     <AnimatedSection hierarchy={2}>
-                        <div className="space-y-4">
-                            {data?.paragraphs && data.paragraphs.length > 0 ? (
-                                data.paragraphs.map((p, i) => (
-                                    <p
-                                        key={i}
-                                        className="cuerpo2"
-                                        dangerouslySetInnerHTML={{ __html: p }}
-                                    />
-                                ))
-                            ) : (
-                                <p className="italic text-vlanc-black/30">Rellena los párrafos de situación en Sanity...</p>
-                            )}
-                        </div>
+                        <CustomPortableText 
+                            value={data?.paragraphs} 
+                            className="space-y-4" 
+                            paragraphClassName="cuerpo2" 
+                        />
                     </AnimatedSection>
                 </div>
             </div>

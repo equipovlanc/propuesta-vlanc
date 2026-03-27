@@ -95,7 +95,7 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'paragraphs', type: 'array', of: [{ type: 'text' }] }),
+                defineField({ name: 'paragraphs', type: 'array', of: [{ type: 'block' }] }),
                 defineField({
                     name: 'image',
                     type: 'image',
@@ -119,7 +119,7 @@ export default defineType({
                     name: 'mission', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'subtitle', type: 'string' }),
-                        defineField({ name: 'description', type: 'text' }),
+                        defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] }),
                     ]
                 }),
                 defineField({
@@ -149,7 +149,7 @@ export default defineType({
                         type: 'object',
                         fields: [
                             defineField({ name: 'title', type: 'string' }),
-                            defineField({ name: 'description', type: 'text' }),
+                            defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] }),
                         ]
                     }]
                 }),
@@ -161,8 +161,8 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'purpose', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'text' }] }),
-                defineField({ name: 'history', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'text' }] }),
+                defineField({ name: 'purpose', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
+                defineField({ name: 'history', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
                 defineField({
                     name: 'members', type: 'array', of: [{
                         type: 'object',
@@ -190,7 +190,7 @@ export default defineType({
                         type: 'object',
                         fields: [
                             defineField({ name: 'name', type: 'string' }),
-                            defineField({ name: 'quote', type: 'text' }),
+                            defineField({ name: 'quote', type: 'array', of: [{ type: 'block' }] }),
                             defineField({
                                 name: 'img',
                                 title: 'Imagen',
@@ -253,7 +253,7 @@ export default defineType({
                                     fields: [
                                         defineField({ name: 'number', type: 'string' }),
                                         defineField({ name: 'title', type: 'string' }),
-                                        defineField({ name: 'description', type: 'text' })
+                                        defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] })
                                     ]
                                 }]
                             })
@@ -286,7 +286,7 @@ export default defineType({
                                     fields: [
                                         defineField({ name: 'number', type: 'string' }),
                                         defineField({ name: 'title', type: 'string' }),
-                                        defineField({ name: 'description', type: 'text' })
+                                        defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] })
                                     ]
                                 }]
                             })
@@ -301,13 +301,13 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'introduction', title: 'Introducción Parte 1', type: 'text' }),
-                defineField({ name: 'highlightPhrase', title: 'Frase Destacada (Negrita/Negro)', type: 'text' }),
-                defineField({ name: 'introduction2', title: 'Introducción Parte 2', type: 'text' }),
+                defineField({ name: 'introduction', title: 'Introducción Parte 1', type: 'array', of: [{ type: 'block' }] }),
+                defineField({ name: 'highlightPhrase', title: 'Frase Destacada (Negrita/Negro)', type: 'array', of: [{ type: 'block' }] }),
+                defineField({ name: 'introduction2', title: 'Introducción Parte 2', type: 'array', of: [{ type: 'block' }] }),
                 defineField({ name: 'locationDate', title: 'Lugar y Fecha (Pie de tabla)', type: 'string' }),
                 defineField({
                     name: 'plansDescription', type: 'array', of: [{
-                        type: 'object', fields: [{ name: 'name', type: 'string' }, { name: 'desc', type: 'text' }]
+                        type: 'object', fields: [{ name: 'name', type: 'string' }, { name: 'desc', type: 'array', of: [{ type: 'block' }] }]
                     }]
                 }),
                 defineField({ name: 'tableHeaders', title: 'Nombres de Planes (Cabecera)', type: 'array', of: [{ type: 'string' }] }),
@@ -331,18 +331,18 @@ export default defineType({
             type: 'object',
             fields: [
                 defineField({ name: 'title', title: 'Título Sección', type: 'string' }),
-                defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón)', type: 'text' }),
+                defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón)', type: 'array', of: [{ type: 'block' }] }),
                 defineField({
                     name: 'conditionalOffer', type: 'object', fields: [
                         { name: 'title', type: 'string' },
-                        { name: 'description', type: 'text' },
+                        { name: 'description', type: 'array', of: [{ type: 'block' }] },
                         { name: 'discountedPlans', type: 'array', of: [{ type: 'object', fields: [{ name: 'name', type: 'string' }, { name: 'originalPrice', type: 'string' }, { name: 'discountedPrice', type: 'string' }] }] }
                     ]
                 }),
                 defineField({
                     name: 'launchOffer', type: 'object', fields: [
                         { name: 'title', type: 'string' },
-                        { name: 'description', type: 'text' },
+                        { name: 'description', type: 'array', of: [{ type: 'block' }] },
                         { name: 'premiumServiceName', type: 'string' },
                         { name: 'premiumServiceValue', type: 'string' }
                     ]
@@ -441,11 +441,12 @@ export default defineType({
                             defineField({
                                 name: 'badgeContent',
                                 title: 'Contenido Badge (Rectángulo Negro)',
-                                type: 'text',
-                                description: 'Texto dentro del recuadro negro. Usa tags HTML como <strong>...</strong> para negritas.'
+                                type: 'array',
+                                of: [{ type: 'block' }],
+                                description: 'Texto dentro del recuadro negro. Permite resaltar palabras y saltos de línea.'
                             }),
                             defineField({ name: 'title', type: 'string' }),
-                            defineField({ name: 'description', type: 'text' }),
+                            defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] }),
                             defineField({ name: 'note', type: 'string' }),
                             defineField({
                                 name: 'isActive',
@@ -481,8 +482,8 @@ export default defineType({
                                         defineField({
                                             name: 'text',
                                             title: 'Texto',
-                                            type: 'text',
-                                            rows: 3
+                                            type: 'array',
+                                            of: [{ type: 'block' }]
                                         }),
                                         defineField({
                                             name: 'style',
@@ -535,7 +536,7 @@ export default defineType({
                                     }
                                 }]
                             }),
-                            defineField({ name: 'note', title: 'Nota (Texto con saltos de línea)', type: 'text' }),
+                            defineField({ name: 'note', title: 'Nota (Texto con saltos de línea)', type: 'array', of: [{ type: 'block' }] }),
                             defineField({ name: 'price', type: 'string' }),
                             defineField({
                                 name: 'image',
@@ -545,8 +546,9 @@ export default defineType({
                             defineField({
                                 name: 'extraNote',
                                 title: 'Nota Bajo Imagen',
-                                type: 'text',
-                                description: 'Nota que aparecerá bajo la imagen de la derecha. Soporta <strong> y saltos de línea.'
+                                type: 'array',
+                                of: [{ type: 'block' }],
+                                description: 'Nota que aparecerá bajo la imagen de la derecha.'
                             }),
                             defineField({
                                 name: 'showExtraNote',

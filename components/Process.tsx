@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 import { motion } from 'framer-motion';
 
 interface ProcessStep {
@@ -14,6 +15,7 @@ interface GuaranteeItem {
     title?: string;
     description?: string;
     note?: string;
+    isActive?: boolean;
 }
 
 interface ProcessProps {
@@ -69,7 +71,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                     {/* Descripción */}
                                     <div className="relative block w-full">
                                         <div className="cuerpo2 text-left">
-                                            <div dangerouslySetInnerHTML={{ __html: s.description || '' }} />
+                                            <CustomPortableText value={s.description} />
                                             {index === 4 && (
                                                 <p className="mt-4 font-bold text-vlanc-secondary">
                                                     · {data?.step5Phrase || "Tu interés es el nuestro"} ·
@@ -125,9 +127,9 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                 / {guaranteeItem.title}
                             </h3>
 
-                            <div
-                                className="cuerpo mb-12"
-                                dangerouslySetInnerHTML={{ __html: guaranteeItem.description || '' }}
+                            <CustomPortableText 
+                                value={guaranteeItem.description} 
+                                className="cuerpo mb-12" 
                             />
 
                             {(guaranteeItem.badgeContent && guaranteeItem.badgeContent.trim().length > 0) && (
@@ -143,9 +145,9 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                     </div>
 
                                     <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
-                                        <div
-                                            className="cuerpo !text-vlanc-black text-[14px] leading-snug"
-                                            dangerouslySetInnerHTML={{ __html: guaranteeItem.badgeContent || '' }}
+                                        <CustomPortableText 
+                                            value={guaranteeItem.badgeContent} 
+                                            className="cuerpo !text-vlanc-black text-[14px] leading-snug" 
                                         />
                                     </div>
                                 </div>

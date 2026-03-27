@@ -1,6 +1,7 @@
 
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 
 interface SubPhase {
     number?: string;
@@ -45,9 +46,9 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                                 {(data?.phases?.[0]?.subPhases ?? []).map((sub, i) => (
                                     <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                         <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: `${sub.number || ''} ${sub.title || ''}` }} /></p>
-                                        <p
-                                            className="whitespace-pre-line"
-                                            dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                        <CustomPortableText 
+                                            value={sub.description} 
+                                            className="whitespace-pre-line" 
                                         />
                                     </div>
                                 ))}
@@ -64,9 +65,9 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                                     {(data?.phases?.[1]?.subPhases ?? []).slice(0, 1).map((sub, i) => (
                                         <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                             <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: `${sub.number || ''} ${sub.title || ''}` }} /></p>
-                                            <p
-                                                className="whitespace-pre-line"
-                                                dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                            <CustomPortableText 
+                                                value={sub.description} 
+                                                className="whitespace-pre-line" 
                                             />
                                             {sub.note && <p className="text-[10px] italic text-vlanc-black/50 mt-2" dangerouslySetInnerHTML={{ __html: sub.note }} />}
                                         </div>
@@ -85,9 +86,9 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                                     {(data?.phases?.[1]?.subPhases ?? []).slice(1).map((sub, i) => (
                                         <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                             <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: `${sub.number || ''} ${sub.title || ''}` }} /></p>
-                                            <p
-                                                className="whitespace-pre-line"
-                                                dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                            <CustomPortableText 
+                                                value={sub.description} 
+                                                className="whitespace-pre-line" 
                                             />
                                         </div>
                                     ))}
@@ -105,9 +106,9 @@ const ScopePhases2: React.FC<ScopePhases2Props> = ({ data }) => {
                                     {(data?.phases?.[2]?.subPhases ?? []).map((sub, i) => (
                                         <div key={i} className="text-vlanc-black/80 text-[12px] leading-[1.4]">
                                             <p className="mb-1"><strong className="text-vlanc-primary tracking-widest uppercase" dangerouslySetInnerHTML={{ __html: `${sub.number || ''} ${sub.title || ''}` }} /></p>
-                                            <p
-                                                className="whitespace-pre-line"
-                                                dangerouslySetInnerHTML={{ __html: sub.description || '' }}
+                                            <CustomPortableText 
+                                                value={sub.description} 
+                                                className="whitespace-pre-line" 
                                             />
                                         </div>
                                     ))}

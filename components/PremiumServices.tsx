@@ -1,6 +1,7 @@
 
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 
 interface DescriptionBlock {
     text: string;
@@ -41,7 +42,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             <div key={key} className="w-full">
                 {isTitle ? (
                     <h4 className="cuerpo uppercase mb-0 text-vlanc-black">
-                        <span dangerouslySetInnerHTML={{ __html: block.text }} />
+                        <CustomPortableText value={block.text} />
                     </h4>
                 ) : (
                     <div className="flex flex-row items-start gap-4">
@@ -52,7 +53,10 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                                 </span>
                             </div>
                         )}
-                        <p className="cuerpo" dangerouslySetInnerHTML={{ __html: block.text }} />
+                        <CustomPortableText 
+                            value={block.text} 
+                            className="cuerpo" 
+                        />
                     </div>
                 )}
                 {block.hasSeparator && <div className="w-full h-[1px] bg-[#8f4933] mt-3 mb-3 opacity-30"></div>}
@@ -93,9 +97,9 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
 
                         {data?.note && (
                             <div className="mt-4">
-                                <p
-                                    className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary"
-                                    dangerouslySetInnerHTML={{ __html: data.note }}
+                                <CustomPortableText 
+                                    value={data.note} 
+                                    className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary" 
                                 />
                             </div>
                         )}
@@ -137,9 +141,9 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     {data?.showExtraNote && data?.extraNote && (
                         <div className="absolute top-full right-0 w-full mt-[50px] pointer-events-none">
                             <AnimatedSection hierarchy={2}>
-                                <p
-                                    className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full text-right whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary"
-                                    dangerouslySetInnerHTML={{ __html: data.extraNote }}
+                                <CustomPortableText 
+                                    value={data.extraNote} 
+                                    className="text-[10px] text-vlanc-secondary/60 italic tracking-wider w-full text-right whitespace-pre-line [&>strong]:font-bold [&>strong]:text-vlanc-secondary" 
                                 />
                             </AnimatedSection>
                         </div>

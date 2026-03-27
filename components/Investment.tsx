@@ -1,6 +1,7 @@
 
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 import { motion } from 'framer-motion';
 
 interface TableRow {
@@ -41,11 +42,6 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
         return 'border-b border-vlanc-primary/10 print:border-b-2 print:border-[#8f4933]/20';
     };
 
-    const formatText = (text?: string) => {
-        if (!text) return '';
-        return text.replace(/\n/g, '<br />');
-    };
-
     return (
         <section className="h-full w-full flex flex-col justify-start pt-[150px] pb-[140px] px-[120px] relative">
             {/* Cabecera Sección (J1) */}
@@ -65,16 +61,19 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                 <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
                     {/* Intro siempre visible */}
                     <AnimatedSection className="space-y-6" hierarchy={2}>
-                        <div
-                            className="cuerpo [&>strong]:font-bold"
-                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction) }}
+                        <CustomPortableText 
+                            value={data?.introduction} 
+                            className="cuerpo [&>strong]:font-bold" 
                         />
                         {data?.highlightPhrase && (
-                            <p className="cuerpo2 font-bold text-vlanc-black" dangerouslySetInnerHTML={{ __html: data.highlightPhrase }} />
+                            <CustomPortableText 
+                                value={data.highlightPhrase} 
+                                className="cuerpo2 font-bold text-vlanc-black" 
+                            />
                         )}
-                        <div
-                            className="cuerpo [&>strong]:font-bold"
-                            dangerouslySetInnerHTML={{ __html: formatText(data?.introduction2) }}
+                        <CustomPortableText 
+                            value={data?.introduction2} 
+                            className="cuerpo [&>strong]:font-bold" 
                         />
                     </AnimatedSection>
 
@@ -94,9 +93,9 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                 <h3 className="font-sans font-bold text-[15px] uppercase leading-tight text-vlanc-black">
                                     <span dangerouslySetInnerHTML={{ __html: `${p.name}_` }} />
                                 </h3>
-                                <div
-                                    className="cuerpo [&>strong]:font-bold"
-                                    dangerouslySetInnerHTML={{ __html: formatText(p.desc) }}
+                                <CustomPortableText 
+                                    value={p.desc} 
+                                    className="cuerpo [&>strong]:font-bold" 
                                 />
                             </motion.div>
                         ))}

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 
 interface Testimonial {
     name?: string;
@@ -86,12 +87,20 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                                 className="block cursor-pointer no-underline"
                                             >
                                                 <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors" dangerouslySetInnerHTML={{ __html: testimonial.name || '' }} />
-                                                <p className="cuerpo" dangerouslySetInnerHTML={{ __html: `"${testimonial.quote}"` }} />
+                                                <div className="cuerpo flex">
+                                                    <span>"</span>
+                                                    <CustomPortableText value={testimonial.quote} />
+                                                    <span>"</span>
+                                                </div>
                                             </a>
                                         ) : (
                                             <div>
                                                 <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors" dangerouslySetInnerHTML={{ __html: testimonial.name || '' }} />
-                                                <p className="cuerpo" dangerouslySetInnerHTML={{ __html: `"${testimonial.quote}"` }} />
+                                                <div className="cuerpo flex">
+                                                    <span>"</span>
+                                                    <CustomPortableText value={testimonial.quote} />
+                                                    <span>"</span>
+                                                </div>
                                             </div>
                                         )}
                                     </AnimatedSection>

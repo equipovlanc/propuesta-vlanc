@@ -1,6 +1,7 @@
 
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 
 interface TeamMember {
     name?: string;
@@ -97,9 +98,9 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                         <h3 className="subtitulo2 mb-6">
                             {data?.purpose?.title || "Nuestro propósito"}
                         </h3>
-                        <div
-                            className="cuerpo2 space-y-4 text-left"
-                            dangerouslySetInnerHTML={{ __html: (data?.purpose?.description || '').trim() }}
+                        <CustomPortableText 
+                            value={data?.purpose?.description} 
+                            className="cuerpo2 space-y-4 text-left" 
                         />
                     </AnimatedSection>
 
@@ -108,9 +109,9 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                         <h3 className="subtitulo2 mb-6">
                             {data?.history?.title || "Nuestra historia"}
                         </h3>
-                        <div
-                            className="cuerpo2 space-y-4 text-left [&>p:last-child]:mb-0"
-                            dangerouslySetInnerHTML={{ __html: (data?.history?.description || '').trim() }}
+                        <CustomPortableText 
+                            value={data?.history?.description} 
+                            className="cuerpo2 space-y-4 text-left [&>p:last-child]:mb-0" 
                         />
                     </AnimatedSection>
                 </div>

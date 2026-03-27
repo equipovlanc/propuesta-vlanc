@@ -1,6 +1,7 @@
 
 import React, { useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 import { motion } from 'framer-motion';
 
 interface SectionData {
@@ -114,7 +115,11 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
 
                         <AnimatedSection hierarchy={2}>
                             <h3 className="subtitulo2 mb-6 leading-tight max-w-sm" dangerouslySetInnerHTML={{ __html: data?.mission?.subtitle || '' }} />
-                            <p className="cuerpo2 w-full" dangerouslySetInnerHTML={{ __html: data?.mission?.description || '' }} />
+                            <CustomPortableText 
+                                value={data?.mission?.description} 
+                                className="w-full"
+                                paragraphClassName="cuerpo2" 
+                            />
                         </AnimatedSection>
                     </div>
                 )}

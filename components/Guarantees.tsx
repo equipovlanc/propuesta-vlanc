@@ -1,6 +1,7 @@
 
 import React from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 
 interface Guarantee {
     icon?: string;
@@ -28,9 +29,9 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
             <h3 className="subtitulo2 not-italic mb-6 leading-tight" dangerouslySetInnerHTML={{ __html: `/ ${item.title || ''}` }} />
 
             {/* 2. DESCRIPCIÓN */}
-            <div
-                className="cuerpo mb-12"
-                dangerouslySetInnerHTML={{ __html: item.description || '' }}
+            <CustomPortableText 
+                value={item.description} 
+                className="cuerpo mb-12" 
             />
 
             {/* 3. CONJUNTO VISUAL */}
@@ -51,9 +52,9 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
                     </div>
 
                     <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
-                        <div
-                            className="cuerpo !text-vlanc-black text-[14px] leading-snug"
-                            dangerouslySetInnerHTML={{ __html: item.badgeContent || '' }}
+                        <CustomPortableText 
+                            value={item.badgeContent} 
+                            className="cuerpo !text-vlanc-black text-[14px] leading-snug" 
                         />
                     </div>
                 </div>
@@ -62,7 +63,10 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
             {/* 4. NOTA AL PIE */}
             {item.note && (
                 <div className="absolute top-full left-0 w-full mt-4">
-                    <p className="text-[10px] text-vlanc-secondary/60 italic w-full" dangerouslySetInnerHTML={{ __html: item.note }} />
+                    <CustomPortableText 
+                        value={item.note} 
+                        className="text-[10px] text-vlanc-secondary/60 italic w-full" 
+                    />
                 </div>
             )}
         </AnimatedSection>

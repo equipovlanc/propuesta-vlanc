@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
+import CustomPortableText from './CustomPortableText';
 
 interface SubPhase {
     number?: string;
@@ -15,6 +16,7 @@ interface GuaranteeItem {
     title?: string;
     description?: string;
     note?: string;
+    isActive?: boolean;
 }
 
 interface Phase {
@@ -110,7 +112,10 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                                 <p className="fase-subtitulo mb-1 text-vlanc-black">
                                     {sub.number} {sub.title}
                                 </p>
-                                <p className="cuerpo text-[14px] leading-[1.5]" dangerouslySetInnerHTML={{ __html: sub.description || '' }} />
+                                <CustomPortableText 
+                                    value={sub.description} 
+                                    className="cuerpo text-[14px] leading-[1.5]" 
+                                />
                             </div>
                         ))}
                     </div>
@@ -148,14 +153,20 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                         <button onClick={closeGuaranteeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                         <div className="flex flex-col items-start w-full relative">
                             <h3 className="subtitulo2 not-italic mb-6 leading-tight text-vlanc-black">/ {guaranteeItem.title}</h3>
-                            <div className="cuerpo mb-12" dangerouslySetInnerHTML={{ __html: guaranteeItem.description || '' }} />
+                            <CustomPortableText 
+                                value={guaranteeItem.description} 
+                                className="cuerpo mb-12" 
+                            />
                             {(guaranteeItem.badgeContent && guaranteeItem.badgeContent.trim().length > 0) && (
                                 <div className="relative ml-6 mb-2">
                                     <div className="absolute -top-7 -left-7 w-[60px] h-[60px] z-10 flex items-center justify-center">
                                         {guaranteeItem.icon ? <img src={guaranteeItem.icon} alt="Garantía" className="w-full h-full object-contain" /> : <div className="w-[40px] h-[40px] bg-vlanc-bg border border-vlanc-black rounded-full" />}
                                     </div>
                                     <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
-                                        <div className="cuerpo !text-vlanc-black text-[14px] leading-snug" dangerouslySetInnerHTML={{ __html: guaranteeItem.badgeContent || '' }} />
+                                        <CustomPortableText 
+                                            value={guaranteeItem.badgeContent} 
+                                            className="cuerpo !text-vlanc-black text-[14px] leading-snug" 
+                                        />
                                     </div>
                                 </div>
                             )}
