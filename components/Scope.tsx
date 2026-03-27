@@ -197,7 +197,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                             <div
                                 key={i}
                                 ref={el => { itemRefs.current[i] = el; }}
-                                className={`mb-4 cuerpo leading-[1.4] text-left ${i >= splitIndex ? 'hidden' : 'block'}`}
+                                className={`cuerpo leading-[1.4] text-left ${i >= splitIndex ? 'hidden' : 'block'}`}
                             >
                                 {typeof item === 'string' ? (
                                     <p dangerouslySetInnerHTML={{ __html: item }} />
@@ -229,7 +229,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 <div className="absolute bottom-[140px] w-full flex flex-col justify-end pointer-events-auto">
                     <AnimatedSection hierarchy={2}>
                         {col2Items.map((item: any, i: number) => (
-                            <div key={`c2-${i}`} className="mb-4 cuerpo leading-[1.4] text-left">
+                            <div key={`c2-${i}`} className="cuerpo leading-[1.4] text-left">
                                 {typeof item === 'string' ? (
                                     <p dangerouslySetInnerHTML={{ __html: item }} />
                                 ) : (
