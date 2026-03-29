@@ -230,8 +230,11 @@ const App: React.FC = () => {
       });
     });
 
+    const phasesCount = (d.scopePhases || []).length;
+    const postPhasesOffset = 9 + phasesCount; // Próxima página libre tras las fases
+
     list.push(
-      { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: 14 },
+      { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: postPhasesOffset },
       {
         id: 'special-offers',
         comp: <SpecialOffers
@@ -243,10 +246,10 @@ const App: React.FC = () => {
           setNavigationBlocked={setNavigationBlocked}
           isSectionCompleted={completedSections.has('special-offers')}
         />,
-        headerPage: 15
+        headerPage: postPhasesOffset + 1
       },
-      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: 16 },
-      { id: 'fine-print', comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 17 },
+      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: postPhasesOffset + 2 },
+      { id: 'fine-print', comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: postPhasesOffset + 3 },
       {
         id: 'divider-slide',
         comp: <DividerSlide
@@ -254,16 +257,19 @@ const App: React.FC = () => {
           step={internalStep}
           isSectionCompleted={completedSections.has('divider-slide')}
           setNavigationBlocked={setNavigationBlocked}
-        />
+        />,
+        headerPage: postPhasesOffset + 4
       },
-      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 19 }
+      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: postPhasesOffset + 5 }
     );
+
+    const postGuaranteesOffset = postPhasesOffset + 6;
 
     (d.premiumServicesList || []).forEach((service: any, i: number) => {
       list.push({
         id: `premium-${i + 1}`,
         comp: <PremiumServices data={service} image={service.image} index={i} />,
-        headerPage: 20 + i
+        headerPage: postGuaranteesOffset + i
       });
     });
 

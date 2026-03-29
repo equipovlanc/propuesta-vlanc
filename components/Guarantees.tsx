@@ -83,7 +83,8 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
         </React.Fragment>
     ));
 
-    const activeItems = (data?.items || []).filter(item => item.isActive !== false);
+    const items = Array.isArray(data?.items) ? data.items : [];
+    const activeItems = items.filter(item => item.isActive !== false);
 
     // Determinar qué va en cada columna
     // Col 1: activeItems[0]
