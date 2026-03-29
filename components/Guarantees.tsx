@@ -39,7 +39,7 @@ const GuaranteeItem = ({ item }: { item: Guarantee }) => {
             {/* 2. DESCRIPCIÓN */}
             <CustomPortableText 
                 value={item.description} 
-                className="cuerpo mb-12" 
+                className="cuerpo mb-6" 
             />
 
             {/* 3. CONJUNTO VISUAL */}
