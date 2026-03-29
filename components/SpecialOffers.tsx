@@ -120,16 +120,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     const imageOpacity = data?.callToAction?.image?.opacity ?? 15;
     const hasCtaText = data?.callToAction?.text && data.callToAction.text.trim().length > 0;
 
-    const openModal = () => {
-        if (premiumService) {
-            setIsModalOpen(true);
-            setNavigationBlocked?.(true);
-        }
-    };
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setNavigationBlocked?.(false);
-    };
+    const openModal = () => { if (premiumService) setIsModalOpen(true); };
+    const closeModal = () => setIsModalOpen(false);
 
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';

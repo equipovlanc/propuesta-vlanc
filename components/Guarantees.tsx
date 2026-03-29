@@ -20,7 +20,13 @@ interface GuaranteesProps {
 }
 
 const GuaranteeItem = ({ item }: { item: Guarantee }) => {
-    const hasBadge = item.badgeContent && item.badgeContent.trim().length > 0;
+    const hasBadge = item.badgeContent && (
+        Array.isArray(item.badgeContent) 
+            ? item.badgeContent.length > 0 
+            : typeof item.badgeContent === 'string' 
+                ? item.badgeContent.trim().length > 0 
+                : true
+    );
 
     return (
         <AnimatedSection className="flex flex-col items-start w-full relative" hierarchy={2}>
@@ -83,8 +89,7 @@ const Guarantees: React.FC<GuaranteesProps> = ({ data }) => {
         </React.Fragment>
     ));
 
-    const items = Array.isArray(data?.items) ? data.items : [];
-    const activeItems = items.filter(item => item.isActive !== false);
+    const activeItems = (data?.items || []).filter(item => item.isActive !== false);
 
     // Determinar qué va en cada columna
     // Col 1: activeItems[0]
