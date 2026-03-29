@@ -87,19 +87,15 @@ const Testimonials: React.FC<TestimonialsProps> = ({ data }) => {
                                                 className="block cursor-pointer no-underline"
                                             >
                                                 <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors" dangerouslySetInnerHTML={{ __html: testimonial.name || '' }} />
-                                                <div className="cuerpo flex">
-                                                    <span>"</span>
+                                                <div className="cuerpo">
                                                     <CustomPortableText value={testimonial.quote} />
-                                                    <span>"</span>
                                                 </div>
                                             </a>
                                         ) : (
                                             <div>
                                                 <h4 className="subtitulo2 mb-4 group-hover:text-vlanc-primary transition-colors" dangerouslySetInnerHTML={{ __html: testimonial.name || '' }} />
-                                                <div className="cuerpo flex">
-                                                    <span>"</span>
+                                                <div className="cuerpo">
                                                     <CustomPortableText value={testimonial.quote} />
-                                                    <span>"</span>
                                                 </div>
                                             </div>
                                         )}
