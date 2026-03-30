@@ -159,7 +159,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                                 value={guaranteeItem.description} 
                                 className="cuerpo mb-12" 
                             />
-                            {(guaranteeItem.badgeContent && guaranteeItem.badgeContent.trim().length > 0) && (
+                            {(guaranteeItem.badgeContent && (Array.isArray(guaranteeItem.badgeContent) ? guaranteeItem.badgeContent.length > 0 : typeof guaranteeItem.badgeContent === 'string' ? guaranteeItem.badgeContent.trim().length > 0 : true)) && (
                                 <div className="relative ml-6 mb-2">
                                     <div className="absolute -top-7 -left-7 w-[60px] h-[60px] z-10 flex items-center justify-center">
                                         {guaranteeItem.icon ? <img src={guaranteeItem.icon} alt="Garantía" className="w-full h-full object-contain" /> : <div className="w-[40px] h-[40px] bg-vlanc-bg border border-vlanc-black rounded-full" />}
