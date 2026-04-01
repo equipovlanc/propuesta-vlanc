@@ -117,11 +117,12 @@ const App: React.FC = () => {
   // Dynamic FinePrint Calculation
   useEffect(() => {
     if (proposalData?.payment?.finePrint) {
-      // 640px de altura para dar margen respecto al final del div (670px total)
+      // El contenedor real visualmente tiene ~538px de altura (1080 - paddings - títulos). 
+      // Calculamos con 520 para dar un pequeño margen de seguridad y evitar que haya texto que rebose a una 3a columna invisible.
       const { totalPages, fontSize } = calculateFinePrintSlides(
         proposalData.payment.finePrint.content,
         proposalData.payment.finePrint.points,
-        640 
+        520 
       );
       setFinePrintData({ totalPages, fontSize });
     }
