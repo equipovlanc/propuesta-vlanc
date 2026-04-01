@@ -45,7 +45,11 @@ const FinePrint: React.FC<FinePrintProps> = ({
 
     // Medición dinámica del tamaño de letra
     useLayoutEffect(() => {
-        if (!containerRef.current || (!activeContent && activePoints.length === 0)) {
+        // Medimos siempre el CONTENIDO TOTAL para que todas las páginas tengan el mismo tamaño de letra
+        const totalContent = data?.content;
+        const totalPoints = data?.points ?? [];
+
+        if (!containerRef.current || (!totalContent && totalPoints.length === 0)) {
             setIsMeasured(true);
             return;
         }
@@ -65,14 +69,14 @@ const FinePrint: React.FC<FinePrintProps> = ({
             tester.style.whiteSpace = 'pre-line';
             tester.style.textAlign = 'justify';
             
-            if (activeContent) {
-                const text = activeContent
+            if (totalContent) {
+                const text = totalContent
                     .map((block: any) => (block.children || [])
                         .map((child: any) => child.text || "").join("")
                     ).join("\n\n");
                 tester.innerText = text;
             } else {
-                tester.innerText = activePoints.join("\n\n");
+                tester.innerText = totalPoints.join("\n\n");
             }
 
             document.body.appendChild(tester);
@@ -81,7 +85,9 @@ const FinePrint: React.FC<FinePrintProps> = ({
 
             // Altura disponible en 2 columnas ~= 670px/columna
             const maxColumnHeight = 670; 
-            return totalHeight > (maxColumnHeight * 2);
+            
+            // Si hay varias páginas, el objetivo es que el texto quepa en N páginas
+            return totalHeight > (maxColumnHeight * 2 * totalPages);
         };
 
         if (checkOverflow() && fontSize > 10) {
@@ -89,7 +95,7 @@ const FinePrint: React.FC<FinePrintProps> = ({
         } else {
             setIsMeasured(true);
         }
-    }, [activeContent, activePoints, fontSize]);
+    }, [data, fontSize, totalPages]);
 
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative overflow-hidden font-sans">
@@ -107,11 +113,11 @@ const FinePrint: React.FC<FinePrintProps> = ({
                     animate={getRevealStyle(effectiveStep >= 2)}
                     transition={{ duration: 0.9, ease: 'easeInOut' }}
                 >
-                    <h3 className="subtitulo2 mb-10">
+                    <h3 className="subtitulo2 mb-10 flex items-center gap-4">
                         <span dangerouslySetInnerHTML={{ __html: data?.title || 'Letra pequeña' }} />
                         {totalPages > 1 && (
-                            <span className="opacity-50 ml-4 font-normal !text-[0.6em]">
-                                (Pág. {pageIndex + 1}/{totalPages})
+                            <span className="font-normal opacity-80">
+                                {pageIndex + 1}/{totalPages}
                             </span>
                         )}
                     </h3>
