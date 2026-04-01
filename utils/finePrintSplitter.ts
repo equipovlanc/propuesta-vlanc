@@ -38,10 +38,11 @@ export const calculateFinePrintSlides = (
             html = content.map((block: any) => {
                 // Soportar negritas rudimentario o simplemente texto plano
                 const text = (block.children || []).map((c: any) => c.text || "").join("");
-                return `<p style="margin-bottom: 0; min-height: 1.4em;">${text}</p>`;
+                // white-space: pre-wrap es vital para los quiebres de línea explícitos dentro de un bloque en Sanity
+                return `<p class="mb-0 min-h-[1.4em]" style="margin-bottom: 0; min-height: 1.4em; white-space: pre-wrap;">${text}</p>`;
             }).join("");
         } else if (points && points.length > 0) {
-            html = points.map(p => `<p style="margin-bottom: 0; min-height: 1.4em;">${p}</p>`).join("");
+            html = points.map(p => `<p class="mb-0 min-h-[1.4em]" style="margin-bottom: 0; min-height: 1.4em; white-space: pre-wrap;">${p}</p>`).join("");
         }
         wrapper.innerHTML = html;
         tester.appendChild(wrapper);
