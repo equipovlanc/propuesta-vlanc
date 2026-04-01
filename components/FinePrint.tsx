@@ -71,12 +71,20 @@ const FinePrint: React.FC<FinePrintProps> = ({
                         )}
                     </h3>
                     
-                    <div className="flex-grow flex flex-col min-h-0 w-full overflow-hidden" ref={containerRef}>
+                    <div className="flex-grow w-full relative overflow-hidden">
                         <div 
-                            className="flex-grow columns-2 gap-20 space-y-0 pb-10 h-full w-full overflow-hidden"
-                            style={{ fontSize: `${fontSize}px`, lineHeight: '1.4' }}
+                            className="absolute top-0 bottom-0 left-0 transition-transform duration-0 ease-in-out"
+                            style={{ 
+                                width: '100%',
+                                columnCount: 2,
+                                columnGap: '80px',
+                                columnFill: 'auto',
+                                transform: `translateX(calc(-${pageIndex} * (100% + 80px)))`,
+                                fontSize: `${fontSize}px`, 
+                                lineHeight: '1.4' 
+                            }}
                         >
-                            <div className="cuerpo text-vlanc-secondary/80 break-inside-avoid text-justify w-full" style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>
+                            <div className="cuerpo text-vlanc-secondary/80 text-justify w-full h-auto" style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>
                                 {activeContent && activeContent.length > 0 ? (
                                     typeof activeContent[0] === 'string' ? (
                                         activeContent.map((point, i) => (

@@ -48,16 +48,11 @@ export const calculateFinePrintSlides = (
         wrapper.innerHTML = html;
         tester.appendChild(wrapper);
         
-        // scrollWidth nos da el ancho total incluyendo columnas que hacen overflow.
-        // Fórmula del CSS column: column 1 (800) + gap (80) + column 2 (800) ...
-        const scrollWidth = tester.scrollWidth;
+        // Calculamos la altura que ocupa todo el texto en una sola columna de 800px
+        const totalHeight = tester.scrollHeight;
         
-        // Cada columna+hueco ocupa 880px (800 + 80).
-        // Calculamos cuántas columnas hay en total.
-        const columns = Math.ceil((scrollWidth + 80) / 880);
-        
-        // 2 columnas por página
-        return Math.ceil(columns / 2);
+        // Cada página tiene 2 columnas, por tanto el espacio vertical disponible por página es containerHeight * 2
+        return Math.max(1, Math.ceil(totalHeight / (containerHeight * 2)));
     };
 
     let totalPages = measurePages(fontSize);
