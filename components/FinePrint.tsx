@@ -2,6 +2,7 @@
 import React, { useState, useLayoutEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { PortableText } from '@portabletext/react';
+import AnimatedSection from './AnimatedSection';
 
 interface FinePrintProps {
     data?: {
@@ -49,17 +50,14 @@ const FinePrint: React.FC<FinePrintProps> = ({
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative overflow-hidden font-sans">
             <div className="w-full h-full flex flex-col">
-                <motion.div 
-                    className="shrink-0 mb-20 print-force-visible"
-                    initial={getRevealStyle(isPrintMode)}
-                    animate={getRevealStyle(true)}
-                    transition={{ duration: 0.9, ease: 'easeInOut' }}
-                >
-                    <h2 className="subtitulo1">
-                        {investmentTitle || "la inversión."}
-                    </h2>
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
-                </motion.div>
+                <div className="shrink-0 mb-20">
+                    <AnimatedSection hierarchy={1}>
+                        <h2 className="subtitulo1">
+                            {investmentTitle || "la inversión."}
+                        </h2>
+                    </AnimatedSection>
+                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                </div>
 
                 <motion.div 
                     className="flex-grow flex flex-col print-force-visible min-h-0"

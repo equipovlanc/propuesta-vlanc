@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { PortableText } from '@portabletext/react';
+import AnimatedSection from './AnimatedSection';
 
 interface PaymentStep {
     percent?: string;
@@ -49,11 +50,12 @@ const Payment: React.FC<PaymentProps> = ({ data, investmentTitle, locationDate, 
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative">
             <div className="w-full h-full flex flex-col">
                 <div className="shrink-0 mb-20">
-                    {/* El título y la barra se muestran siempre (no forman parte del sistema de pasos) */}
-                    <h2 className="subtitulo1">
-                        {investmentTitle || "la inversión."}
-                    </h2>
-                    <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                    <AnimatedSection hierarchy={1}>
+                        <h2 className="subtitulo1">
+                            {investmentTitle || "la inversión."}
+                        </h2>
+                    </AnimatedSection>
+                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
 
                 {/* Grid */}
