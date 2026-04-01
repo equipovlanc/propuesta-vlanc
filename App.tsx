@@ -23,7 +23,49 @@ import StudioLanding from './components/StudioLanding';
 import CustomCursor from './components/CustomCursor';
 import sanityClient from './sanity/client';
 import { ScrollContext } from './context/ScrollContext';
-import { splitPortableTextIntoPages } from './utils/textSplitter';
+
+/**
+ * Divide el contenido de la letra pequeña en bloques que quepan en una página (2 columnas).
+ * Estimación basada en caracteres y líneas a 10px de font-size.
+ */
+const splitFinePrint = (content: any[], points: string[]) => {
+  const maxLinesPerPage = 90; // ~1260px de altura total (14px por línea)
+  const charsPerLine = 120; // Montserrat 10px en 800px de ancho aprox.
+
+  const pages: any[][] = [];
+  let currentPage: any[] = [];
+  let currentLines = 0;
+
+  const addBlock = (block: any, lines: number) => {
+    if (currentLines + lines > maxLinesPerPage && currentPage.length > 0) {
+      pages.push(currentPage);
+      currentPage = [block];
+      currentLines = lines;
+    } else {
+      currentPage.push(block);
+      currentLines += lines;
+    }
+  };
+
+  if (content && content.length > 0) {
+    content.forEach(block => {
+      let estimatedLines = 1;
+      if (block._type === 'block') {
+        const text = (block.children || []).map((c: any) => c.text).join('');
+        estimatedLines = Math.max(1, Math.ceil(text.length / charsPerLine));
+      }
+      addBlock(block, estimatedLines + 1); // +1 por espacio entre bloques
+    });
+  } else if (points && points.length > 0) {
+    points.forEach(point => {
+      const estimatedLines = Math.max(1, Math.ceil(point.length / charsPerLine));
+      addBlock(point, estimatedLines + 1);
+    });
+  }
+
+  if (currentPage.length > 0) pages.push(currentPage);
+  return pages;
+};
 
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
@@ -246,29 +288,42 @@ const App: React.FC = () => {
         />,
         headerPage: 15
       },
-      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: 16 }
+      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: 16 },
     );
 
-    // Splitting Fine Print into multiple pages if needed
-    const finePrintPages = splitPortableTextIntoPages(d.payment?.finePrint?.content || []);
-    finePrintPages.forEach((pageContent, idx) => {
-      list.push({
-        id: `fine-print${idx > 0 ? `-${idx}` : ''}`,
-        comp: (
-          <FinePrint 
-            data={d.payment?.finePrint} 
-            investmentTitle={d.investment?.title} 
-            locationDate={d.investment?.locationDate} 
-            overrideContent={pageContent}
-            pageIndex={idx}
-            totalPages={finePrintPages.length}
-          />
-        ),
-        headerPage: 17 + idx
+    // Letra Pequeña Dinámica
+    let currentHeaderPage = 17;
+    const finePrintPages = splitFinePrint(d.payment?.finePrint?.content, d.payment?.finePrint?.points);
+    
+    if (finePrintPages.length > 0) {
+      finePrintPages.forEach((pageContent, idx) => {
+        list.push({
+          id: idx === 0 ? 'fine-print' : `fine-print-${idx}`,
+          comp: (
+            <FinePrint 
+              data={d.payment?.finePrint} 
+              pageContent={pageContent} 
+              pageIndex={idx} 
+              totalPages={finePrintPages.length}
+              investmentTitle={d.investment?.title} 
+              locationDate={d.investment?.locationDate} 
+            />
+          ),
+          headerPage: currentHeaderPage++
+        });
       });
-    });
+    } else {
+      list.push({ 
+        id: 'fine-print', 
+        comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, 
+        headerPage: currentHeaderPage++ 
+      });
+    }
 
-    const nextHeaderStart = 17 + finePrintPages.length; // e.g. if 1 page, next is 18
+    // El resto de secciones siguen tras la letra pequeña
+    // Hay un gap de 1 página (la 18 era el divider en el original si la letra pequeña era 1 página)
+    // Mantendremos el divider como una página sin header explícito pero que cuenta.
+    const dividerHeaderPage = currentHeaderPage++; 
 
     list.push(
       {
@@ -279,15 +334,16 @@ const App: React.FC = () => {
           isSectionCompleted={completedSections.has('divider-slide')}
           setNavigationBlocked={setNavigationBlocked}
         />
+        // Sin headerPage para que no aparezca el Header
       },
-      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: nextHeaderStart + 1 }
+      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: currentHeaderPage++ }
     );
 
     (d.premiumServicesList || []).forEach((service: any, i: number) => {
       list.push({
         id: `premium-${i + 1}`,
         comp: <PremiumServices data={service} image={service.image} index={i} />,
-        headerPage: nextHeaderStart + 2 + i
+        headerPage: currentHeaderPage + i
       });
     });
 

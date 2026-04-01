@@ -14,9 +14,9 @@ interface FinePrintProps {
     locationDate?: string;
     step?: number;
     isPrintMode?: boolean;
-    pageIndex?: number;
+    pageContent?: any[]; // Bloques específicos de esta página
+    pageIndex?: number;  // 0-indexed
     totalPages?: number;
-    overrideContent?: any[];
 }
 
 const getRevealStyle = (visible: boolean) => ({
@@ -30,25 +30,31 @@ const FinePrint: React.FC<FinePrintProps> = ({
     locationDate, 
     step = 2, 
     isPrintMode = false,
+    pageContent,
     pageIndex = 0,
-    totalPages = 1,
-    overrideContent
+    totalPages = 1
 }) => {
     const effectiveStep = isPrintMode ? 2 : step;
     const [fontSize, setFontSize] = useState(16);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isMeasured, setIsMeasured] = useState(false);
 
-    const actualContent = overrideContent || data?.content;
+    // Priorizamos el contenido fragmentado de la página si existe
+    const activeContent = pageContent || data?.content;
+    const activePoints = !pageContent ? (data?.points ?? []) : [];
 
     // Medición dinámica del tamaño de letra
     useLayoutEffect(() => {
-        if (!containerRef.current || !actualContent) return;
+        if (!containerRef.current || (!activeContent && activePoints.length === 0)) {
+            setIsMeasured(true);
+            return;
+        }
 
         const checkOverflow = () => {
             const container = containerRef.current;
             if (!container) return false;
 
+            // Tester invisible para medir altura total en una columna
             const tester = document.createElement('div');
             tester.style.width = '800px';
             tester.style.fontSize = `${fontSize}px`;
@@ -59,20 +65,21 @@ const FinePrint: React.FC<FinePrintProps> = ({
             tester.style.whiteSpace = 'pre-line';
             tester.style.textAlign = 'justify';
             
-            if (actualContent) {
-                const text = actualContent
+            if (activeContent) {
+                const text = activeContent
                     .map((block: any) => (block.children || [])
                         .map((child: any) => child.text || "").join("")
                     ).join("\n\n");
                 tester.innerText = text;
             } else {
-                tester.innerText = (data?.points ?? []).join("\n\n");
+                tester.innerText = activePoints.join("\n\n");
             }
 
             document.body.appendChild(tester);
             const totalHeight = tester.scrollHeight;
             document.body.removeChild(tester);
 
+            // Altura disponible en 2 columnas ~= 670px/columna
             const maxColumnHeight = 670; 
             return totalHeight > (maxColumnHeight * 2);
         };
@@ -82,11 +89,7 @@ const FinePrint: React.FC<FinePrintProps> = ({
         } else {
             setIsMeasured(true);
         }
-    }, [actualContent, fontSize]);
-
-    const displayTitle = totalPages > 1 
-        ? `${data?.title || 'Letra pequeña'} (${pageIndex + 1}/${totalPages})`
-        : (data?.title || 'Letra pequeña');
+    }, [activeContent, activePoints, fontSize]);
 
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative overflow-hidden font-sans">
@@ -104,7 +107,14 @@ const FinePrint: React.FC<FinePrintProps> = ({
                     animate={getRevealStyle(effectiveStep >= 2)}
                     transition={{ duration: 0.9, ease: 'easeInOut' }}
                 >
-                    <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: displayTitle }} />
+                    <h3 className="subtitulo2 mb-10">
+                        <span dangerouslySetInnerHTML={{ __html: data?.title || 'Letra pequeña' }} />
+                        {totalPages > 1 && (
+                            <span className="opacity-50 ml-4 font-normal !text-[0.6em]">
+                                (Pág. {pageIndex + 1}/{totalPages})
+                            </span>
+                        )}
+                    </h3>
                     
                     <div className="flex-grow flex flex-col min-h-0 w-full" ref={containerRef}>
                         <div 
@@ -112,25 +122,31 @@ const FinePrint: React.FC<FinePrintProps> = ({
                             style={{ fontSize: `${fontSize}px`, lineHeight: '1.4' }}
                         >
                             <div className="cuerpo text-vlanc-secondary/80 break-inside-avoid text-justify w-full" style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>
-                                {actualContent ? (
-                                    <PortableText 
-                                        value={actualContent} 
-                                        components={{
-                                            block: {
-                                                normal: ({children}) => <p className="mb-0 min-h-[1.4em]">{children}</p>
-                                            },
-                                            list: {
-                                                bullet: ({children}) => <ul className="list-disc pl-5 mb-0">{children}</ul>,
-                                                number: ({children}) => <ol className="list-decimal pl-5 mb-0">{children}</ol>,
-                                            },
-                                            listItem: {
-                                                bullet: ({children}) => <li className="mb-0 min-h-[1.4em]">{children}</li>,
-                                                number: ({children}) => <li className="mb-0 min-h-[1.4em]">{children}</li>,
-                                            }
-                                        }}
-                                    />
+                                {activeContent && activeContent.length > 0 ? (
+                                    typeof activeContent[0] === 'string' ? (
+                                        activeContent.map((point, i) => (
+                                            <p key={i} className="mb-0" dangerouslySetInnerHTML={{ __html: point as unknown as string }} />
+                                        ))
+                                    ) : (
+                                        <PortableText 
+                                            value={activeContent} 
+                                            components={{
+                                                block: {
+                                                    normal: ({children}) => <p className="mb-0 min-h-[1.4em]">{children}</p>
+                                                },
+                                                list: {
+                                                    bullet: ({children}) => <ul className="list-disc pl-5 mb-0">{children}</ul>,
+                                                    number: ({children}) => <ol className="list-decimal pl-5 mb-0">{children}</ol>,
+                                                },
+                                                listItem: {
+                                                    bullet: ({children}) => <li className="mb-0 min-h-[1.4em]">{children}</li>,
+                                                    number: ({children}) => <li className="mb-0 min-h-[1.4em]">{children}</li>,
+                                                }
+                                            }}
+                                        />
+                                    )
                                 ) : (
-                                    (data?.points ?? []).map((point, i) => (
+                                    activePoints.map((point, i) => (
                                         <p key={i} className="mb-0" dangerouslySetInnerHTML={{ __html: point }} />
                                     ))
                                 )}
@@ -140,8 +156,7 @@ const FinePrint: React.FC<FinePrintProps> = ({
                 </motion.div>
             </div>
 
-            {/* FIRMA - Directamente bajo el margen inferior (140px)
-                 Alineada exactamente a la columna derecha (Ancho 800px) */}
+            {/* FIRMA - Repetida en todas las páginas según requerimiento */}
             <motion.div
                 className="absolute right-[120px] bottom-[140px] w-[800px] pointer-events-none z-20 print-force-visible"
                 initial={getRevealStyle(isPrintMode)}
@@ -156,7 +171,7 @@ const FinePrint: React.FC<FinePrintProps> = ({
                 </div>
             </motion.div>
 
-            {/* FECHA — Posición estándar absoluta */}
+            {/* FECHA — Repetida en todas las páginas según requerimiento */}
             <motion.div
                 className="absolute bottom-[70px] right-[120px] z-20 print-force-visible"
                 initial={getRevealStyle(isPrintMode)}
