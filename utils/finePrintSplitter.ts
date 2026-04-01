@@ -36,9 +36,12 @@ export const calculateFinePrintSlides = (
         let html = '';
         if (content && content.length > 0) {
             html = content.map((block: any) => {
-                // Soportar negritas rudimentario o simplemente texto plano
+                if (typeof block === 'string') {
+                    // Si el bloque es directamente un string (WYSIWYG legacy o simple point)
+                    return `<p class="mb-0 min-h-[1.4em]" style="margin-bottom: 0; min-height: 1.4em; white-space: pre-wrap;">${block}</p>`;
+                }
+                // Si es PortableText normal
                 const text = (block.children || []).map((c: any) => c.text || "").join("");
-                // white-space: pre-wrap es vital para los quiebres de línea explícitos dentro de un bloque en Sanity
                 return `<p class="mb-0 min-h-[1.4em]" style="margin-bottom: 0; min-height: 1.4em; white-space: pre-wrap;">${text}</p>`;
             }).join("");
         } else if (points && points.length > 0) {
