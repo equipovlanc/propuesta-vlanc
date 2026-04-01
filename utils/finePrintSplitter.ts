@@ -12,10 +12,8 @@ export const calculateFinePrintSlides = (
     if (typeof document === 'undefined') return { totalPages: 1, fontSize: 16 };
 
     const tester = document.createElement('div');
-    tester.style.columnWidth = '800px';
-    tester.style.columnGap = '80px';
-    tester.style.columnFill = 'auto';
-    tester.style.height = `${containerHeight}px`; // Altura exacta del contenedor de texto
+    tester.style.width = '800px'; // Simulamos una sola columna
+    // No limitamos la altura para que el scrollHeight sea el total real
     tester.style.fontFamily = 'Montserrat, sans-serif';
     tester.style.position = 'absolute';
     tester.style.visibility = 'hidden';
