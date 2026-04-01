@@ -71,7 +71,7 @@ const FinePrint: React.FC<FinePrintProps> = ({
                         )}
                     </h3>
                     
-                    <div className="flex-grow w-full relative overflow-hidden">
+                    <div className="flex-grow w-full relative overflow-hidden mb-[50px]">
                         <div 
                             className="absolute top-0 bottom-0 left-0 transition-transform duration-0 ease-in-out"
                             style={{ 
