@@ -15,8 +15,10 @@ interface FinePrintProps {
     step?: number;
     isPrintMode?: boolean;
     pageContent?: any[]; // Bloques específicos de esta página
+    pagePoints?: string[]; // Puntos específicos de esta página
     pageIndex?: number;  // 0-indexed
     totalPages?: number;
+    fontSize?: number;   // Tamaño calculado dinámicamente
 }
 
 const getRevealStyle = (visible: boolean) => ({
@@ -31,71 +33,18 @@ const FinePrint: React.FC<FinePrintProps> = ({
     step = 2, 
     isPrintMode = false,
     pageContent,
+    pagePoints,
     pageIndex = 0,
-    totalPages = 1
+    totalPages = 1,
+    fontSize = 16
 }) => {
     const effectiveStep = isPrintMode ? 2 : step;
-    const [fontSize, setFontSize] = useState(16);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [isMeasured, setIsMeasured] = useState(false);
 
     // Priorizamos el contenido fragmentado de la página si existe
     const activeContent = pageContent || data?.content;
-    const activePoints = !pageContent ? (data?.points ?? []) : [];
+    const activePoints = pagePoints || (!pageContent ? (data?.points ?? []) : []);
 
-    // Medición dinámica del tamaño de letra
-    useLayoutEffect(() => {
-        // Medimos siempre el CONTENIDO TOTAL para que todas las páginas tengan el mismo tamaño de letra
-        const totalContent = data?.content;
-        const totalPoints = data?.points ?? [];
-
-        if (!containerRef.current || (!totalContent && totalPoints.length === 0)) {
-            setIsMeasured(true);
-            return;
-        }
-
-        const checkOverflow = () => {
-            const container = containerRef.current;
-            if (!container) return false;
-
-            // Tester invisible para medir altura total en una columna
-            const tester = document.createElement('div');
-            tester.style.width = '800px';
-            tester.style.fontSize = `${fontSize}px`;
-            tester.style.lineHeight = '1.4';
-            tester.style.fontFamily = 'Montserrat, sans-serif';
-            tester.style.position = 'absolute';
-            tester.style.visibility = 'hidden';
-            tester.style.whiteSpace = 'pre-line';
-            tester.style.textAlign = 'justify';
-            
-            if (totalContent) {
-                const text = totalContent
-                    .map((block: any) => (block.children || [])
-                        .map((child: any) => child.text || "").join("")
-                    ).join("\n\n");
-                tester.innerText = text;
-            } else {
-                tester.innerText = totalPoints.join("\n\n");
-            }
-
-            document.body.appendChild(tester);
-            const totalHeight = tester.scrollHeight;
-            document.body.removeChild(tester);
-
-            // Altura disponible en 2 columnas ~= 670px/columna
-            const maxColumnHeight = 670; 
-            
-            // Si hay varias páginas, el objetivo es que el texto quepa en N páginas
-            return totalHeight > (maxColumnHeight * 2 * totalPages);
-        };
-
-        if (checkOverflow() && fontSize > 10) {
-            setFontSize(prev => prev - 0.5);
-        } else {
-            setIsMeasured(true);
-        }
-    }, [data, fontSize, totalPages]);
 
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative overflow-hidden font-sans">
@@ -108,7 +57,7 @@ const FinePrint: React.FC<FinePrintProps> = ({
                 </div>
 
                 <motion.div 
-                    className={`flex-grow flex flex-col print-force-visible min-h-0 transition-opacity duration-300 ${isMeasured ? 'opacity-100' : 'opacity-0'}`}
+                    className="flex-grow flex flex-col print-force-visible min-h-0 transition-opacity duration-300"
                     initial={getRevealStyle(isPrintMode)}
                     animate={getRevealStyle(effectiveStep >= 2)}
                     transition={{ duration: 0.9, ease: 'easeInOut' }}
@@ -122,9 +71,9 @@ const FinePrint: React.FC<FinePrintProps> = ({
                         )}
                     </h3>
                     
-                    <div className="flex-grow flex flex-col min-h-0 w-full" ref={containerRef}>
+                    <div className="flex-grow flex flex-col min-h-0 w-full overflow-hidden" ref={containerRef}>
                         <div 
-                            className="flex-grow columns-2 gap-20 space-y-0 pb-10 h-full w-full"
+                            className="flex-grow columns-2 gap-20 space-y-0 pb-10 h-full w-full overflow-hidden"
                             style={{ fontSize: `${fontSize}px`, lineHeight: '1.4' }}
                         >
                             <div className="cuerpo text-vlanc-secondary/80 break-inside-avoid text-justify w-full" style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>

@@ -23,52 +23,12 @@ import StudioLanding from './components/StudioLanding';
 import CustomCursor from './components/CustomCursor';
 import sanityClient from './sanity/client';
 import { ScrollContext } from './context/ScrollContext';
+import { calculateFinePrintSlides, FinePrintChunk } from './utils/finePrintSplitter';
 
-/**
- * Divide el contenido de la letra pequeña en bloques que quepan en una página (2 columnas).
- * Estimación basada en caracteres y líneas a 10px de font-size.
- */
-const splitFinePrint = (content: any[], points: string[]) => {
-  const maxLinesPerPage = 90; // ~1260px de altura total (14px por línea)
-  const charsPerLine = 120; // Montserrat 10px en 800px de ancho aprox.
-
-  const pages: any[][] = [];
-  let currentPage: any[] = [];
-  let currentLines = 0;
-
-  const addBlock = (block: any, lines: number) => {
-    if (currentLines + lines > maxLinesPerPage && currentPage.length > 0) {
-      pages.push(currentPage);
-      currentPage = [block];
-      currentLines = lines;
-    } else {
-      currentPage.push(block);
-      currentLines += lines;
-    }
-  };
-
-  if (content && content.length > 0) {
-    content.forEach(block => {
-      let estimatedLines = 1;
-      if (block._type === 'block') {
-        const text = (block.children || []).map((c: any) => c.text).join('');
-        estimatedLines = Math.max(1, Math.ceil(text.length / charsPerLine));
-      }
-      addBlock(block, estimatedLines + 1); // +1 por espacio entre bloques
-    });
-  } else if (points && points.length > 0) {
-    points.forEach(point => {
-      const estimatedLines = Math.max(1, Math.ceil(point.length / charsPerLine));
-      addBlock(point, estimatedLines + 1);
-    });
-  }
-
-  if (currentPage.length > 0) pages.push(currentPage);
-  return pages;
-};
 
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
+  const [finePrintData, setFinePrintData] = useState<{ pages: FinePrintChunk[], fontSize: number }>({ pages: [], fontSize: 16 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -155,6 +115,18 @@ const App: React.FC = () => {
     };
     fetchProposalData();
   }, [slug]);
+
+  // Dynamic FinePrint Calculation
+  useEffect(() => {
+    if (proposalData?.payment?.finePrint) {
+      const { pages, fontSize } = calculateFinePrintSlides(
+        proposalData.payment.finePrint.content,
+        proposalData.payment.finePrint.points,
+        660 // maxColumnHeight (slightly reduced for safety)
+      );
+      setFinePrintData({ pages, fontSize });
+    }
+  }, [proposalData]);
 
   // Navigation Logic defined BEFORE sections to be used in closure
   const navigate = (newIndex: number) => {
@@ -293,18 +265,20 @@ const App: React.FC = () => {
 
     // Letra Pequeña Dinámica
     let currentHeaderPage = 17;
-    const finePrintPages = splitFinePrint(d.payment?.finePrint?.content, d.payment?.finePrint?.points);
+    const { pages, fontSize: fpFontSize } = finePrintData;
     
-    if (finePrintPages.length > 0) {
-      finePrintPages.forEach((pageContent, idx) => {
+    if (pages.length > 0) {
+      pages.forEach((page, idx) => {
         list.push({
           id: idx === 0 ? 'fine-print' : `fine-print-${idx}`,
           comp: (
             <FinePrint 
               data={d.payment?.finePrint} 
-              pageContent={pageContent} 
+              pageContent={page.content} 
+              pagePoints={page.points}
               pageIndex={idx} 
-              totalPages={finePrintPages.length}
+              totalPages={pages.length}
+              fontSize={fpFontSize}
               investmentTitle={d.investment?.title} 
               locationDate={d.investment?.locationDate} 
             />
@@ -313,6 +287,7 @@ const App: React.FC = () => {
         });
       });
     } else {
+      // Fallback si no hay contenido (vacío)
       list.push({ 
         id: 'fine-print', 
         comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, 
