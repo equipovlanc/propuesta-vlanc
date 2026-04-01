@@ -23,12 +23,10 @@ import StudioLanding from './components/StudioLanding';
 import CustomCursor from './components/CustomCursor';
 import sanityClient from './sanity/client';
 import { ScrollContext } from './context/ScrollContext';
-import { calculateFinePrintSlides, FinePrintChunk } from './utils/finePrintSplitter';
-
-
+import { calculateFinePrintSlides } from './utils/finePrintSplitter';
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
-  const [finePrintData, setFinePrintData] = useState<{ pages: FinePrintChunk[], fontSize: number }>({ pages: [], fontSize: 16 });
+  const [finePrintData, setFinePrintData] = useState<{ totalPages: number, fontSize: number }>({ totalPages: 0, fontSize: 16 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -119,12 +117,13 @@ const App: React.FC = () => {
   // Dynamic FinePrint Calculation
   useEffect(() => {
     if (proposalData?.payment?.finePrint) {
-      const { pages, fontSize } = calculateFinePrintSlides(
+      // 640px de altura para dar margen respecto al final del div (670px total)
+      const { totalPages, fontSize } = calculateFinePrintSlides(
         proposalData.payment.finePrint.content,
         proposalData.payment.finePrint.points,
-        660 // maxColumnHeight (slightly reduced for safety)
+        640 
       );
-      setFinePrintData({ pages, fontSize });
+      setFinePrintData({ totalPages, fontSize });
     }
   }, [proposalData]);
 
@@ -265,19 +264,18 @@ const App: React.FC = () => {
 
     // Letra Pequeña Dinámica
     let currentHeaderPage = 17;
-    const { pages, fontSize: fpFontSize } = finePrintData;
+    const { totalPages, fontSize: fpFontSize } = finePrintData;
     
-    if (pages.length > 0) {
-      pages.forEach((page, idx) => {
+    // Solo mostramos si hay datos, y si se han calculado las páginas (totalPages > 0)
+    if (totalPages > 0) {
+      for (let idx = 0; idx < totalPages; idx++) {
         list.push({
           id: idx === 0 ? 'fine-print' : `fine-print-${idx}`,
           comp: (
             <FinePrint 
               data={d.payment?.finePrint} 
-              pageContent={page.content} 
-              pagePoints={page.points}
               pageIndex={idx} 
-              totalPages={pages.length}
+              totalPages={totalPages}
               fontSize={fpFontSize}
               investmentTitle={d.investment?.title} 
               locationDate={d.investment?.locationDate} 
@@ -285,9 +283,9 @@ const App: React.FC = () => {
           ),
           headerPage: currentHeaderPage++
         });
-      });
-    } else {
-      // Fallback si no hay contenido (vacío)
+      }
+    } else if (proposalData && finePrintData.totalPages === 0) {
+      // Fallback mientras se calcula (loading state visual silencioso) o si no hay letrapequeña
       list.push({ 
         id: 'fine-print', 
         comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, 
