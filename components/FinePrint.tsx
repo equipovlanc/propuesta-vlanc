@@ -14,6 +14,9 @@ interface FinePrintProps {
     locationDate?: string;
     step?: number;
     isPrintMode?: boolean;
+    pageIndex?: number;
+    totalPages?: number;
+    overrideContent?: any[];
 }
 
 const getRevealStyle = (visible: boolean) => ({
@@ -21,24 +24,31 @@ const getRevealStyle = (visible: boolean) => ({
     filter: visible ? 'blur(0px)' : 'blur(5px)',
 });
 
-const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDate, step = 2, isPrintMode = false }) => {
+const FinePrint: React.FC<FinePrintProps> = ({ 
+    data, 
+    investmentTitle, 
+    locationDate, 
+    step = 2, 
+    isPrintMode = false,
+    pageIndex = 0,
+    totalPages = 1,
+    overrideContent
+}) => {
     const effectiveStep = isPrintMode ? 2 : step;
     const [fontSize, setFontSize] = useState(16);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isMeasured, setIsMeasured] = useState(false);
 
+    const actualContent = overrideContent || data?.content;
+
     // Medición dinámica del tamaño de letra
     useLayoutEffect(() => {
-        if (!containerRef.current || !data) return;
+        if (!containerRef.current || !actualContent) return;
 
         const checkOverflow = () => {
             const container = containerRef.current;
             if (!container) return false;
 
-            // En un sistema de 2 columnas con altura fija (aprox 630px efectivos tras títulos), 
-            // el contenido desborda si su scrollHeight es mayor que el offsetHeight.
-            // Pero columns-2 es especial. Usaremos un div invisible como "tester" 
-            // que simula una sola columna de 800px de ancho.
             const tester = document.createElement('div');
             tester.style.width = '800px';
             tester.style.fontSize = `${fontSize}px`;
@@ -49,23 +59,20 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
             tester.style.whiteSpace = 'pre-line';
             tester.style.textAlign = 'justify';
             
-            // Replicamos el contenido
-            if (data.content) {
-                // Simplificación para el tester: extraemos texto plano
-                const text = data.content
+            if (actualContent) {
+                const text = actualContent
                     .map((block: any) => (block.children || [])
                         .map((child: any) => child.text || "").join("")
                     ).join("\n\n");
                 tester.innerText = text;
             } else {
-                tester.innerText = (data.points ?? []).join("\n\n");
+                tester.innerText = (data?.points ?? []).join("\n\n");
             }
 
             document.body.appendChild(tester);
             const totalHeight = tester.scrollHeight;
             document.body.removeChild(tester);
 
-            // Altura disponible en 2 columnas (1080 - 150 - 140 - ~120 de títulos) ~= 670px
             const maxColumnHeight = 670; 
             return totalHeight > (maxColumnHeight * 2);
         };
@@ -75,7 +82,11 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
         } else {
             setIsMeasured(true);
         }
-    }, [data, fontSize]);
+    }, [actualContent, fontSize]);
+
+    const displayTitle = totalPages > 1 
+        ? `${data?.title || 'Letra pequeña'} (${pageIndex + 1}/${totalPages})`
+        : (data?.title || 'Letra pequeña');
 
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative overflow-hidden font-sans">
@@ -93,7 +104,7 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                     animate={getRevealStyle(effectiveStep >= 2)}
                     transition={{ duration: 0.9, ease: 'easeInOut' }}
                 >
-                    <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: data?.title || 'Letra pequeña' }} />
+                    <h3 className="subtitulo2 mb-10" dangerouslySetInnerHTML={{ __html: displayTitle }} />
                     
                     <div className="flex-grow flex flex-col min-h-0 w-full" ref={containerRef}>
                         <div 
@@ -101,9 +112,9 @@ const FinePrint: React.FC<FinePrintProps> = ({ data, investmentTitle, locationDa
                             style={{ fontSize: `${fontSize}px`, lineHeight: '1.4' }}
                         >
                             <div className="cuerpo text-vlanc-secondary/80 break-inside-avoid text-justify w-full" style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>
-                                {data?.content ? (
+                                {actualContent ? (
                                     <PortableText 
-                                        value={data.content} 
+                                        value={actualContent} 
                                         components={{
                                             block: {
                                                 normal: ({children}) => <p className="mb-0 min-h-[1.4em]">{children}</p>

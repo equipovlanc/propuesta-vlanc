@@ -23,6 +23,7 @@ import StudioLanding from './components/StudioLanding';
 import CustomCursor from './components/CustomCursor';
 import sanityClient from './sanity/client';
 import { ScrollContext } from './context/ScrollContext';
+import { splitPortableTextIntoPages } from './utils/textSplitter';
 
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
@@ -245,8 +246,31 @@ const App: React.FC = () => {
         />,
         headerPage: 15
       },
-      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: 16 },
-      { id: 'fine-print', comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, headerPage: 17 },
+      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: 16 }
+    );
+
+    // Splitting Fine Print into multiple pages if needed
+    const finePrintPages = splitPortableTextIntoPages(d.payment?.finePrint?.content || []);
+    finePrintPages.forEach((pageContent, idx) => {
+      list.push({
+        id: `fine-print${idx > 0 ? `-${idx}` : ''}`,
+        comp: (
+          <FinePrint 
+            data={d.payment?.finePrint} 
+            investmentTitle={d.investment?.title} 
+            locationDate={d.investment?.locationDate} 
+            overrideContent={pageContent}
+            pageIndex={idx}
+            totalPages={finePrintPages.length}
+          />
+        ),
+        headerPage: 17 + idx
+      });
+    });
+
+    const nextHeaderStart = 17 + finePrintPages.length; // e.g. if 1 page, next is 18
+
+    list.push(
       {
         id: 'divider-slide',
         comp: <DividerSlide
@@ -256,14 +280,14 @@ const App: React.FC = () => {
           setNavigationBlocked={setNavigationBlocked}
         />
       },
-      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: 19 }
+      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: nextHeaderStart + 1 }
     );
 
     (d.premiumServicesList || []).forEach((service: any, i: number) => {
       list.push({
         id: `premium-${i + 1}`,
         comp: <PremiumServices data={service} image={service.image} index={i} />,
-        headerPage: 20 + i
+        headerPage: nextHeaderStart + 2 + i
       });
     });
 
