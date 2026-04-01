@@ -49,18 +49,23 @@ const FinePrint: React.FC<FinePrintProps> = ({
     return (
         <section className="h-full w-full pt-[150px] pb-[140px] px-[120px] flex flex-col justify-start relative overflow-hidden font-sans">
             <div className="w-full h-full flex flex-col">
-                <div className="shrink-0 mb-20">
+                <motion.div 
+                    className="shrink-0 mb-20 print-force-visible"
+                    initial={getRevealStyle(isPrintMode)}
+                    animate={getRevealStyle(true)}
+                    transition={{ duration: 0.9, ease: 'easeInOut' }}
+                >
                     <h2 className="subtitulo1">
                         {investmentTitle || "la inversión."}
                     </h2>
                     <div className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
-                </div>
+                </motion.div>
 
                 <motion.div 
-                    className="flex-grow flex flex-col print-force-visible min-h-0 transition-opacity duration-300"
+                    className="flex-grow flex flex-col print-force-visible min-h-0"
                     initial={getRevealStyle(isPrintMode)}
-                    animate={getRevealStyle(effectiveStep >= 2)}
-                    transition={{ duration: 0.9, ease: 'easeInOut' }}
+                    animate={getRevealStyle(true)}
+                    transition={{ duration: 0.9, delay: 0.3, ease: 'easeInOut' }}
                 >
                     <h3 className="subtitulo2 mb-10 flex items-center gap-4">
                         <span dangerouslySetInnerHTML={{ __html: data?.title || 'Letra pequeña' }} />
@@ -123,8 +128,8 @@ const FinePrint: React.FC<FinePrintProps> = ({
             <motion.div
                 className="absolute right-[120px] bottom-[140px] w-[800px] pointer-events-none z-20 print-force-visible"
                 initial={getRevealStyle(isPrintMode)}
-                animate={getRevealStyle(effectiveStep >= 2)}
-                transition={{ duration: 0.9, ease: 'easeInOut' }}
+                animate={getRevealStyle(true)}
+                transition={{ duration: 0.9, delay: 0.5, ease: 'easeInOut' }}
             >
                 <div className="flex flex-col border-t border-[#8f4933] pt-1 print:border-t-2 print:!border-[#8f4933] pointer-events-auto">
                     <div className="flex justify-between items-start">
@@ -138,8 +143,8 @@ const FinePrint: React.FC<FinePrintProps> = ({
             <motion.div
                 className="absolute bottom-[70px] right-[120px] z-20 print-force-visible"
                 initial={getRevealStyle(isPrintMode)}
-                animate={getRevealStyle(effectiveStep >= 2)}
-                transition={{ duration: 0.9, ease: 'easeInOut' }}
+                animate={getRevealStyle(true)}
+                transition={{ duration: 0.9, delay: 0.5, ease: 'easeInOut' }}
             >
                 <p className="cuerpo font-bold text-right">
                     {locationDate || "En Alcoi a XX de mes de 2025"}
