@@ -321,7 +321,7 @@ const App: React.FC = () => {
       });
     });
 
-    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} isSectionCompleted={completedSections.has('contact')} /> });
+    list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} isSectionCompleted={completedSections.has('contact')} onNavigate={(id) => navigateToId(id)} /> });
 
     return list;
   })();

@@ -24,6 +24,7 @@ interface ContactProps {
     finalLogoVideo?: string | null;
     onPrint?: () => void;
     isSectionCompleted?: boolean;
+    onNavigate?: (id: string) => void;
 }
 
 type Phase = 'playing' | 'sliding' | 'done';
@@ -35,7 +36,7 @@ interface OverlayRect {
     height: number;
 }
 
-const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint, isSectionCompleted = false }) => {
+const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPrint, isSectionCompleted = false, onNavigate }) => {
     const [videoHasError, setVideoHasError] = React.useState(false);
     const hasVideo = !!finalLogoVideo && !videoHasError;
 
@@ -121,8 +122,9 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                 <div className="flex items-center justify-center h-full w-full">
                     <div
                         ref={footerPlaceholderRef}
-                        className="w-full max-w-[785px] aspect-[785/691] overflow-hidden relative -translate-x-[100px] print-force-visible"
+                        className={`w-full max-w-[785px] aspect-[785/691] overflow-hidden relative -translate-x-[100px] print-force-visible ${showContent ? 'cursor-pointer hover:opacity-80 transition-opacity duration-300' : ''}`}
                         style={{ opacity: showContent ? 1 : 0 }}
+                        onClick={() => { if (showContent && onNavigate) onNavigate('divider-slide'); }}
                     >
                         {hasVideo ? (
                             <>
