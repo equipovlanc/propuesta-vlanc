@@ -214,16 +214,14 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         <div className="space-y-4 cuerpo text-left">
                             <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.location || '' }} /></p>
                             <p><strong className="font-bold uppercase">TIPO DE PROYECTO:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.projectType || '' }} /></p>
-                            <div className="flex gap-2">
-                                <strong className="font-bold uppercase whitespace-nowrap">ÁMBITO DE INTERVENCIÓN:</strong> 
-                                <div>
-                                    {Array.isArray(data?.intervention?.scope) ? (
-                                        <CustomPortableText value={data.intervention.scope} isInline />
-                                    ) : (
-                                        <span dangerouslySetInnerHTML={{ __html: data?.intervention?.scope || '' }} />
-                                    )}
-                                </div>
-                            </div>
+                            <p>
+                                <strong className="font-bold uppercase">ÁMBITO DE INTERVENCIÓN:</strong>{' '}
+                                {Array.isArray(data?.intervention?.scope) ? (
+                                    <CustomPortableText value={data.intervention.scope} isInline />
+                                ) : (
+                                    <span dangerouslySetInnerHTML={{ __html: data?.intervention?.scope || '' }} />
+                                )}
+                            </p>
                         </div>
                     </AnimatedSection>
                 </div>
