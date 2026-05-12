@@ -77,7 +77,7 @@ const App: React.FC = () => {
           "team": team{..., "members": members[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}}},
           "testimonials": testimonials{..., "items": items[]{..., "img": {"src": img.asset->url, "opacity": img.overlayOpacity}}},
           "scopeIntro": scopeIntro{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
-          "scopePhases": scopePhases1.phases[] {..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url} + scopePhases2.phases[] {..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
+          "scopePhases": scopePhases.phases[] {..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
           "specialOffers": specialOffers{
             ..., 
             conditionalOffer,
@@ -236,11 +236,9 @@ const App: React.FC = () => {
 
     // Phases
     (d.scopePhases || []).forEach((phase: any, i: number) => {
-      const numPhases1 = d.scopePhases1?.phases?.length || 0;
-      const currentSectionTitle = i < numPhases1 ? d.scopePhases1?.title : d.scopePhases2?.title;
       list.push({
         id: `phase-${i + 1}`,
-        comp: <ScopePhases data={phase} mainTitle={currentSectionTitle} guaranteeItem={d.guarantees?.items?.[i + 1]} />,
+        comp: <ScopePhases data={phase} guaranteeItem={d.guarantees?.items?.[i + 1]} />,
         headerPage: 9 + i
       });
     });

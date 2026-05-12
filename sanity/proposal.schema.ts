@@ -221,17 +221,17 @@ export default defineType({
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'location', type: 'string' }),
                         defineField({ name: 'projectType', type: 'string' }),
-                        defineField({ name: 'scope', type: 'string' }),
+                        defineField({ name: 'scope', type: 'array', of: [{ type: 'block' }] }),
                         defineField({ name: 'program', type: 'array', of: [{ type: 'block' }] }),
                         defineField({ name: 'breakdown', type: 'array', of: [{ type: 'string' }] }),
-                        defineField({ name: 'note', type: 'string' })
+                        defineField({ name: 'note', type: 'array', of: [{ type: 'block' }] })
                     ]
                 })
             ]
         }),
         defineField({
-            name: 'scopePhases1',
-            title: 'Trabajos Contemplados (Fases 1-2)',
+            name: 'scopePhases',
+            title: 'Trabajos Contemplados',
             type: 'object',
             fields: [
                 defineField({
@@ -247,39 +247,6 @@ export default defineType({
                             defineField({ name: 'video', title: 'Archivo Video (Si aplica)', type: 'file' }),
                             defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
                             defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía (Si aplica)', type: 'string' }),
-                            defineField({
-                                name: 'subPhases', type: 'array', of: [{
-                                    type: 'object',
-                                    fields: [
-                                        defineField({ name: 'number', type: 'string' }),
-                                        defineField({ name: 'title', type: 'string' }),
-                                        defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] })
-                                    ]
-                                }]
-                            })
-                        ]
-                    }]
-                })
-            ]
-        }),
-        defineField({
-            name: 'scopePhases2',
-            title: 'Trabajos Contemplados (Fases 3-5)',
-            type: 'object',
-            fields: [
-                defineField({
-                    name: 'phases', type: 'array', of: [{
-                        type: 'object',
-                        fields: [
-                            defineField({ name: 'title', type: 'string' }),
-                            defineField({
-                                name: 'image',
-                                type: 'image',
-                                fields: [overlayField]
-                            }),
-                            defineField({ name: 'video', title: 'Archivo Video', type: 'file' }),
-                            defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
-                            defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía', type: 'string' }),
                             defineField({
                                 name: 'subPhases', type: 'array', of: [{
                                     type: 'object',
@@ -519,17 +486,22 @@ export default defineType({
                                     ],
                                     preview: {
                                         select: {
-                                            title: 'text',
+                                            titleBlocks: 'text',
                                             style: 'style',
                                             num: 'number',
                                             sep: 'hasSeparator'
                                         },
-                                        prepare({ title, style, num, sep }) {
+                                        prepare({ titleBlocks, style, num, sep }) {
+                                            const block = (titleBlocks || []).find((b: any) => b._type === 'block');
+                                            const titleText = block 
+                                                ? block.children?.filter((child: any) => child._type === 'span').map((span: any) => span.text).join('') 
+                                                : 'Sin texto';
+                                                
                                             const type = style === 'title' ? '[TIT]' : '[TXT]';
                                             const number = num ? `(#${num})` : '';
                                             const line = sep ? '___' : '';
                                             return {
-                                                title: title,
+                                                title: titleText || 'Sin texto',
                                                 subtitle: `${type} ${number} ${line}`
                                             }
                                         }

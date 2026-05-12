@@ -1,6 +1,7 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import AnimatedSection from './AnimatedSection';
 import { PortableText } from '@portabletext/react';
+import CustomPortableText from './CustomPortableText';
 
 interface ScopeProps {
     data?: {
@@ -11,10 +12,10 @@ interface ScopeProps {
             title?: string;
             location?: string;
             projectType?: string;
-            scope?: string;
+            scope?: any[] | string;
             program?: any[] | string;
             breakdown?: string[];
-            note?: string;
+            note?: any[] | string;
         };
     }
 }
@@ -213,7 +214,16 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         <div className="space-y-4 cuerpo text-left">
                             <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.location || '' }} /></p>
                             <p><strong className="font-bold uppercase">TIPO DE PROYECTO:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.projectType || '' }} /></p>
-                            <p><strong className="font-bold uppercase">ÁMBITO DE INTERVENCIÓN:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.scope || '' }} /></p>
+                            <div className="flex gap-2">
+                                <strong className="font-bold uppercase whitespace-nowrap">ÁMBITO DE INTERVENCIÓN:</strong> 
+                                <div>
+                                    {Array.isArray(data?.intervention?.scope) ? (
+                                        <CustomPortableText value={data.intervention.scope} isInline />
+                                    ) : (
+                                        <span dangerouslySetInnerHTML={{ __html: data?.intervention?.scope || '' }} />
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </AnimatedSection>
                 </div>
@@ -298,9 +308,13 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                 {data?.intervention?.note && (
                     <div className="absolute top-[940px] w-full pt-1 pointer-events-auto print-force-visible">
                         <AnimatedSection hierarchy={2}>
-                            <p className="text-[10px] text-vlanc-secondary/60 italic uppercase tracking-widest leading-[1.4]">
-                                {data?.intervention?.note}
-                            </p>
+                            <div className="text-[10px] text-vlanc-secondary/60 italic tracking-widest leading-[1.4]">
+                                {Array.isArray(data?.intervention?.note) ? (
+                                    <CustomPortableText value={data.intervention.note} />
+                                ) : (
+                                    <p>{data?.intervention?.note}</p>
+                                )}
+                            </div>
                         </AnimatedSection>
                     </div>
                 )}
