@@ -214,11 +214,11 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         <div className="space-y-4 cuerpo text-left">
                             <p><strong className="font-bold uppercase">LOCALIZACIÓN:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.location || '' }} /></p>
                             <p><strong className="font-bold uppercase">TIPO DE PROYECTO:</strong> <span dangerouslySetInnerHTML={{ __html: data?.intervention?.projectType || '' }} /></p>
-                            <div className="flex items-start gap-2">
-                                <strong className="font-bold uppercase whitespace-nowrap mt-[2px]">ÁMBITO DE INTERVENCIÓN:</strong> 
-                                <div className="cuerpo leading-[1.4]">
+                            <div className="flex gap-2">
+                                <strong className="font-bold uppercase whitespace-nowrap">ÁMBITO DE INTERVENCIÓN:</strong> 
+                                <div>
                                     {Array.isArray(data?.intervention?.scope) ? (
-                                        <PortableText value={data.intervention.scope} components={portableTextComponents} />
+                                        <CustomPortableText value={data.intervention.scope} isInline />
                                     ) : (
                                         <span dangerouslySetInnerHTML={{ __html: data?.intervention?.scope || '' }} />
                                     )}
@@ -310,7 +310,7 @@ const Scope: React.FC<ScopeProps> = ({ data }) => {
                         <AnimatedSection hierarchy={2}>
                             <div className="text-[10px] text-vlanc-secondary/60 italic tracking-widest leading-[1.4]">
                                 {Array.isArray(data?.intervention?.note) ? (
-                                    <PortableText value={data.intervention.note} components={portableTextComponents} />
+                                    <CustomPortableText value={data.intervention.note} />
                                 ) : (
                                     <p>{data?.intervention?.note}</p>
                                 )}
