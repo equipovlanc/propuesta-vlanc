@@ -38,6 +38,7 @@ interface SpecialOffersProps {
         launchOffer?: {
             title?: string;
             description?: string;
+            premiumServiceName?: string;
         };
         callToAction?: {
             text?: string;
@@ -121,7 +122,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     const hasCtaText = data?.callToAction?.text && data.callToAction.text.trim().length > 0;
 
     const hasConditionalOffer = Boolean(data?.conditionalOffer?.title || data?.conditionalOffer?.description || plans.length > 0);
-    const hasLaunchOffer = Boolean(data?.launchOffer?.title || data?.launchOffer?.description || data?.offerFooterText || premiumService);
+    const hasLaunchOffer = Boolean(data?.launchOffer?.title || data?.launchOffer?.description || data?.offerFooterText || (data?.launchOffer?.premiumServiceName && data.launchOffer.premiumServiceName.trim().length > 0));
     const hasLogo = Boolean(data?.overlayLogo);
 
     const thingsToReveal = [
@@ -222,9 +223,11 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                 />
                             </div>
                         )}
-                        <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0 print-force-visible print:!bg-[#8f4933] print:opacity-100" onClick={openModal}>
-                            <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors print:text-white">TU HOGAR COMO NUNCA LO IMAGINASTE</span>
-                        </button>
+                        {data?.launchOffer?.premiumServiceName && data.launchOffer.premiumServiceName.trim().length > 0 && (
+                            <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0 print-force-visible print:!bg-[#8f4933] print:opacity-100" onClick={openModal}>
+                                <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors print:text-white uppercase">{data.launchOffer.premiumServiceName}</span>
+                            </button>
+                        )}
                         {data?.offerFooterText && (
                             <CustomPortableText 
                                 value={data.offerFooterText} 

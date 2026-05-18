@@ -29,7 +29,7 @@ const getSpecialOffersSteps = (specialOffersData: any, premiumService: any) => {
     let s = 0;
     const plans = specialOffersData?.conditionalOffer?.discountedPlans || [];
     const hasConditional = Boolean(specialOffersData?.conditionalOffer?.title || specialOffersData?.conditionalOffer?.description || plans.length > 0);
-    const hasLaunch = Boolean(specialOffersData?.launchOffer?.title || specialOffersData?.launchOffer?.description || specialOffersData?.offerFooterText || premiumService);
+    const hasLaunch = Boolean(specialOffersData?.launchOffer?.title || specialOffersData?.launchOffer?.description || specialOffersData?.offerFooterText || (specialOffersData?.launchOffer?.premiumServiceName && specialOffersData.launchOffer.premiumServiceName.trim().length > 0));
     const hasLogo = Boolean(specialOffersData?.overlayLogo);
 
     if (hasConditional) s++;
