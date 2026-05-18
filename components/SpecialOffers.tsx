@@ -242,6 +242,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                             </div>
                         </div>
                     </div>
+                    {/* Espaciador flexible para aumentar distancia con la fecha según lo permitido por el espacio (50% más de distancia ideal, 10% mínimo) */}
+                    <div className="w-full shrink block min-h-[7px] h-[35px] print:hidden" />
                 </AnimatedSection>
 
                 <AnimatedSection className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20" hierarchy={2}>
