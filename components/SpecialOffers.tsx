@@ -120,6 +120,26 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     const imageOpacity = data?.callToAction?.image?.opacity ?? 15;
     const hasCtaText = data?.callToAction?.text && data.callToAction.text.trim().length > 0;
 
+    const hasConditionalOffer = Boolean(data?.conditionalOffer?.title || data?.conditionalOffer?.description || plans.length > 0);
+    const hasLaunchOffer = Boolean(data?.launchOffer?.title || data?.launchOffer?.description || data?.offerFooterText || premiumService);
+    const hasLogo = Boolean(data?.overlayLogo);
+
+    const thingsToReveal = [
+        hasConditionalOffer ? 'conditional' : null,
+        hasLaunchOffer ? 'launch' : null,
+        hasLogo ? 'logo' : null
+    ].filter(Boolean) as string[];
+
+    const isRevealed = (item: string) => {
+        if (isPrintMode || isSectionCompleted) return true;
+        const index = thingsToReveal.indexOf(item);
+        if (index === -1) return false;
+        return step >= index + 1;
+    };
+
+    const lastContentItem = thingsToReveal.filter(t => t !== 'logo').pop();
+    const signatureRevealed = lastContentItem ? isRevealed(lastContentItem) : step >= 1;
+
     const openModal = () => { if (premiumService) setIsModalOpen(true); };
     const closeModal = () => setIsModalOpen(false);
 
@@ -167,9 +187,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                     <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
 
-                <AnimatedSection className="flex-grow flex flex-col justify-center overflow-y-auto no-scrollbar print:overflow-visible print:justify-start print:pt-4 print-force-visible" hierarchy={2}>
-                    <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 1)}`}>
-                        {data?.conditionalOffer && (
+                <AnimatedSection className="flex-grow flex flex-col justify-start overflow-y-auto max-h-full no-scrollbar print:overflow-visible print:justify-start print:pt-4 print-force-visible" hierarchy={2}>
+                    {hasConditionalOffer && (
+                        <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(isRevealed('conditional'))}`}>
+                            {data?.conditionalOffer && (
                             <div className="mb-4">
                                 <h3 className="subtitulo2 mb-2 text-vlanc-black">
                                     <CustomPortableText value={data.conditionalOffer.title} isInline />
@@ -186,8 +207,10 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                             ))}
                         </div>
                     </div>
+                    )}
 
-                    <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(step >= 2)}`}>
+                    {hasLaunchOffer && (
+                    <div className={`border border-[#8f4933]/30 p-5 mb-4 shrink-0 overflow-hidden print:overflow-visible print:border-2 print:!border-[#8f4933]/50 ${getRevealClasses(isRevealed('launch'))}`}>
                         {data?.launchOffer && (
                             <div className="mb-4">
                                 <h3 className="subtitulo2 mb-2 text-vlanc-black">
@@ -209,8 +232,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                             />
                         )}
                     </div>
+                    )}
 
-                    <div className={`w-full shrink-0 ${getRevealClasses(step >= 2)} print-force-visible`}>
+                    <div className={`w-full mt-auto shrink-0 ${getRevealClasses(signatureRevealed)} print-force-visible`}>
                         <div className="w-full flex flex-col border-t border-[#8f4933] mt-[20px] pt-1 print:border-t-2 print:!border-[#8f4933]">
                             <div className="flex justify-between items-start">
                                 <span className="tabla1">VIVE VLANC SL</span>
@@ -221,7 +245,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                 </AnimatedSection>
 
                 <AnimatedSection className="absolute -bottom-[70px] right-[69.5px] translate-y-1/2 z-20" hierarchy={2}>
-                    <div className={getRevealClasses(step >= 2)}>
+                    <div className={getRevealClasses(signatureRevealed)}>
                         <p className="cuerpo font-bold text-right">{locationDate || "En Alcoi a XX de mes de 2025"}</p>
                     </div>
                 </AnimatedSection>
@@ -249,7 +273,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                             <motion.div
                                 className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none bg-vlanc-primary/10 backdrop-blur-[2px] print-force-visible"
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: (step ?? 3) >= 3 ? 1 : 0 }}
+                                animate={{ opacity: isRevealed('logo') ? 1 : 0 }}
                                 transition={{ duration: 3.0, ease: "easeInOut" }}
                             >
                                 <div className="w-[460px] h-[255px] flex items-center justify-center">
