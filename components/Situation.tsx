@@ -21,8 +21,11 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
             {/* COLUMNA TEXTO */}
             <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-[140px]">
 
-                {/* ESPACIO SUPERIOR / TÍTULO (J1) */}
-                <div className="flex-grow flex flex-col justify-center">
+                {/* ESPACIO SUPERIOR FLEXIBLE */}
+                <div className="flex-grow" />
+
+                {/* TÍTULO + BARRA (J1) */}
+                <div className="shrink-0">
                     <AnimatedSection hierarchy={1}>
                         <h2 className="subtitulo1">
                             {data?.title || "la situación."}
@@ -30,6 +33,9 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                     </AnimatedSection>
                     <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
                 </div>
+
+                {/* GAP FIJO ENTRE BARRA Y CUERPO: 75px */}
+                <div className="shrink-0 h-[75px]" />
 
                 {/* CUERPO DE TEXTO (J2) */}
                 <div className="shrink-0">
