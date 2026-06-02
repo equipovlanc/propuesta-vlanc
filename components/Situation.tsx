@@ -38,11 +38,11 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                 <div className="shrink-0 h-[75px]" />
 
                 {/* CUERPO DE TEXTO (J2) */}
-                <div className="shrink-0" style={{ fontSize: '14px' }}>
+                <div className="shrink-0">
                     <AnimatedSection hierarchy={2}>
                         <CustomPortableText 
                             value={data?.paragraphs} 
-                            paragraphClassName="cuerpo2" 
+                            paragraphClassName="cuerpo2-situation" 
                         />
                     </AnimatedSection>
                 </div>
