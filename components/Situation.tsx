@@ -19,7 +19,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
         <section className="h-full w-full flex flex-col lg:flex-row overflow-hidden items-stretch">
 
             {/* COLUMNA TEXTO */}
-            <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-[140px]">
+            <div className="w-full lg:flex-1 flex flex-col h-full px-10 lg:pl-[120px] lg:pr-[120px] pt-0 pb-0">
 
                 {/* ESPACIO SUPERIOR FLEXIBLE */}
                 <div className="flex-grow" />
@@ -42,10 +42,13 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                     <AnimatedSection hierarchy={2}>
                         <CustomPortableText 
                             value={data?.paragraphs} 
-                            paragraphClassName="cuerpo2-situation" 
+                            paragraphClassName="cuerpo2" 
                         />
                     </AnimatedSection>
                 </div>
+
+                {/* MARGEN INFERIOR FIJO: mitad del margen original (140/2 = 70px) */}
+                <div className="shrink-0 h-[70px]" />
             </div>
 
             {/* COLUMNA IMAGEN (J0) */}
