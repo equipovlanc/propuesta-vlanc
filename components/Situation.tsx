@@ -38,7 +38,7 @@ const Situation: React.FC<SituationProps> = ({ data }) => {
                 <div className="shrink-0 h-[75px]" />
 
                 {/* CUERPO DE TEXTO (J2) */}
-                <div className="shrink-0">
+                <div className="shrink-0" style={{ fontSize: '14px' }}>
                     <AnimatedSection hierarchy={2}>
                         <CustomPortableText 
                             value={data?.paragraphs} 
