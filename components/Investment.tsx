@@ -57,7 +57,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
             </div>
 
             {/* Contenedor Principal */}
-            <div className="w-full flex flex-row gap-[120px] items-start h-full relative">
+            <div className="w-full flex flex-row gap-[120px] items-start flex-1 min-h-0 relative">
 
                 {/* COLUMNA IZQUIERDA (Textos) */}
                 <div className="flex-1 space-y-6 overflow-y-auto max-h-full no-scrollbar pr-4">
