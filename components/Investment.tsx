@@ -105,7 +105,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                 </div>
 
                 {/* COLUMNA DERECHA: Tabla Interactiva */}
-                <div className="shrink-0 flex flex-col items-end justify-end h-full">
+                <div className="shrink-0 flex flex-col items-end self-end">
                     <AnimatedSection
                         className="w-[820px] flex flex-col relative rounded-sm overflow-hidden"
                         hierarchy={2}
