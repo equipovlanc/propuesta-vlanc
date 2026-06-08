@@ -232,36 +232,43 @@ const App: React.FC = () => {
     if (!proposalData) return [];
     const d = proposalData;
 
-    const list = [
+    const list: any[] = [
       // 0: Hero
       { id: 'hero', comp: <Hero data={d.hero} headerData={d.header} logo={d.logos?.mainLogo} /> },
       // 1: Index
-      { id: 'index', comp: <IndexSection data={d.index} onNavigate={(id) => navigateToId(id)} /> },
-      // 2: Situation
-      { id: 'situation', comp: <Situation data={d.situation} />, headerPage: 3 },
-      // 3: Mission
-      { id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: 4 },
-      // 4: Process
-      { id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} step={internalStep} />, headerPage: 5 },
-      // 5: Team
-      { id: 'team', comp: <Team data={d.team} />, headerPage: 6 },
-      // 6: Testimonials
-      { id: 'testimonials', comp: <Testimonials data={d.testimonials} />, headerPage: 7 },
-      // 7: Scope Intro
-      { id: 'scope', comp: <Scope data={d.scopeIntro} />, headerPage: 8 },
+      { id: 'index', comp: <IndexSection data={d.index} onNavigate={(id) => navigateToId(id)} /> }
     ];
+
+    let currentHeaderPage = 3;
+
+    // 2: Situation
+    list.push({ id: 'situation', comp: <Situation data={d.situation} />, headerPage: currentHeaderPage++ });
+    // 3: Mission
+    list.push({ id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: currentHeaderPage++ });
+    
+    // 4: Process (Condicional)
+    if (d.process?.isActive !== false) {
+      list.push({ id: 'process', comp: <Process data={d.process} guaranteeItem={d.guarantees?.items?.[0]} step={internalStep} />, headerPage: currentHeaderPage++ });
+    }
+
+    // 5: Team
+    list.push({ id: 'team', comp: <Team data={d.team} />, headerPage: currentHeaderPage++ });
+    // 6: Testimonials
+    list.push({ id: 'testimonials', comp: <Testimonials data={d.testimonials} />, headerPage: currentHeaderPage++ });
+    // 7: Scope Intro
+    list.push({ id: 'scope', comp: <Scope data={d.scopeIntro} />, headerPage: currentHeaderPage++ });
 
     // Phases
     (d.scopePhases || []).forEach((phase: any, i: number) => {
       list.push({
         id: `phase-${i + 1}`,
         comp: <ScopePhases data={phase} guaranteeItem={d.guarantees?.items?.[i + 1]} />,
-        headerPage: 9 + i
+        headerPage: currentHeaderPage++
       });
     });
 
     list.push(
-      { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: 14 },
+      { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: currentHeaderPage++ },
       {
         id: 'special-offers',
         comp: <SpecialOffers
@@ -273,13 +280,12 @@ const App: React.FC = () => {
           setNavigationBlocked={setNavigationBlocked}
           isSectionCompleted={completedSections.has('special-offers')}
         />,
-        headerPage: 15
+        headerPage: currentHeaderPage++
       },
-      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: 16 },
+      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: currentHeaderPage++ }
     );
 
     // Letra Pequeña Dinámica
-    let currentHeaderPage = 17;
     const { totalPages, fontSize: fpFontSize } = finePrintData;
     
     // Solo mostramos si hay datos, y si se han calculado las páginas (totalPages > 0)

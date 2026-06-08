@@ -135,6 +135,13 @@ export default defineType({
             title: 'El Proceso',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activo?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, la sección del proceso no aparecerá en la web y las páginas se ajustarán.'
+                }),
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'badge', title: 'Texto Garantía/Badge (Paso 3)', type: 'string' }),
                 defineField({
