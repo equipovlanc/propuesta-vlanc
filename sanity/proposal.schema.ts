@@ -125,7 +125,7 @@ export default defineType({
                 defineField({
                     name: 'achievements', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
-                        defineField({ name: 'listItems', type: 'array', of: [{ type: 'string' }] }),
+                        defineField({ name: 'description', title: 'Descripción', type: 'array', of: [{ type: 'block' }] }),
                     ]
                 }),
             ]

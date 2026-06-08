@@ -2,12 +2,13 @@
 import React, { useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
 import CustomPortableText from './CustomPortableText';
+import { PortableText } from '@portabletext/react';
 import { motion } from 'framer-motion';
 
 interface SectionData {
     title?: string;
     subtitle?: string;
-    description?: string;
+    description?: any;
     listItems?: string[];
 }
 
@@ -133,11 +134,37 @@ const Mission: React.FC<MissionProps> = ({ data, step = 0 }) => {
                         <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px] mb-12" />
 
                         <AnimatedSection hierarchy={2}>
-                            <ul className="space-y-4 w-full">
-                                {(data?.achievements?.listItems ?? []).map((item, i) => (
-                                    <li key={i} className="cuerpo2" dangerouslySetInnerHTML={{ __html: item }} />
-                                ))}
-                            </ul>
+                            <div className="w-full">
+                                <PortableText 
+                                    value={data?.achievements?.description as any}
+                                    components={{
+                                        block: {
+                                            normal: ({ children }: any) => {
+                                                // Prevenir renderizado de bloques completamente vacíos que causan saltos dobles
+                                                const isEmpty = !children || (Array.isArray(children) && children.length === 1 && (children[0] === '' || children[0] === '\n'));
+                                                if (isEmpty) return null;
+                                                
+                                                // whitespace-normal sobrescribe el pre-line de cuerpo2 para evitar intros duplicados
+                                                return <p className="cuerpo2 whitespace-normal mb-1 last:mb-0 leading-tight">{children}</p>;
+                                            }
+                                        },
+                                        list: {
+                                            bullet: ({ children }: any) => (
+                                                <ul className="flex flex-col gap-0 w-full mb-0">
+                                                    {children}
+                                                </ul>
+                                            )
+                                        },
+                                        listItem: {
+                                            bullet: ({ children }: any) => (
+                                                <li className="cuerpo2 whitespace-normal mb-1 last:mb-0 leading-tight">
+                                                    {children}
+                                                </li>
+                                            )
+                                        }
+                                    }}
+                                />
+                            </div>
                         </AnimatedSection>
                     </div>
                 )}
