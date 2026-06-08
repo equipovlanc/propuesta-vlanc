@@ -181,8 +181,10 @@ const App: React.FC = () => {
         else setInternalStep(isMovingForward ? 0 : processStepsCount);
       }
       else if (nextSection.id === 'investment') {
-        if (completedSections.has('investment')) setInternalStep(6);
-        else setInternalStep(isMovingForward ? 0 : 6);
+        const numPlans = proposalData?.investment?.tableHeaders?.length || 3;
+        const maxSteps = numPlans * 2;
+        if (completedSections.has('investment')) setInternalStep(maxSteps);
+        else setInternalStep(isMovingForward ? 0 : maxSteps);
       }
       else if (nextSection.id === 'payment') {
         if (completedSections.has('payment')) setInternalStep(1);
@@ -374,8 +376,10 @@ const App: React.FC = () => {
         }
 
         if (activeSection.id === 'investment' && !isCompleted) {
+          const numPlans = proposalData?.investment?.tableHeaders?.length || 3;
+          const maxSteps = numPlans * 2;
           if (e.deltaY > 0) {
-            if (internalStep < 6) { setInternalStep(prev => prev + 1); return; }
+            if (internalStep < maxSteps) { setInternalStep(prev => prev + 1); return; }
           } else {
             if (internalStep > 0) { setInternalStep(prev => prev - 1); return; }
           }
@@ -432,7 +436,7 @@ const App: React.FC = () => {
 
       if (activeSection.id === 'mission' && !isCompleted) if (handleStep(2)) return;
       if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
-      if (activeSection.id === 'investment' && !isCompleted) if (handleStep(6)) return;
+      if (activeSection.id === 'investment' && !isCompleted) if (handleStep((proposalData?.investment?.tableHeaders?.length || 3) * 2)) return;
       if (activeSection.id === 'payment' && !isCompleted) if (handleStep(1)) return;
       if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(getSpecialOffersSteps(proposalData?.specialOffers, proposalData?.premiumServicesList?.[1]))) return;
       if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(1)) return;
@@ -464,7 +468,7 @@ const App: React.FC = () => {
 
       if (activeSection.id === 'mission' && !isCompleted && tryStep(2)) return;
       if (activeSection.id === 'process' && !isCompleted && tryStep(proposalData?.process?.steps?.length || 8)) return;
-      if (activeSection.id === 'investment' && !isCompleted && tryStep(6)) return;
+      if (activeSection.id === 'investment' && !isCompleted && tryStep((proposalData?.investment?.tableHeaders?.length || 3) * 2)) return;
       if (activeSection.id === 'payment' && !isCompleted && tryStep(1)) return;
       if (activeSection.id === 'special-offers' && !isCompleted && tryStep(getSpecialOffersSteps(proposalData?.specialOffers, proposalData?.premiumServicesList?.[1]))) return;
       if (activeSection.id === 'divider-slide' && !isCompleted && tryStep(1)) return;

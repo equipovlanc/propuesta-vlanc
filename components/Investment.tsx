@@ -35,6 +35,8 @@ const CheckIcon = () => (
 
 const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = false }) => {
 
+    const numPlans = data?.tableHeaders?.length || 3;
+
     const getRowBg = (color?: string) => {
         if (color === 'light') return 'bg-[#eae0d5]';
         if (color === 'medium') return 'bg-[#dccbc1]';
@@ -103,43 +105,38 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                 </div>
 
                 {/* COLUMNA DERECHA: Tabla Interactiva */}
-                <div className="shrink-0 flex flex-col items-end">
+                <div className="shrink-0 flex flex-col items-end justify-end h-full">
                     <AnimatedSection
-                        className="w-[820px] h-[532px] flex flex-col relative rounded-sm overflow-hidden"
+                        className="w-[820px] flex flex-col relative rounded-sm overflow-hidden"
                         hierarchy={2}
                     >
 
                         {/* CAPAS DE RESALTADO (Highlight Columns) */}
                         {/* Grid Layer absoluta detrás del contenido */}
-                        <div className="absolute inset-0 grid grid-cols-[2.5fr_1fr_1fr_1fr] h-full pointer-events-none z-0">
-                            {/* Columna Plan 1 */}
-                            <motion.div
-                                className="col-start-2 row-span-full bg-vlanc-primary/5"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 1 ? 1 : 0 }} // Solo resaltada cuando es el paso activo
-                                transition={{ duration: 0.5 }}
-                            />
-                            {/* Columna Plan 2 */}
-                            <motion.div
-                                className="col-start-3 row-span-full bg-vlanc-primary/5"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 2 ? 1 : 0 }}
-                                transition={{ duration: 0.5 }}
-                            />
-                            {/* Columna Plan 3 */}
-                            <motion.div
-                                className="col-start-4 row-span-full bg-vlanc-primary/5"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: step === 3 ? 1 : 0 }}
-                                transition={{ duration: 0.5 }}
-                            />
+                        <div 
+                            className="absolute inset-0 grid h-full pointer-events-none z-0"
+                            style={{ gridTemplateColumns: `2.5fr repeat(${numPlans}, 1fr)` }}
+                        >
+                            {Array.from({ length: numPlans }).map((_, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="row-span-full bg-vlanc-primary/5"
+                                    style={{ gridColumnStart: i + 2 }}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: step === i + 1 ? 1 : 0 }} // Solo resaltada cuando es el paso activo
+                                    transition={{ duration: 0.5 }}
+                                />
+                            ))}
                         </div>
 
                         {/* CONTENIDO TABLA (z-10) */}
                         <div className="relative z-10 w-full h-full flex flex-col">
 
                             {/* Cabecera Tabla */}
-                            <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] bg-[#cbb6aa] shrink-0 h-[47px]">
+                            <div 
+                                className="grid bg-[#cbb6aa] shrink-0 h-[47px]"
+                                style={{ gridTemplateColumns: `2.5fr repeat(${numPlans}, 1fr)` }}
+                            >
                                 <div className="p-3"></div>
                                 {(data?.tableHeaders ?? []).map((h, i) => (
                                     <motion.div
@@ -158,12 +155,12 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                             {/* Cuerpo Tabla */}
                             <div className="flex-grow flex flex-col bg-transparent">
                                 {(data?.tableRows ?? []).map((row, i) => {
-                                    const gridClass = "grid grid-cols-[2.5fr_1fr_1fr_1fr] items-center";
+                                    const gridClass = "grid items-center";
 
                                     if (row.isPremiumSeparator) {
                                         return (
-                                            <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10 print:border-b-2 print:border-[#8f4933]/30`}>
-                                                <div className="px-4 text-right pr-4 col-span-4 h-full flex items-center justify-end">
+                                            <div key={i} className={`${gridClass} h-[31px] shrink-0 bg-[#e6ded6] border-b border-vlanc-primary/10 print:border-b-2 print:border-[#8f4933]/30`} style={{ gridTemplateColumns: `2.5fr repeat(${numPlans}, 1fr)` }}>
+                                                <div className="px-4 text-right pr-4 col-span-full h-full flex items-center justify-end">
                                                     <span className="tabla2 italic font-bold">SERVICIOS PREMIUM</span>
                                                 </div>
                                             </div>
@@ -171,7 +168,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                     }
 
                                     return (
-                                        <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`}>
+                                        <div key={i} className={`flex-grow ${gridClass} ${getRowBg(row.highlightColor)}`} style={{ gridTemplateColumns: `2.5fr repeat(${numPlans}, 1fr)` }}>
                                             <div className="px-4 leading-tight py-1">
                                                 <span className="tabla2" dangerouslySetInnerHTML={{ __html: row.label }} />
                                             </div>
@@ -192,14 +189,17 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                             </div>
 
                             {/* Pie Tabla: Precios */}
-                            <div className="grid grid-cols-[2.5fr_1fr_1fr_1fr] bg-[#8f4933] text-white shrink-0 h-[35px]">
+                            <div 
+                                className="grid bg-[#8f4933] text-white shrink-0 h-[35px]"
+                                style={{ gridTemplateColumns: `2.5fr repeat(${numPlans}, 1fr)` }}
+                            >
                                 <div className="p-4"></div>
                                 {(data?.prices ?? []).map((price, i) => (
                                     <motion.div
                                         key={i}
                                         className="px-4 text-center flex flex-col justify-center h-full print-force-visible"
                                         initial={isPrintMode ? { opacity: 1 } : { opacity: 0 }}
-                                        animate={{ opacity: (step >= i + 4 || isPrintMode) ? 1 : 0 }}
+                                        animate={{ opacity: (step >= i + numPlans + 1 || isPrintMode) ? 1 : 0 }}
                                         transition={{ duration: 0.5, delay: 0.1 }}
                                     >
                                         <span className="tabla3 whitespace-nowrap">{price}</span>
