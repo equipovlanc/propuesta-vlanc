@@ -105,11 +105,12 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                 </div>
 
                 {/* COLUMNA DERECHA: Tabla Interactiva */}
-                <div className="shrink-0 flex flex-col items-end self-end">
-                    <AnimatedSection
-                        className="w-[820px] flex flex-col relative rounded-sm overflow-hidden"
-                        hierarchy={2}
-                    >
+                <div className="shrink-0 flex flex-col relative w-[820px] h-full">
+                    <div className="absolute bottom-0 right-0 flex flex-col w-full min-h-full">
+                        <AnimatedSection
+                            className="w-full flex-1 flex flex-col relative rounded-sm overflow-hidden"
+                            hierarchy={2}
+                        >
 
                         {/* CAPAS DE RESALTADO (Highlight Columns) */}
                         {/* Grid Layer absoluta detrás del contenido */}
@@ -211,12 +212,13 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                     </AnimatedSection>
 
                     {/* FIRMA */}
-                    <AnimatedSection className="w-[820px] flex flex-col border-t border-[#703622] mt-[25px] pt-1 print-force-visible print:border-t-2 print:!border-[#703622]" hierarchy={2}>
+                    <AnimatedSection className="w-full flex flex-col border-t border-[#703622] mt-[25px] pt-1 print-force-visible print:border-t-2 print:!border-[#703622]" hierarchy={2}>
                         <div className="flex justify-between items-start">
                             <span className="tabla1">VIVE VLANC SL</span>
                             <span className="tabla1 text-right">ACEPTA PRESUPUESTO_FIRMA</span>
                         </div>
                     </AnimatedSection>
+                    </div>
                 </div>
             </div>
 
