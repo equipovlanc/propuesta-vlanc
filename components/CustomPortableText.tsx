@@ -51,6 +51,10 @@ const CustomPortableText: React.FC<CustomPortableTextProps> = ({
                         block: {
                             normal: ({ children }: any) => {
                                 const Tag = isInline ? 'span' : 'p';
+                                const isEmpty = !children || (Array.isArray(children) && children.length === 1 && (children[0] === '' || children[0] === '\n'));
+                                if (isEmpty) {
+                                    return <br />;
+                                }
                                 return (
                                     <Tag className={`mb-0 min-h-[1.4em] ${paragraphClassName || className}`}>
                                         {children}
