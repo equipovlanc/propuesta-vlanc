@@ -111,7 +111,7 @@ const Team: React.FC<TeamProps> = ({ data }) => {
                         </h3>
                         <CustomPortableText 
                             value={data?.history?.description} 
-                            className="cuerpo2 space-y-4 text-left [&>p:last-child]:mb-0" 
+                            className="cuerpo2 text-left" 
                         />
                     </AnimatedSection>
                 </div>
