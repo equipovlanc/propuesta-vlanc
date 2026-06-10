@@ -92,7 +92,7 @@ const App: React.FC = () => {
           "team": team{..., "members": members[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}}},
           "testimonials": testimonials{..., "items": items[]{..., "img": {"src": img.asset->url, "opacity": img.overlayOpacity}}},
           "scopeIntro": scopeIntro{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
-          "scopePhases": scopePhases.phases[] {..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
+          "scopePhases": scopePhases{..., phases[]{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url}},
           "specialOffers": specialOffers{
             ..., 
             conditionalOffer,
@@ -104,7 +104,7 @@ const App: React.FC = () => {
           "payment": payment{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "dividerSlide": dividerSlide{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
           "guarantees": guarantees{..., "items": items[]{..., isActive, "icon": icon.asset->url}},
-          "premiumServicesList": premiumServices.services[]{..., extraNote, showExtraNote, "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
+          "premiumServices": premiumServices{..., services[]{..., extraNote, showExtraNote, "image": {"src": image.asset->url, "opacity": image.overlayOpacity}}},
           "contact": contact{
             ..., 
             "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, 
@@ -191,7 +191,8 @@ const App: React.FC = () => {
         else setInternalStep(isMovingForward ? 0 : 1);
       }
       else if (nextSection.id === 'special-offers') {
-        const maxSteps = getSpecialOffersSteps(proposalData?.specialOffers, proposalData?.premiumServicesList?.[1]);
+        const premiumServices = proposalData?.premiumServices?.services;
+        const maxSteps = getSpecialOffersSteps(proposalData?.specialOffers, premiumServices?.[1]);
         if (completedSections.has('special-offers')) setInternalStep(maxSteps);
         else setInternalStep(isMovingForward ? 0 : maxSteps);
       }
@@ -242,9 +243,13 @@ const App: React.FC = () => {
     let currentHeaderPage = 3;
 
     // 2: Situation
-    list.push({ id: 'situation', comp: <Situation data={d.situation} />, headerPage: currentHeaderPage++ });
+    if (d.situation?.isActive !== false) {
+      list.push({ id: 'situation', comp: <Situation data={d.situation} />, headerPage: currentHeaderPage++ });
+    }
     // 3: Mission
-    list.push({ id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: currentHeaderPage++ });
+    if (d.mission?.isActive !== false) {
+      list.push({ id: 'mission', comp: <Mission data={d.mission} step={internalStep} />, headerPage: currentHeaderPage++ });
+    }
     
     // 4: Process (Condicional)
     if (d.process?.isActive !== false) {
@@ -252,11 +257,17 @@ const App: React.FC = () => {
     }
 
     // 5: Team
-    list.push({ id: 'team', comp: <Team data={d.team} />, headerPage: currentHeaderPage++ });
+    if (d.team?.isActive !== false) {
+      list.push({ id: 'team', comp: <Team data={d.team} />, headerPage: currentHeaderPage++ });
+    }
     // 6: Testimonials
-    list.push({ id: 'testimonials', comp: <Testimonials data={d.testimonials} />, headerPage: currentHeaderPage++ });
+    if (d.testimonials?.isActive !== false) {
+      list.push({ id: 'testimonials', comp: <Testimonials data={d.testimonials} />, headerPage: currentHeaderPage++ });
+    }
     // 7: Scope Intro
-    list.push({ id: 'scope', comp: <Scope data={d.scopeIntro} />, headerPage: currentHeaderPage++ });
+    if (d.scopeIntro?.isActive !== false) {
+      list.push({ id: 'scope', comp: <Scope data={d.scopeIntro} />, headerPage: currentHeaderPage++ });
+    }
 
     // Phases
     (d.scopePhases || []).forEach((phase: any, i: number) => {
@@ -278,67 +289,70 @@ const App: React.FC = () => {
               if (add.guaranteeText) {
                   let addGuarantee = d.guarantees?.items?.[i + 1];
                   if (add.selectedGuarantee !== undefined && add.selectedGuarantee !== null) {
-                      const idx = Number(add.selectedGuarantee) - 1;
-                      if (idx >= 0 && d.guarantees?.items?.[idx]) addGuarantee = d.guarantees.items[idx];
-                  }
-                  if (addGuarantee) guaranteesList.push({ text: add.guaranteeText, item: addGuarantee });
-              }
-          });
-      }
-
-      list.push({
-        id: `phase-${i + 1}`,
-        comp: <ScopePhases data={phase} guaranteeItem={phaseGuarantee} guaranteesList={guaranteesList} />,
-        headerPage: currentHeaderPage++
+    if (d.scopePhases?.isActive !== false) {
+      (d.scopePhases?.phases || []).forEach((phase: any, i: number) => {
+        list.push({
+          id: `phase-${i + 1}`,
+          comp: <ScopePhases data={phase} guaranteeItem={d.guarantees?.items?.[i + 1]} />,
+          headerPage: currentHeaderPage++
+        });
       });
-    });
+    }
 
-    list.push(
-      { id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: currentHeaderPage++ },
-      {
+    if (d.investment?.isActive !== false) {
+      list.push({ id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: currentHeaderPage++ });
+    }
+
+    if (d.specialOffers?.isActive !== false) {
+      list.push({
         id: 'special-offers',
         comp: <SpecialOffers
           data={d.specialOffers}
           investmentTitle={d.investment?.title}
           locationDate={d.investment?.locationDate}
-          premiumService={d.premiumServicesList?.[1]}
+          premiumService={d.premiumServices?.services?.[1]}
           step={internalStep}
           setNavigationBlocked={setNavigationBlocked}
           isSectionCompleted={completedSections.has('special-offers')}
         />,
         headerPage: currentHeaderPage++
-      },
-      { id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: currentHeaderPage++ }
-    );
+      });
+    }
+
+    if (d.payment?.isActive !== false) {
+      list.push({ id: 'payment', comp: <Payment data={d.payment} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} step={internalStep} />, headerPage: currentHeaderPage++ });
+    }
 
     // Letra Pequeña Dinámica
     const { totalPages, fontSize: fpFontSize } = finePrintData;
     
-    // Solo mostramos si hay datos, y si se han calculado las páginas (totalPages > 0)
-    if (totalPages > 0) {
-      for (let idx = 0; idx < totalPages; idx++) {
-        list.push({
-          id: idx === 0 ? 'fine-print' : `fine-print-${idx}`,
-          comp: (
-            <FinePrint 
-              data={d.payment?.finePrint} 
-              pageIndex={idx} 
-              totalPages={totalPages}
-              fontSize={fpFontSize}
-              investmentTitle={d.investment?.title} 
-              locationDate={d.investment?.locationDate} 
-            />
-          ),
-          headerPage: currentHeaderPage++
+    // Solo mostramos si hay datos, y si se han calculado las páginas (totalPages > 0), y si la sección entera no está desactivada, y si el fineprint en sí está activo.
+    if (d.payment?.isActive !== false && d.payment?.finePrint?.isActive !== false) {
+      if (totalPages > 0) {
+        for (let idx = 0; idx < totalPages; idx++) {
+          list.push({
+            id: idx === 0 ? 'fine-print' : `fine-print-${idx}`,
+            comp: (
+              <FinePrint 
+                data={d.payment?.finePrint} 
+                pageIndex={idx} 
+                totalPages={totalPages}
+                fontSize={fpFontSize}
+                investmentTitle={d.investment?.title} 
+                locationDate={d.investment?.locationDate} 
+              />
+            ),
+            headerPage: currentHeaderPage++
+          });
+        }
+      } else if (proposalData && finePrintData.totalPages === 0) {
+        // Fallback mientras se calcula (loading state visual silencioso) o si no hay letrapequeña
+        list.push({ 
+          id: 'fine-print', 
+          comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, 
+          headerPage: currentHeaderPage++ 
         });
       }
-    } else if (proposalData && finePrintData.totalPages === 0) {
-      // Fallback mientras se calcula (loading state visual silencioso) o si no hay letrapequeña
-      list.push({ 
-        id: 'fine-print', 
-        comp: <FinePrint data={d.payment?.finePrint} investmentTitle={d.investment?.title} locationDate={d.investment?.locationDate} />, 
-        headerPage: currentHeaderPage++ 
-      });
     }
 
     // El resto de secciones siguen tras la letra pequeña
@@ -346,8 +360,8 @@ const App: React.FC = () => {
     // Mantendremos el divider como una página sin header explícito pero que cuenta.
     const dividerHeaderPage = currentHeaderPage++; 
 
-    list.push(
-      {
+    if (d.dividerSlide?.isActive !== false) {
+      list.push({
         id: 'divider-slide',
         comp: <DividerSlide
           data={d.dividerSlide}
@@ -355,18 +369,22 @@ const App: React.FC = () => {
           isSectionCompleted={completedSections.has('divider-slide')}
           setNavigationBlocked={setNavigationBlocked}
         />
-        // Sin headerPage para que no aparezca el Header
-      },
-      { id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: currentHeaderPage++ }
-    );
-
-    (d.premiumServicesList || []).forEach((service: any, i: number) => {
-      list.push({
-        id: `premium-${i + 1}`,
-        comp: <PremiumServices data={service} image={service.image} index={i} />,
-        headerPage: currentHeaderPage + i
       });
-    });
+    }
+
+    if (d.guarantees?.isActive !== false) {
+      list.push({ id: 'guarantees', comp: <Guarantees data={d.guarantees} />, headerPage: currentHeaderPage++ });
+    }
+
+    if (d.premiumServices?.isActive !== false) {
+      (d.premiumServices?.services || []).forEach((service: any, i: number) => {
+        list.push({
+          id: `premium-${i + 1}`,
+          comp: <PremiumServices data={service} image={service.image} index={i} />,
+          headerPage: currentHeaderPage + i
+        });
+      });
+    }
 
     list.push({ id: 'contact', comp: <Contact data={d.contact} finalLogo={d.logos?.finalLogo} finalLogoVideo={d.logos?.finalLogoVideo} onPrint={handleManualPrint} isSectionCompleted={completedSections.has('contact')} onNavigate={(id) => navigateToId(id)} /> });
 
@@ -426,7 +444,8 @@ const App: React.FC = () => {
         }
 
         if (activeSection.id === 'special-offers' && !isCompleted) {
-          const maxSteps = getSpecialOffersSteps(proposalData?.specialOffers, proposalData?.premiumServicesList?.[1]);
+          const premiumServices = proposalData?.premiumServices?.services;
+          const maxSteps = getSpecialOffersSteps(proposalData?.specialOffers, premiumServices?.[1]);
           if (e.deltaY > 0) {
             if (internalStep < maxSteps) { setInternalStep(prev => prev + 1); return; }
           } else {
@@ -470,7 +489,10 @@ const App: React.FC = () => {
       if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
       if (activeSection.id === 'investment' && !isCompleted) if (handleStep((proposalData?.investment?.tableHeaders?.length || 3) * 2)) return;
       if (activeSection.id === 'payment' && !isCompleted) if (handleStep(1)) return;
-      if (activeSection.id === 'special-offers' && !isCompleted) if (handleStep(getSpecialOffersSteps(proposalData?.specialOffers, proposalData?.premiumServicesList?.[1]))) return;
+      if (activeSection.id === 'special-offers' && !isCompleted) {
+        const premiumServices = proposalData?.premiumServices?.services;
+        if (handleStep(getSpecialOffersSteps(proposalData?.specialOffers, premiumServices?.[1]))) return;
+      }
       if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(1)) return;
 
 
@@ -502,7 +524,10 @@ const App: React.FC = () => {
       if (activeSection.id === 'process' && !isCompleted && tryStep(proposalData?.process?.steps?.length || 8)) return;
       if (activeSection.id === 'investment' && !isCompleted && tryStep((proposalData?.investment?.tableHeaders?.length || 3) * 2)) return;
       if (activeSection.id === 'payment' && !isCompleted && tryStep(1)) return;
-      if (activeSection.id === 'special-offers' && !isCompleted && tryStep(getSpecialOffersSteps(proposalData?.specialOffers, proposalData?.premiumServicesList?.[1]))) return;
+      if (activeSection.id === 'special-offers' && !isCompleted) {
+        const premiumServices = proposalData?.premiumServices?.services;
+        if (tryStep(getSpecialOffersSteps(proposalData?.specialOffers, premiumServices?.[1]))) return;
+      }
       if (activeSection.id === 'divider-slide' && !isCompleted && tryStep(1)) return;
 
       if (deltaY > 0) navigate(currentIndex + 1);

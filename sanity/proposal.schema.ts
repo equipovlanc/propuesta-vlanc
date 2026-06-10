@@ -94,6 +94,13 @@ export default defineType({
             title: 'La Situación',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'paragraphs', type: 'array', of: [{ type: 'block' }] }),
                 defineField({
@@ -108,6 +115,13 @@ export default defineType({
             title: 'Misión y Objetivos',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'video', title: 'Video Misión (Opcional)', type: 'file' }),
                 defineField({
                     name: 'image',
@@ -167,6 +181,13 @@ export default defineType({
             title: 'Equipo',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'purpose', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
                 defineField({ name: 'history', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
@@ -191,6 +212,13 @@ export default defineType({
             title: 'Testimonios',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'title', type: 'string' }),
                 defineField({
                     name: 'items', type: 'array', of: [{
@@ -215,6 +243,13 @@ export default defineType({
             title: 'Ámbito de Intervención',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'video', title: 'Video Ámbito (Opcional)', type: 'file' }),
                 defineField({
@@ -241,6 +276,13 @@ export default defineType({
             title: 'Trabajos Contemplados',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({
                     name: 'phases', type: 'array', of: [{
                         type: 'object',
@@ -311,6 +353,13 @@ export default defineType({
             title: 'Inversión',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'title', type: 'string' }),
                 defineField({ name: 'introduction', title: 'Introducción Parte 1', type: 'array', of: [{ type: 'block' }] }),
                 defineField({ name: 'highlightPhrase', title: 'Frase Destacada (Negrita/Negro)', type: 'array', of: [{ type: 'block' }] }),
@@ -341,10 +390,23 @@ export default defineType({
             title: 'Ofertas Especiales',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'title', title: 'Título Sección', type: 'string' }),
                 defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón)', type: 'array', of: [{ type: 'block' }] }),
                 defineField({
                     name: 'conditionalOffer', type: 'object', fields: [
+                        defineField({
+                            name: 'isActive',
+                            title: '¿Mostrar Condición Especial?',
+                            type: 'boolean',
+                            initialValue: true
+                        }),
                         { name: 'title', type: 'string' },
                         { name: 'description', type: 'array', of: [{ type: 'block' }] },
                         { name: 'discountedPlans', type: 'array', of: [{ type: 'object', fields: [{ name: 'name', type: 'string' }, { name: 'originalPrice', type: 'string' }, { name: 'discountedPrice', type: 'string' }] }] }
@@ -352,6 +414,12 @@ export default defineType({
                 }),
                 defineField({
                     name: 'launchOffer', type: 'object', fields: [
+                        defineField({
+                            name: 'isActive',
+                            title: '¿Mostrar Oferta Lanzamiento?',
+                            type: 'boolean',
+                            initialValue: true
+                        }),
                         { name: 'title', type: 'string' },
                         { name: 'description', type: 'array', of: [{ type: 'block' }] },
                         { name: 'premiumServiceName', type: 'string' },
@@ -377,6 +445,13 @@ export default defineType({
             title: 'Formas de Pago',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'title', type: 'string' }),
                 defineField({
                     name: 'image',
@@ -400,6 +475,13 @@ export default defineType({
                 }),
                 defineField({
                     name: 'finePrint', type: 'object', fields: [
+                        defineField({
+                            name: 'isActive',
+                            title: '¿Mostrar Letra Pequeña?',
+                            type: 'boolean',
+                            initialValue: true,
+                            description: 'Si se desactiva, no se generarán las páginas de letra pequeña.'
+                        }),
                         defineField({ name: 'title', type: 'string' }),
                         defineField({
                             name: 'content',
@@ -418,6 +500,13 @@ export default defineType({
             title: 'Diapositiva Divisoria (Equipo)',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({
                     name: 'text',
                     title: 'Texto Principal',
@@ -443,6 +532,13 @@ export default defineType({
             title: 'Garantías',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({ name: 'title', type: 'string' }),
                 defineField({
                     name: 'items', type: 'array', of: [{
@@ -476,6 +572,13 @@ export default defineType({
             title: 'Servicios Premium',
             type: 'object',
             fields: [
+                defineField({
+                    name: 'isActive',
+                    title: '¿Está Activa?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, esta sección no aparecerá en la web.'
+                }),
                 defineField({
                     name: 'services', type: 'array', of: [{
                         type: 'object',

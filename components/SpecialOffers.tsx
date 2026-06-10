@@ -31,11 +31,13 @@ interface SpecialOffersProps {
         title?: string;
         offerFooterText?: string;
         conditionalOffer?: {
+            isActive?: boolean;
             title?: string;
             description?: string;
             discountedPlans?: DiscountedPlan[];
         };
         launchOffer?: {
+            isActive?: boolean;
             title?: string;
             description?: string;
             premiumServiceName?: string;
@@ -121,8 +123,8 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     const imageOpacity = data?.callToAction?.image?.opacity ?? 15;
     const hasCtaText = data?.callToAction?.text && data.callToAction.text.trim().length > 0;
 
-    const hasConditionalOffer = Boolean(data?.conditionalOffer?.title || data?.conditionalOffer?.description || plans.length > 0);
-    const hasLaunchOffer = Boolean(data?.launchOffer?.title || data?.launchOffer?.description || data?.offerFooterText || (data?.launchOffer?.premiumServiceName && data.launchOffer.premiumServiceName.trim().length > 0));
+    const hasConditionalOffer = data?.conditionalOffer?.isActive !== false && Boolean(data?.conditionalOffer?.title || data?.conditionalOffer?.description || plans.length > 0);
+    const hasLaunchOffer = data?.launchOffer?.isActive !== false && Boolean(data?.launchOffer?.title || data?.launchOffer?.description || data?.offerFooterText || (data?.launchOffer?.premiumServiceName && data.launchOffer.premiumServiceName.trim().length > 0));
     const hasLogo = Boolean(data?.overlayLogo);
 
     const thingsToReveal = [
