@@ -122,22 +122,22 @@ export default defineType({
                     initialValue: true,
                     description: 'Si se desactiva, esta sección no aparecerá en la web.'
                 }),
-                defineField({ name: 'video', title: 'Video Misión (Opcional)', type: 'file' }),
+                defineField({ name: 'video', title: '1. Video Misión (Mitad Izquierda)', type: 'file' }),
                 defineField({
                     name: 'image',
-                    title: 'Imagen Misión (Fallback)',
+                    title: '2. Imagen Misión (Fallback Mitad Izquierda)',
                     type: 'image',
                     fields: [overlayField]
                 }),
                 defineField({
-                    name: 'mission', type: 'object', fields: [
+                    name: 'mission', title: '3. Bloque Misión (Mitad Derecha - Arriba)', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'subtitle', type: 'string' }),
                         defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] }),
                     ]
                 }),
                 defineField({
-                    name: 'achievements', type: 'object', fields: [
+                    name: 'achievements', title: '4. Bloque Logros (Mitad Derecha - Abajo)', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'description', title: 'Descripción', type: 'array', of: [{ type: 'block' }] }),
                     ]
@@ -156,23 +156,23 @@ export default defineType({
                     initialValue: true,
                     description: 'Si se desactiva, la sección del proceso no aparecerá en la web y las páginas se ajustarán.'
                 }),
-                defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'badge', title: 'Texto Garantía/Badge (Paso 3)', type: 'string' }),
+                defineField({ name: 'title', title: '1. Título General', type: 'string' }),
                 defineField({
-                    name: 'step5Phrase',
-                    title: 'Frase Destacada Paso 5',
-                    type: 'string',
-                    initialValue: 'Tu interés es el nuestro',
-                    description: 'Frase que aparece resaltada en el quinto paso del proceso.'
-                }),
-                defineField({
-                    name: 'steps', type: 'array', of: [{
+                    name: 'steps', title: '2. Pasos del Proceso (1 al 8)', type: 'array', of: [{
                         type: 'object',
                         fields: [
                             defineField({ name: 'title', type: 'string' }),
                             defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] }),
                         ]
                     }]
+                }),
+                defineField({ name: 'badge', title: '3. Texto Garantía/Badge (Aparece bajo Paso 3)', type: 'string' }),
+                defineField({
+                    name: 'step5Phrase',
+                    title: '4. Frase Destacada Paso 5',
+                    type: 'string',
+                    initialValue: 'Tu interés es el nuestro',
+                    description: 'Frase que aparece resaltada en el quinto paso del proceso.'
                 }),
             ]
         }),
@@ -188,11 +188,11 @@ export default defineType({
                     initialValue: true,
                     description: 'Si se desactiva, esta sección no aparecerá en la web.'
                 }),
-                defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'purpose', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
-                defineField({ name: 'history', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
+                defineField({ name: 'title', title: '1. Título General', type: 'string' }),
+                defineField({ name: 'purpose', title: '2. Propósito (Mitad Izquierda)', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
+                defineField({ name: 'history', title: '3. Historia (Mitad Derecha)', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
                 defineField({
-                    name: 'members', type: 'array', of: [{
+                    name: 'members', title: '4. Miembros (Carrusel Inferior)', type: 'array', of: [{
                         type: 'object',
                         fields: [
                             defineField({ name: 'name', type: 'string' }),
@@ -360,19 +360,18 @@ export default defineType({
                     initialValue: true,
                     description: 'Si se desactiva, esta sección no aparecerá en la web.'
                 }),
-                defineField({ name: 'title', type: 'string' }),
-                defineField({ name: 'introduction', title: 'Introducción Parte 1', type: 'array', of: [{ type: 'block' }] }),
-                defineField({ name: 'highlightPhrase', title: 'Frase Destacada (Negrita/Negro)', type: 'array', of: [{ type: 'block' }] }),
-                defineField({ name: 'introduction2', title: 'Introducción Parte 2', type: 'array', of: [{ type: 'block' }] }),
-                defineField({ name: 'locationDate', title: 'Lugar y Fecha (Pie de tabla)', type: 'string' }),
+                defineField({ name: 'title', title: '1. Título General', type: 'string' }),
+                defineField({ name: 'introduction', title: '2. Introducción Parte 1', type: 'array', of: [{ type: 'block' }] }),
+                defineField({ name: 'highlightPhrase', title: '3. Frase Destacada (Centro, Negrita)', type: 'array', of: [{ type: 'block' }] }),
+                defineField({ name: 'introduction2', title: '4. Introducción Parte 2', type: 'array', of: [{ type: 'block' }] }),
                 defineField({
-                    name: 'plansDescription', type: 'array', of: [{
+                    name: 'plansDescription', title: '5. Tarjetas Descriptivas de Planes (Aparecen sobre la tabla)', type: 'array', of: [{
                         type: 'object', fields: [{ name: 'name', type: 'string' }, { name: 'desc', type: 'array', of: [{ type: 'block' }] }]
                     }]
                 }),
-                defineField({ name: 'tableHeaders', title: 'Nombres de Planes (Cabecera)', type: 'array', of: [{ type: 'string' }] }),
+                defineField({ name: 'tableHeaders', title: '6. Nombres de Planes (Cabecera de Tabla)', type: 'array', of: [{ type: 'string' }] }),
                 defineField({
-                    name: 'tableRows', title: 'Filas de la Tabla', type: 'array', of: [{
+                    name: 'tableRows', title: '7. Filas de Características (Cuerpo de Tabla)', type: 'array', of: [{
                         type: 'object',
                         fields: [
                             defineField({ name: 'label', type: 'string' }),
@@ -382,7 +381,8 @@ export default defineType({
                         ]
                     }]
                 }),
-                defineField({ name: 'prices', title: 'Precios (Pie de tabla)', type: 'array', of: [{ type: 'string' }] })
+                defineField({ name: 'prices', title: '8. Precios (Pie de tabla)', type: 'array', of: [{ type: 'string' }] }),
+                defineField({ name: 'locationDate', title: '9. Lugar y Fecha (Pie de tabla y Ofertas Especiales)', type: 'string' })
             ]
         }),
         defineField({
@@ -398,9 +398,10 @@ export default defineType({
                     description: 'Si se desactiva, esta sección no aparecerá en la web.'
                 }),
                 defineField({ name: 'title', title: 'Título Sección', type: 'string' }),
-                defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón)', type: 'array', of: [{ type: 'block' }] }),
+                
+                // --- LADO IZQUIERDO ---
                 defineField({
-                    name: 'conditionalOffer', type: 'object', fields: [
+                    name: 'conditionalOffer', title: '1. Condiciones Especiales', type: 'object', fields: [
                         defineField({
                             name: 'isActive',
                             title: '¿Mostrar Condición Especial?',
@@ -413,7 +414,7 @@ export default defineType({
                     ]
                 }),
                 defineField({
-                    name: 'launchOffer', type: 'object', fields: [
+                    name: 'launchOffer', title: '2. Oferta de Lanzamiento', type: 'object', fields: [
                         defineField({
                             name: 'isActive',
                             title: '¿Mostrar Oferta Lanzamiento?',
@@ -426,8 +427,11 @@ export default defineType({
                         { name: 'premiumServiceValue', type: 'string' }
                     ]
                 }),
+                defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón de Lanzamiento)', type: 'array', of: [{ type: 'block' }] }),
+                
+                // --- LADO DERECHO ---
                 defineField({
-                    name: 'callToAction', type: 'object', fields: [
+                    name: 'callToAction', title: '3. Llamada a la Acción (Imagen y Texto)', type: 'object', fields: [
                         { name: 'text', type: 'string' },
                         defineField({
                             name: 'image',
@@ -436,8 +440,8 @@ export default defineType({
                         })
                     ]
                 }),
-                defineField({ name: 'popupVideo', title: 'Video Pop-up (Paso 3)', type: 'file' }),
-                defineField({ name: 'overlayLogo', title: 'Logo sobre Imagen (Paso 4)', type: 'image' })
+                defineField({ name: 'overlayLogo', title: '4. Logo Gigante sobre Imagen (Paso Final)', type: 'image' }),
+                defineField({ name: 'popupVideo', title: 'Video Pop-up (Paso Opcional)', type: 'file' })
             ]
         }),
         defineField({
@@ -452,29 +456,15 @@ export default defineType({
                     initialValue: true,
                     description: 'Si se desactiva, esta sección no aparecerá en la web.'
                 }),
-                defineField({ name: 'title', type: 'string' }),
+                defineField({ name: 'title', title: '1. Título General', type: 'string' }),
                 defineField({
-                    name: 'image',
-                    title: 'Imagen Lateral (Ocupará hueco letra pequeña)',
-                    type: 'image',
-                    fields: [
-                        defineField({
-                            name: 'overlayOpacity',
-                            title: 'Opacidad Filtro (%)',
-                            type: 'number',
-                            initialValue: 15,
-                            validation: (Rule) => Rule.min(0).max(100)
-                        })
-                    ]
-                }),
-                defineField({
-                    name: 'paymentMethods', type: 'object', fields: [
+                    name: 'paymentMethods', title: '2. Bloques de Métodos de Pago', type: 'object', fields: [
                         { name: 'title', type: 'string' },
                         { name: 'plans', type: 'array', of: [{ type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'payments', type: 'array', of: [{ type: 'object', fields: [{ name: 'percent', type: 'string' }, { name: 'description', type: 'string' }] }] }] }] }
                     ]
                 }),
                 defineField({
-                    name: 'finePrint', type: 'object', fields: [
+                    name: 'finePrint', title: '3. Letra Pequeña', type: 'object', fields: [
                         defineField({
                             name: 'isActive',
                             title: '¿Mostrar Letra Pequeña?',
@@ -491,6 +481,20 @@ export default defineType({
                             description: 'Bloque de texto para la letra pequeña. Permite negritas y saltos de línea.'
                         }),
                         defineField({ name: 'invoiceInfo', type: 'string' }),
+                    ]
+                }),
+                defineField({
+                    name: 'image',
+                    title: '4. Imagen Lateral (Ocupará hueco Letra Pequeña si hay espacio)',
+                    type: 'image',
+                    fields: [
+                        defineField({
+                            name: 'overlayOpacity',
+                            title: 'Opacidad Filtro (%)',
+                            type: 'number',
+                            initialValue: 15,
+                            validation: (Rule) => Rule.min(0).max(100)
+                        })
                     ]
                 })
             ]
