@@ -122,22 +122,22 @@ export default defineType({
                     initialValue: true,
                     description: 'Si se desactiva, esta sección no aparecerá en la web.'
                 }),
-                defineField({ name: 'video', title: '1. Video Misión (Mitad Izquierda)', type: 'file' }),
+                defineField({ name: 'video', title: '1. Video Misión', type: 'file' }),
                 defineField({
                     name: 'image',
-                    title: '2. Imagen Misión (Fallback Mitad Izquierda)',
+                    title: '2. Imagen Misión (Fallback)',
                     type: 'image',
                     fields: [overlayField]
                 }),
                 defineField({
-                    name: 'mission', title: '3. Bloque Misión (Mitad Derecha - Arriba)', type: 'object', fields: [
+                    name: 'mission', title: '3. Bloque Misión', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'subtitle', type: 'string' }),
                         defineField({ name: 'description', type: 'array', of: [{ type: 'block' }] }),
                     ]
                 }),
                 defineField({
-                    name: 'achievements', title: '4. Bloque Logros (Mitad Derecha - Abajo)', type: 'object', fields: [
+                    name: 'achievements', title: '4. Bloque Logros', type: 'object', fields: [
                         defineField({ name: 'title', type: 'string' }),
                         defineField({ name: 'description', title: 'Descripción', type: 'array', of: [{ type: 'block' }] }),
                     ]
@@ -189,8 +189,8 @@ export default defineType({
                     description: 'Si se desactiva, esta sección no aparecerá en la web.'
                 }),
                 defineField({ name: 'title', title: '1. Título General', type: 'string' }),
-                defineField({ name: 'purpose', title: '2. Propósito (Mitad Izquierda)', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
-                defineField({ name: 'history', title: '3. Historia (Mitad Derecha)', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
+                defineField({ name: 'purpose', title: '2. Propósito', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
+                defineField({ name: 'history', title: '3. Historia', type: 'object', fields: [{ name: 'title', type: 'string' }, { name: 'description', type: 'array', of: [{ type: 'block' }] }] }),
                 defineField({
                     name: 'members', title: '4. Miembros (Carrusel Inferior)', type: 'array', of: [{
                         type: 'object',
@@ -265,7 +265,6 @@ export default defineType({
                         defineField({ name: 'projectType', type: 'string' }),
                         defineField({ name: 'scope', type: 'array', of: [{ type: 'block' }] }),
                         defineField({ name: 'program', type: 'array', of: [{ type: 'block' }] }),
-                        defineField({ name: 'breakdown', type: 'array', of: [{ type: 'string' }] }),
                         defineField({ name: 'note', type: 'array', of: [{ type: 'block' }] })
                     ]
                 })
@@ -423,16 +422,14 @@ export default defineType({
                         }),
                         { name: 'title', type: 'string' },
                         { name: 'description', type: 'array', of: [{ type: 'block' }] },
-                        { name: 'premiumServiceName', type: 'string' },
-                        { name: 'premiumServiceValue', type: 'string' }
+                        { name: 'premiumServiceName', type: 'string' }
                     ]
                 }),
                 defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón de Lanzamiento)', type: 'array', of: [{ type: 'block' }] }),
                 
                 // --- LADO DERECHO ---
                 defineField({
-                    name: 'callToAction', title: '3. Llamada a la Acción (Imagen y Texto)', type: 'object', fields: [
-                        { name: 'text', type: 'string' },
+                    name: 'callToAction', title: '3. Llamada a la Acción (Imagen)', type: 'object', fields: [
                         defineField({
                             name: 'image',
                             type: 'image',

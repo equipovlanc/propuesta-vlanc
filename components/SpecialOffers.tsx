@@ -121,7 +121,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     const plans = data?.conditionalOffer?.discountedPlans || [];
     const imageSrc = data?.callToAction?.image?.src;
     const imageOpacity = data?.callToAction?.image?.opacity ?? 15;
-    const hasCtaText = data?.callToAction?.text && data.callToAction.text.trim().length > 0;
 
     const hasConditionalOffer = data?.conditionalOffer?.isActive !== false && Boolean(data?.conditionalOffer?.title || data?.conditionalOffer?.description || plans.length > 0);
     const hasLaunchOffer = data?.launchOffer?.isActive !== false && Boolean(data?.launchOffer?.title || data?.launchOffer?.description || data?.offerFooterText || (data?.launchOffer?.premiumServiceName && data.launchOffer.premiumServiceName.trim().length > 0));
@@ -268,11 +267,6 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                     className="absolute inset-0 pointer-events-none transition-colors duration-1000"
                                     style={{ backgroundColor: `rgba(143, 73, 51, ${imageOpacity / 100})` }}
                                 />
-                                {hasCtaText && (
-                                    <div className="absolute bottom-[85px] left-0 w-full flex justify-center z-10 px-8">
-                                        <h2 className="especial1">{data?.callToAction?.text}</h2>
-                                    </div>
-                                )}
                             </div>
                         )}
 
