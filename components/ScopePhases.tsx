@@ -32,11 +32,12 @@ interface ScopePhasesProps {
     data?: Phase;
     mainTitle?: string;
     guaranteeItem?: GuaranteeItem;
+    guaranteesList?: { text: string; item: GuaranteeItem }[];
 }
 
-const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados.", guaranteeItem }) => {
+const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados.", guaranteeItem, guaranteesList = [] }) => {
     const [showVideo, setShowVideo] = useState(false);
-    const [isGuaranteeModalOpen, setIsGuaranteeModalOpen] = useState(false);
+    const [openGuaranteeIndex, setOpenGuaranteeIndex] = useState<number | null>(null);
     const imageSrc = data?.image?.src;
     const imageOpacity = data?.image?.opacity ?? 15;
 
@@ -62,11 +63,12 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
         if (data?.video) setShowVideo(true);
     };
 
-    const openGuaranteeModal = () => setIsGuaranteeModalOpen(true);
-    const closeGuaranteeModal = () => setIsGuaranteeModalOpen(false);
+    const openGuaranteeModal = (index: number) => setOpenGuaranteeIndex(index);
+    const closeGuaranteeModal = () => setOpenGuaranteeIndex(null);
 
-    const hasGuarantee = !!data?.guaranteeText;
-    const hasButtons = hasGuarantee || (data?.videoButtonText && data?.videoButtonText.trim() !== "");
+    const hasGuarantees = guaranteesList.length > 0 || !!data?.guaranteeText;
+    const hasButtons = hasGuarantees || (data?.videoButtonText && data?.videoButtonText.trim() !== "");
+    const activeModalItem = openGuaranteeIndex !== null ? guaranteesList[openGuaranteeIndex]?.item : null;
 
     return (
         <section className="h-screen w-full relative overflow-hidden">
@@ -122,20 +124,23 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
 
                     {hasButtons && (
                         <div className="absolute top-[calc(100%+40px)] left-0 w-full flex items-center gap-6">
-                            {(hasGuarantee && guaranteeItem && guaranteeItem.isActive !== false) && (() => {
-                                const { badge, desc } = getGuaranteeParts(data!.guaranteeText!);
-                                return (
-                                    <button onClick={openGuaranteeModal} className="flex items-center h-[52px] bg-vlanc-primary text-white px-6 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group outline-none active:scale-[0.98] shrink min-w-0">
-                                        <span className="boton1 text-white shrink-0 whitespace-nowrap">{badge}</span>
-                                        {desc && (
-                                            <div className="flex items-center shrink min-w-0 ml-3 overflow-hidden">
-                                                <span className="mr-3 text-[14px] font-serif leading-none opacity-60 shrink-0">/</span>
-                                                <span className="boton2 text-white truncate">{desc}</span>
-                                            </div>
-                                        )}
-                                    </button>
-                                );
-                            })()}
+                            {guaranteesList.map((g, index) => {
+                                if (g.item && g.item.isActive !== false) {
+                                    const { badge, desc } = getGuaranteeParts(g.text);
+                                    return (
+                                        <button key={index} onClick={() => openGuaranteeModal(index)} className="flex items-center h-[52px] bg-vlanc-primary text-white px-6 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group outline-none active:scale-[0.98] shrink min-w-0">
+                                            <span className="boton1 text-white shrink-0 whitespace-nowrap">{badge}</span>
+                                            {desc && (
+                                                <div className="flex items-center shrink min-w-0 ml-3 overflow-hidden">
+                                                    <span className="mr-3 text-[14px] font-serif leading-none opacity-60 shrink-0">/</span>
+                                                    <span className="boton2 text-white truncate">{desc}</span>
+                                                </div>
+                                            )}
+                                        </button>
+                                    );
+                                }
+                                return null;
+                            })}
                             {data?.videoButtonText && (
                                 <button onClick={handleVideoClick} className="ml-auto flex shrink-0 items-center h-[52px] border border-vlanc-primary text-vlanc-primary px-8 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group outline-none active:scale-[0.98] print:hidden">
                                     <span className="boton1 text-vlanc-primary group-hover:text-white">{data.videoButtonText}</span>
@@ -147,35 +152,35 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             </div>
 
             {/* MODAL GARANTÍA */}
-            {isGuaranteeModalOpen && guaranteeItem && (
+            {openGuaranteeIndex !== null && activeModalItem && (
                 <div className="absolute inset-0 z-[100] flex items-center justify-center bg-vlanc-bg/80 backdrop-blur-sm px-10 pointer-events-auto" onClick={closeGuaranteeModal}>
                     <AnimatedSection className="bg-vlanc-bg border border-vlanc-primary/10 shadow-2xl p-12 max-w-[613px] w-full relative" onClick={(e) => e.stopPropagation()} hierarchy={2}>
                         <button onClick={closeGuaranteeModal} className="absolute top-6 right-6 text-vlanc-black hover:text-vlanc-primary transition-colors text-3xl leading-none">&times;</button>
                         <div className="flex flex-col items-start w-full relative">
                             <h3 className="subtitulo2 not-italic mb-6 leading-tight text-vlanc-black">
-                                / <CustomPortableText value={guaranteeItem.title} isInline />
+                                / <CustomPortableText value={activeModalItem.title} isInline />
                             </h3>
                             <CustomPortableText 
-                                value={guaranteeItem.description} 
+                                value={activeModalItem.description} 
                                 className="cuerpo mb-12" 
                             />
-                            {(guaranteeItem.badgeContent && (Array.isArray(guaranteeItem.badgeContent) ? guaranteeItem.badgeContent.length > 0 : typeof guaranteeItem.badgeContent === 'string' ? guaranteeItem.badgeContent.trim().length > 0 : true)) && (
+                            {(activeModalItem.badgeContent && (Array.isArray(activeModalItem.badgeContent) ? activeModalItem.badgeContent.length > 0 : typeof activeModalItem.badgeContent === 'string' ? activeModalItem.badgeContent.trim().length > 0 : true)) && (
                                 <div className="relative ml-6 mb-2">
                                     <div className="absolute -top-7 -left-7 w-[60px] h-[60px] z-10 flex items-center justify-center">
-                                        {guaranteeItem.icon ? <img src={guaranteeItem.icon} alt="Garantía" className="w-full h-full object-contain" /> : <div className="w-[40px] h-[40px] bg-vlanc-bg border border-vlanc-black rounded-full" />}
+                                        {activeModalItem.icon ? <img src={activeModalItem.icon} alt="Garantía" className="w-full h-full object-contain" /> : <div className="w-[40px] h-[40px] bg-vlanc-bg border border-vlanc-black rounded-full" />}
                                     </div>
                                     <div className="border-2 border-vlanc-black bg-transparent px-6 py-6 min-w-[200px] relative z-0">
                                         <CustomPortableText 
-                                            value={guaranteeItem.badgeContent} 
+                                            value={activeModalItem.badgeContent} 
                                             className="cuerpo !text-vlanc-black text-[14px] leading-snug" 
                                             isInline
                                         />
                                     </div>
                                 </div>
                             )}
-                            {guaranteeItem.note && (
+                            {activeModalItem.note && (
                                 <div className="mt-8 border-t border-vlanc-primary/10 pt-4 w-full">
-                                    <p className="text-[10px] text-vlanc-secondary/60 italic">{guaranteeItem.note}</p>
+                                    <p className="text-[10px] text-vlanc-secondary/60 italic">{activeModalItem.note}</p>
                                 </div>
                             )}
                         </div>

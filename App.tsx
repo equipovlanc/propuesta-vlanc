@@ -268,9 +268,27 @@ const App: React.FC = () => {
           }
       }
 
+      const guaranteesList: any[] = [];
+      if (phase.guaranteeText && phaseGuarantee) {
+          guaranteesList.push({ text: phase.guaranteeText, item: phaseGuarantee });
+      }
+
+      if (phase.additionalGuarantees && Array.isArray(phase.additionalGuarantees)) {
+          phase.additionalGuarantees.forEach((add: any) => {
+              if (add.guaranteeText) {
+                  let addGuarantee = d.guarantees?.items?.[i + 1];
+                  if (add.selectedGuarantee !== undefined && add.selectedGuarantee !== null) {
+                      const idx = Number(add.selectedGuarantee) - 1;
+                      if (idx >= 0 && d.guarantees?.items?.[idx]) addGuarantee = d.guarantees.items[idx];
+                  }
+                  if (addGuarantee) guaranteesList.push({ text: add.guaranteeText, item: addGuarantee });
+              }
+          });
+      }
+
       list.push({
         id: `phase-${i + 1}`,
-        comp: <ScopePhases data={phase} guaranteeItem={phaseGuarantee} />,
+        comp: <ScopePhases data={phase} guaranteeItem={phaseGuarantee} guaranteesList={guaranteesList} />,
         headerPage: currentHeaderPage++
       });
     });

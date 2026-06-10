@@ -261,6 +261,37 @@ export default defineType({
                                 description: 'Opcional. Escribe el número de la garantía que quieres que se abra en el popup (1 para la primera, 2 para la segunda, etc.). Si lo dejas vacío, usará la predeterminada.'
                             }),
                             defineField({
+                                name: 'additionalGuarantees',
+                                title: 'Garantías Adicionales',
+                                type: 'array',
+                                description: 'Añade más botones de garantía si esta fase tiene más de una.',
+                                of: [{
+                                    type: 'object',
+                                    fields: [
+                                        defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía', type: 'string' }),
+                                        defineField({ 
+                                            name: 'selectedGuarantee', 
+                                            title: 'Garantía a mostrar (Número)', 
+                                            type: 'number',
+                                            description: 'Número de la garantía que quieres que se abra (1 para la primera, etc.).'
+                                        })
+                                    ],
+                                    preview: {
+                                        select: {
+                                            title: 'guaranteeText',
+                                            subtitle: 'selectedGuarantee'
+                                        },
+                                        prepare(selection) {
+                                            const { title, subtitle } = selection;
+                                            return {
+                                                title: title || 'Sin texto',
+                                                subtitle: subtitle ? `Abre la garantía #${subtitle}` : 'Abre garantía por defecto'
+                                            }
+                                        }
+                                    }
+                                }]
+                            }),
+                            defineField({
                                 name: 'subPhases', type: 'array', of: [{
                                     type: 'object',
                                     fields: [
