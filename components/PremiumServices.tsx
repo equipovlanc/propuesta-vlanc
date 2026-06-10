@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
 import CustomPortableText from './CustomPortableText';
 
@@ -30,6 +30,46 @@ interface PremiumServicesProps {
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 0 }) => {
     const imageSrc = image?.src;
     const imageOpacity = image?.opacity ?? 15;
+
+    const [isSingleLine, setIsSingleLine] = useState(false); // Por defecto intentamos 2 líneas (como original)
+    const headerRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const checkSpace = () => {
+            if (headerRef.current && contentRef.current) {
+                const headerRect = headerRef.current.getBoundingClientRect();
+                const contentRect = contentRef.current.getBoundingClientRect();
+                
+                const gap = contentRect.top - headerRect.bottom;
+
+                if (!isSingleLine) {
+                    // actualmente 2 líneas
+                    if (gap < 75) {
+                        setIsSingleLine(true);
+                    }
+                } else {
+                    // actualmente 1 línea
+                    // Si cambiamos a 2 líneas, el título crecerá ~76px, reduciendo el gap.
+                    // Para que el nuevo gap sea >= 75px, el actual debe ser >= 151px.
+                    if (gap >= 151) {
+                        setIsSingleLine(false);
+                    }
+                }
+            }
+        };
+
+        checkSpace();
+        window.addEventListener('resize', checkSpace);
+        // También observamos cambios en el contenido (si hay imágenes cargando etc)
+        const resizeObserver = new ResizeObserver(checkSpace);
+        if (contentRef.current) resizeObserver.observe(contentRef.current);
+        
+        return () => {
+            window.removeEventListener('resize', checkSpace);
+            resizeObserver.disconnect();
+        };
+    }, [isSingleLine, data]);
 
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
@@ -69,10 +109,10 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             <div className="w-[888px] h-full flex flex-col justify-between pl-[120px] pr-10 pt-[150px] pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
 
                 {/* 1. Cabecera Principal (J1) */}
-                <div className="shrink-0">
+                <div className="shrink-0" ref={headerRef}>
                     <AnimatedSection hierarchy={1}>
                         <h2 className="subtitulo1">
-                            {index === 0 ? (
+                            {!isSingleLine ? (
                                 <>servicios<br />premium.</>
                             ) : (
                                 "servicios premium."
@@ -83,7 +123,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 </div>
 
                 {/* 2. Contenido del Servicio (J2) */}
-                <div className="flex flex-col justify-end max-w-xl">
+                <div className="flex flex-col justify-end max-w-xl" ref={contentRef}>
                     <AnimatedSection hierarchy={2}>
                         <h3 className="subtitulo2 not-italic font-bold mb-8">
                             / <CustomPortableText value={data?.subtitle} isInline />
