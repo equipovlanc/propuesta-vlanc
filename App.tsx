@@ -260,9 +260,17 @@ const App: React.FC = () => {
 
     // Phases
     (d.scopePhases || []).forEach((phase: any, i: number) => {
+      let phaseGuarantee = d.guarantees?.items?.[i + 1];
+      if (phase.selectedGuarantee !== undefined && phase.selectedGuarantee !== null) {
+          const idx = Number(phase.selectedGuarantee) - 1;
+          if (idx >= 0 && d.guarantees?.items?.[idx]) {
+              phaseGuarantee = d.guarantees.items[idx];
+          }
+      }
+
       list.push({
         id: `phase-${i + 1}`,
-        comp: <ScopePhases data={phase} guaranteeItem={d.guarantees?.items?.[i + 1]} />,
+        comp: <ScopePhases data={phase} guaranteeItem={phaseGuarantee} />,
         headerPage: currentHeaderPage++
       });
     });

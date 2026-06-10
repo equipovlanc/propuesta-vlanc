@@ -121,23 +121,23 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                     </div>
 
                     {hasButtons && (
-                        <div className="absolute top-[calc(100%+40px)] left-0 flex items-center gap-6">
+                        <div className="absolute top-[calc(100%+40px)] left-0 w-full flex items-center gap-6">
                             {(hasGuarantee && guaranteeItem && guaranteeItem.isActive !== false) && (() => {
                                 const { badge, desc } = getGuaranteeParts(data!.guaranteeText!);
                                 return (
-                                    <button onClick={openGuaranteeModal} className="flex items-center h-[52px] bg-vlanc-primary text-white px-6 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group outline-none active:scale-[0.98]">
-                                        <span className="boton1 text-white">{badge}</span>
+                                    <button onClick={openGuaranteeModal} className="flex items-center h-[52px] bg-vlanc-primary text-white px-6 rounded-[1px] shadow-sm hover:bg-vlanc-secondary transition-all cursor-pointer group outline-none active:scale-[0.98] shrink min-w-0">
+                                        <span className="boton1 text-white shrink-0 whitespace-nowrap">{badge}</span>
                                         {desc && (
-                                            <>
-                                                <span className="mx-3 text-[14px] font-serif leading-none opacity-60">/</span>
-                                                <span className="boton2 text-white">{desc}</span>
-                                            </>
+                                            <div className="flex items-center shrink min-w-0 ml-3 overflow-hidden">
+                                                <span className="mr-3 text-[14px] font-serif leading-none opacity-60 shrink-0">/</span>
+                                                <span className="boton2 text-white truncate">{desc}</span>
+                                            </div>
                                         )}
                                     </button>
                                 );
                             })()}
                             {data?.videoButtonText && (
-                                <button onClick={handleVideoClick} className="flex items-center h-[52px] border border-vlanc-primary text-vlanc-primary px-8 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group outline-none active:scale-[0.98] print:hidden">
+                                <button onClick={handleVideoClick} className="ml-auto flex shrink-0 items-center h-[52px] border border-vlanc-primary text-vlanc-primary px-8 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group outline-none active:scale-[0.98] print:hidden">
                                     <span className="boton1 text-vlanc-primary group-hover:text-white">{data.videoButtonText}</span>
                                 </button>
                             )}

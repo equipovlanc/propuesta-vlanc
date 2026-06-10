@@ -254,6 +254,12 @@ export default defineType({
                             defineField({ name: 'video', title: 'Archivo Video (Si aplica)', type: 'file' }),
                             defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
                             defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía (Si aplica)', type: 'string' }),
+                            defineField({ 
+                                name: 'selectedGuarantee', 
+                                title: 'Garantía a mostrar (Número)', 
+                                type: 'number',
+                                description: 'Opcional. Escribe el número de la garantía que quieres que se abra en el popup (1 para la primera, 2 para la segunda, etc.). Si lo dejas vacío, usará la predeterminada.'
+                            }),
                             defineField({
                                 name: 'subPhases', type: 'array', of: [{
                                     type: 'object',
