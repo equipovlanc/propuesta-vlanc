@@ -104,7 +104,7 @@ const App: React.FC = () => {
           "payment": payment{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}},
           "dividerSlide": dividerSlide{..., "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, "video": video.asset->url},
           "guarantees": guarantees{..., "items": items[]{..., isActive, "icon": icon.asset->url}},
-          "premiumServices": premiumServices{..., services[]{..., extraNote, showExtraNote, "image": {"src": image.asset->url, "opacity": image.overlayOpacity}}},
+          "premiumServices": premiumServices{..., services[]{..., isActive, extraNote, showExtraNote, "image": {"src": image.asset->url, "opacity": image.overlayOpacity}}},
           "contact": contact{
             ..., 
             "image": {"src": image.asset->url, "opacity": image.overlayOpacity}, 
@@ -384,11 +384,15 @@ const App: React.FC = () => {
     }
 
     if (d.premiumServices?.isActive !== false) {
+      // El índice `i` es siempre la posición ORIGINAL en Sanity: así los ids (`premium-N`)
+      // se mantienen estables aunque se desactive un servicio intermedio.
+      // La numeración de página, en cambio, es consecutiva sobre los servicios visibles.
       (d.premiumServices?.services || []).forEach((service: any, i: number) => {
+        if (service?.isActive === false) return;
         list.push({
           id: `premium-${i + 1}`,
           comp: <PremiumServices data={service} image={service.image} index={i} />,
-          headerPage: currentHeaderPage + i
+          headerPage: currentHeaderPage++
         });
       });
     }

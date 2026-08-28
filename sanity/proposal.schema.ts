@@ -675,8 +675,30 @@ export default defineType({
                                 title: '¿Mostrar Nota Bajo Imagen?',
                                 type: 'boolean',
                                 initialValue: false
+                            }),
+                            defineField({
+                                name: 'isActive',
+                                title: '¿Está Activo?',
+                                type: 'boolean',
+                                initialValue: true,
+                                description: 'Si se desactiva, este servicio premium no aparecerá en la web (ni su página, ni en la impresión). El resto de páginas se renumeran automáticamente.'
                             })
-                        ]
+                        ],
+                        preview: {
+                            select: {
+                                subtitle: 'subtitle',
+                                title: 'title',
+                                isActive: 'isActive',
+                                media: 'image'
+                            },
+                            prepare({ subtitle, title, isActive, media }) {
+                                return {
+                                    title: subtitle || title || 'Servicio sin nombre',
+                                    subtitle: isActive === false ? 'DESACTIVADO (no se muestra)' : 'Activo',
+                                    media
+                                }
+                            }
+                        }
                     }]
                 })
             ]

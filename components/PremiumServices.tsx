@@ -19,6 +19,7 @@ interface Service {
     note?: string;
     extraNote?: string;
     showExtraNote?: boolean;
+    isActive?: boolean;
 }
 
 interface PremiumServicesProps {
