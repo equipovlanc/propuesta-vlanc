@@ -1,18 +1,33 @@
 # Migraciones de Sanity
 
-## `activar-servicios-premium/` — recomendado (sin tokens)
+## `activar-servicios-premium.ts` — recomendado (sin tokens)
 
 Migración oficial del CLI de Sanity. Se ejecuta **desde la carpeta del Studio**
 (la que está fuera de este repo, la que tiene `sanity.cli.ts`), usando la sesión
 de `sanity login`. No hace falta crear ningún token.
 
+La carpeta `migrations` NO existe por defecto en el Studio: la creas tú, a mano,
+en la raíz del proyecto (al lado de `sanity.cli.ts` y `sanity.config.ts`).
+
+```
+<studio>/
+  sanity.cli.ts
+  sanity.config.ts
+  migrations/                          <-- la creas tú
+    activar-servicios-premium.ts       <-- copias este archivo aquí
+```
+
 ```bash
-# 1. copia la carpeta activar-servicios-premium/ a  <studio>/migrations/
-# 2. desde la carpeta del studio:
+# desde la carpeta del studio:
 npx sanity login                                                    # solo la 1a vez
 npx sanity migration run activar-servicios-premium                  # simulacro, no escribe
 npx sanity migration run activar-servicios-premium --no-dry-run     # aplica
 ```
+
+El id de la migración es el nombre del archivo sin extensión. El CLI también
+admite la forma `migrations/activar-servicios-premium/index.ts`; con un archivo
+suelto es equivalente y más cómodo. No hay que compilar nada: el TypeScript se
+carga al vuelo.
 
 El dry-run es el modo por defecto. Al aplicar, el CLI pide confirmación del
 dataset sobre el que va a escribir.
