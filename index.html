@@ -267,9 +267,12 @@
       color: #000000;
     }
 
+    /* El font-size sale de una variable para que una página concreta pueda
+       reducirlo puntualmente (ver la medida de seguridad de PremiumServices).
+       Sin la variable definida se comporta exactamente como antes. */
     .subtitulo2 {
       font-family: 'Baskerville Display PT', serif;
-      font-size: 24px;
+      font-size: var(--subtitulo2-size, 24px);
       line-height: 1.2;
       font-weight: 400;
       font-style: italic;
@@ -294,9 +297,10 @@
       color: #000000;
     }
 
+    /* Idem: font-size por variable, con el valor de siempre como fallback. */
     .cuerpo {
       font-family: 'Montserrat', sans-serif;
-      font-size: 14px;
+      font-size: var(--cuerpo-size, 14px);
       line-height: 1.4;
       font-weight: 400;
       color: #703622;

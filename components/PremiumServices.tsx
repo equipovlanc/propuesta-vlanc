@@ -33,15 +33,44 @@ const SPACER_FULL = 150;    // alto del espaciador superior sin comprimir (el an
 const SPACER_PROBE_W = 100; // ancho fijo del espaciador, usado como sonda para deducir el zoom
 const MIN_GAP = 40;         // hueco mínimo bajo la barra (el mt-[40px] del bloque de contenido)
 
+// Medida de seguridad respecto al logo de la esquina superior izquierda.
+const LOGO_MIN_GAP = 50;      // px libres mínimos entre el logo y la primera línea del título
+const SUBTITULO2_SIZE = 24;   // tamaños base de las clases que se reducen
+const CUERPO_SIZE = 14;
+const MAX_FONT_REDUCTION = 3; // tope: deja cuerpo en 11px, aún por encima de la letra pequeña (10px)
+
+// Borde inferior real del logo, en coordenadas de cliente (con el zoom ya aplicado).
+// El logo usa object-contain, así que si la imagen no es cuadrada no llena su caja
+// y el borde visible queda por encima del borde del elemento.
+const getLogoBottom = (): number | null => {
+    const el = document.querySelector('[data-vlanc-logo]');
+    if (!el) return null;
+
+    const rect = el.getBoundingClientRect();
+    const img = el.querySelector('img');
+    if (img && img.naturalWidth > 0 && img.naturalHeight > 0) {
+        const scale = Math.min(rect.width / img.naturalWidth, rect.height / img.naturalHeight);
+        return rect.top + (rect.height + img.naturalHeight * scale) / 2;
+    }
+    return rect.bottom;
+};
+
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 0 }) => {
     const imageSrc = image?.src;
     const imageOpacity = image?.opacity ?? 15;
 
     const [isSingleLine, setIsSingleLine] = useState(false); // Por defecto intentamos 2 líneas (como original)
+    // Cada instancia muestra siempre el mismo servicio, así que esto sólo crece
+    // hasta el primer valor que cumple y ahí se queda: no puede oscilar.
+    const [fontReduction, setFontReduction] = useState(0);
     const headerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const spacerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
+    // Reducción desde la que ya hemos pedido un incremento. El ResizeObserver puede
+    // dispararse varias veces antes del re-render y, sin esto, cada disparo mediría
+    // el mismo DOM y encogería el texto de más.
+    const bumpedFromRef = useRef(-1);
 
     useEffect(() => {
         const checkSpace = () => {
@@ -59,8 +88,9 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             const zoom = spacerRect.width / SPACER_PROBE_W;
             if (!zoom) return;
 
+            const titleRect = title.getBoundingClientRect();
             const spacerHeight = spacerRect.height / zoom;
-            const titleHeight = title.getBoundingClientRect().height / zoom;
+            const titleHeight = titleRect.height / zoom;
             const gap = (content.getBoundingClientRect().top - header.getBoundingClientRect().bottom) / zoom;
 
             // Alto de UNA línea del título, medido en vivo en lugar de asumirlo.
@@ -78,6 +108,31 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 // ese espacio para no comprimir el espaciador otra vez al hacerlo.
                 if (!isCramped && gap >= MIN_GAP + lineHeight + 1) setIsSingleLine(false);
             }
+
+            // --- Medida de seguridad respecto al logo ---
+            // Al reducir el cuerpo de texto el contenido encoge, el espaciador se
+            // descomprime y la cabecera baja, alejándose del logo. Subimos la
+            // reducción de 1 en 1 hasta cumplir los 50px o agotar el tope.
+            if (fontReduction >= MAX_FONT_REDUCTION || bumpedFromRef.current === fontReduction) return;
+
+            const logoBottom = getLogoBottom();
+            if (logoBottom === null) return;
+
+            // El texto no llena su caja: descontamos el medio interlineado para medir
+            // desde la parte superior real del texto. Se usa la proporción y no los
+            // px de getComputedStyle porque la proporción es inmune al zoom.
+            const cs = getComputedStyle(title);
+            const fontSize = parseFloat(cs.fontSize);
+            const cssLineHeight = parseFloat(cs.lineHeight);
+            const halfLeadingRatio = Number.isFinite(fontSize) && Number.isFinite(cssLineHeight) && cssLineHeight > 0
+                ? (cssLineHeight - fontSize) / (2 * cssLineHeight)
+                : 0;
+
+            const logoGap = (titleRect.top - logoBottom) / zoom + lineHeight * halfLeadingRatio;
+            if (logoGap < LOGO_MIN_GAP) {
+                bumpedFromRef.current = fontReduction;
+                setFontReduction(fontReduction + 1);
+            }
         };
 
         checkSpace();
@@ -91,7 +146,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             window.removeEventListener('resize', checkSpace);
             resizeObserver.disconnect();
         };
-    }, [isSingleLine, data]);
+    }, [isSingleLine, fontReduction, data]);
 
     const renderDescriptionBlock = (block: DescriptionBlock, key: number, allBlocks: DescriptionBlock[]) => {
         const isTitle = block.style === 'title';
@@ -126,7 +181,16 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
     };
 
     return (
-        <section className="h-full w-full flex flex-row">
+        <section
+            className="h-full w-full flex flex-row"
+            // Sólo afecta a esta página: subtitulo2 y cuerpo leen estas variables.
+            // Quedan fuera subtitulo1 (el título principal) y la letra pequeña,
+            // que llevan su tamaño fijo.
+            style={{
+                '--subtitulo2-size': `${SUBTITULO2_SIZE - fontReduction}px`,
+                '--cuerpo-size': `${CUERPO_SIZE - fontReduction}px`,
+            } as React.CSSProperties}
+        >
             {/* Left Column (J1 & J2) */}
             <div className="w-[888px] h-full flex flex-col justify-between pl-[120px] pr-10 pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
 
@@ -157,13 +221,21 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     Con justify-between sólo consume espacio libre, así que no altera la
                     composición cuando ya hay hueco de sobra; sólo actúa cuando el contenido
                     crece tanto que el hueco caería por debajo de 40px. */}
-                <div className="flex flex-col justify-end max-w-xl mt-[40px]" ref={contentRef}>
+                {/* Los bloques de descripción de estilo "título" no llevan clase propia
+                    y heredan el tamaño: con calc(1em - Npx) les llega la misma reducción
+                    sin necesidad de saber de cuánto heredan (con N=0 quedan intactos). */}
+                <div
+                    className="flex flex-col justify-end max-w-xl mt-[40px]"
+                    ref={contentRef}
+                    style={{ fontSize: `calc(1em - ${fontReduction}px)` }}
+                >
                     <AnimatedSection hierarchy={2}>
-                        {/* mb-5 igual que el h4 de abajo: iguala el hueco óptico con el
-                            que hay entre el título en mayúsculas y el texto que le sigue.
-                            El medio interlineado de subtitulo2 (2,4px) y el de cuerpo
-                            (2,8px) difieren en 0,4px, por debajo de lo perceptible. */}
-                        <h3 className="subtitulo2 not-italic font-bold mb-5">
+                        {/* El h4 en mayúsculas es subtítulo de este h3, así que van más
+                            juntos: la mitad del hueco que hay del h4 al texto que le sigue.
+                            Ese hueco óptico es 25,6px, luego el objetivo son 12,8px; menos
+                            los medios interlineados (2,4px de subtitulo2 + 2,8px de cuerpo)
+                            quedan 7,6px de margen. */}
+                        <h3 className="subtitulo2 not-italic font-bold mb-[7.6px]">
                             / <CustomPortableText value={data?.subtitle} isInline />
                         </h3>
 

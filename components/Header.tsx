@@ -14,6 +14,7 @@ const Header: React.FC<HeaderProps> = ({ logo, pageNumber, onNavigate, onPrint }
       {/* Logo Small - Navegación al Índice (Sección 1, índice 1) */}
       <button
         onClick={() => onNavigate && onNavigate(1)}
+        data-vlanc-logo
         className="absolute top-[20px] left-[52px] w-[78px] h-[78px] flex items-center justify-center pointer-events-auto cursor-pointer group bg-transparent border-none p-0 outline-none"
       >
         {logo ? (
