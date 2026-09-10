@@ -31,7 +31,7 @@ interface PremiumServicesProps {
 // Medidas en px CSS de la columna izquierda.
 const SPACER_FULL = 150;    // alto del espaciador superior sin comprimir (el antiguo pt-[150px])
 const SPACER_PROBE_W = 100; // ancho fijo del espaciador, usado como sonda para deducir el zoom
-const MIN_GAP = 50;         // hueco mínimo bajo la barra (el mt-[50px] del bloque de contenido)
+const MIN_GAP = 40;         // hueco mínimo bajo la barra (el mt-[40px] del bloque de contenido)
 
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 0 }) => {
     const imageSrc = image?.src;
@@ -133,7 +133,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 {/* 1. Cabecera Principal (J1) */}
                 {/* El pt-[150px] de la columna se ha convertido en un espaciador comprimible:
                     cuando el contenido crece y el hueco bajo la barra caería por debajo de
-                    50px, este espaciador cede y el bloque título+barra sube en conjunto
+                    40px, este espaciador cede y el bloque título+barra sube en conjunto
                     (mantienen intacta su relación de 27px). Mientras haya sitio de sobra
                     mide 150px exactos, así que la composición habitual no cambia. */}
                 <div className="flex flex-col shrink min-h-0">
@@ -153,11 +153,11 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 </div>
 
                 {/* 2. Contenido del Servicio (J2) */}
-                {/* mt-[50px]: separación mínima garantizada respecto a la barra de la cabecera.
+                {/* mt-[40px]: separación mínima garantizada respecto a la barra de la cabecera.
                     Con justify-between sólo consume espacio libre, así que no altera la
                     composición cuando ya hay hueco de sobra; sólo actúa cuando el contenido
-                    crece tanto que el hueco caería por debajo de 50px. */}
-                <div className="flex flex-col justify-end max-w-xl mt-[50px]" ref={contentRef}>
+                    crece tanto que el hueco caería por debajo de 40px. */}
+                <div className="flex flex-col justify-end max-w-xl mt-[40px]" ref={contentRef}>
                     <AnimatedSection hierarchy={2}>
                         <h3 className="subtitulo2 not-italic font-bold mb-8">
                             / <CustomPortableText value={data?.subtitle} isInline />
