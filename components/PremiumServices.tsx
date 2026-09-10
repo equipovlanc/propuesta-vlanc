@@ -159,7 +159,11 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                     crece tanto que el hueco caería por debajo de 40px. */}
                 <div className="flex flex-col justify-end max-w-xl mt-[40px]" ref={contentRef}>
                     <AnimatedSection hierarchy={2}>
-                        <h3 className="subtitulo2 not-italic font-bold mb-8">
+                        {/* mb-5 igual que el h4 de abajo: iguala el hueco óptico con el
+                            que hay entre el título en mayúsculas y el texto que le sigue.
+                            El medio interlineado de subtitulo2 (2,4px) y el de cuerpo
+                            (2,8px) difieren en 0,4px, por debajo de lo perceptible. */}
+                        <h3 className="subtitulo2 not-italic font-bold mb-5">
                             / <CustomPortableText value={data?.subtitle} isInline />
                         </h3>
 
