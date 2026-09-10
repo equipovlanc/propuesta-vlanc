@@ -107,24 +107,36 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
     return (
         <section className="h-full w-full flex flex-row">
             {/* Left Column (J1 & J2) */}
-            <div className="w-[888px] h-full flex flex-col justify-between pl-[120px] pr-10 pt-[150px] pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
+            <div className="w-[888px] h-full flex flex-col justify-between pl-[120px] pr-10 pb-[140px] shrink-0 overflow-y-auto no-scrollbar relative z-10">
 
                 {/* 1. Cabecera Principal (J1) */}
-                <div className="shrink-0" ref={headerRef}>
-                    <AnimatedSection hierarchy={1}>
-                        <h2 className="subtitulo1">
-                            {!isSingleLine ? (
-                                <>servicios<br />premium.</>
-                            ) : (
-                                "servicios premium."
-                            )}
-                        </h2>
-                    </AnimatedSection>
-                    <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                {/* El pt-[150px] de la columna se ha convertido en un espaciador comprimible:
+                    cuando el contenido crece y el hueco bajo la barra caería por debajo de
+                    70px, este espaciador cede y el bloque título+barra sube en conjunto
+                    (mantienen intacta su relación de 27px). Mientras haya sitio de sobra
+                    mide 150px exactos, así que la composición habitual no cambia. */}
+                <div className="flex flex-col shrink min-h-0">
+                    <div className="h-[150px] shrink min-h-0" aria-hidden="true" />
+                    <div className="shrink-0" ref={headerRef}>
+                        <AnimatedSection hierarchy={1}>
+                            <h2 className="subtitulo1">
+                                {!isSingleLine ? (
+                                    <>servicios<br />premium.</>
+                                ) : (
+                                    "servicios premium."
+                                )}
+                            </h2>
+                        </AnimatedSection>
+                        <AnimatedSection mode="bar" className="w-[112px] h-[5px] bg-[#8f4933] mt-[27px]" />
+                    </div>
                 </div>
 
                 {/* 2. Contenido del Servicio (J2) */}
-                <div className="flex flex-col justify-end max-w-xl" ref={contentRef}>
+                {/* mt-[70px]: separación mínima garantizada respecto a la barra de la cabecera.
+                    Con justify-between sólo consume espacio libre, así que no altera la
+                    composición cuando ya hay hueco de sobra; sólo actúa cuando el contenido
+                    crece tanto que el hueco caería por debajo de 70px. */}
+                <div className="flex flex-col justify-end max-w-xl mt-[70px]" ref={contentRef}>
                     <AnimatedSection hierarchy={2}>
                         <h3 className="subtitulo2 not-italic font-bold mb-8">
                             / <CustomPortableText value={data?.subtitle} isInline />
