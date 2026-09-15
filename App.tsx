@@ -28,8 +28,11 @@ import { calculateFinePrintSlides } from './utils/finePrintSplitter';
 const getSpecialOffersSteps = (specialOffersData: any, premiumService: any) => {
     let s = 0;
     const plans = specialOffersData?.conditionalOffer?.discountedPlans || [];
-    const hasConditional = Boolean(specialOffersData?.conditionalOffer?.title || specialOffersData?.conditionalOffer?.description || plans.length > 0);
-    const hasLaunch = Boolean(specialOffersData?.launchOffer?.title || specialOffersData?.launchOffer?.description || specialOffersData?.offerFooterText || (specialOffersData?.launchOffer?.premiumServiceName && specialOffersData.launchOffer.premiumServiceName.trim().length > 0));
+    const hasConditional = specialOffersData?.conditionalOffer?.isActive !== false && Boolean(specialOffersData?.conditionalOffer?.title || specialOffersData?.conditionalOffer?.description || plans.length > 0);
+    // Espejo exacto de showPremiumButton/hasLaunchOffer en SpecialOffers.tsx: si divergen,
+    // el número de pasos de la sección deja de cuadrar con lo que se pinta.
+    const showPremiumButton = specialOffersData?.launchOffer?.premiumButtonIsActive !== false && Boolean(specialOffersData?.launchOffer?.premiumServiceName && specialOffersData.launchOffer.premiumServiceName.trim().length > 0);
+    const hasLaunch = specialOffersData?.launchOffer?.isActive !== false && Boolean(specialOffersData?.launchOffer?.title || specialOffersData?.launchOffer?.description || specialOffersData?.offerFooterText || showPremiumButton);
     const hasLogo = Boolean(specialOffersData?.overlayLogo);
 
     if (hasConditional) s++;
@@ -281,13 +284,13 @@ const App: React.FC = () => {
         }
 
         const guaranteesList: any[] = [];
-        if (phase.guaranteeText && phaseGuarantee) {
+        if (phase.guaranteeButtonIsActive !== false && phase.guaranteeText && phaseGuarantee) {
             guaranteesList.push({ text: phase.guaranteeText, item: phaseGuarantee });
         }
 
         if (phase.additionalGuarantees && Array.isArray(phase.additionalGuarantees)) {
             phase.additionalGuarantees.forEach((add: any) => {
-                if (add.guaranteeText) {
+                if (add.isActive !== false && add.guaranteeText) {
                     let addGuarantee = d.guarantees?.items?.[i + 1];
                     if (add.selectedGuarantee !== undefined && add.selectedGuarantee !== null) {
                         const idx = Number(add.selectedGuarantee) - 1;

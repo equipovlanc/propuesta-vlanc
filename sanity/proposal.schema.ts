@@ -168,6 +168,13 @@ export default defineType({
                 }),
                 defineField({ name: 'badge', title: '3. Texto Garantía/Badge (Aparece bajo Paso 3)', type: 'string' }),
                 defineField({
+                    name: 'badgeButtonIsActive',
+                    title: '¿Mostrar el Botón de Garantía del Paso 3?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Si se desactiva, el botón de garantía que aparece bajo el paso 3 no se mostrará. (Ojo: también desaparece por su cuenta si desactivas la garantía nº 1 en la sección Garantías.)'
+                }),
+                defineField({
                     name: 'step5Phrase',
                     title: '4. Frase Destacada Paso 5',
                     type: 'string',
@@ -294,12 +301,26 @@ export default defineType({
                             }),
                             defineField({ name: 'video', title: 'Archivo Video (Si aplica)', type: 'file' }),
                             defineField({ name: 'videoButtonText', title: 'Texto Botón Video', type: 'string' }),
+                            defineField({
+                                name: 'videoButtonIsActive',
+                                title: '¿Mostrar el Botón de Video?',
+                                type: 'boolean',
+                                initialValue: true,
+                                description: 'Si se desactiva, el botón no aparecerá aunque tenga texto. El texto se conserva para poder reactivarlo.'
+                            }),
                             defineField({ name: 'guaranteeText', title: 'Texto Botón Garantía (Si aplica)', type: 'string' }),
                             defineField({ 
                                 name: 'selectedGuarantee', 
                                 title: 'Garantía a mostrar (Número)', 
                                 type: 'number',
                                 description: 'Opcional. Escribe el número de la garantía que quieres que se abra en el popup (1 para la primera, 2 para la segunda, etc.). Si lo dejas vacío, usará la predeterminada.'
+                            }),
+                            defineField({
+                                name: 'guaranteeButtonIsActive',
+                                title: '¿Mostrar el Botón de Garantía?',
+                                type: 'boolean',
+                                initialValue: true,
+                                description: 'Si se desactiva, el botón de garantía de esta fase no aparecerá aunque tenga texto.'
                             }),
                             defineField({
                                 name: 'additionalGuarantees',
@@ -315,18 +336,27 @@ export default defineType({
                                             title: 'Garantía a mostrar (Número)', 
                                             type: 'number',
                                             description: 'Número de la garantía que quieres que se abra (1 para la primera, etc.).'
+                                        }),
+                                        defineField({
+                                            name: 'isActive',
+                                            title: '¿Mostrar este Botón?',
+                                            type: 'boolean',
+                                            initialValue: true,
+                                            description: 'Si se desactiva, este botón no aparecerá aunque tenga texto.'
                                         })
                                     ],
                                     preview: {
                                         select: {
                                             title: 'guaranteeText',
-                                            subtitle: 'selectedGuarantee'
+                                            subtitle: 'selectedGuarantee',
+                                            isActive: 'isActive'
                                         },
                                         prepare(selection) {
-                                            const { title, subtitle } = selection;
+                                            const { title, subtitle, isActive } = selection;
+                                            const destino = subtitle ? `Abre la garantía #${subtitle}` : 'Abre garantía por defecto';
                                             return {
                                                 title: title || 'Sin texto',
-                                                subtitle: subtitle ? `Abre la garantía #${subtitle}` : 'Abre garantía por defecto'
+                                                subtitle: isActive === false ? `DESACTIVADO · ${destino}` : destino
                                             }
                                         }
                                     }
@@ -422,7 +452,14 @@ export default defineType({
                         }),
                         { name: 'title', type: 'string' },
                         { name: 'description', type: 'array', of: [{ type: 'block' }] },
-                        { name: 'premiumServiceName', type: 'string' }
+                        { name: 'premiumServiceName', type: 'string' },
+                        defineField({
+                            name: 'premiumButtonIsActive',
+                            title: '¿Mostrar el Botón del Servicio Premium?',
+                            type: 'boolean',
+                            initialValue: true,
+                            description: 'Si se desactiva, el botón que abre el popup del servicio premium no aparecerá aunque tenga texto.'
+                        })
                     ]
                 }),
                 defineField({ name: 'offerFooterText', title: 'Texto Pie de Oferta (Debajo Botón de Lanzamiento)', type: 'array', of: [{ type: 'block' }] }),
@@ -744,7 +781,14 @@ export default defineType({
                 }),
                 defineField({
                     name: 'web', type: 'object', fields: [
-                        defineField({ name: 'title', type: 'string' }), { name: 'url', type: 'url' }, { name: 'displayText', type: 'string' }
+                        defineField({ name: 'title', type: 'string' }), { name: 'url', type: 'url' }, { name: 'displayText', type: 'string' },
+                        defineField({
+                            name: 'isActive',
+                            title: '¿Mostrar el Enlace Web?',
+                            type: 'boolean',
+                            initialValue: true,
+                            description: 'Si se desactiva, el enlace no aparecerá (el título del bloque sí se mantiene).'
+                        })
                     ]
                 }),
                 defineField({
@@ -753,9 +797,33 @@ export default defineType({
                         fields: [
                             { name: 'name', type: 'string' },
                             { name: 'url', type: 'url' },
-                            { name: 'icon', title: 'Icono (SVG/PNG)', type: 'image' }
-                        ]
+                            { name: 'icon', title: 'Icono (SVG/PNG)', type: 'image' },
+                            defineField({
+                                name: 'isActive',
+                                title: '¿Mostrar este Icono?',
+                                type: 'boolean',
+                                initialValue: true,
+                                description: 'Si se desactiva, este icono no aparecerá en la web.'
+                            })
+                        ],
+                        preview: {
+                            select: { title: 'name', isActive: 'isActive', media: 'icon' },
+                            prepare({ title, isActive, media }) {
+                                return {
+                                    title: title || 'Red social',
+                                    subtitle: isActive === false ? 'DESACTIVADO (no se muestra)' : 'Activo',
+                                    media
+                                }
+                            }
+                        }
                     }]
+                }),
+                defineField({
+                    name: 'printButtonIsActive',
+                    title: '¿Mostrar el Botón "Imprimir Propuesta / PDF"?',
+                    type: 'boolean',
+                    initialValue: true,
+                    description: 'Botón de la esquina inferior izquierda de la última página. Si se desactiva, el cliente no podrá descargar el PDF desde ahí.'
                 })
             ]
         })

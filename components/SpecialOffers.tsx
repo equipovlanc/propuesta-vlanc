@@ -41,6 +41,7 @@ interface SpecialOffersProps {
             title?: string;
             description?: string;
             premiumServiceName?: string;
+            premiumButtonIsActive?: boolean;
         };
         callToAction?: {
             text?: string;
@@ -123,7 +124,9 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
     const imageOpacity = data?.callToAction?.image?.opacity ?? 15;
 
     const hasConditionalOffer = data?.conditionalOffer?.isActive !== false && Boolean(data?.conditionalOffer?.title || data?.conditionalOffer?.description || plans.length > 0);
-    const hasLaunchOffer = data?.launchOffer?.isActive !== false && Boolean(data?.launchOffer?.title || data?.launchOffer?.description || data?.offerFooterText || (data?.launchOffer?.premiumServiceName && data.launchOffer.premiumServiceName.trim().length > 0));
+    // OJO: esta condición está duplicada en getSpecialOffersSteps (App.tsx). Si cambia una, cambia la otra.
+    const showPremiumButton = data?.launchOffer?.premiumButtonIsActive !== false && Boolean(data?.launchOffer?.premiumServiceName && data.launchOffer.premiumServiceName.trim().length > 0);
+    const hasLaunchOffer = data?.launchOffer?.isActive !== false && Boolean(data?.launchOffer?.title || data?.launchOffer?.description || data?.offerFooterText || showPremiumButton);
     const hasLogo = Boolean(data?.overlayLogo);
 
     const thingsToReveal = [
@@ -224,7 +227,7 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                 />
                             </div>
                         )}
-                        {data?.launchOffer?.premiumServiceName && data.launchOffer.premiumServiceName.trim().length > 0 && (
+                        {showPremiumButton && (
                             <button className="w-full h-[41px] border border-[#8f4933] flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#8f4933] hover:bg-transparent group mb-4 shrink-0 print-force-visible print:!bg-[#8f4933] print:opacity-100" onClick={openModal}>
                                 <span className="tabla1 text-white group-hover:text-[#8f4933] transition-colors print:text-white uppercase">{data.launchOffer.premiumServiceName}</span>
                             </button>

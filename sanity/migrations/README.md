@@ -35,6 +35,19 @@ dataset sobre el que va a escribir.
 Si tu `sanity.cli.ts` no declara projectId/dataset, añade:
 `--project j14bbmni --dataset production`
 
+## `activar-botones.ts` — opcional
+
+Mismo caso que la anterior, pero para los interruptores de botones
+(botón de vídeo y de garantía de cada fase, botón de garantía del paso 3 del
+proceso, botón del servicio premium, enlace web, iconos de RRSS y botón de
+imprimir). **La web ya funciona sin ejecutarla**: sin valor equivale a visible.
+Solo sirve para que en el Studio los interruptores se vean encendidos.
+
+```bash
+npx sanity migration run activar-botones                  # simulacro
+npx sanity migration run activar-botones --no-dry-run     # aplica
+```
+
 ## `set-premium-isactive.mjs` — alternativa
 
 Hace exactamente lo mismo, pero se ejecuta desde **este** repo (que ya tiene

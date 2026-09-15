@@ -25,6 +25,8 @@ interface Phase {
     video?: string;
     guaranteeText?: string;
     videoButtonText?: string;
+    videoButtonIsActive?: boolean;
+    guaranteeButtonIsActive?: boolean;
     subPhases?: SubPhase[];
 }
 
@@ -66,8 +68,11 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
     const openGuaranteeModal = (index: number) => setOpenGuaranteeIndex(index);
     const closeGuaranteeModal = () => setOpenGuaranteeIndex(null);
 
-    const hasGuarantees = guaranteesList.length > 0 || !!data?.guaranteeText;
-    const hasButtons = hasGuarantees || (data?.videoButtonText && data?.videoButtonText.trim() !== "");
+    // Un botón de garantía solo se pinta si su garantía sigue activa (App.tsx ya filtra
+    // los que estén desactivados desde la fase), y el de vídeo si su interruptor lo permite.
+    const visibleGuarantees = guaranteesList.filter(g => g.item && g.item.isActive !== false);
+    const showVideoButton = data?.videoButtonIsActive !== false && !!data?.videoButtonText && data.videoButtonText.trim() !== "";
+    const hasButtons = visibleGuarantees.length > 0 || showVideoButton;
     const activeModalItem = openGuaranteeIndex !== null ? guaranteesList[openGuaranteeIndex]?.item : null;
 
     return (
@@ -141,7 +146,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                                 }
                                 return null;
                             })}
-                            {data?.videoButtonText && (
+                            {showVideoButton && (
                                 <button onClick={handleVideoClick} className="flex shrink-0 items-center h-[52px] border border-vlanc-primary text-vlanc-primary px-8 uppercase hover:bg-vlanc-primary hover:text-white transition-all rounded-[1px] cursor-pointer bg-transparent group outline-none active:scale-[0.98] print:hidden">
                                     <span className="boton1 text-vlanc-primary group-hover:text-white">{data.videoButtonText}</span>
                                 </button>

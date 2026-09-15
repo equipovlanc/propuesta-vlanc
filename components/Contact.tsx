@@ -5,6 +5,7 @@ interface SocialMedia {
     name?: string;
     url?: string;
     icon?: string;
+    isActive?: boolean;
 }
 
 interface PhoneDetails {
@@ -16,8 +17,9 @@ interface ContactProps {
     data?: {
         location?: { title?: string; address?: string; email?: string };
         phone?: { title?: string; landline?: PhoneDetails; mobile?: PhoneDetails };
-        web?: { title?: string; url?: string; displayText?: string };
+        web?: { title?: string; url?: string; displayText?: string; isActive?: boolean };
         rrss?: SocialMedia[];
+        printButtonIsActive?: boolean;
         image?: string;
     };
     finalLogo?: string | null;
@@ -190,19 +192,19 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                         <div>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black" dangerouslySetInnerHTML={{ __html: `/ ${data?.web?.title || ''}` }} />
                             <div className="pl-6">
-                                <a
+                                {data?.web?.isActive !== false && <a
                                     href={data?.web?.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="cuerpo border-b border-vlanc-primary text-vlanc-secondary hover:text-vlanc-primary transition-colors"
                                     dangerouslySetInnerHTML={{ __html: data?.web?.displayText || '' }}
-                                />
+                                />}
                             </div>
                         </div>
                         <div>
                             <h4 className="subtitulo2 font-bold not-italic mb-4 text-vlanc-black">/ RRSS</h4>
                             <div className="flex gap-6 items-center pl-6">
-                                {(data?.rrss ?? []).map((social, i) => (
+                                {(data?.rrss ?? []).filter(social => social?.isActive !== false).map((social, i) => (
                                     <a
                                         key={i}
                                         href={social.url}
@@ -224,7 +226,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
             </div>
 
             {/* Botón imprimir */}
-            <motion.div
+            {data?.printButtonIsActive !== false && <motion.div
                 className="absolute bottom-8 left-12 no-print"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: showContent ? 1 : 0 }}
@@ -236,7 +238,7 @@ const Contact: React.FC<ContactProps> = ({ data, finalLogo, finalLogoVideo, onPr
                 >
                     [ IMPRIMIR PROPUESTA / PDF ]
                 </button>
-            </motion.div>
+            </motion.div>}
 
             {/* OVERLAY ÚNICO: video animándose de centro a izquierda.
                 - Sin padding (igual que el footer placeholder) para que las dimensiones coincidan exactamente.

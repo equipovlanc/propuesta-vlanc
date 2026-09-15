@@ -23,6 +23,7 @@ interface ProcessProps {
         title?: string;
         steps?: ProcessStep[];
         badge?: string;
+        badgeButtonIsActive?: boolean;
         step5Phrase?: string;
     };
     guaranteeItem?: GuaranteeItem;
@@ -81,7 +82,7 @@ const Process: React.FC<ProcessProps> = ({ data, guaranteeItem, step = 8 }) => {
                                     </div>
 
                                     {/* Botón Garantía (Solo index 2 / Paso 3) */}
-                                    {(index === 2 && guaranteeItem && guaranteeItem.isActive !== false) && (
+                                    {(index === 2 && data?.badgeButtonIsActive !== false && guaranteeItem && guaranteeItem.isActive !== false) && (
                                         <div className="relative inline-block mt-6">
                                             <button
                                                 onClick={openModal}
