@@ -13,7 +13,7 @@ identificada por un *slug* en la URL. Todo el contenido vive en Sanity.
 | Pieza | Dónde | Quién la cambia |
 |---|---|---|
 | **Web** (React 19 + Vite) | este repo → GitHub `equipovlanc/propuesta-vlanc` → Vercel | **Claude**: edita, commitea y pushea. Vercel despliega solo. |
-| **Sanity Studio** | `C:\Users\jgont\VLANC\WEB\propuestasvlanc(SANITYSTUDIO)` | **Jose**: copia el esquema y lanza `npm run deploy`. |
+| **Sanity Studio** | `C:\Users\jgont\VLANC\WEB\propuestasvlanc(SANITYSTUDIO)` → publicado en **propuestasvlanc.sanity.studio** | **Claude puede hacerlo entero**: copiar el esquema, desplegar y migrar (ver Comandos). |
 | **Datos** (dataset) | Sanity cloud, proyecto `j14bbmni`, dataset `production` | Jose desde el Studio; Claude solo mediante migraciones que Jose ejecuta. |
 
 **El Studio NO está en este repo.** La carpeta [sanity/](sanity/) de aquí es un
@@ -77,13 +77,28 @@ npm run build        # verificación previa a push: debe pasar siempre
 ```bash
 # en la carpeta del Studio
 npm run dev          # Studio en local
-npm run deploy       # publica el Studio (tras copiar el esquema)
-npx sanity migration run <id>                 # simulacro, no escribe
-npx sanity migration run <id> --no-dry-run    # aplica
+npx sanity deploy --url propuestasvlanc -y                 # despliega sin preguntar
+
+npx sanity migration run <id>                              # simulacro, no escribe
+npx sanity migration run <id> --no-dry-run --no-confirm    # aplica sin preguntar
 ```
 
 El `sanity.cli.ts` del Studio ya declara `projectId` y `dataset`, así que los
 comandos de migración **no** necesitan `--project` ni `--dataset`.
+
+**Claude puede ejecutar todo esto**: el CLI usa la sesión de `sanity login` que ya
+está activa en esta máquina. Las banderas `-y` y `--no-confirm` son imprescindibles,
+porque la herramienta Bash no tiene teclado y cualquier pregunta interactiva deja el
+comando colgado.
+
+`--url propuestasvlanc` también es obligatorio: `sanity.cli.ts` no guarda el host,
+así que sin esa bandera el CLI pregunta a dónde publicar y en modo desatendido
+podría crear un Studio nuevo en otra dirección. (La clave `studioHost` está
+deprecada en el CLI 6 y su sustituta, `deployment.appId`, no se puede consultar
+desde el CLI: de ahí que vaya por bandera.)
+
+Antes de migrar, **simular siempre**, y comprobar el resultado consultando el
+dataset en lugar de fiarse de la salida del CLI.
 
 ## Acoplamientos frágiles
 

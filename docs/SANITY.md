@@ -5,7 +5,8 @@
 | Proyecto | `j14bbmni` |
 | Dataset | `production` |
 | Tipo de documento | `proposal` (uno por cliente, identificado por `slug`) |
-| Studio | `C:\Users\jgont\VLANC\WEB\propuestasvlanc(SANITYSTUDIO)` — Sanity 5 |
+| Studio | `C:\Users\jgont\VLANC\WEB\propuestasvlanc(SANITYSTUDIO)` — Sanity 5, CLI 6 |
+| Studio publicado | **propuestasvlanc.sanity.studio** |
 | Esquema en el Studio | `schemaTypes/proposal.schema.ts`, registrado en `schemaTypes/index.ts` |
 
 ## Ciclo de un cambio de esquema
@@ -113,9 +114,19 @@ El CLI usa la sesión de `sanity login`, no hace falta crear ningún token.
 Desde la carpeta del **Studio**:
 
 ```bash
-npx sanity migration run <id>                 # simulacro: solo imprime
-npx sanity migration run <id> --no-dry-run    # aplica, pidiendo confirmación
+npx sanity migration run <id>                              # simulacro: solo imprime
+npx sanity migration run <id> --no-dry-run                 # aplica, preguntando
+npx sanity migration run <id> --no-dry-run --no-confirm    # aplica sin preguntar
 ```
+
+`--no-confirm` es lo que permite que la ejecute Claude: sin esa bandera el CLI
+espera un sí por teclado y el comando se queda colgado.
+
+El simulacro imprime el contenido completo de cada parche, o sea decenas de miles
+de caracteres. Para ver solo el alcance:
+`npx sanity migration run <id> 2>&1 | grep -c "^\[patch\] \[proposal\]"`.
+Ese número incluye **borradores**, así que suele ser mayor que el de propuestas
+publicadas.
 
 El `<id>` es el nombre del archivo sin extensión. El CLI acepta
 `migrations/<id>.ts` o `migrations/<id>/index.ts`, carga el TypeScript al vuelo
