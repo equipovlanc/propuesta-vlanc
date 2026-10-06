@@ -8,23 +8,6 @@ Cada entrada indica si requirió acción manual de Jose:
 
 ---
 
-## 2026-10-06 · Varios precios por servicio premium
-**[esquema]** **[web]** **[migración recomendada]**
-
-`premiumServices.services[].prices` es ahora un array: un botón de precio por
-entrada, en fila. Aplica tanto a la página del servicio como al popup de la oferta
-de lanzamiento.
-
-El campo `price` antiguo se conserva de reserva y se oculta en el Studio en cuanto
-hay precios en el array, siguiendo [D8](docs/DECISIONES.md#d8).
-
-Migración `precios-premium-a-lista.ts`: aditiva e idempotente. **Ejecutada**
-contra `production`: 86 parches (67 servicios publicados más los de borradores).
-Comprobado después: 67 servicios con array `prices`, ninguno sin él, y ningún
-valor distinto del `price` original, que se conserva.
-
----
-
 ## 2026-10-06 · Trabajos Contemplados se reparte en varias páginas si no cabe
 **[web]**
 
@@ -45,6 +28,7 @@ Verificado con un DOM simulado sobre diez repartos: no se pierden ni se repiten
 apartados, no hay páginas vacías ni a medio llenar, nunca encoge más de lo
 necesario y al partir siempre vuelve al tamaño original.
 
+
 ---
 
 ## 2026-10-06 · Corrige el ajuste automático, que encogía siempre al máximo
@@ -58,6 +42,7 @@ reducía hasta el tope en todas las fases, hubiera desbordamiento o no.
 Ahora todo se mide como desplazamiento dentro del lienzo de 1920px, así que la
 escala se cancela y la medida es correcta en cualquier instante de la animación.
 Afecta también a Servicios Premium, que tenía el mismo defecto.
+
 
 ---
 
@@ -73,6 +58,7 @@ los ancestros para quedarse con el logo de su página. Esto corrige de paso que,
 imprimir, Servicios Premium medía siempre contra el logo de la primera página y por
 eso nunca aplicaba la reducción en el PDF.
 
+
 ---
 
 ## 2026-10-06 · Mismo revelado por pasos en todas las fases de inversión
@@ -81,6 +67,37 @@ eso nunca aplicaba la reducción en el PDF.
 Se retira la excepción que mostraba entero el texto de la columna izquierda a
 partir de la segunda fase. Ahora todas las fases revelan ese texto paso a paso,
 junto con las columnas de la tabla, igual que la primera.
+
+
+---
+
+## 2026-10-06 · Centrado del nombre de fase en la tabla de inversión
+**[web]**
+
+La celda izquierda de la fila de precios llevaba 16px de padding vertical, así que
+al meter dentro el nombre de la fase la fila crecía por debajo de su fondo marrón y
+arrastraba los precios hacia abajo. Sin padding vertical y con `h-full`, la fila
+vuelve a medir sus 35px y todo queda centrado. Mismo arreglo en la fila de planes,
+donde el contenido sí cabía pero el centrado salía por casualidad.
+
+
+---
+
+## 2026-10-06 · Varios precios por servicio premium
+**[esquema]** **[web]** **[migración recomendada]**
+
+`premiumServices.services[].prices` es ahora un array: un botón de precio por
+entrada, en fila. Aplica tanto a la página del servicio como al popup de la oferta
+de lanzamiento.
+
+El campo `price` antiguo se conserva de reserva y se oculta en el Studio en cuanto
+hay precios en el array, siguiendo [D8](docs/DECISIONES.md#d8).
+
+Migración `precios-premium-a-lista.ts`: aditiva e idempotente. **Ejecutada**
+contra `production`: 86 parches (67 servicios publicados más los de borradores).
+Comprobado después: 67 servicios con array `prices`, ninguno sin él, y ningún
+valor distinto del `price` original, que se conserva.
+
 
 ---
 
@@ -106,6 +123,19 @@ Antes de todo esto se guardó el primer commit real del Studio
 (`7ac20c1` en `propuestasvlanc(SANITYSTUDIO)`), que hasta ahora tenía el esquema y
 las migraciones sin versionar.
 
+
+---
+
+## 2026-10-06 · Despliegue y migraciones del Studio sin preguntas
+
+Queda anotado que el Studio publicado es **propuestasvlanc.sanity.studio** y que
+Claude puede desplegarlo y migrar por su cuenta con `npx sanity deploy --url
+propuestasvlanc -y` y `--no-confirm`. Sin esas banderas el CLI espera una respuesta
+por teclado y el comando se queda colgado.
+
+Sin efecto sobre la web ni sobre Sanity.
+
+
 ---
 
 ## 2026-10-06 · Comandos de arranque y cierre de sesión
@@ -121,6 +151,7 @@ Añadidos dos comandos de proyecto en `.claude/skills/`:
   sobrevive a la compactación del contexto.
 
 Sin efecto sobre la web ni sobre Sanity.
+
 
 ---
 

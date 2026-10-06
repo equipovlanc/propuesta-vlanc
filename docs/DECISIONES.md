@@ -110,6 +110,35 @@ producción.
 ---
 
 <a id="d6"></a>
+<a id="d10"></a>
+## D10 · Si el contenido no cabe: encoger poco, y luego paginar sin partir bloques
+**2026-10-06 · cerrada**
+
+El orden es siempre el mismo: que quepa tal cual, si no encoger hasta **2px**, y si
+con eso no basta **volver al tamaño original** y repartir en varias páginas.
+
+Lo que se reparte nunca es texto suelto, sino el **bloque completo** con su título:
+un cuerpo de texto no se corta jamás por la mitad y un título nunca se queda solo al
+final de una página. Los botones cierran la sección, así que van en la última página;
+la cabecera se repite en todas.
+
+**Por qué.** Es un documento contractual que el cliente puede imprimir: un texto
+notablemente más pequeño que el resto de la propuesta canta, y un párrafo cortado a
+mitad de página parece un fallo. Dos píxeles pasan desapercibidos; cuatro no.
+
+**Consecuencias.**
+- El reparto se calcula **antes** de construir las diapositivas (en `App.tsx`, como
+  la letra pequeña), porque el número de páginas cambia la numeración, la
+  navegación y la impresión.
+- Al decidirse de una vez, el componente no mide nada en vivo: no depende de las
+  animaciones de entrada ni del instante en que se monta. **No volver** a medir
+  dentro del componente en estos casos.
+- Hay que esperar a `document.fonts.ready` antes de medir.
+- Un bloque que por sí solo no quepa se queda en su página y desborda: partirlo está
+  descartado, y una página vacía sería peor.
+
+---
+
 <a id="d9"></a>
 ## D9 · Las migraciones cosméticas no se ejecutan
 **2026-10-06 · cerrada**
