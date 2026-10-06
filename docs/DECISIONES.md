@@ -110,6 +110,30 @@ producción.
 ---
 
 <a id="d6"></a>
+<a id="d7"></a>
+## D7 · La inversión es un array de fases, con los campos antiguos de reserva
+**2026-10-06 · cerrada**
+
+`investment.phases[]` contiene una página completa por fase. Los campos antiguos
+(`introduction`, `tableRows`, `prices`…) **no se han borrado**: mientras `phases`
+esté vacío hacen de fase 1, y en cuanto hay fases se ocultan solos en el Studio.
+
+**Por qué.** Permite desplegar la web antes de migrar el contenido sin que nada se
+caiga, y deja la migración como un paso reversible: si algo sale mal, se borra el
+array `phases` y todo vuelve al comportamiento anterior. Los campos de una fase se
+definen **una sola vez** en el esquema (`camposDeFaseInversion`) y se reutilizan en
+los dos sitios, así que no pueden divergir.
+
+**Consecuencias.**
+- La migración `inversion-a-fases.ts` es aditiva: copia, no mueve.
+- No borrar los campos heredados del esquema sin comprobar antes que todas las
+  propuestas, borradores incluidos, tienen ya su array `phases`.
+- `title` y `locationDate` siguen siendo únicos para toda la sección, porque los
+  leen también Ofertas Especiales, Forma de Pago y la letra pequeña.
+
+---
+
+<a id="d6"></a>
 ## D6 · Interruptor para los botones de contenido, no para los de interfaz
 **2026-09-15 · cerrada**
 

@@ -41,7 +41,7 @@ incrementándose solo por las secciones que de verdad se pintan:
 hero · index                        (sin número)
 situación · misión · proceso · equipo · testimonios · ámbito
 fases (una diapositiva por fase)
-inversión · ofertas especiales · forma de pago
+inversión (una diapositiva por fase activa) · ofertas especiales · forma de pago
 letra pequeña (1..N páginas, calculadas en tiempo de ejecución)
 [diapositiva separadora: consume un número pero no lo muestra]
 garantías
@@ -73,13 +73,24 @@ Algunas diapositivas se revelan por partes antes de pasar a la siguiente. El est
 |---|---|
 | Misión | 2 |
 | Proceso | uno por paso del proceso |
-| Inversión | nº de planes × 2 |
+| Inversión | nº de planes × 2, **por fase** |
 | Ofertas especiales | dinámico: condición especial + oferta de lanzamiento + logo |
 | Forma de pago | 1 |
 | Separadora | 1 |
 
 `completedSections` recuerda las que ya se han visto enteras, para que al volver
 atrás aparezcan completas en lugar de reiniciar la animación.
+
+Las páginas de inversión son un caso aparte: como puede haber varias y cada una
+tener distinto número de planes, **cada entrada del array lleva su propio
+`maxSteps`**, y los manejadores de rueda, teclado y swipe lo leen de ahí en vez de
+recalcularlo. Sus ids son `investment`, `investment-2`, `investment-3`… y se
+reconocen con el ayudante `esInversion()`.
+
+En la primera página de inversión las tarjetas de planes de la izquierda se van
+revelando paso a paso junto con las columnas de la tabla. En las siguientes, ese
+texto ya se ha leído, así que aparece entero al llegar (`revealTextOnArrival`) y
+solo avanza la tabla, en el mismo orden.
 
 **El contador de pasos de Ofertas Especiales está duplicado**: `getSpecialOffersSteps`
 en `App.tsx` decide cuántos pasos hay, y `SpecialOffers.tsx` decide qué se pinta.

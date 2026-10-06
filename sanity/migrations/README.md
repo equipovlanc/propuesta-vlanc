@@ -48,6 +48,20 @@ npx sanity migration run activar-botones                  # simulacro
 npx sanity migration run activar-botones --no-dry-run     # aplica
 ```
 
+## `inversion-a-fases.ts` — necesaria para usar varias fases de inversión
+
+Copia el contenido actual de "la inversión" a `investment.phases[0]` para poder
+duplicarlo desde el Studio. Es **aditiva**: no borra los campos antiguos, así que se
+puede deshacer borrando el array `phases`.
+
+```bash
+npx sanity migration run inversion-a-fases                  # simulacro
+npx sanity migration run inversion-a-fases --no-dry-run     # aplica
+```
+
+Sin ejecutarla la web funciona igual que siempre, pero no se pueden crear fases
+nuevas desde el Studio.
+
 ## `set-premium-isactive.mjs` — alternativa
 
 Hace exactamente lo mismo, pero se ejecuta desde **este** repo (que ya tiene

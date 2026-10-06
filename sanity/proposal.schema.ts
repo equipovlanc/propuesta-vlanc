@@ -1,5 +1,37 @@
 import { defineType, defineField } from 'sanity'
 
+// Campos que componen UNA pagina de inversion (su columna de texto y su tabla).
+// Se usan dos veces: en las fases nuevas y en los campos heredados que hacen de
+// fase 1 mientras no se haya migrado. Al estar definidos una sola vez, no pueden
+// divergir entre si.
+const camposDeFaseInversion = [
+    defineField({ name: 'introduction', title: '2. Introduccion Parte 1', type: 'array', of: [{ type: 'block' }] }),
+    defineField({ name: 'highlightPhrase', title: '3. Frase Destacada (Centro, Negrita)', type: 'array', of: [{ type: 'block' }] }),
+    defineField({ name: 'introduction2', title: '4. Introduccion Parte 2', type: 'array', of: [{ type: 'block' }] }),
+    defineField({
+        name: 'plansDescription', title: '5. Tarjetas Descriptivas de Planes (Aparecen sobre la tabla)', type: 'array', of: [{
+            type: 'object', fields: [{ name: 'name', type: 'string' }, { name: 'desc', type: 'array', of: [{ type: 'block' }] }]
+        }]
+    }),
+    defineField({ name: 'tableHeaders', title: '6. Nombres de Planes (Cabecera de Tabla)', type: 'array', of: [{ type: 'string' }] }),
+    defineField({
+        name: 'tableRows', title: '7. Filas de Caracteristicas (Cuerpo de Tabla)', type: 'array', of: [{
+            type: 'object',
+            fields: [
+                defineField({ name: 'label', type: 'string' }),
+                defineField({ name: 'isPremiumSeparator', title: 'Es separador Servicios Premium?', type: 'boolean' }),
+                defineField({ name: 'highlightColor', title: 'Color de fondo especial (Opcional)', type: 'string', options: { list: ['none', 'light', 'medium', 'dark'] } }),
+                defineField({ name: 'checks', type: 'array', of: [{ type: 'boolean' }] })
+            ]
+        }]
+    }),
+    defineField({ name: 'prices', title: '8. Precios (Pie de tabla)', type: 'array', of: [{ type: 'string' }] })
+]
+
+// Los campos heredados solo se ven mientras no haya fases. En cuanto se crea la
+// primera fase dejan de leerse, asi que se ocultan para que nadie edite en balde.
+const hayFases = ({ parent }: any) => Array.isArray(parent?.phases) && parent.phases.length > 0
+
 const overlayField = defineField({
     name: 'overlayOpacity',
     title: 'Opacidad Filtro (%)',
@@ -389,29 +421,49 @@ export default defineType({
                     initialValue: true,
                     description: 'Si se desactiva, esta sección no aparecerá en la web.'
                 }),
-                defineField({ name: 'title', title: '1. Título General', type: 'string' }),
-                defineField({ name: 'introduction', title: '2. Introducción Parte 1', type: 'array', of: [{ type: 'block' }] }),
-                defineField({ name: 'highlightPhrase', title: '3. Frase Destacada (Centro, Negrita)', type: 'array', of: [{ type: 'block' }] }),
-                defineField({ name: 'introduction2', title: '4. Introducción Parte 2', type: 'array', of: [{ type: 'block' }] }),
+                defineField({ name: 'title', title: '1. Título General (común a todas las fases)', type: 'string' }),
+                defineField({ name: 'locationDate', title: '2. Lugar y Fecha (común a todas las fases, y usado en Ofertas Especiales)', type: 'string' }),
                 defineField({
-                    name: 'plansDescription', title: '5. Tarjetas Descriptivas de Planes (Aparecen sobre la tabla)', type: 'array', of: [{
-                        type: 'object', fields: [{ name: 'name', type: 'string' }, { name: 'desc', type: 'array', of: [{ type: 'block' }] }]
-                    }]
-                }),
-                defineField({ name: 'tableHeaders', title: '6. Nombres de Planes (Cabecera de Tabla)', type: 'array', of: [{ type: 'string' }] }),
-                defineField({
-                    name: 'tableRows', title: '7. Filas de Características (Cuerpo de Tabla)', type: 'array', of: [{
+                    name: 'phases',
+                    title: '3. Fases de Inversión (una página cada una)',
+                    type: 'array',
+                    description: 'Cada fase es una página completa de la inversión, con su propio texto y su propia tabla. Para añadir otra, abre el menú de una fase existente y pulsa Duplicate: la copia nace con todo el contenido relleno y solo hay que retocarlo.',
+                    of: [{
                         type: 'object',
+                        name: 'investmentPhase',
+                        title: 'Fase',
                         fields: [
-                            defineField({ name: 'label', type: 'string' }),
-                            defineField({ name: 'isPremiumSeparator', title: '¿Es separador Servicios Premium?', type: 'boolean' }),
-                            defineField({ name: 'highlightColor', title: 'Color de fondo especial (Opcional)', type: 'string', options: { list: ['none', 'light', 'medium', 'dark'] } }),
-                            defineField({ name: 'checks', type: 'array', of: [{ type: 'boolean' }] })
-                        ]
+                            defineField({
+                                name: 'phaseLabel',
+                                title: '1. Nombre de la Fase (ej: FASE 1)',
+                                type: 'string',
+                                description: 'Se muestra a la izquierda de la fila de planes y de la fila de precios. Déjalo vacío si no quieres que aparezca. Puede ser el texto que quieras, no tiene por qué ser FASE 1.'
+                            }),
+                            ...camposDeFaseInversion,
+                            defineField({
+                                name: 'isActive',
+                                title: '¿Está Activa?',
+                                type: 'boolean',
+                                initialValue: true,
+                                description: 'Si se desactiva, esta página de inversión no aparecerá en la web y el resto se renumera.'
+                            })
+                        ],
+                        preview: {
+                            select: { phaseLabel: 'phaseLabel', headers: 'tableHeaders', isActive: 'isActive' },
+                            prepare({ phaseLabel, headers, isActive }) {
+                                const planes = (headers || []).length
+                                const detalle = planes ? planes + ' plan' + (planes === 1 ? '' : 'es') : 'Sin planes'
+                                return {
+                                    title: phaseLabel || 'Fase sin nombre',
+                                    subtitle: isActive === false ? 'DESACTIVADA - ' + detalle : detalle
+                                }
+                            }
+                        }
                     }]
                 }),
-                defineField({ name: 'prices', title: '8. Precios (Pie de tabla)', type: 'array', of: [{ type: 'string' }] }),
-                defineField({ name: 'locationDate', title: '9. Lugar y Fecha (Pie de tabla y Ofertas Especiales)', type: 'string' })
+
+                // --- Campos heredados: hacen de fase 1 mientras no se cree ninguna fase ---
+                ...camposDeFaseInversion.map((campo) => ({ ...campo, hidden: hayFases })) as any[]
             ]
         }),
         defineField({

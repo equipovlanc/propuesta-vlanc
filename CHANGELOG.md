@@ -8,6 +8,32 @@ Cada entrada indica si requirió acción manual de Jose:
 
 ---
 
+## 2026-10-06 · La inversión admite varias fases
+**[esquema]** **[web]** **[migración necesaria]**
+
+La sección de inversión pasa a ser un array de fases: cada una es una página
+completa con su texto y su tabla, y se añade duplicando una existente desde el
+Studio. Decisión [D7](docs/DECISIONES.md#d7).
+
+- `phaseLabel` por fase, visible sin pasos en la celda izquierda de la fila de
+  planes y de la fila de precios.
+- En la segunda fase en adelante, el texto de la columna izquierda aparece entero
+  al llegar y solo la tabla avanza por pasos.
+- Cada página lleva su propio `maxSteps`, porque las fases pueden tener distinto
+  número de planes.
+- Los campos antiguos se conservan como fase 1 de reserva y se ocultan en el Studio
+  en cuanto hay fases.
+
+Migración `inversion-a-fases.ts`: aditiva e idempotente, simulada sobre las 18
+propuestas publicadas. Hace falta ejecutarla para poder crear la segunda fase; sin
+ella la web sigue mostrando la inversión de siempre.
+
+Antes de todo esto se guardó el primer commit real del Studio
+(`7ac20c1` en `propuestasvlanc(SANITYSTUDIO)`), que hasta ahora tenía el esquema y
+las migraciones sin versionar.
+
+---
+
 ## 2026-10-06 · Comandos de arranque y cierre de sesión
 
 Añadidos dos comandos de proyecto en `.claude/skills/`:

@@ -42,6 +42,12 @@ const getSpecialOffersSteps = (specialOffersData: any, premiumService: any) => {
     return s > 0 ? s : 1;
 };
 
+// Las paginas de inversion son varias: 'investment' es la primera y
+// 'investment-2', 'investment-3'... las siguientes. Cada una lleva su propio
+// numero de pasos en la propia seccion (maxSteps), porque pueden tener distinto
+// numero de planes.
+const esInversion = (id?: string) => id === 'investment' || Boolean(id && id.startsWith('investment-'));
+
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
   const [finePrintData, setFinePrintData] = useState<{ totalPages: number, fontSize: number }>({ totalPages: 0, fontSize: 16 });
@@ -162,7 +168,7 @@ const App: React.FC = () => {
     // Recuperamos el ID de la sección actual para marcar como completada
     const currentSection = sectionsRef.current[currentIndex];
     if (isMovingForward && currentSection) {
-      if (['mission', 'process', 'investment', 'special-offers', 'divider-slide', 'payment'].includes(currentSection.id)) {
+      if (['mission', 'process', 'special-offers', 'divider-slide', 'payment'].includes(currentSection.id) || esInversion(currentSection.id)) {
         setCompletedSections(prev => new Set(prev).add(currentSection.id));
       }
     }
@@ -183,10 +189,9 @@ const App: React.FC = () => {
         if (completedSections.has('process')) setInternalStep(processStepsCount);
         else setInternalStep(isMovingForward ? 0 : processStepsCount);
       }
-      else if (nextSection.id === 'investment') {
-        const numPlans = proposalData?.investment?.tableHeaders?.length || 3;
-        const maxSteps = numPlans * 2;
-        if (completedSections.has('investment')) setInternalStep(maxSteps);
+      else if (esInversion(nextSection.id)) {
+        const maxSteps = nextSection.maxSteps ?? 6;
+        if (completedSections.has(nextSection.id)) setInternalStep(maxSteps);
         else setInternalStep(isMovingForward ? 0 : maxSteps);
       }
       else if (nextSection.id === 'payment') {
@@ -309,8 +314,29 @@ const App: React.FC = () => {
       });
     }
 
+    // Una pagina por fase de inversion. Si todavia no se ha creado el array de
+    // fases, el propio objeto `investment` hace de fase 1 con sus campos heredados,
+    // asi que el contenido antiguo sigue viendose igual sin migrar nada.
+    const fasesInversion: any[] = (Array.isArray(d.investment?.phases) && d.investment.phases.length > 0)
+      ? d.investment.phases
+      : (d.investment ? [d.investment] : []);
+
     if (d.investment?.isActive !== false) {
-      list.push({ id: 'investment', comp: <Investment data={d.investment} step={internalStep} />, headerPage: currentHeaderPage++ });
+      fasesInversion.forEach((fase: any, i: number) => {
+        if (fase?.isActive === false) return;
+        list.push({
+          // El id va por la posicion ORIGINAL para que los enlaces del indice no
+          // se desvien al desactivar una fase intermedia.
+          id: i === 0 ? 'investment' : `investment-${i + 1}`,
+          comp: <Investment
+            data={{ ...fase, title: d.investment?.title, locationDate: d.investment?.locationDate }}
+            step={internalStep}
+            revealTextOnArrival={i > 0}
+          />,
+          headerPage: currentHeaderPage++,
+          maxSteps: (fase?.tableHeaders?.length || 3) * 2
+        });
+      });
     }
 
     if (d.specialOffers?.isActive !== false) {
@@ -439,9 +465,8 @@ const App: React.FC = () => {
           }
         }
 
-        if (activeSection.id === 'investment' && !isCompleted) {
-          const numPlans = proposalData?.investment?.tableHeaders?.length || 3;
-          const maxSteps = numPlans * 2;
+        if (esInversion(activeSection.id) && !isCompleted) {
+          const maxSteps = activeSection.maxSteps ?? 6;
           if (e.deltaY > 0) {
             if (internalStep < maxSteps) { setInternalStep(prev => prev + 1); return; }
           } else {
@@ -501,7 +526,7 @@ const App: React.FC = () => {
 
       if (activeSection.id === 'mission' && !isCompleted) if (handleStep(2)) return;
       if (activeSection.id === 'process' && !isCompleted) if (handleStep(proposalData?.process?.steps?.length || 8)) return;
-      if (activeSection.id === 'investment' && !isCompleted) if (handleStep((proposalData?.investment?.tableHeaders?.length || 3) * 2)) return;
+      if (esInversion(activeSection.id) && !isCompleted) if (handleStep(activeSection.maxSteps ?? 6)) return;
       if (activeSection.id === 'payment' && !isCompleted) if (handleStep(1)) return;
       if (activeSection.id === 'special-offers' && !isCompleted) {
         const premiumServices = proposalData?.premiumServices?.services;
@@ -536,7 +561,7 @@ const App: React.FC = () => {
 
       if (activeSection.id === 'mission' && !isCompleted && tryStep(2)) return;
       if (activeSection.id === 'process' && !isCompleted && tryStep(proposalData?.process?.steps?.length || 8)) return;
-      if (activeSection.id === 'investment' && !isCompleted && tryStep((proposalData?.investment?.tableHeaders?.length || 3) * 2)) return;
+      if (esInversion(activeSection.id) && !isCompleted && tryStep(activeSection.maxSteps ?? 6)) return;
       if (activeSection.id === 'payment' && !isCompleted && tryStep(1)) return;
       if (activeSection.id === 'special-offers' && !isCompleted) {
         const premiumServices = proposalData?.premiumServices?.services;

@@ -46,6 +46,7 @@ Son 26, todos booleanos con `initialValue: true` y todos leídos con
 - `specialOffers.conditionalOffer.isActive` y `specialOffers.launchOffer.isActive`
   — quitan un paso interno de la sección de ofertas.
 - `contact.rrss[].isActive` — quita un icono.
+- `investment.phases[].isActive` — quita esa página de inversión entera.
 
 ### Botones
 
@@ -63,6 +64,26 @@ Son 26, todos booleanos con `initialValue: true` y todos leídos con
 cerrar popups, los enlaces del índice y la navegación de la cabecera. Son mecanismos
 de la interfaz: esconderlos dejaría páginas en las que no se puede hacer nada. Los
 teléfonos de contacto tampoco, porque no son enlaces: si se borra el número desaparecen.
+
+## Las fases de la sección de inversión
+
+`investment` puede tener varias páginas, una por cada elemento de `investment.phases`.
+Cada fase lleva su propio texto de la columna izquierda y su propia tabla completa;
+lo único común a todas es el título (`investment.title`) y el lugar y fecha
+(`investment.locationDate`), que además usan Ofertas Especiales, Forma de Pago y la
+letra pequeña.
+
+`phaseLabel` es el nombre de la fase ("FASE 1", o lo que se quiera). Se pinta en la
+celda izquierda de la fila de planes y en la de la fila de precios, y es visible
+desde que se llega a la página, sin pasos. Si se deja vacío no aparece nada.
+
+**Para añadir una fase**: menú ⋮ de una fase existente → **Duplicate**. La copia nace
+con todo el contenido relleno y solo hay que retocar lo que cambie.
+
+**Compatibilidad**: mientras `phases` esté vacío, el propio objeto `investment` hace
+de fase 1 con sus campos de siempre, y el esquema los muestra. En cuanto existe una
+fase, esos campos heredados se **ocultan solos** en el Studio (ya no se leen) para que
+nadie edite donde no toca. Ver [D7](DECISIONES.md#d7).
 
 ## Migraciones
 
