@@ -151,7 +151,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                 className="grid bg-[#cbb6aa] shrink-0 h-[47px]"
                                 style={{ gridTemplateColumns: `2.5fr repeat(${numPlans}, 1fr)` }}
                             >
-                                <div className="p-3 pl-4 flex items-center">
+                                <div className="px-4 flex items-center h-full">
                                     {phaseLabel && (
                                         <span className="tabla1 whitespace-nowrap">{phaseLabel}</span>
                                     )}
@@ -211,7 +211,7 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                                 className="grid bg-[#8f4933] text-white shrink-0 h-[35px]"
                                 style={{ gridTemplateColumns: `2.5fr repeat(${numPlans}, 1fr)` }}
                             >
-                                <div className="p-4 flex items-center">
+                                <div className="px-4 flex items-center h-full">
                                     {phaseLabel && (
                                         <span className="tabla3 whitespace-nowrap">{phaseLabel}</span>
                                     )}
