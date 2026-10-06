@@ -87,10 +87,10 @@ tener distinto número de planes, **cada entrada del array lleva su propio
 recalcularlo. Sus ids son `investment`, `investment-2`, `investment-3`… y se
 reconocen con el ayudante `esInversion()`.
 
-En la primera página de inversión las tarjetas de planes de la izquierda se van
-revelando paso a paso junto con las columnas de la tabla. En las siguientes, ese
-texto ya se ha leído, así que aparece entero al llegar (`revealTextOnArrival`) y
-solo avanza la tabla, en el mismo orden.
+Todas las páginas de inversión se comportan igual: las tarjetas de planes de la
+izquierda se revelan paso a paso junto con las columnas de la tabla, en cada fase.
+Hubo brevemente una excepción para la segunda fase en adelante, y se retiró por
+coherencia.
 
 **El contador de pasos de Ofertas Especiales está duplicado**: `getSpecialOffersSteps`
 en `App.tsx` decide cuántos pasos hay, y `SpecialOffers.tsx` decide qué se pinta.

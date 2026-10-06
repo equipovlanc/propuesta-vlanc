@@ -26,12 +26,6 @@ interface InvestmentProps {
     };
     step?: number; // 0 = Intro, 1 = Plan 1, 2 = Plan 2, 3 = Plan 3
     isPrintMode?: boolean;
-    /**
-     * En la primera fase las tarjetas de planes se van revelando con los pasos.
-     * En las fases siguientes el texto ya se ha leido antes, asi que se muestra
-     * entero al llegar y solo la tabla avanza por pasos.
-     */
-    revealTextOnArrival?: boolean;
 }
 
 const CheckIcon = () => (
@@ -40,12 +34,10 @@ const CheckIcon = () => (
     </svg>
 );
 
-const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = false, revealTextOnArrival = false }) => {
+const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = false }) => {
 
     const numPlans = data?.tableHeaders?.length || 3;
     const phaseLabel = data?.phaseLabel?.trim();
-    // El texto de la izquierda se muestra entero si lo pide la fase, o al imprimir.
-    const textoVisible = isPrintMode || revealTextOnArrival;
 
     const getRowBg = (color?: string) => {
         if (color === 'light') return 'bg-[#eae0d5]';
@@ -95,10 +87,10 @@ const Investment: React.FC<InvestmentProps> = ({ data, step = 3, isPrintMode = f
                             <motion.div
                                 key={i}
                                 className="space-y-2 print-force-visible"
-                                initial={textoVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                                initial={isPrintMode ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                                 animate={{
-                                    opacity: (step >= i + 1 || textoVisible) ? 1 : 0.1,
-                                    x: (step >= i + 1 || textoVisible) ? 0 : -20,
+                                    opacity: (step >= i + 1 || isPrintMode) ? 1 : 0.1,
+                                    x: (step >= i + 1 || isPrintMode) ? 0 : -20,
                                 }}
                                 transition={{ duration: 0.8, ease: "easeOut" }}
                             >

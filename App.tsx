@@ -331,7 +331,6 @@ const App: React.FC = () => {
           comp: <Investment
             data={{ ...fase, title: d.investment?.title, locationDate: d.investment?.locationDate }}
             step={internalStep}
-            revealTextOnArrival={i > 0}
           />,
           headerPage: currentHeaderPage++,
           maxSteps: (fase?.tableHeaders?.length || 3) * 2

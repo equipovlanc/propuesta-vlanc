@@ -25,6 +25,15 @@ valor distinto del `price` original, que se conserva.
 
 ---
 
+## 2026-10-06 · Mismo revelado por pasos en todas las fases de inversión
+**[web]**
+
+Se retira la excepción que mostraba entero el texto de la columna izquierda a
+partir de la segunda fase. Ahora todas las fases revelan ese texto paso a paso,
+junto con las columnas de la tabla, igual que la primera.
+
+---
+
 ## 2026-10-06 · La inversión admite varias fases
 **[esquema]** **[web]** **[migración necesaria]**
 
@@ -34,8 +43,6 @@ Studio. Decisión [D7](docs/DECISIONES.md#d7).
 
 - `phaseLabel` por fase, visible sin pasos en la celda izquierda de la fila de
   planes y de la fila de precios.
-- En la segunda fase en adelante, el texto de la columna izquierda aparece entero
-  al llegar y solo la tabla avanza por pasos.
 - Cada página lleva su propio `maxSteps`, porque las fases pueden tener distinto
   número de planes.
 - Los campos antiguos se conservan como fase 1 de reserva y se ocultan en el Studio
