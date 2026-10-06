@@ -18,9 +18,10 @@ de lanzamiento.
 El campo `price` antiguo se conserva de reserva y se oculta en el Studio en cuanto
 hay precios en el array, siguiendo [D8](docs/DECISIONES.md#d8).
 
-Migración `precios-premium-a-lista.ts`: aditiva e idempotente, simulada sobre las
-18 propuestas publicadas (67 precios). Sin ejecutarla la web se ve igual, pero
-habría que reescribir cada precio a mano al pasar al array.
+Migración `precios-premium-a-lista.ts`: aditiva e idempotente. **Ejecutada**
+contra `production`: 86 parches (67 servicios publicados más los de borradores).
+Comprobado después: 67 servicios con array `prices`, ninguno sin él, y ningún
+valor distinto del `price` original, que se conserva.
 
 ---
 
@@ -40,9 +41,9 @@ Studio. Decisión [D7](docs/DECISIONES.md#d7).
 - Los campos antiguos se conservan como fase 1 de reserva y se ocultan en el Studio
   en cuanto hay fases.
 
-Migración `inversion-a-fases.ts`: aditiva e idempotente, simulada sobre las 18
-propuestas publicadas. Hace falta ejecutarla para poder crear la segunda fase; sin
-ella la web sigue mostrando la inversión de siempre.
+Migración `inversion-a-fases.ts`: aditiva e idempotente. **Ejecutada** contra
+`production`: 23 documentos (18 propuestas publicadas y 5 borradores). Comprobado
+después: las 18 tienen su FASE 1 con sus planes y precios.
 
 Antes de todo esto se guardó el primer commit real del Studio
 (`7ac20c1` en `propuestasvlanc(SANITYSTUDIO)`), que hasta ahora tenía el esquema y
