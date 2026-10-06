@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
 import CustomPortableText from './CustomPortableText';
-import { getLogoBottom } from '../utils/logoBottom';
+import { getLogoBottomOffset, CANVAS_WIDTH } from '../utils/logoBottom';
 
 interface SubPhase {
     number?: string;
@@ -48,11 +48,7 @@ const CUERPO_SIZE = 14;
 const MAX_FONT_REDUCTION = 4;
 // Hueco libre mínimo entre el borde inferior del logo y la primera línea del
 // bloque de fases, en px CSS. Subir este número hace que reduzca antes.
-const LOGO_MIN_GAP = 10;
-// Ancho del lienzo, usado como sonda para deducir el zoom de #app-container y
-// poder razonar en px CSS en lugar de en px ya escalados.
-const CANVAS_WIDTH = 1920;
-
+const LOGO_MIN_GAP = 2;
 const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados.", guaranteeItem, guaranteesList = [] }) => {
     const [showVideo, setShowVideo] = useState(false);
     const [openGuaranteeIndex, setOpenGuaranteeIndex] = useState<number | null>(null);
@@ -101,15 +97,20 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
             if (!section || !block) return;
             if (fontReduction >= MAX_FONT_REDUCTION || bumpedFromRef.current === fontReduction) return;
 
-            const zoom = section.getBoundingClientRect().width / CANVAS_WIDTH;
-            if (!zoom) return;
-
-            const logoBottom = getLogoBottom(section);
+            const logoBottom = getLogoBottomOffset(section);
             if (logoBottom === null) return;
+
+            // Las diapositivas entran con una animación de escala (3x o 0.4x hasta 1),
+            // así que todo se mide como desplazamiento DENTRO del lienzo: la escala se
+            // cancela y la medida vale también mientras dura la animación.
+            const sectionRect = section.getBoundingClientRect();
+            const scale = sectionRect.width / CANVAS_WIDTH;
+            if (!scale) return;
 
             // El bloque está anclado abajo y crece hacia arriba, así que su borde
             // superior es justo lo que se acerca al logo.
-            const gap = (block.getBoundingClientRect().top - logoBottom) / zoom;
+            const blockTop = (block.getBoundingClientRect().top - sectionRect.top) / scale;
+            const gap = blockTop - logoBottom;
             if (gap < LOGO_MIN_GAP) {
                 bumpedFromRef.current = fontReduction;
                 setFontReduction(fontReduction + 1);

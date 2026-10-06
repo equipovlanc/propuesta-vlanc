@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
 import CustomPortableText from './CustomPortableText';
-import { getLogoBottom } from '../utils/logoBottom';
+import { getLogoBottomOffset, CANVAS_WIDTH } from '../utils/logoBottom';
 
 interface DescriptionBlock {
     text: string;
@@ -105,8 +105,17 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             // reducción de 1 en 1 hasta cumplir los 50px o agotar el tope.
             if (fontReduction >= MAX_FONT_REDUCTION || bumpedFromRef.current === fontReduction) return;
 
-            const logoBottom = getLogoBottom(title);
+            const logoBottom = getLogoBottomOffset(title);
             if (logoBottom === null) return;
+
+            // Mismo motivo que en ScopePhases: durante la animación de entrada la
+            // diapositiva está escalada, así que el logo y el título sólo son
+            // comparables como desplazamientos dentro del lienzo.
+            const section = title.closest('section');
+            if (!section) return;
+            const sectionRect = section.getBoundingClientRect();
+            const sectionScale = sectionRect.width / CANVAS_WIDTH;
+            if (!sectionScale) return;
 
             // El texto no llena su caja: descontamos el medio interlineado para medir
             // desde la parte superior real del texto. Se usa la proporción y no los
@@ -118,7 +127,8 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                 ? (cssLineHeight - fontSize) / (2 * cssLineHeight)
                 : 0;
 
-            const logoGap = (titleRect.top - logoBottom) / zoom + lineHeight * halfLeadingRatio;
+            const titleTop = (titleRect.top - sectionRect.top) / sectionScale;
+            const logoGap = titleTop - logoBottom + lineHeight * halfLeadingRatio;
             if (logoGap < LOGO_MIN_GAP) {
                 bumpedFromRef.current = fontReduction;
                 setFontReduction(fontReduction + 1);

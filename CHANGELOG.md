@@ -25,6 +25,20 @@ valor distinto del `price` original, que se conserva.
 
 ---
 
+## 2026-10-06 · Corrige el ajuste automático, que encogía siempre al máximo
+**[web]**
+
+La medición comparaba coordenadas de pantalla entre el logo y el contenido de la
+diapositiva, y se dispara al montar, justo cuando la diapositiva está entrando
+con una animación de escala de 3x. El hueco salía muy negativo y el texto se
+reducía hasta el tope en todas las fases, hubiera desbordamiento o no.
+
+Ahora todo se mide como desplazamiento dentro del lienzo de 1920px, así que la
+escala se cancela y la medida es correcta en cualquier instante de la animación.
+Afecta también a Servicios Premium, que tenía el mismo defecto.
+
+---
+
 ## 2026-10-06 · Trabajos Contemplados encoge el texto si invade el logo
 **[web]**
 

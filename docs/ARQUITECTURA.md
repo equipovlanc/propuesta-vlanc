@@ -119,7 +119,13 @@ Piezas del mecanismo:
   `text-[14px]` fija el tamaño y **anula la variable**.
 - Las variables se ponen en el bloque concreto que debe encoger, no en la sección
   entera, para que no alcancen a los popups, que son hermanos suyos.
-- Todo vive dentro de `#app-container`, que aplica `zoom`, así que
+- **Nunca comparar coordenadas de pantalla entre el logo y algo de dentro de la
+  diapositiva.** Las diapositivas entran con una animación de escala (3x o 0.4x
+  hasta 1), y el logo vive fuera de ellas: durante esa animación la distancia medida
+  así es falsa. Peor aún, la medición se dispara al montar, o sea en el peor momento
+  posible. Todo se mide como **desplazamiento dentro del lienzo de 1920px**: la
+  escala se cancela y la medida vale en cualquier instante.
+- Todo vive además dentro de `#app-container`, que aplica `zoom`, así que
   `getBoundingClientRect` devuelve px ya escalados. Se deduce el factor midiendo un
   elemento de ancho conocido y se razona en px CSS.
 - Un `ref` recuerda desde qué reducción se pidió el último incremento: el
