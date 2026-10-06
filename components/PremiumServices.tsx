@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
 import CustomPortableText from './CustomPortableText';
+import { getLogoBottom } from '../utils/logoBottom';
 
 interface DescriptionBlock {
     text: string;
@@ -39,22 +40,6 @@ const LOGO_MIN_GAP = 50;      // px libres mínimos entre el logo y la primera l
 const SUBTITULO2_SIZE = 24;   // tamaños base de las clases que se reducen
 const CUERPO_SIZE = 14;
 const MAX_FONT_REDUCTION = 3; // tope: deja cuerpo en 11px, aún por encima de la letra pequeña (10px)
-
-// Borde inferior real del logo, en coordenadas de cliente (con el zoom ya aplicado).
-// El logo usa object-contain, así que si la imagen no es cuadrada no llena su caja
-// y el borde visible queda por encima del borde del elemento.
-const getLogoBottom = (): number | null => {
-    const el = document.querySelector('[data-vlanc-logo]');
-    if (!el) return null;
-
-    const rect = el.getBoundingClientRect();
-    const img = el.querySelector('img');
-    if (img && img.naturalWidth > 0 && img.naturalHeight > 0) {
-        const scale = Math.min(rect.width / img.naturalWidth, rect.height / img.naturalHeight);
-        return rect.top + (rect.height + img.naturalHeight * scale) / 2;
-    }
-    return rect.bottom;
-};
 
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 0 }) => {
     const imageSrc = image?.src;
@@ -120,7 +105,7 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
             // reducción de 1 en 1 hasta cumplir los 50px o agotar el tope.
             if (fontReduction >= MAX_FONT_REDUCTION || bumpedFromRef.current === fontReduction) return;
 
-            const logoBottom = getLogoBottom();
+            const logoBottom = getLogoBottom(title);
             if (logoBottom === null) return;
 
             // El texto no llena su caja: descontamos el medio interlineado para medir

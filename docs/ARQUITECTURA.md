@@ -97,6 +97,41 @@ en `App.tsx` decide cuántos pasos hay, y `SpecialOffers.tsx` decide qué se pin
 Si las dos condiciones no son idénticas, queda un paso en el que no ocurre nada.
 Hay comentarios de aviso en ambos sitios.
 
+## Ajuste automático del tamaño de texto
+
+Dos secciones encogen su texto solas cuando el contenido crece demasiado:
+**Servicios Premium** y **Trabajos Contemplados**. Las dos usan el mismo patrón.
+
+La referencia es el **borde inferior del logo** de la esquina superior izquierda.
+Cuando el texto se acerca a esa altura, se resta 1px a los tamaños base de esa
+sección, se vuelve a medir, y se repite hasta cumplir o hasta agotar el tope.
+
+Piezas del mecanismo:
+
+- `utils/logoBottom.ts` calcula el borde inferior **real** del logo. El logo usa
+  `object-contain`, así que si la imagen no es cuadrada no llena su caja y el borde
+  visible queda por encima del del elemento. La función sube por los ancestros del
+  elemento que pregunta para quedarse con el logo de **su** página: al imprimir hay
+  uno por página y buscarlo en todo el documento devolvía siempre el de la primera.
+- Los tamaños se aplican por **variables CSS** (`--cuerpo-size`,
+  `--fase-titulo-size`, `--fase-subtitulo-size`, `--subtitulo2-size`), declaradas en
+  `index.html` con su valor por defecto. Cuidado: una clase de Tailwind como
+  `text-[14px]` fija el tamaño y **anula la variable**.
+- Las variables se ponen en el bloque concreto que debe encoger, no en la sección
+  entera, para que no alcancen a los popups, que son hermanos suyos.
+- Todo vive dentro de `#app-container`, que aplica `zoom`, así que
+  `getBoundingClientRect` devuelve px ya escalados. Se deduce el factor midiendo un
+  elemento de ancho conocido y se razona en px CSS.
+- Un `ref` recuerda desde qué reducción se pidió el último incremento: el
+  `ResizeObserver` se dispara varias veces antes del re-render y sin eso cada
+  disparo mediría el mismo DOM y encogería el texto de más.
+
+La reducción solo crece, nunca vuelve atrás dentro de la misma diapositiva, así que
+no puede oscilar. Cada diapositiva monta su propia instancia y empieza de cero.
+
+Los números a tocar si hace falta afinar están al principio de cada componente:
+`LOGO_MIN_GAP` (hueco libre exigido) y `MAX_FONT_REDUCTION` (tope de px).
+
 ## Modo impresión
 
 `isPrintMode` cambia el render por completo: en vez de una diapositiva, pinta

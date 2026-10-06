@@ -25,6 +25,20 @@ valor distinto del `price` original, que se conserva.
 
 ---
 
+## 2026-10-06 · Trabajos Contemplados encoge el texto si invade el logo
+**[web]**
+
+Cuando el contenido de una fase crece hasta acercarse al borde inferior del logo,
+el texto de esa columna se reduce de 1 en 1 px hasta dejar el hueco libre, con un
+tope de 4px. Mismo patrón que ya usaba Servicios Premium.
+
+El cálculo del borde del logo se extrae a `utils/logoBottom.ts` y ahora sube por
+los ancestros para quedarse con el logo de su página. Esto corrige de paso que, al
+imprimir, Servicios Premium medía siempre contra el logo de la primera página y por
+eso nunca aplicaba la reducción en el PDF.
+
+---
+
 ## 2026-10-06 · Mismo revelado por pasos en todas las fases de inversión
 **[web]**
 

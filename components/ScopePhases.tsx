@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AnimatedSection from './AnimatedSection';
 import CustomPortableText from './CustomPortableText';
+import { getLogoBottom } from '../utils/logoBottom';
 
 interface SubPhase {
     number?: string;
@@ -37,6 +38,21 @@ interface ScopePhasesProps {
     guaranteesList?: { text: string; item: GuaranteeItem }[];
 }
 
+// Tamaños base de las clases de texto de la columna de fases. Se reducen en
+// bloque, de 1 en 1 px, cuando el contenido crece tanto que sube por encima del
+// logo de la esquina superior izquierda.
+const FASE_TITULO_SIZE = 18;
+const FASE_SUBTITULO_SIZE = 15;
+const CUERPO_SIZE = 14;
+// Tope: deja el cuerpo en 10px. Más abajo el texto deja de leerse en pantalla.
+const MAX_FONT_REDUCTION = 4;
+// Hueco libre mínimo entre el borde inferior del logo y la primera línea del
+// bloque de fases, en px CSS. Subir este número hace que reduzca antes.
+const LOGO_MIN_GAP = 10;
+// Ancho del lienzo, usado como sonda para deducir el zoom de #app-container y
+// poder razonar en px CSS en lugar de en px ya escalados.
+const CANVAS_WIDTH = 1920;
+
 const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados.", guaranteeItem, guaranteesList = [] }) => {
     const [showVideo, setShowVideo] = useState(false);
     const [openGuaranteeIndex, setOpenGuaranteeIndex] = useState<number | null>(null);
@@ -68,6 +84,50 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
     const openGuaranteeModal = (index: number) => setOpenGuaranteeIndex(index);
     const closeGuaranteeModal = () => setOpenGuaranteeIndex(null);
 
+    // Cada diapositiva monta su propia instancia, así que esto sólo crece hasta el
+    // primer valor que cumple y ahí se queda: no puede oscilar.
+    const [fontReduction, setFontReduction] = useState(0);
+    const sectionRef = useRef<HTMLElement>(null);
+    const blockRef = useRef<HTMLDivElement>(null);
+    // Reducción desde la que ya hemos pedido un incremento. El ResizeObserver puede
+    // dispararse varias veces antes del re-render y, sin esto, cada disparo mediría
+    // el mismo DOM y encogería el texto de más.
+    const bumpedFromRef = useRef(-1);
+
+    useEffect(() => {
+        const checkSpace = () => {
+            const section = sectionRef.current;
+            const block = blockRef.current;
+            if (!section || !block) return;
+            if (fontReduction >= MAX_FONT_REDUCTION || bumpedFromRef.current === fontReduction) return;
+
+            const zoom = section.getBoundingClientRect().width / CANVAS_WIDTH;
+            if (!zoom) return;
+
+            const logoBottom = getLogoBottom(section);
+            if (logoBottom === null) return;
+
+            // El bloque está anclado abajo y crece hacia arriba, así que su borde
+            // superior es justo lo que se acerca al logo.
+            const gap = (block.getBoundingClientRect().top - logoBottom) / zoom;
+            if (gap < LOGO_MIN_GAP) {
+                bumpedFromRef.current = fontReduction;
+                setFontReduction(fontReduction + 1);
+            }
+        };
+
+        checkSpace();
+        window.addEventListener('resize', checkSpace);
+        // También al cambiar el contenido: fuentes que terminan de cargar, etc.
+        const resizeObserver = new ResizeObserver(checkSpace);
+        if (blockRef.current) resizeObserver.observe(blockRef.current);
+
+        return () => {
+            window.removeEventListener('resize', checkSpace);
+            resizeObserver.disconnect();
+        };
+    }, [fontReduction, data]);
+
     // Un botón de garantía solo se pinta si su garantía sigue activa (App.tsx ya filtra
     // los que estén desactivados desde la fase), y el de vídeo si su interruptor lo permite.
     const visibleGuarantees = guaranteesList.filter(g => g.item && g.item.isActive !== false);
@@ -76,7 +136,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
     const activeModalItem = openGuaranteeIndex !== null ? guaranteesList[openGuaranteeIndex]?.item : null;
 
     return (
-        <section className="h-screen w-full relative overflow-hidden">
+        <section className="h-screen w-full relative overflow-hidden" ref={sectionRef}>
             {/* TÍTULO (J1) */}
             <div className="absolute top-[150px] left-[120px] z-20">
                 <AnimatedSection hierarchy={1}>
@@ -108,8 +168,16 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
 
             {/* FASES Y BOTONES (J2) */}
             <div
+                ref={blockRef}
                 className="absolute left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto"
-                style={{ bottom: hasButtons ? '180px' : '140px' }}
+                /* Las variables van en este bloque y no en la sección entera para que
+                   la reducción no alcance al popup de garantías, que es hermano suyo. */
+                style={{
+                    bottom: hasButtons ? '180px' : '140px',
+                    '--fase-titulo-size': `${FASE_TITULO_SIZE - fontReduction}px`,
+                    '--fase-subtitulo-size': `${FASE_SUBTITULO_SIZE - fontReduction}px`,
+                    '--cuerpo-size': `${CUERPO_SIZE - fontReduction}px`,
+                } as React.CSSProperties}
             >
                 <AnimatedSection className="w-full" hierarchy={2}>
                     <h3 className="fase-titulo mb-8 text-vlanc-black">{data?.title}</h3>
@@ -121,7 +189,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                                 </p>
                                 <CustomPortableText 
                                     value={sub.description} 
-                                    className="cuerpo text-[14px] leading-[1.5]" 
+                                    className="cuerpo leading-[1.5]" 
                                 />
                             </div>
                         ))}
