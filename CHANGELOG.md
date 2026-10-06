@@ -8,6 +8,22 @@ Cada entrada indica si requirió acción manual de Jose:
 
 ---
 
+## 2026-10-06 · Varios precios por servicio premium
+**[esquema]** **[web]** **[migración recomendada]**
+
+`premiumServices.services[].prices` es ahora un array: un botón de precio por
+entrada, en fila. Aplica tanto a la página del servicio como al popup de la oferta
+de lanzamiento.
+
+El campo `price` antiguo se conserva de reserva y se oculta en el Studio en cuanto
+hay precios en el array, siguiendo [D8](docs/DECISIONES.md#d8).
+
+Migración `precios-premium-a-lista.ts`: aditiva e idempotente, simulada sobre las
+18 propuestas publicadas (67 precios). Sin ejecutarla la web se ve igual, pero
+habría que reescribir cada precio a mano al pasar al array.
+
+---
+
 ## 2026-10-06 · La inversión admite varias fases
 **[esquema]** **[web]** **[migración necesaria]**
 

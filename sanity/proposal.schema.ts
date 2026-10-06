@@ -746,7 +746,21 @@ export default defineType({
                                 }]
                             }),
                             defineField({ name: 'note', title: 'Nota (Texto con saltos de línea)', type: 'array', of: [{ type: 'block' }] }),
-                            defineField({ name: 'price', type: 'string' }),
+                            defineField({
+                                name: 'prices',
+                                title: 'Precios (uno por botón)',
+                                type: 'array',
+                                of: [{ type: 'string' }],
+                                description: 'Cada entrada es un botón de precio. Añade tantos como necesites; aparecen en fila, en el mismo orden.'
+                            }),
+                            // Campo antiguo de un solo precio: se sigue usando mientras no
+                            // haya ninguno en `prices`, y se oculta en cuanto lo hay.
+                            defineField({
+                                name: 'price',
+                                title: 'Precio (campo antiguo, de un solo botón)',
+                                type: 'string',
+                                hidden: ({ parent }: any) => Array.isArray(parent?.prices) && parent.prices.length > 0
+                            }),
                             defineField({
                                 name: 'image',
                                 type: 'image',

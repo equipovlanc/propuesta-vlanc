@@ -16,6 +16,7 @@ interface PremiumService {
     title?: string;
     subtitle?: string;
     price?: string;
+    prices?: string[];
     description?: DescriptionBlock[];
     note?: string;
 }
@@ -309,7 +310,22 @@ const SpecialOffers: React.FC<SpecialOffersProps> = ({
                                     />
                                 </div>
                             )}
-                            {premiumService.price && <div className="mt-8 bg-[#8f4933] text-white px-8 py-3 rounded-[1px] flex items-center justify-center cursor-default"><span className="boton1 text-white tracking-[0.1em]">{premiumService.price}</span></div>}
+                            {(() => {
+                                // Mismo criterio que PremiumServices: `prices` manda, y si no
+                                // lo hay se usa el campo antiguo `price`.
+                                const precios = ((premiumService.prices?.length ? premiumService.prices : (premiumService.price ? [premiumService.price] : [])) ?? [])
+                                    .filter((p) => typeof p === 'string' && p.trim() !== '');
+                                if (precios.length === 0) return null;
+                                return (
+                                    <div className="mt-8 flex flex-row items-center gap-4 flex-wrap">
+                                        {precios.map((precio, i) => (
+                                            <div key={i} className="bg-[#8f4933] text-white px-8 py-3 rounded-[1px] flex items-center justify-center cursor-default whitespace-nowrap">
+                                                <span className="boton1 text-white tracking-[0.1em]">{precio}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })()}
                         </div>
                     </AnimatedSection>
                 </div>

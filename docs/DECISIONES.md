@@ -110,6 +110,33 @@ producción.
 ---
 
 <a id="d6"></a>
+<a id="d8"></a>
+## D8 · Cambiar el tipo de un campo se hace con un campo nuevo, nunca in situ
+**2026-10-06 · cerrada**
+
+Cuando un campo necesita cambiar de forma (de texto suelto a lista, de objeto a
+array de objetos), **no se cambia el `type` del campo existente**. Se añade uno
+nuevo, el antiguo se queda de reserva mientras el nuevo esté vacío, y el esquema
+oculta el antiguo en cuanto el nuevo tiene contenido.
+
+Casos aplicados: `investment.phases` frente a los campos sueltos de inversión (D7),
+y `premiumServices.services[].prices` frente a `price`.
+
+**Por qué.** Cambiar el `type` de un campo que ya tiene datos hace que el Studio
+marque el contenido existente como inválido y ofrezca borrarlo, y rompe la web en
+el hueco entre desplegar y migrar. Con un campo nuevo, la web funciona igual antes
+y después de migrar, el despliegue y la migración dejan de depender el uno del
+otro, y deshacer es tan fácil como vaciar el campo nuevo.
+
+**Consecuencias.**
+- Las migraciones de este proyecto son **aditivas**: copian, no mueven ni borran.
+- Queda contenido duplicado en el documento (el viejo y el nuevo). Es el precio a
+  pagar, y no estorba porque el antiguo está oculto.
+- No limpiar nunca los campos de reserva sin comprobar antes que **todas** las
+  propuestas, borradores incluidos, usan ya el campo nuevo.
+
+---
+
 <a id="d7"></a>
 ## D7 · La inversión es un array de fases, con los campos antiguos de reserva
 **2026-10-06 · cerrada**

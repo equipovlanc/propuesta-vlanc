@@ -85,6 +85,16 @@ de fase 1 con sus campos de siempre, y el esquema los muestra. En cuanto existe 
 fase, esos campos heredados se **ocultan solos** en el Studio (ya no se leen) para que
 nadie edite donde no toca. Ver [D7](DECISIONES.md#d7).
 
+## Precios de los servicios premium
+
+Cada servicio puede tener **varios botones de precio**: `premiumServices.services[].prices`
+es un array y se pinta un botón por entrada, en fila y en el orden del array. Aparecen
+tanto en la página del servicio como en el popup de la oferta de lanzamiento.
+
+El campo antiguo `price` (un solo texto) sigue existiendo y actúa de reserva mientras
+`prices` esté vacío; en cuanto hay precios en el array, el Studio lo oculta. Mismo
+patrón que las fases de inversión: ver [D8](DECISIONES.md#d8).
+
 ## Migraciones
 
 ### ¿Hace falta migrar?

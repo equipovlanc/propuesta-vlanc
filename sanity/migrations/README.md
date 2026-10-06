@@ -62,6 +62,16 @@ npx sanity migration run inversion-a-fases --no-dry-run     # aplica
 Sin ejecutarla la web funciona igual que siempre, pero no se pueden crear fases
 nuevas desde el Studio.
 
+## `precios-premium-a-lista.ts` — recomendada si usas varios precios
+
+Copia el `price` de cada servicio premium al nuevo array `prices`, para no tener
+que reescribir a mano los precios que ya estaban. Aditiva: no borra `price`.
+
+```bash
+npx sanity migration run precios-premium-a-lista                  # simulacro
+npx sanity migration run precios-premium-a-lista --no-dry-run     # aplica
+```
+
 ## `set-premium-isactive.mjs` — alternativa
 
 Hace exactamente lo mismo, pero se ejecuta desde **este** repo (que ya tiene

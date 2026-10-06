@@ -15,6 +15,7 @@ interface Service {
     title?: string;
     subtitle?: string;
     price?: string;
+    prices?: string[];
     description?: DescriptionBlock[];
     note?: string;
     extraNote?: string;
@@ -57,6 +58,10 @@ const getLogoBottom = (): number | null => {
 
 const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 0 }) => {
     const imageSrc = image?.src;
+    // Un botón por precio. Mientras no se use el array `prices`, el campo antiguo
+    // `price` hace de único precio, así que el contenido sin migrar se ve igual.
+    const precios: string[] = ((data?.prices?.length ? data.prices : (data?.price ? [data.price] : [])) ?? [])
+        .filter((p) => typeof p === 'string' && p.trim() !== '');
     const imageOpacity = image?.opacity ?? 15;
 
     const [isSingleLine, setIsSingleLine] = useState(false); // Por defecto intentamos 2 líneas (como original)
@@ -256,10 +261,14 @@ const PremiumServices: React.FC<PremiumServicesProps> = ({ data, image, index = 
                             </div>
                         )}
 
-                        {data?.price && (
+                        {precios.length > 0 && (
                             <div className="relative h-0 w-full">
-                                <div className="absolute top-8 left-0 bg-[#8f4933] text-white px-8 py-3 rounded-[1px] shadow-sm flex items-center justify-center cursor-default whitespace-nowrap">
-                                    <span className="boton1 text-white tracking-[0.1em]">{data.price}</span>
+                                <div className="absolute top-8 left-0 flex flex-row items-center gap-4">
+                                    {precios.map((precio, i) => (
+                                        <div key={i} className="bg-[#8f4933] text-white px-8 py-3 rounded-[1px] shadow-sm flex items-center justify-center cursor-default whitespace-nowrap">
+                                            <span className="boton1 text-white tracking-[0.1em]">{precio}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         )}
