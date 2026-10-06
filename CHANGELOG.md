@@ -8,6 +8,22 @@ Cada entrada indica si requirió acción manual de Jose:
 
 ---
 
+## 2026-10-06 · Comandos de arranque y cierre de sesión
+
+Añadidos dos comandos de proyecto en `.claude/skills/`:
+
+- **`/arranque`**: comprobaciones de solo lectura antes de empezar (decisiones
+  cerradas, estado del repo, divergencia del esquema frente al Studio, migraciones
+  sin copiar).
+- **`/cierre`**: verificación del build, registro en `CHANGELOG.md` y
+  `docs/DECISIONES.md`, commit, push y lista de pasos manuales para el Studio.
+  Pensado también para usarlo a mitad de sesión, porque lo escrito en disco
+  sobrevive a la compactación del contexto.
+
+Sin efecto sobre la web ni sobre Sanity.
+
+---
+
 ## 2026-10-06 · Documentación del proyecto
 
 Añadidos [CLAUDE.md](CLAUDE.md), [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md),

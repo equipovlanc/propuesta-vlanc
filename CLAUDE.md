@@ -27,23 +27,23 @@ buzón de intercambio:
 
 ## Rutina de sesión
 
-**Al empezar**, antes de proponer nada:
+Hay dos comandos que automatizan esto. Están en `.claude/skills/`, así que su
+contenido es la referencia detallada; aquí queda solo el para qué.
 
-1. Lee [docs/DECISIONES.md](docs/DECISIONES.md). Hay decisiones ya tomadas que no
-   se reabren (sobre todo: los bloques se copian, nunca se comparten por referencia).
-2. Comprueba si el esquema de aquí y el del Studio han divergido:
-   ```bash
-   diff <(tr -d '\r' < sanity/proposal.schema.ts) \
-        <(tr -d '\r' < "C:/Users/jgont/VLANC/WEB/propuestasvlanc(SANITYSTUDIO)/schemaTypes/proposal.schema.ts")
-   ```
-   Si difieren, hay un cambio pendiente de copiar o alguien editó el Studio a mano.
-   Avísalo antes de seguir.
-3. Si el cambio depende del contenido real, consúltalo en lectura (ver
-   [docs/SANITY.md](docs/SANITY.md#consultar-el-dataset-en-lectura)). No supongas.
+- **`/arranque`** — al empezar. Solo lectura: lee las decisiones cerradas, mira el
+  estado del repo, comprueba si el esquema de aquí y el del Studio han divergido y
+  si quedan migraciones sin copiar. Evita construir sobre suposiciones.
+- **`/cierre`** — al acabar, **y también a mitad de sesión** cada vez que se cierra
+  un bloque de trabajo: verifica el build, registra en `CHANGELOG.md` (y en
+  `docs/DECISIONES.md` si se ha decidido algo), commitea, pushea y entrega la lista
+  de pasos manuales para el Studio.
 
-**Al terminar**: apunta el cambio en [CHANGELOG.md](CHANGELOG.md), y si se ha
-decidido algo que condicione el futuro, en [docs/DECISIONES.md](docs/DECISIONES.md).
-Di siempre con claridad qué le toca hacer a Jose en el Studio y qué va solo por Vercel.
+Lo escrito en disco sobrevive a la compactación del contexto; lo que solo está en la
+conversación, no. En sesiones largas, `/cierre` temprano y a menudo.
+
+Si se trabaja sin los comandos, el mínimo irrenunciable es el mismo: leer
+[docs/DECISIONES.md](docs/DECISIONES.md) antes de proponer cambios de fondo, y dejar
+siempre dicho con claridad qué le toca hacer a Jose en el Studio y qué va solo por Vercel.
 
 ## Reglas de oro
 
