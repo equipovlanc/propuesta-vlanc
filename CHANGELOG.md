@@ -90,7 +90,8 @@ interruptores de las ofertas, así que al desactivar una quedaba un paso fantasm
 la navegación. Las dos copias de esa condición se verificaron idénticas.
 
 Migración opcional `activar-botones.ts` (322 valores sobre 17 propuestas), solo para
-que los interruptores se vean encendidos en el Studio.
+que los interruptores se vean encendidos en el Studio. **Descartada**: no se va a
+ejecutar, ver [D9](docs/DECISIONES.md#d9).
 
 ---
 

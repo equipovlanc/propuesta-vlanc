@@ -110,6 +110,28 @@ producción.
 ---
 
 <a id="d6"></a>
+<a id="d9"></a>
+## D9 · Las migraciones cosméticas no se ejecutan
+**2026-10-06 · cerrada**
+
+Solo se ejecutan las migraciones **imprescindibles**, es decir, las que sin ellas
+dejan contenido inaccesible o impiden usar una función nueva. Las que únicamente
+sirven para que un interruptor se vea encendido en el Studio se escriben, se dejan
+disponibles y **no se lanzan**.
+
+Caso en vigor: `activar-botones.ts` queda sin ejecutar. En el Studio los
+interruptores de botones se ven apagados aunque los botones sí se muestren; es el
+comportamiento esperado por [D1](#d1), no un fallo.
+
+**Por qué.** Decisión de Jose: toda escritura masiva sobre `production` tiene un
+riesgo, por pequeño que sea, y aquí no compra nada funcional.
+
+**How to apply:** no volver a ofrecerla en cada sesión. Al añadir interruptores
+nuevos, entregar la migración de relleno si se quiere, pero presentarla como
+opcional y darla por descartada salvo que Jose la pida.
+
+---
+
 <a id="d8"></a>
 ## D8 · Cambiar el tipo de un campo se hace con un campo nuevo, nunca in situ
 **2026-10-06 · cerrada**
