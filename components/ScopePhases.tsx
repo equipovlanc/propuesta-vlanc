@@ -44,8 +44,9 @@ interface ScopePhasesProps {
 const FASE_TITULO_SIZE = 18;
 const FASE_SUBTITULO_SIZE = 15;
 const CUERPO_SIZE = 14;
-// Tope: deja el cuerpo en 10px. Más abajo el texto deja de leerse en pantalla.
-const MAX_FONT_REDUCTION = 4;
+// Tope de reducción. Si con esto no basta, el contenido se reparte en dos
+// diapositivas en vez de seguir encogiendo.
+const MAX_FONT_REDUCTION = 2;
 // Hueco libre mínimo entre el borde inferior del logo y la primera línea del
 // bloque de fases, en px CSS. Subir este número hace que reduzca antes.
 const LOGO_MIN_GAP = 2;
