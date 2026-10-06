@@ -25,6 +25,28 @@ valor distinto del `price` original, que se conserva.
 
 ---
 
+## 2026-10-06 · Trabajos Contemplados se reparte en varias páginas si no cabe
+**[web]**
+
+Si una fase no cabe, primero se encoge el texto hasta 2px. Si aun así no entra, se
+vuelve al tamaño original y la fase se reparte en varias diapositivas idénticas.
+
+- La unidad que se mueve es el apartado completo: número, título y cuerpo viajan
+  juntos, nunca se corta un texto por la mitad.
+- El título de la fase se repite en cada página; los botones van sólo en la última.
+- Ids `phase-N`, `phase-N-2`…, así que los enlaces del índice no se mueven.
+
+El reparto lo calcula `utils/scopePhasesSplitter.ts` midiendo el contenido real en
+un contenedor oculto, esperando a que carguen las tipografías. Al decidirse antes de
+construir las diapositivas, el componente ya no mide nada en vivo y deja de depender
+de las animaciones de entrada.
+
+Verificado con un DOM simulado sobre diez repartos: no se pierden ni se repiten
+apartados, no hay páginas vacías ni a medio llenar, nunca encoge más de lo
+necesario y al partir siempre vuelve al tamaño original.
+
+---
+
 ## 2026-10-06 · Corrige el ajuste automático, que encogía siempre al máximo
 **[web]**
 

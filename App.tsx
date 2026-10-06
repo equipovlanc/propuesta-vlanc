@@ -24,6 +24,7 @@ import CustomCursor from './components/CustomCursor';
 import sanityClient from './sanity/client';
 import { ScrollContext } from './context/ScrollContext';
 import { calculateFinePrintSlides } from './utils/finePrintSplitter';
+import { calculateScopePhaseLayout, type ScopePhaseLayout } from './utils/scopePhasesSplitter';
 
 const getSpecialOffersSteps = (specialOffersData: any, premiumService: any) => {
     let s = 0;
@@ -46,11 +47,23 @@ const getSpecialOffersSteps = (specialOffersData: any, premiumService: any) => {
 // 'investment-2', 'investment-3'... las siguientes. Cada una lleva su propio
 // numero de pasos en la propia seccion (maxSteps), porque pueden tener distinto
 // numero de planes.
+// Si una fase lleva botones, el bloque de texto se ancla 40px más arriba y hay
+// menos sitio. Esto se mira antes de repartir, así que no puede consultar si la
+// garantía apuntada sigue activa: en la duda da por hecho que hay botón, que es
+// el caso con menos espacio y por tanto el seguro.
+const faseTieneBotones = (fase: any): boolean => Boolean(
+    (fase?.videoButtonIsActive !== false && fase?.videoButtonText?.trim())
+    || (fase?.guaranteeButtonIsActive !== false && fase?.guaranteeText)
+    || (fase?.additionalGuarantees ?? []).some((extra: any) => extra?.isActive !== false && extra?.guaranteeText)
+);
+
 const esInversion = (id?: string) => id === 'investment' || Boolean(id && id.startsWith('investment-'));
 
 const App: React.FC = () => {
   const [proposalData, setProposalData] = useState<any>(null);
   const [finePrintData, setFinePrintData] = useState<{ totalPages: number, fontSize: number }>({ totalPages: 0, fontSize: 16 });
+  // Reparto de cada fase de Trabajos Contemplados en una o varias diapositivas.
+  const [scopeLayouts, setScopeLayouts] = useState<ScopePhaseLayout[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -137,6 +150,25 @@ const App: React.FC = () => {
     };
     fetchProposalData();
   }, [slug]);
+
+  // Reparto de Trabajos Contemplados: se mide el contenido real y se decide
+  // cuánto encoger y, si aun así no cabe, en cuántas páginas repartirlo.
+  useEffect(() => {
+    const fases = proposalData?.scopePhases?.phases;
+    if (!fases?.length) { setScopeLayouts([]); return; }
+
+    let cancelado = false;
+    const calcular = () => {
+      if (cancelado) return;
+      setScopeLayouts(fases.map((fase: any) => calculateScopePhaseLayout(fase, faseTieneBotones(fase))));
+    };
+
+    // Las fuentes cambian la altura del texto: medir antes de que carguen miente.
+    if (document.fonts?.ready) document.fonts.ready.then(calcular);
+    else calcular();
+
+    return () => { cancelado = true; };
+  }, [proposalData]);
 
   // Dynamic FinePrint Calculation
   useEffect(() => {
@@ -306,10 +338,26 @@ const App: React.FC = () => {
             });
         }
 
-        list.push({
-          id: `phase-${i + 1}`,
-          comp: <ScopePhases data={phase} guaranteeItem={phaseGuarantee} guaranteesList={guaranteesList} />,
-          headerPage: currentHeaderPage++
+        // Una fase puede ocupar varias páginas. Mientras no se haya medido todavía
+        // se pinta entera en una, que es como se veía antes de repartir.
+        const layout = scopeLayouts[i];
+        const paginas: (number[] | null)[] = layout?.pages?.length ? layout.pages : [null];
+
+        paginas.forEach((indices, p) => {
+          list.push({
+            // El id de la primera página no cambia, para no romper los enlaces del
+            // índice que ya apuntan a `phase-N`.
+            id: p === 0 ? `phase-${i + 1}` : `phase-${i + 1}-${p + 1}`,
+            comp: <ScopePhases
+              data={phase}
+              guaranteeItem={phaseGuarantee}
+              guaranteesList={guaranteesList}
+              subPhases={indices ? indices.map((k) => (phase.subPhases ?? [])[k]) : undefined}
+              fontReduction={layout?.fontReduction ?? 0}
+              showButtons={p === paginas.length - 1}
+            />,
+            headerPage: currentHeaderPage++
+          });
         });
       });
     }

@@ -1,8 +1,7 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import AnimatedSection from './AnimatedSection';
 import CustomPortableText from './CustomPortableText';
-import { getLogoBottomOffset, CANVAS_WIDTH } from '../utils/logoBottom';
 
 interface SubPhase {
     number?: string;
@@ -36,21 +35,33 @@ interface ScopePhasesProps {
     mainTitle?: string;
     guaranteeItem?: GuaranteeItem;
     guaranteesList?: { text: string; item: GuaranteeItem }[];
+    /**
+     * Apartados que van en ESTA página. Cuando una fase no cabe entera, App.tsx
+     * la reparte en varias diapositivas y a cada una le pasa su trozo.
+     */
+    subPhases?: SubPhase[];
+    /** Píxeles a restar a los tamaños base, ya decididos por el repartidor. */
+    fontReduction?: number;
+    /** Los botones sólo se pintan en la última página de la fase. */
+    showButtons?: boolean;
 }
 
-// Tamaños base de las clases de texto de la columna de fases. Se reducen en
-// bloque, de 1 en 1 px, cuando el contenido crece tanto que sube por encima del
-// logo de la esquina superior izquierda.
+// Tamaños base de las clases de texto de la columna de fases. La reducción la
+// decide utils/scopePhasesSplitter.ts, que mide el contenido antes de construir
+// las diapositivas; aquí sólo se aplica.
 const FASE_TITULO_SIZE = 18;
 const FASE_SUBTITULO_SIZE = 15;
 const CUERPO_SIZE = 14;
-// Tope de reducción. Si con esto no basta, el contenido se reparte en dos
-// diapositivas en vez de seguir encogiendo.
-const MAX_FONT_REDUCTION = 2;
-// Hueco libre mínimo entre el borde inferior del logo y la primera línea del
-// bloque de fases, en px CSS. Subir este número hace que reduzca antes.
-const LOGO_MIN_GAP = 2;
-const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos contemplados.", guaranteeItem, guaranteesList = [] }) => {
+
+const ScopePhases: React.FC<ScopePhasesProps> = ({
+    data,
+    mainTitle = "trabajos contemplados.",
+    guaranteeItem,
+    guaranteesList = [],
+    subPhases,
+    fontReduction = 0,
+    showButtons = true,
+}) => {
     const [showVideo, setShowVideo] = useState(false);
     const [openGuaranteeIndex, setOpenGuaranteeIndex] = useState<number | null>(null);
     const imageSrc = data?.image?.src;
@@ -81,64 +92,17 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
     const openGuaranteeModal = (index: number) => setOpenGuaranteeIndex(index);
     const closeGuaranteeModal = () => setOpenGuaranteeIndex(null);
 
-    // Cada diapositiva monta su propia instancia, así que esto sólo crece hasta el
-    // primer valor que cumple y ahí se queda: no puede oscilar.
-    const [fontReduction, setFontReduction] = useState(0);
-    const sectionRef = useRef<HTMLElement>(null);
-    const blockRef = useRef<HTMLDivElement>(null);
-    // Reducción desde la que ya hemos pedido un incremento. El ResizeObserver puede
-    // dispararse varias veces antes del re-render y, sin esto, cada disparo mediría
-    // el mismo DOM y encogería el texto de más.
-    const bumpedFromRef = useRef(-1);
-
-    useEffect(() => {
-        const checkSpace = () => {
-            const section = sectionRef.current;
-            const block = blockRef.current;
-            if (!section || !block) return;
-            if (fontReduction >= MAX_FONT_REDUCTION || bumpedFromRef.current === fontReduction) return;
-
-            const logoBottom = getLogoBottomOffset(section);
-            if (logoBottom === null) return;
-
-            // Las diapositivas entran con una animación de escala (3x o 0.4x hasta 1),
-            // así que todo se mide como desplazamiento DENTRO del lienzo: la escala se
-            // cancela y la medida vale también mientras dura la animación.
-            const sectionRect = section.getBoundingClientRect();
-            const scale = sectionRect.width / CANVAS_WIDTH;
-            if (!scale) return;
-
-            // El bloque está anclado abajo y crece hacia arriba, así que su borde
-            // superior es justo lo que se acerca al logo.
-            const blockTop = (block.getBoundingClientRect().top - sectionRect.top) / scale;
-            const gap = blockTop - logoBottom;
-            if (gap < LOGO_MIN_GAP) {
-                bumpedFromRef.current = fontReduction;
-                setFontReduction(fontReduction + 1);
-            }
-        };
-
-        checkSpace();
-        window.addEventListener('resize', checkSpace);
-        // También al cambiar el contenido: fuentes que terminan de cargar, etc.
-        const resizeObserver = new ResizeObserver(checkSpace);
-        if (blockRef.current) resizeObserver.observe(blockRef.current);
-
-        return () => {
-            window.removeEventListener('resize', checkSpace);
-            resizeObserver.disconnect();
-        };
-    }, [fontReduction, data]);
 
     // Un botón de garantía solo se pinta si su garantía sigue activa (App.tsx ya filtra
     // los que estén desactivados desde la fase), y el de vídeo si su interruptor lo permite.
     const visibleGuarantees = guaranteesList.filter(g => g.item && g.item.isActive !== false);
     const showVideoButton = data?.videoButtonIsActive !== false && !!data?.videoButtonText && data.videoButtonText.trim() !== "";
-    const hasButtons = visibleGuarantees.length > 0 || showVideoButton;
+    // Los botones cierran la fase, así que van en su última página.
+    const hasButtons = showButtons && (visibleGuarantees.length > 0 || showVideoButton);
     const activeModalItem = openGuaranteeIndex !== null ? guaranteesList[openGuaranteeIndex]?.item : null;
 
     return (
-        <section className="h-screen w-full relative overflow-hidden" ref={sectionRef}>
+        <section className="h-screen w-full relative overflow-hidden">
             {/* TÍTULO (J1) */}
             <div className="absolute top-[150px] left-[120px] z-20">
                 <AnimatedSection hierarchy={1}>
@@ -170,7 +134,6 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
 
             {/* FASES Y BOTONES (J2) */}
             <div
-                ref={blockRef}
                 className="absolute left-[1034px] right-[120px] z-20 flex flex-col justify-end items-start pointer-events-auto"
                 /* Las variables van en este bloque y no en la sección entera para que
                    la reducción no alcance al popup de garantías, que es hermano suyo. */
@@ -184,7 +147,7 @@ const ScopePhases: React.FC<ScopePhasesProps> = ({ data, mainTitle = "trabajos c
                 <AnimatedSection className="w-full" hierarchy={2}>
                     <h3 className="fase-titulo mb-8 text-vlanc-black">{data?.title}</h3>
                     <div className="space-y-6">
-                        {(data?.subPhases ?? []).map((sub, i) => (
+                        {(subPhases ?? data?.subPhases ?? []).map((sub, i) => (
                             <div key={i} className="text-left">
                                 <p className="fase-subtitulo mb-1 text-vlanc-black">
                                     {sub.number} {sub.title}

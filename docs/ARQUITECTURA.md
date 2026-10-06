@@ -97,10 +97,40 @@ en `App.tsx` decide cuántos pasos hay, y `SpecialOffers.tsx` decide qué se pin
 Si las dos condiciones no son idénticas, queda un paso en el que no ocurre nada.
 Hay comentarios de aviso en ambos sitios.
 
-## Ajuste automático del tamaño de texto
+## Cuando el contenido no cabe
 
-Dos secciones encogen su texto solas cuando el contenido crece demasiado:
-**Servicios Premium** y **Trabajos Contemplados**. Las dos usan el mismo patrón.
+Dos secciones se defienden solas cuando el contenido crece demasiado, cada una a su
+manera.
+
+### Trabajos Contemplados: encoge y, si no basta, reparte
+
+`utils/scopePhasesSplitter.ts` mide el contenido **antes** de construir las
+diapositivas, en un contenedor oculto que replica los estilos de la columna, e
+intenta por este orden:
+
+1. Que la fase quepa tal cual.
+2. Encoger el texto de 1 en 1 px, hasta un máximo de 2.
+3. Si con −2px sigue sin caber, **volver al tamaño original** y repartir la fase en
+   varias diapositivas idénticas.
+
+Lo que se reparte es el apartado completo: su número, su título y su cuerpo viajan
+siempre juntos, así que nunca queda un texto cortado por la mitad ni un título
+huérfano al final de una página. El título de la fase se repite en cada página y los
+botones se pintan **sólo en la última**.
+
+El cálculo vive en `App.tsx`, como el de la letra pequeña, porque el número de
+diapositivas tiene que conocerse antes de armar la lista. Espera a
+`document.fonts.ready`: medir antes de que carguen las tipografías da alturas falsas.
+Los ids son `phase-N` para la primera página y `phase-N-2`, `phase-N-3`… para las
+siguientes, así que los enlaces del índice siguen funcionando.
+
+Como el reparto se decide de una vez y se pasa por props, el componente no mide nada
+en vivo: no depende de las animaciones ni del momento en que se monta.
+
+### Servicios Premium: encoge sobre la marcha
+
+Mide en vivo contra el borde inferior del logo y encoge hasta 3px. Detalles del
+mecanismo:
 
 La referencia es el **borde inferior del logo** de la esquina superior izquierda.
 Cuando el texto se acerca a esa altura, se resta 1px a los tamaños base de esa
@@ -135,8 +165,9 @@ Piezas del mecanismo:
 La reducción solo crece, nunca vuelve atrás dentro de la misma diapositiva, así que
 no puede oscilar. Cada diapositiva monta su propia instancia y empieza de cero.
 
-Los números a tocar si hace falta afinar están al principio de cada componente:
-`LOGO_MIN_GAP` (hueco libre exigido) y `MAX_FONT_REDUCTION` (tope de px).
+Los números a tocar para afinar están al principio de `utils/scopePhasesSplitter.ts`
+(`TOP_GAP`, `MAX_FONT_REDUCTION`, y la geometría de la columna) y de
+`components/PremiumServices.tsx` (`LOGO_MIN_GAP`, `MAX_FONT_REDUCTION`).
 
 ## Modo impresión
 
