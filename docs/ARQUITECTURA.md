@@ -1,0 +1,114 @@
+# Arquitectura de la web
+
+React 19 + Vite + Framer Motion. SPA pura: [vercel.json](../vercel.json) reescribe
+cualquier ruta a `/index.html`. No hay servidor ni API propia; el contenido se lee
+directamente de Sanity desde el navegador.
+
+## Carga de datos
+
+[App.tsx](../App.tsx) lee el *slug* de la URL y trae el documento `proposal`
+completo con una sola consulta GROQ. La consulta empieza por `...`, que arrastra
+todos los campos tal cual, y luego sobreescribe solo los que necesitan resolverse:
+imágenes y vídeos a URL (`asset->url`) y la opacidad del filtro de color.
+
+**Consecuencia práctica:** un campo nuevo en el esquema **no suele requerir tocar
+la consulta**, porque el `...` ya lo trae. Solo hay que tocarla si el campo nuevo
+está dentro de un objeto que se proyecta campo a campo (los `logos`, por ejemplo).
+
+Si no hay slug o no existe la propuesta, [StudioLanding.tsx](../components/StudioLanding.tsx)
+cae sobre la última propuesta creada.
+
+## Modelo de diapositivas
+
+No hay scroll real. `App.tsx` construye un array `sections` y muestra **una sola**
+cada vez; la rueda, las flechas y el índice solo cambian el índice de ese array.
+El índice se refleja en la URL como `#page-N`.
+
+Cada entrada del array tiene:
+
+- `id` — identificador estable (`mission`, `phase-3`, `premium-2`…). Es el destino
+  de los enlaces del índice, así que **no debe cambiar** cuando se oculta otro elemento.
+- `comp` — el componente ya construido.
+- `headerPage` — el número que pinta la cabecera. Es opcional: portada, índice,
+  la diapositiva separadora y contacto no llevan número.
+
+### Orden y numeración
+
+La portada y el índice no se numeran. El contador de páginas arranca en **3** y va
+incrementándose solo por las secciones que de verdad se pintan:
+
+```
+hero · index                        (sin número)
+situación · misión · proceso · equipo · testimonios · ámbito
+fases (una diapositiva por fase)
+inversión · ofertas especiales · forma de pago
+letra pequeña (1..N páginas, calculadas en tiempo de ejecución)
+[diapositiva separadora: consume un número pero no lo muestra]
+garantías
+servicios premium (una diapositiva por servicio activo)
+contacto                            (sin número)
+```
+
+Cualquier sección con su interruptor en `false` no entra en el array, así que no
+deja hueco: las siguientes se renumeran solas.
+
+> Cuidado con la diapositiva separadora: la línea
+> `const dividerHeaderPage = currentHeaderPage++;` se ejecuta **siempre**, incluso
+> si la separadora está desactivada, así que ese número se salta a propósito.
+> Es intencionado (viene del diseño original en papel), no un error.
+
+### Número de páginas de la letra pequeña
+
+Es dinámico: [utils/finePrintSplitter.ts](../utils/finePrintSplitter.ts) mide el
+texto y decide cuántas páginas y con qué tamaño de letra. Hasta que termina el
+cálculo se pinta una página provisional. Por eso el total de diapositivas puede
+variar entre propuestas con el mismo esquema.
+
+## Pasos internos
+
+Algunas diapositivas se revelan por partes antes de pasar a la siguiente. El estado
+`internalStep` lo controla, y cada sección declara cuántos pasos tiene:
+
+| Sección | Pasos |
+|---|---|
+| Misión | 2 |
+| Proceso | uno por paso del proceso |
+| Inversión | nº de planes × 2 |
+| Ofertas especiales | dinámico: condición especial + oferta de lanzamiento + logo |
+| Forma de pago | 1 |
+| Separadora | 1 |
+
+`completedSections` recuerda las que ya se han visto enteras, para que al volver
+atrás aparezcan completas en lugar de reiniciar la animación.
+
+**El contador de pasos de Ofertas Especiales está duplicado**: `getSpecialOffersSteps`
+en `App.tsx` decide cuántos pasos hay, y `SpecialOffers.tsx` decide qué se pinta.
+Si las dos condiciones no son idénticas, queda un paso en el que no ocurre nada.
+Hay comentarios de aviso en ambos sitios.
+
+## Modo impresión
+
+`isPrintMode` cambia el render por completo: en vez de una diapositiva, pinta
+**todas** una debajo de otra, cada una en una página de 420×297 mm (A3 horizontal),
+escalando el lienzo de 1920×1080 con `zoom: 0.82677165`. A cada componente se le
+pasa `step: 99` para que se muestre completo, sin animaciones a medias.
+
+Como recorre **el mismo array `sections`**, todo lo que se oculta en pantalla
+desaparece también del PDF, sin páginas en blanco. Esto es automático: no hay que
+mantener dos listas.
+
+Se dispara con el botón de la última página, con `Ctrl+P` (evento `beforeprint`) y
+con un *fallback* por `matchMedia('print')` para Safari.
+
+## Qué revisar cuando algo aparece o desaparece
+
+Al añadir un interruptor que puede quitar una diapositiva entera:
+
+1. ¿Se construye el array saltándose el elemento? (no basta con ocultarlo por CSS)
+2. ¿Los `id` siguen siendo los originales, para no desviar los enlaces del índice?
+3. ¿La numeración es consecutiva sobre los elementos visibles?
+4. ¿El contador de pasos internos, si la sección los tiene, cuenta lo mismo que se pinta?
+5. ¿Queda algún índice fijo (`items[0]`, `services[1]`) apuntando al array sin filtrar?
+
+El modo impresión y los puntitos de navegación no hay que tocarlos: salen del
+mismo array.
