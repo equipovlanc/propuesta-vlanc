@@ -237,7 +237,8 @@ const App: React.FC = () => {
         else setInternalStep(isMovingForward ? 0 : maxSteps);
       }
       else if (nextSection.id === 'divider-slide') {
-        const dividerStepsCount = 1; // 0: init, 1: video/final
+        // Sin vídeo no hay nada que revelar, así que la sección no consume pasos.
+        const dividerStepsCount = nextSection.maxSteps ?? 1;
         if (completedSections.has('divider-slide')) setInternalStep(dividerStepsCount);
         else setInternalStep(isMovingForward ? 0 : dividerStepsCount);
       }
@@ -451,7 +452,10 @@ const App: React.FC = () => {
           step={internalStep}
           isSectionCompleted={completedSections.has('divider-slide')}
           setNavigationBlocked={setNavigationBlocked}
-        />
+        />,
+        // El paso interno existe para dejar correr el vídeo. Si no hay vídeo, la
+        // imagen y el texto ya se ven al llegar y ese paso sólo sería scroll muerto.
+        maxSteps: d.dividerSlide?.video ? 1 : 0
       });
     }
 
@@ -540,7 +544,7 @@ const App: React.FC = () => {
         }
 
         if (activeSection.id === 'divider-slide' && !isCompleted) {
-          const totalSteps = 1; // 0: init, 1: video/final
+          const totalSteps = activeSection.maxSteps ?? 1;
           if (e.deltaY > 0) {
             if (internalStep < totalSteps) { setInternalStep(prev => prev + 1); return; }
           } else {
@@ -579,7 +583,7 @@ const App: React.FC = () => {
         const premiumServices = proposalData?.premiumServices?.services;
         if (handleStep(getSpecialOffersSteps(proposalData?.specialOffers, premiumServices?.[1]))) return;
       }
-      if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(1)) return;
+      if (activeSection.id === 'divider-slide' && !isCompleted) if (handleStep(activeSection.maxSteps ?? 1)) return;
 
 
       if (e.key === 'ArrowDown' || e.key === 'ArrowRight') navigate(currentIndex + 1);
@@ -614,7 +618,7 @@ const App: React.FC = () => {
         const premiumServices = proposalData?.premiumServices?.services;
         if (tryStep(getSpecialOffersSteps(proposalData?.specialOffers, premiumServices?.[1]))) return;
       }
-      if (activeSection.id === 'divider-slide' && !isCompleted && tryStep(1)) return;
+      if (activeSection.id === 'divider-slide' && !isCompleted && tryStep(activeSection.maxSteps ?? 1)) return;
 
       if (deltaY > 0) navigate(currentIndex + 1);
       else navigate(currentIndex - 1);

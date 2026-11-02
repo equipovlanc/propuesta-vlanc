@@ -8,6 +8,23 @@ Cada entrada indica si requirió acción manual de Jose:
 
 ---
 
+## 2026-11-02 · La diapositiva divisoria sin vídeo ya no sale en blanco
+**[web]**
+
+Si la sección no tiene vídeo cargado en Sanity, la imagen y su texto aparecen al
+llegar, encadenados igual que al volver a la página: primero la imagen y medio
+segundo después el texto.
+
+Antes la imagen sólo se mostraba una vez la sección quedaba marcada como vista, y
+el texto esperaba a que terminase un vídeo que no existía. Resultado: la
+diapositiva se veía en blanco, se consumía su paso interno y se pasaba a Garantías
+sin haber enseñado nada. Afectaba a la propuesta `alicia-rosa`, la única sin vídeo.
+
+Además, sin vídeo la sección ya no consume paso interno: no hay nada que revelar,
+así que ese scroll era tiempo muerto.
+
+---
+
 ## 2026-10-06 · Trabajos Contemplados se reparte en varias páginas si no cabe
 **[web]**
 

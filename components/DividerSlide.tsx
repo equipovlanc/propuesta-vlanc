@@ -31,11 +31,19 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
     const imageOpacity = data?.image?.opacity ?? 15;
     const videoSrc = data?.video;
 
+    const hasVideo = Boolean(videoSrc);
+
     // Video is visible on steps 0 and 1, only if NOT completed
-    const isVideoVisible = (step === 0 || step === 1) && !isSectionCompleted;
+    const isVideoVisible = hasVideo && (step === 0 || step === 1) && !isSectionCompleted;
     // Image is visible if completed OR in print mode OR if we specifically want it to replace the video
     // The user said: "al volver lo que estará sera la imagen" (back to page implies isSectionCompleted)
-    const isImageVisible = isSectionCompleted || isPrintMode;
+    //
+    // Sin vídeo no hay nada que esperar: la imagen y su texto aparecen al llegar, con
+    // el mismo encadenado que al volver (primero la imagen, el texto medio segundo
+    // después). Antes quedaban ocultos hasta que la sección se marcaba como vista, así
+    // que la diapositiva se veía en blanco y se pasaba de largo sin enseñar nada.
+    const isImageVisible = !hasVideo || isSectionCompleted || isPrintMode;
+    const isTextVisible = !hasVideo || isSectionCompleted || videoFinished || isPrintMode;
 
     // --- Effects for Video State Sync ---
     useEffect(() => {
@@ -250,10 +258,10 @@ const DividerSlide: React.FC<DividerSlideProps> = ({ data, step = 0, isSectionCo
                     className="mt-12 text-right print-force-visible"
                     initial={isPrintMode ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     animate={{
-                        opacity: (isSectionCompleted || videoFinished || isPrintMode) ? 1 : 0,
-                        y: (isSectionCompleted || videoFinished || isPrintMode) ? 0 : 20
+                        opacity: isTextVisible ? 1 : 0,
+                        y: isTextVisible ? 0 : 20
                     }}
-                    transition={{ duration: 1.5, ease: "easeOut", delay: (isSectionCompleted || videoFinished || isPrintMode) ? 0.5 : 0 }}
+                    transition={{ duration: 1.5, ease: "easeOut", delay: isTextVisible ? 0.5 : 0 }}
                 >
                     <h2 className="especial2">{data?.text || "¿Nos dejas acompañarte?"}</h2>
                 </motion.div>
